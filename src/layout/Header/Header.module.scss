@@ -1,0 +1,176 @@
+.header {
+
+    //  masthead
+    &__masthead {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 50px;
+
+        &__social {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding: 5px 10px;
+
+            & a {
+                color: white;
+            }
+        }
+
+        &__nav-main {
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            color: white;
+            height: 80px;
+            margin: 0 50px;
+            border-radius: 60px;
+            background-color: $dark-primary-color;
+
+            &__logo {
+                & img {
+                    height: auto;
+                }
+            }
+
+            &__input {
+                display: flex;
+                justify-content: flex-end;
+                flex-wrap: wrap;
+                align-items: stretch;
+                padding-right: 30px;
+                width: 100%;
+
+                & input {
+                    display: none;
+
+                    @include desktop {
+                        display: flex;
+                        border-radius: 5px 0 0 5px;
+                        border: 1px solid #343536;
+                        padding: 13px 25px;
+                        appearance: none;
+                        background-clip: padding-box;
+                        transition: border-color 0.15s ease-in-out,
+                            box-shadow 0.15s ease-in-out;
+                    }
+                }
+
+                & button {
+                    border: 1px solid #343536;
+                    border-radius: 0 5px 5px 0;
+                    cursor: pointer;
+                    padding: 0.375rem 0.75rem;
+                }
+            }
+        }
+    }
+
+    //sub-masthead
+    &__sub-masthead {
+        background-color: transparent;
+
+        &__nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+
+            &__container {
+                height: 0;
+                display: flex;
+                justify-content: center;
+                flex-grow: 1;
+                padding: 0;
+                overflow-y: visible;
+                z-index: 999;
+
+                &__navbar {
+                    width: 60%;
+                    height: 100%;
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    // position: relative;
+                    // top: 50px;
+
+                    &-menu {
+                        width: 70%; // Ajustez la largeur selon vos besoins
+                        height: auto; // Ajustez la hauteur selon vos besoins
+                        margin: 0 8px; // Espacement entre les boutons
+                        font-size: 20px;
+                        font-family: sans-serif;
+                        text-transform: capitalize;
+                        line-height: 3em;
+                        transition: 0.3s;
+                        cursor: pointer;
+                        padding: 20px;
+                        // justify-content: center;
+                        // align-items: center;
+                        // color: white; // Couleur du texte
+                        background-size: cover; // Pour couvrir entièrement l'élément
+                        background-position: center; // Centrer l'image
+                        background-repeat: no-repeat; // Ne pas répéter l'image
+
+                        &:nth-child(4n + 1) {
+                            background: $btn-orange no-repeat;
+                            background-position: center;
+                            background-size: 100% 100%;
+                            text-align: center;
+                            // transform: rotate(20deg);
+                            // transform: perspective(200px) rotateY(20deg);
+                            // padding-bottom: 10%;
+                        }
+
+                        &:nth-child(4n + 2) {
+                            background: $btn-red no-repeat;
+                            text-align: center;
+                            // transform: rotate(-5deg);
+                            // transform: perspective(200px) rotateY(20deg);
+                            background-position: center;
+                            background-size: 100% 100%;
+                            // padding-top: 10%;
+                        }
+
+                        &:nth-child(4n + 3) {
+                            background: $btn-green no-repeat;
+                            background-position: center;
+                            background-size: 100% 100%;
+                            text-align: center;
+                            // transform: rotate(5deg);
+                            // transform: perspective(200px) rotateY(20deg);
+                            // padding-top: 10%;
+                        }
+
+                        &:nth-child(4n + 4) {
+                            background: $btn-blue no-repeat;
+                            background-position: center;
+                            background-size: 100% 100%;
+                            text-align: center;
+                            // padding-top: 10%;
+                            // transform: perspective(200px) rotateY(20deg);
+                            // transition: transform 0.3s ease-in-out;
+                        }
+
+                        // &:nth-child(odd):hover {
+                        //   transform: translateY(-10px);
+                        //   // padding-bottom: 5%;
+                        // }
+
+                        &:hover {
+                            transform: translateY(-10px);
+                            transition: transform 0.3s ease-in-out;
+                            // transform: perspective(200px) rotateX(45deg);
+                            // padding-top: 5%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,42 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    color: white;
+}
+
+header {
+    background-color: #2c3f64;
+    // height: 166px;
+}
+
+a {
+    @include font-primary($font-size-small);
+    text-decoration: none;
+    color: white;
+}
+
+h1 {
+    @include font-primary($font-size-xxlarge, bold);
+}
+
+h2 {
+    @include font-secondary($font-size-xlarge, bold);
+}
+
+h3 {
+    @include font-secondary($font-size-small, bold);
+}
+
+h4 {
+    @include font-tertiary($font-size-xlarge, bold);
+}
+
+p {
+    @include font-tertiary;
+}

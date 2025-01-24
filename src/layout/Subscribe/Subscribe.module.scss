@@ -1,0 +1,74 @@
+.container__subscribe {
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100% auto;
+    /* Prend toute la hauteur de la fenêtre */
+    padding: 140px 0 140px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    &__link {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 100%;
+        /* S'assure que la largeur ne dépasse pas celle de la page */
+
+        &__line {
+            flex-grow: 1;
+            border: none;
+            height: 2px;
+            /* Épaisseur de la ligne */
+            background-color: $secondary-color;
+            /* Couleur des lignes */
+            margin: 0;
+            /* Supprimer toute marge */
+        }
+
+        &--square-button,
+        &--subscribe-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #2c3f64;
+            /* Couleur du texte */
+            margin: 0;
+            /* Supprimer toute marge pour que le carré touche la ligne */
+            cursor: pointer;
+
+            &:hover .container__subscribe__link--square {
+                background-color: darken($secondary-color, 10%);
+            }
+
+            &:hover .container__subscribe__link--text {
+                color: darken($primary-color, 10%);
+            }
+        }
+
+        &--square {
+            background-color: $secondary-color;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+        }
+
+        &--subscribe-button .container__subscribe__link--square {
+            width: 60px;
+            height: 60px;
+        }
+
+        &--text {
+            margin-top: 5px;
+            /* Espace au-dessus du texte */
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            width: max-content;
+            color: $primary-color;
+        }
+    }
+}

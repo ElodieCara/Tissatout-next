@@ -1,0 +1,43 @@
+.articles-gallery {
+    display: flex;
+    margin-bottom: 15px;
+
+    &__icon {
+        width: 175px;
+        height: 175px;
+        background-color: $primary-color;
+        border-radius: 20px;
+        padding: 15px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+
+        & img {
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    &__body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        & * {
+            margin-left: 30px;
+        }
+
+        &__title {
+            font-weight: bold;
+        }
+
+        &__description {
+            width: 40vh;
+            font-size: 100%;
+            color: $primary-color;
+        }
+
+        &__date {
+            font-size: 100%;
+        }
+    }
+}

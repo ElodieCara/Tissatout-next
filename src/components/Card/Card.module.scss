@@ -1,0 +1,32 @@
+.card {
+    width: 100% auto;
+    height: 250px;
+    background-color: $primary-color;
+    border-radius: 15px;
+    margin: 0 0 10%;
+
+    &__image {
+        height: 80%;
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+        border-radius: 15px 15px 0 0;
+
+        & img {
+            width: 100%;
+            height: auto;
+            position: absolute;
+        }
+    }
+
+    &__title {
+        height: 20%;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: white;
+        margin-left: 30px;
+        box-sizing: border-box;
+        font-size: bold;
+    }
+}

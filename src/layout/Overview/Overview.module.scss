@@ -1,0 +1,94 @@
+.container__section {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    height: 850px;
+    position: relative;
+    bottom: 100px;
+
+    &__card-1 {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        position: absolute;
+        background-image: $rectangle-yellow;
+        margin-right: 300px;
+        width: 850px; // Ajuster la largeur de la carte 1
+        height: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+
+        &__sidebar {
+            list-style: none;
+            padding: 90px;
+
+            &__button {
+                width: 200px;
+                height: 100px;
+                background-color: $primary-color;
+                margin-bottom: 10px;
+                padding: 10px;
+                border-radius: 33px;
+                // border: 15px solid $primary-color;
+                cursor: pointer;
+                text-align: center; // Centrer le texte horizontalement
+                color: white; // Couleur du texte blanc
+                display: flex; // Pour centrer le texte horizontalement et verticalement
+                align-items: center; // Centrer verticalement
+                justify-content: center; // Centrer horizontalement
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); // Ajouter une ombre autour des boutons
+                transition: transform 0.3s ease, box-shadow 0.3s ease; // Ajout d'une transition pour l'effet de survol
+
+                &:hover {
+                    transform: scale(1.05); // Augmente légèrement la taille du bouton
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); // Ajoute une ombre pour l'effet de survol
+                }
+            }
+        }
+    }
+
+    &__card-2 {
+        margin-left: 300px;
+        width: 850px;
+        height: 100%;
+        background-image: $rectangle-blue;
+        background-repeat: no-repeat;
+        background-position: center;
+        position: relative;
+
+        &__content-panel {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            justify-content: flex-start;
+            background: $rectangle-yellow center no-repeat;
+            width: 100%;
+            height: 100%;
+
+            &__text {
+                width: 50%;
+                margin: 110px 100px 100px 100px;
+            }
+
+            &__img {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 46%;
+                height: 31%;
+                position: absolute;
+                top: 510px;
+                right: 41px;
+                // border: black 1px solid;
+                // transform: rotate(3.71deg);
+
+                img {
+                    width: 100%;
+                    height: 50%;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+}

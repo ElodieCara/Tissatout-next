@@ -1,0 +1,52 @@
+.body {
+    &.summer-theme {
+        background-color: #f0f8ff; // Couleur estivale
+        background-image: url('/assets/summer-background.jpg'); // Image de fond pour l'été
+        color: #003366; // Texte
+
+        .decoration {
+            position: absolute;
+            width: 50px; // Taille des décorations
+            height: 50px;
+            background-size: contain;
+            background-repeat: no-repeat;
+
+
+            &.decoration-star-1 {
+                background-image: url('/assets/Star 5.png');
+                top: 10px;
+                left: 20px;
+            }
+
+            &.decoration-star-2 {
+                background-image: url('/assets/Star 5.png');
+                bottom: 15px;
+                right: 25px;
+            }
+
+            &.decoration-rocket-1 {
+                background-image: url('/assets/navette 3.png');
+                top: 30%;
+                left: 5%;
+            }
+
+            &.decoration-rocket-2 {
+                background-image: url('/assets/navette 3.png');
+                bottom: 40%;
+                right: 10%;
+            }
+
+            &.decoration-balloon-1 {
+                background-image: url('/assets/ballon-jaune-vide.png');
+                top: 5%;
+                right: 15%;
+            }
+
+            &.decoration-balloon-2 {
+                background-image: url('/assets/ballon-jaune-vide.png');
+                bottom: 10%;
+                left: 20%;
+            }
+        }
+    }
+}

@@ -1,0 +1,79 @@
+@charset "UTF-8";
+.container__slide {
+  position: relative;
+  width: 100%;
+  height: 450px;
+}
+.container__slide__image {
+  height: 100%;
+  top: -60px;
+  overflow: hidden;
+}
+.container__slide__image img {
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center center;
+     object-position: center center;
+  margin: auto;
+  height: 100% !important;
+}
+.container__slide__buttons {
+  position: absolute;
+  top: 150px;
+  left: 30px;
+  right: 30px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 10;
+}
+.container__slide__pagination {
+  position: absolute;
+  bottom: 80px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.container__slide__pagination span {
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  margin: 0 5px;
+  display: inline-block;
+}
+.container__slide__pagination span .balloon-icon {
+  width: 30px;
+  /* Définissez la largeur souhaitée */
+  height: 30px;
+  /* Définissez la hauteur souhaitée */
+  -o-object-fit: contain;
+     object-fit: contain;
+  /* Maintient les proportions de l'image */
+  display: block;
+  /* Évite tout décalage lié au comportement inline des images */
+}
+.container__slide__text {
+  position: absolute;
+  bottom: 125px;
+  left: 150px;
+  color: white;
+  font-size: large;
+  width: 40%;
+}
+.container__slide__text h1, .container__slide__text p {
+  margin-bottom: 30px;
+}
+.container__slide__btn {
+  position: absolute;
+  bottom: -30px;
+  left: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 50px;
+  border-radius: 30px;
+  background-color: #ecac3e;
+  color: #2c3f64;
+  font-weight: bold;
+}/*# sourceMappingURL=Slideshow.module.css.map */
