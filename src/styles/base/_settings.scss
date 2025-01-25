@@ -10,6 +10,11 @@ body {
     color: white;
 }
 
+main {
+    position: relative; // Contexte parent pour les décorations
+    z-index: 0; // Assure que le contenu principal reste visible
+}
+
 header {
     background-color: #2c3f64;
     // height: 166px;

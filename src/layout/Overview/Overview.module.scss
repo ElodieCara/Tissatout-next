@@ -5,6 +5,7 @@
     height: 850px;
     position: relative;
     bottom: 100px;
+    z-index: 2;
 
     &__card-1 {
         display: flex;

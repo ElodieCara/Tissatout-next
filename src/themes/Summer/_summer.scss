@@ -1,52 +1,73 @@
-.body {
-    &.summer-theme {
-        background-color: #f0f8ff; // Couleur estivale
-        background-image: url('/assets/summer-background.jpg'); // Image de fond pour l'été
-        color: #003366; // Texte
+.summer-theme {
+    position: relative; // Contexte parent pour les décorations
+    background-color: #f0f8ff; // Couleur estivale    
+    color: #003366;
+    width: 100%;
+    /* S'assure que le conteneur prend toute la largeur */
+    height: 100%;
 
-        .decoration {
-            position: absolute;
-            width: 50px; // Taille des décorations
-            height: 50px;
-            background-size: contain;
-            background-repeat: no-repeat;
+    .decorations-container {
+        position: absolute; // Positionne les décorations dans le contexte de <main>
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%; // Couvre toute la hauteur de <main>
+        pointer-events: none; // Désactive les interactions utilisateur
+        // z-index: 0; // Derrière le contenu principal
 
 
-            &.decoration-star-1 {
-                background-image: url('/assets/Star 5.png');
-                top: 10px;
-                left: 20px;
-            }
+        &__img {
+            position: relative;
+            /* Positionne l'image par rapport à decorations-container */
+            top: 73vh;
+            /* Position verticale basée sur la hauteur de la fenêtre */
+            left: 76vw;
+            /* Position horizontale basée sur la largeur de la fenêtre */
+            width: 10vw;
+            /* Ajuste la taille en fonction de la largeur de la fenêtre */
+            height: auto;
+            /* Conserve les proportions */
+            pointer-events: none;
+            /* Empêche les interactions utilisateur */
+            z-index: 3;
+            /* Place l'image au-dessus des décorations */
+            overflow: hidden;
+            /* Empêche le débordement (si nécessaire) */
 
-            &.decoration-star-2 {
-                background-image: url('/assets/Star 5.png');
-                bottom: 15px;
-                right: 25px;
-            }
 
-            &.decoration-rocket-1 {
-                background-image: url('/assets/navette 3.png');
-                top: 30%;
-                left: 5%;
-            }
-
-            &.decoration-rocket-2 {
-                background-image: url('/assets/navette 3.png');
-                bottom: 40%;
-                right: 10%;
-            }
-
-            &.decoration-balloon-1 {
-                background-image: url('/assets/ballon-jaune-vide.png');
-                top: 5%;
-                right: 15%;
-            }
-
-            &.decoration-balloon-2 {
-                background-image: url('/assets/ballon-jaune-vide.png');
-                bottom: 10%;
-                left: 20%;
+            & img {
+                display: block;
+                /* Assure que l'image est bien rendue */
+                width: 100%;
+                /* Occupe tout l’espace défini par decorations-container__img */
+                height: auto;
+                /* Conserve les proportions */
             }
         }
     }
+
+
+    .decoration {
+        position: absolute;
+        z-index: 0;
+        width: clamp(30px, 5vw, 50px);
+        height: clamp(30px, 5vw, 50px);
+        background-size: contain;
+        background-repeat: no-repeat;
+        filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
+
+        &.decoration-star {
+            background-image: url('/assets/Star.png');
+        }
+
+        &.decoration-balloon {
+            background-image: url('/assets/ballon-jaune-vide.png');
+        }
+
+        &.decoration-rocket {
+            background-image: url('/assets/navette.png');
+        }
+    }
+
+
 }

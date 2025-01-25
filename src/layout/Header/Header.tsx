@@ -27,12 +27,13 @@ const Header: React.FC = () => {
                     </a>
                 </div>
                 <nav className="header__masthead__nav-main">
-                    <div className="header__masthead__nav-main__logo">
+                    <div className="header__masthead__nav-main__logo" style={{ position: "relative", width: "180px", height: "100px" }}>
                         <Image
-                            src="/Tissatout.png" // L'image doit être dans le dossier "public"
-                            width={180}
-                            height={50}
+                            src="/Tissatout.png"
                             alt="Logo Tissatout"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            style={{ objectFit: "contain" }} // Garde les proportions
                         />
                     </div>
                     <h1 className="header__masthead__nav-main__title">Tissatout</h1>

@@ -14,6 +14,11 @@ body {
   color: white;
 }
 
+main {
+  position: relative;
+  z-index: 0;
+}
+
 header {
   background-color: #2c3f64;
 }
@@ -64,47 +69,65 @@ p {
   line-height: 1.5;
 }
 
-.body.summer-theme {
+.summer-theme {
+  position: relative;
   background-color: #f0f8ff;
-  background-image: url("/assets/summer-background.jpg");
   color: #003366;
+  width: 100%;
+  /* S'assure que le conteneur prend toute la largeur */
+  height: 100%;
 }
-.body.summer-theme .decoration {
+.summer-theme .decorations-container {
   position: absolute;
-  width: 50px;
-  height: 50px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.summer-theme .decorations-container__img {
+  position: relative;
+  /* Positionne l'image par rapport à decorations-container */
+  top: 73vh;
+  /* Position verticale basée sur la hauteur de la fenêtre */
+  left: 76vw;
+  /* Position horizontale basée sur la largeur de la fenêtre */
+  width: 10vw;
+  /* Ajuste la taille en fonction de la largeur de la fenêtre */
+  height: auto;
+  /* Conserve les proportions */
+  pointer-events: none;
+  /* Empêche les interactions utilisateur */
+  z-index: 3;
+  /* Place l'image au-dessus des décorations */
+  overflow: hidden;
+  /* Empêche le débordement (si nécessaire) */
+}
+.summer-theme .decorations-container__img img {
+  display: block;
+  /* Assure que l'image est bien rendue */
+  width: 100%;
+  /* Occupe tout l’espace défini par decorations-container__img */
+  height: auto;
+  /* Conserve les proportions */
+}
+.summer-theme .decoration {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
   background-size: contain;
   background-repeat: no-repeat;
+  filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
 }
-.body.summer-theme .decoration.decoration-star-1 {
-  background-image: url("/assets/Star 5.png");
-  top: 10px;
-  left: 20px;
+.summer-theme .decoration.decoration-star {
+  background-image: url("/assets/Star.png");
 }
-.body.summer-theme .decoration.decoration-star-2 {
-  background-image: url("/assets/Star 5.png");
-  bottom: 15px;
-  right: 25px;
-}
-.body.summer-theme .decoration.decoration-rocket-1 {
-  background-image: url("/assets/navette 3.png");
-  top: 30%;
-  left: 5%;
-}
-.body.summer-theme .decoration.decoration-rocket-2 {
-  background-image: url("/assets/navette 3.png");
-  bottom: 40%;
-  right: 10%;
-}
-.body.summer-theme .decoration.decoration-balloon-1 {
+.summer-theme .decoration.decoration-balloon {
   background-image: url("/assets/ballon-jaune-vide.png");
-  top: 5%;
-  right: 15%;
 }
-.body.summer-theme .decoration.decoration-balloon-2 {
-  background-image: url("/assets/ballon-jaune-vide.png");
-  bottom: 10%;
-  left: 20%;
+.summer-theme .decoration.decoration-rocket {
+  background-image: url("/assets/navette.png");
 }
 
 .card {
@@ -178,6 +201,7 @@ p {
   position: relative;
   width: 100%;
   height: 450px;
+  z-index: 1;
 }
 .container__slide__image {
   height: 100%;
@@ -336,7 +360,10 @@ p {
   background-color: #202d48;
 }
 .header__masthead__nav-main__logo img {
-  height: auto;
+  height: 242%;
+  width: 146%;
+  left: -20px;
+  top: -41px;
 }
 .header__masthead__nav-main__input {
   display: flex;
@@ -438,6 +465,91 @@ p {
 .header__sub-masthead__nav__container__navbar-menu:hover {
   transform: translateY(-10px);
   transition: transform 0.3s ease-in-out;
+}
+
+.container__section {
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  height: 850px;
+  position: relative;
+  bottom: 100px;
+  z-index: 2;
+}
+.container__section__card-1 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  position: absolute;
+  background-image: url("../../assets/Rectangle 20.png");
+  margin-right: 300px;
+  width: 850px;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.container__section__card-1__sidebar {
+  list-style: none;
+  padding: 90px;
+}
+.container__section__card-1__sidebar__button {
+  width: 200px;
+  height: 100px;
+  background-color: #2c3f64;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 33px;
+  cursor: pointer;
+  text-align: center;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.container__section__card-1__sidebar__button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.container__section__card-2 {
+  margin-left: 300px;
+  width: 850px;
+  height: 100%;
+  background-image: url("../../assets/Rectangle 13.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+}
+.container__section__card-2__content-panel {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+  background: url("../../assets/Rectangle 20.png") center no-repeat;
+  width: 100%;
+  height: 100%;
+}
+.container__section__card-2__content-panel__text {
+  width: 50%;
+  margin: 110px 100px 100px 100px;
+}
+.container__section__card-2__content-panel__img {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 46%;
+  height: 31%;
+  position: absolute;
+  top: 510px;
+  right: 41px;
+}
+.container__section__card-2__content-panel__img img {
+  width: 100%;
+  height: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 
 .container__footer {
@@ -548,90 +660,6 @@ p {
   width: -moz-max-content;
   width: max-content;
   color: #2c3f64;
-}
-
-.container__section {
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  height: 850px;
-  position: relative;
-  bottom: 100px;
-}
-.container__section__card-1 {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  position: absolute;
-  background-image: url("../../assets/Rectangle 20.png");
-  margin-right: 300px;
-  width: 850px;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.container__section__card-1__sidebar {
-  list-style: none;
-  padding: 90px;
-}
-.container__section__card-1__sidebar__button {
-  width: 200px;
-  height: 100px;
-  background-color: #2c3f64;
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 33px;
-  cursor: pointer;
-  text-align: center;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.container__section__card-1__sidebar__button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-.container__section__card-2 {
-  margin-left: 300px;
-  width: 850px;
-  height: 100%;
-  background-image: url("../../assets/Rectangle 13.png");
-  background-repeat: no-repeat;
-  background-position: center;
-  position: relative;
-}
-.container__section__card-2__content-panel {
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  justify-content: flex-start;
-  background: url("../../assets/Rectangle 20.png") center no-repeat;
-  width: 100%;
-  height: 100%;
-}
-.container__section__card-2__content-panel__text {
-  width: 50%;
-  margin: 110px 100px 100px 100px;
-}
-.container__section__card-2__content-panel__img {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 46%;
-  height: 31%;
-  position: absolute;
-  top: 510px;
-  right: 41px;
-}
-.container__section__card-2__content-panel__img img {
-  width: 100%;
-  height: 50%;
-  -o-object-fit: cover;
-     object-fit: cover;
 }
 
 /******************* NEWS ***********************/

@@ -39,7 +39,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ images }) => {
                     src={images[currentSlide].image}
                     alt={`Slide ${currentSlide + 1}`}
                     style={{ width: "100%", height: "auto" }}
-                    priority // Priorité de chargement pour la première image
+                    priority={true} // Priorité de chargement pour la première image
                 />
                 {/* Ajout de la boule rouge */}
 

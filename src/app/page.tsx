@@ -130,7 +130,7 @@ export default function HomePage() {
       </section>
 
       <Subscribe />
-      <Footer />
+
     </>
   );
 }

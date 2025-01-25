@@ -65,7 +65,7 @@ const ThemeProvider: React.FC = () => {
                 </select>
             </div>
 
-            {themeToApply === themes.summer && <SummerDecorations />}
+            {themeToApply === themes.summer && <SummerDecorations theme="summer" />}
             {themeToApply === themes.winter && <WinterDecorations />}
             {themeToApply === themes.halloween && <HalloweenDecorations />}
             {themeToApply === themes.christmas && <ChristmasDecorations />}
