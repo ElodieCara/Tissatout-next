@@ -1,0 +1,14 @@
+// Decorations/themes
+@use '../../../styles/utils/variables' as *;
+@use '../../../styles/base/mixins' as *;
+
+@each $theme, $settings in $themes {
+    .#{$theme}-theme {
+        @include theme-decorations(map-get($settings, bg-color),
+            map-get($settings, text-color));
+
+        @each $decoration, $image in map-get($settings, decorations) {
+            @include decoration("decoration-#{$decoration}", $image);
+        }
+    }
+}

@@ -1,3 +1,7 @@
+@use '../base/typography' as typo;
+@use '../utils/variables' as vars; // Les variables sont accessibles directement
+@use '../base/mixins' as mix; // Les mixins doivent utiliser le préfixe `mix`
+
 *,
 *::before,
 *::after {
@@ -21,27 +25,27 @@ header {
 }
 
 a {
-    @include font-primary($font-size-small);
+    @include mix.font-primary(vars.$font-size-small); // Utilisez le préfixe `mix`
     text-decoration: none;
     color: white;
 }
 
 h1 {
-    @include font-primary($font-size-xxlarge, bold);
+    @include mix.font-primary(vars.$font-size-xxlarge, bold); // Utilisez le préfixe `mix`
 }
 
 h2 {
-    @include font-secondary($font-size-xlarge, bold);
+    @include mix.font-secondary(vars.$font-size-xlarge, bold); // Utilisez le préfixe `mix`
 }
 
 h3 {
-    @include font-secondary($font-size-small, bold);
+    @include mix.font-secondary(vars.$font-size-small, bold); // Utilisez le préfixe `mix`
 }
 
 h4 {
-    @include font-tertiary($font-size-xlarge, bold);
+    @include mix.font-tertiary(vars.$font-size-xlarge, bold); // Utilisez le préfixe `mix`
 }
 
 p {
-    @include font-tertiary;
+    @include mix.font-tertiary; // Utilisez le préfixe `mix`
 }

@@ -15,9 +15,14 @@ import SpringDecorations from "./Spring/Spring";
 import AutumnDecorations from "./Autumn/Autumn";
 import { Theme } from "@/types/theme";
 import BackToSchoolDecorations from "./Back_to_school/BackToSchool";
+import { calculateEaster } from "@/utils/dateHelpers";
+import ThemeDecorations from "@/components/Decorations/Themes/ThemeDecorations";
+import { decorationsConfig } from "@/data/decorationsConfig";
+
 
 const themes: Record<Theme, string> = {
     "back-to-school-theme": "back-to-school-theme",
+    "easter-theme": "easter-theme",
     "default-theme": "default-theme",
     "summer-theme": "summer-theme",
     "winter-theme": "winter-theme",
@@ -50,13 +55,23 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     const themeToApply = forceTheme || theme;
 
     useEffect(() => {
+
+        const year = new Date().getFullYear();
+        const easterDate = calculateEaster(year);
+
         if (forceTheme !== null) return;
 
         const now = new Date();
         const month = now.getMonth();
         const day = now.getDate();
 
-        if (month === 11 && day >= 20) {
+        // Une semaine avant Pâques
+        const easterWeekStart = new Date(easterDate);
+        easterWeekStart.setDate(easterDate.getDate() - 7);
+
+        if (now >= easterWeekStart && now <= easterDate) {
+            setTheme("easter-theme"); // Thème appliqué pour Pâques
+        } else if (month === 11 && day >= 20) {
             setTheme("christmas-theme");
         } else if (month === 10 && day >= 25) {
             setTheme("halloween-theme");
@@ -76,8 +91,10 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     }, [forceTheme]);
 
     useEffect(() => {
-        document.body.className = themes[themeToApply];
+        // Appliquer la classe CSS du thème sur <body>
+        document.body.className = `${themeToApply}-theme`;
     }, [themeToApply]);
+
 
     useEffect(() => {
         console.log("forceTheme:", forceTheme);
@@ -106,13 +123,18 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
                 </select>
             </div>
 
-            {themeToApply === "back-to-school-theme" && <BackToSchoolDecorations />}
+            <ThemeDecorations
+                decorations={decorationsConfig[themeToApply] || []} // Toujours renvoyer un tableau vide
+                theme={themeToApply}
+            />
+
+            {/* {themeToApply === "back-to-school-theme" && <BackToSchoolDecorations />}
             {themeToApply === "summer-theme" && <SummerDecorations />}
             {themeToApply === "winter-theme" && <WinterDecorations />}
             {themeToApply === "spring-theme" && <SpringDecorations />}
             {themeToApply === "autumn-theme" && <AutumnDecorations />}
             {themeToApply === "halloween-theme" && <HalloweenDecorations />}
-            {themeToApply === "christmas-theme" && <ChristmasDecorations />}
+            {themeToApply === "christmas-theme" && <ChristmasDecorations />} */}
             <div key={themeToApply}>
                 {children}
             </div>

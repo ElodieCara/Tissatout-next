@@ -1,5 +1,6 @@
 export type Theme =
     | "default-theme"
+    | "easter-theme"
     | "summer-theme"
     | "winter-theme"
     | "spring-theme"

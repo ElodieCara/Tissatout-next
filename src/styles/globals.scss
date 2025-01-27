@@ -1,8 +1,10 @@
-@import "./utils/variables";
-@import "./base/fonts";
-@import "./base/mixins";
-@import "./base/typography";
-@import "./base/settings";
+// globals.scss
+
+@use './base/fonts' as *;
+@use './utils/variables' as *;
+@use './base/mixins' as *;
+@use './base/typography' as *;
+@use './base/settings' as *;
 
 // Composants globaux
 @import "../components/Card/Card.module.scss";
@@ -11,6 +13,8 @@
 @import "../components/Slideshow/Slideshow.module.scss";
 @import "../components/Button/Button.module.scss";
 @import "../components/RedBtn/RedBtn.module.scss";
+@import "../components/Decorations/Themes/decorations.scss";
+@import "../components/Decorations/Themes/themes.scss";
 
 // Layout
 @import "../layout/header/Header.module.scss";

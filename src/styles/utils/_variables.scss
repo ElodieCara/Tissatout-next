@@ -25,3 +25,20 @@ $font-size-base: 1rem;
 $font-size-large: 1.25rem;
 $font-size-xlarge: 1.5rem;
 $font-size-xxlarge: 2.5rem;
+
+// ----------------------------------------------------
+
+$themes: (
+    summer: (bg-color: #f0f8ff,
+        text-color: #003366,
+        decorations: (star: '/assets/Star.png',
+            balloon: '/assets/ballon-jaune-vide.png',
+            rocket: '/assets/navette.png'
+        )),
+    winter: (bg-color: #eaf7ff,
+        text-color: #001f3f,
+        decorations: (snowflake: '/assets/snowflake.png',
+            snowman: '/assets/snowman.png',
+            hot-chocolate: '/assets/hot-chocolate.png'
+        )) // Ajoutez d'autres thèmes ici...
+);

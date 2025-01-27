@@ -25,9 +25,6 @@ const Overview: React.FC = () => {
 
     return (
         <div className="container__section" style={{ position: "relative" }} key={theme}>
-            {/* Utilisation de ThemeIcon */}
-            <ThemeIcon theme={theme} />
-
             {/* Contenu principal */}
             <div className="container__section__card-1">
                 <ul className="container__section__card-1__sidebar">
@@ -46,6 +43,8 @@ const Overview: React.FC = () => {
             </div>
 
             <div className="container__section__card-2">
+                {/* Utilisation de ThemeIcon */}
+                <ThemeIcon theme={theme} />
                 <div className="container__section__card-2__content-panel">
                     <div className="container__section__card-2__content-panel__text">
                         <h3>{content}</h3>
