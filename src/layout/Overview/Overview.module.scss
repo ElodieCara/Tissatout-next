@@ -7,6 +7,24 @@
     bottom: 100px;
     z-index: 2;
 
+    &__theme {
+        position: absolute;
+        /* Fixe l'icône par rapport au conteneur */
+        top: 10px;
+        /* Distance depuis le haut */
+        right: 10px;
+        /* Distance depuis la droite */
+        z-index: 10;
+
+        & .theme-icon {
+            width: 80px;
+            /* Taille fixe */
+            height: auto;
+            /* Conserve les proportions */
+            display: block;
+        }
+    }
+
     &__card-1 {
         display: flex;
         flex-direction: column;

@@ -4,16 +4,16 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Card from "@/components/Card/Card";
-import ThemeProvider from "@/themes/ThemeProvider";
+import ThemeProvider, { useTheme } from "@/components/Decorations/Themes/ThemeProvider";
 import Overview from "@/layout/Overview/Overview";
 import ArticleCard from "@/components/ArticleCard/ArticleCard";
 import Subscribe from "@/layout/Subscribe/Subscribe";
-import Footer from "@/layout/Footer/Footer";
 import { news, ideas } from "@/data/home";
 import arrowPrev from "@/assets/arrow-circle-right.png";
 import arrowNext from "@/assets/arrow-circle-left.png";
 import Slideshow from "@/components/Slideshow/Slideshow";
 import { slide as slides } from "../data/home";
+
 
 export default function HomePage() {
   const [articles, setArticles] = useState(news);
@@ -32,12 +32,14 @@ export default function HomePage() {
     setCurrentSlide((prev) => (prev > 0 ? prev - 1 : totalSlides - 1));
   };
 
+
   return (
     <>
 
       <Slideshow images={slides} />
-      <Overview />
-      <ThemeProvider />
+      <ThemeProvider>
+        <Overview />
+      </ThemeProvider>
       {/* Section des actualités */}
       <section className="container__news">
         <h2>Actualités</h2>

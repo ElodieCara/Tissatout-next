@@ -69,67 +69,6 @@ p {
   line-height: 1.5;
 }
 
-.summer-theme {
-  position: relative;
-  background-color: #f0f8ff;
-  color: #003366;
-  width: 100%;
-  /* S'assure que le conteneur prend toute la largeur */
-  height: 100%;
-}
-.summer-theme .decorations-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.summer-theme .decorations-container__img {
-  position: relative;
-  /* Positionne l'image par rapport à decorations-container */
-  top: 73vh;
-  /* Position verticale basée sur la hauteur de la fenêtre */
-  left: 76vw;
-  /* Position horizontale basée sur la largeur de la fenêtre */
-  width: 10vw;
-  /* Ajuste la taille en fonction de la largeur de la fenêtre */
-  height: auto;
-  /* Conserve les proportions */
-  pointer-events: none;
-  /* Empêche les interactions utilisateur */
-  z-index: 3;
-  /* Place l'image au-dessus des décorations */
-  overflow: hidden;
-  /* Empêche le débordement (si nécessaire) */
-}
-.summer-theme .decorations-container__img img {
-  display: block;
-  /* Assure que l'image est bien rendue */
-  width: 100%;
-  /* Occupe tout l’espace défini par decorations-container__img */
-  height: auto;
-  /* Conserve les proportions */
-}
-.summer-theme .decoration {
-  position: absolute;
-  z-index: 0;
-  width: clamp(30px, 5vw, 50px);
-  height: clamp(30px, 5vw, 50px);
-  background-size: contain;
-  background-repeat: no-repeat;
-  filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
-}
-.summer-theme .decoration.decoration-star {
-  background-image: url("/assets/Star.png");
-}
-.summer-theme .decoration.decoration-balloon {
-  background-image: url("/assets/ballon-jaune-vide.png");
-}
-.summer-theme .decoration.decoration-rocket {
-  background-image: url("/assets/navette.png");
-}
-
 .card {
   width: 100% auto;
   height: 250px;
@@ -476,6 +415,22 @@ p {
   bottom: 100px;
   z-index: 2;
 }
+.container__section__theme {
+  position: absolute;
+  /* Fixe l'icône par rapport au conteneur */
+  top: 10px;
+  /* Distance depuis le haut */
+  right: 10px;
+  /* Distance depuis la droite */
+  z-index: 10;
+}
+.container__section__theme .theme-icon {
+  width: 80px;
+  /* Taille fixe */
+  height: auto;
+  /* Conserve les proportions */
+  display: block;
+}
 .container__section__card-1 {
   display: flex;
   flex-direction: column;
@@ -660,6 +615,42 @@ p {
   width: -moz-max-content;
   width: max-content;
   color: #2c3f64;
+}
+
+.summer-theme {
+  position: relative;
+  background-color: #f0f8ff;
+  color: #003366;
+  width: 100%;
+  /* S'assure que le conteneur prend toute la largeur */
+  height: 100%;
+}
+.summer-theme .decorations-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.decoration {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
+}
+.decoration.decoration-star {
+  background-image: url("/assets/Star.png");
+}
+.decoration.decoration-balloon {
+  background-image: url("/assets/ballon-jaune-vide.png");
+}
+.decoration.decoration-rocket {
+  background-image: url("/assets/navette.png");
 }
 
 /******************* NEWS ***********************/

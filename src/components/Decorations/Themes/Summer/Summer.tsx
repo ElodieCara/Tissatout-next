@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-// Type pour définir les thèmes disponibles
-type Theme = "summer" | "winter" | "spring" | "autumn";
 
-// Propriétés acceptées par le composant
-interface DecorationsProps {
-    theme: Theme;
-}
-
-const SummerDecorations: React.FC<DecorationsProps> = ({ theme }) => {
+const SummerDecorations: React.FC = () => {
     // Liste des décorations avec leurs classes CSS
     const decorations = [
         "decoration-star", // Étoile
@@ -23,15 +16,6 @@ const SummerDecorations: React.FC<DecorationsProps> = ({ theme }) => {
         bottom: 0,
     });
 
-    // Images dynamiques par thème
-    const themeImages = {
-        summer: "/assets/sun.png",
-        winter: "/assets/snowflake.png",
-        spring: "/assets/flower.png",
-        autumn: "/assets/leaf.png",
-    };
-
-    const themeImage = themeImages[theme]; // Obtenir l'image correspondant au thème
 
     // Calculer la hauteur de <main> et la position du conteneur "container__slide"
     useEffect(() => {
@@ -75,11 +59,6 @@ const SummerDecorations: React.FC<DecorationsProps> = ({ theme }) => {
 
     return (
         <div className="decorations-container">
-            {/* Image dynamique basée sur le thème */}
-            <div className="decorations-container__img">
-                <img src={themeImage} alt={`${theme} icon`} className="theme-icon" />
-            </div>
-
             {/* Décorations dynamiques */}
             {repeatedDecorations.map((decoration, index) => (
                 <div
