@@ -23,13 +23,13 @@ export const decorationsConfig: Record<Theme, { className: string }[]> = {
         { className: "decoration-owl" },
     ],
     "halloween-theme": [
-        { className: "decoration-pumpkin" },
+        { className: "decoration-bat" },
         { className: "decoration-ghost" },
         { className: "decoration-witch-hat" },
     ],
     "christmas-theme": [
         { className: "decoration-christmas-tree" },
-        { className: "decoration-gift" },
+        { className: "decoration-candy" },
         { className: "decoration-lights" },
     ],
     "easter-theme": [
@@ -40,7 +40,7 @@ export const decorationsConfig: Record<Theme, { className: string }[]> = {
     "back-to-school-theme": [
         { className: "decoration-bag" },
         { className: "decoration-ruler" },
-        { className: "decoration-lamp" },
+        { className: "decoration-book" },
     ],
     // Ajoutez une entrée vide pour "default-theme"
     "default-theme": [],

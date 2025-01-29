@@ -26,19 +26,67 @@ $font-size-large: 1.25rem;
 $font-size-xlarge: 1.5rem;
 $font-size-xxlarge: 2.5rem;
 
-// ----------------------------------------------------
+//-----------------------------------------------------
 
 $themes: (
     summer: (bg-color: #f0f8ff,
         text-color: #003366,
-        decorations: (star: '/assets/Star.png',
-            balloon: '/assets/ballon-jaune-vide.png',
-            rocket: '/assets/navette.png'
+        icon-filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%), // JAUNE SOLEIL ☀️
+        decorations: (star: '/assets/decorations/summer/summer-star.png',
+            balloon: '/assets/decorations/summer/summer-balloon.png',
+            rocket: '/assets/decorations/summer/summer-rocket.png'
         )),
     winter: (bg-color: #eaf7ff,
         text-color: #001f3f,
-        decorations: (snowflake: '/assets/snowflake.png',
-            snowman: '/assets/snowman.png',
-            hot-chocolate: '/assets/hot-chocolate.png'
-        )) // Ajoutez d'autres thèmes ici...
+        icon-filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(1200%) hue-rotate(200deg) brightness(90%) contrast(110%), // BLEU GLACÉ ❄️
+        decorations: (snowflake: '/assets/decorations/winter/winter-snowflake.png',
+            snowman: '/assets/decorations/winter/winter-snowman.png',
+            hot-chocolate: '/assets/decorations/winter/winter-hot-chocolate.png'
+        )),
+    spring: (bg-color: #eaffea,
+        text-color: #004d00,
+        icon-filter: brightness(0) saturate(100%) invert(70%) sepia(100%) saturate(2000%) hue-rotate(310deg) brightness(100%) contrast(98%), // ROSE FLORAL 🌸
+        decorations: (flower: '/assets/decorations/spring/spring-flower.png',
+            butterfly: '/assets/decorations/spring/spring-butterfly.png',
+            nest: '/assets/decorations/spring/spring-nest.png'
+        )),
+    autumn: (bg-color: #fff4e6,
+        text-color: #663300,
+        icon-filter: brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(1800%) hue-rotate(25deg) brightness(95%) contrast(105%), // ORANGE FEUILLAGE 🍂
+        decorations: (mushroom: '/assets/decorations/autumn/autumn-mushroom.png',
+            acorns: '/assets/decorations/autumn/autumn-acorns.png',
+            owl: '/assets/decorations/autumn/autumn-owl.png'
+        )),
+    halloween: (bg-color: #1e1e1e,
+        text-color: #ff7518,
+        icon-filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(7500%) hue-rotate(0deg) brightness(80%) contrast(130%), // ROUGE EFFRAYANT 🎃
+        decorations: (bat: '/assets/decorations/halloween/halloween-bat.png',
+            ghost: '/assets/decorations/halloween/halloween-ghost.png',
+            witch-hat: '/assets/decorations/halloween/halloween-witch-hat.png'
+        )),
+    christmas: (bg-color: #ffefef,
+        text-color: #004d4d,
+        icon-filter: brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(800%) hue-rotate(120deg) brightness(95%) contrast(100%), // VERT SAPIN 🎄
+        decorations: (christmas-tree: '/assets/decorations/christmas/christmas-tree.png',
+            candy: '/assets/decorations/christmas/christmas-candy.png',
+            lights: '/assets/decorations/christmas/christmas-lights.png'
+        )),
+    easter: (bg-color: #fffbea,
+        text-color: #ffa500,
+        icon-filter: brightness(0) saturate(100%) invert(69%) sepia(83%) saturate(420%) hue-rotate(310deg) brightness(92%) contrast(99%), // ROSE PÂQUES 🐰
+        decorations: (egg: '/assets/decorations/easter/easter-egg.png',
+            bunny: '/assets/decorations/easter/easter-bunny.png',
+            carrot: '/assets/decorations/easter/easter-carrot.png'
+        )),
+    back-to-school: (bg-color: #f7f7f7,
+        text-color: #333333,
+        icon-filter: brightness(0) saturate(100%) invert(26%) sepia(92%) saturate(3600%) hue-rotate(240deg) brightness(89%) contrast(115%), // BLEU CARTABLE 🎒
+        decorations: (bag: '/assets/decorations/back-to-school/back-to-school-bag.png',
+            ruler: '/assets/decorations/back-to-school/back-to-school-ruler.png',
+            book: '/assets/decorations/back-to-school/back-to-school-book.png'
+        )),
+    default: (bg-color: #ffffff,
+        text-color: #000000,
+        icon-filter: brightness(0) saturate(100%) invert(50%) sepia(50%) saturate(800%) hue-rotate(0deg) brightness(100%) contrast(100%), // GRIS PAR DÉFAUT ⚫
+        decorations: ())
 );

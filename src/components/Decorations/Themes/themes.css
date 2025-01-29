@@ -13,34 +13,34 @@
   height: 100%;
   pointer-events: none;
 }
-.summer-theme .decoration-star {
+.summer-theme .decorations-container .decoration-star {
   position: absolute;
   z-index: 0;
   width: clamp(30px, 5vw, 50px);
   height: clamp(30px, 5vw, 50px);
   background-size: contain;
   background-repeat: no-repeat;
-  background-image: url(/assets/Star.png);
+  background-image: url("/assets/decorations/summer/summer-star.png");
   filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
 }
-.summer-theme .decoration-balloon {
+.summer-theme .decorations-container .decoration-balloon {
   position: absolute;
   z-index: 0;
   width: clamp(30px, 5vw, 50px);
   height: clamp(30px, 5vw, 50px);
   background-size: contain;
   background-repeat: no-repeat;
-  background-image: url(/assets/ballon-jaune-vide.png);
+  background-image: url("/assets/decorations/summer/summer-balloon.png");
   filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
 }
-.summer-theme .decoration-rocket {
+.summer-theme .decorations-container .decoration-rocket {
   position: absolute;
   z-index: 0;
   width: clamp(30px, 5vw, 50px);
   height: clamp(30px, 5vw, 50px);
   background-size: contain;
   background-repeat: no-repeat;
-  background-image: url(/assets/navette.png);
+  background-image: url("/assets/decorations/summer/summer-rocket.png");
   filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
 }
 
@@ -59,33 +59,325 @@
   height: 100%;
   pointer-events: none;
 }
-.winter-theme .decoration-snowflake {
+.winter-theme .decorations-container .decoration-snowflake {
   position: absolute;
   z-index: 0;
   width: clamp(30px, 5vw, 50px);
   height: clamp(30px, 5vw, 50px);
   background-size: contain;
   background-repeat: no-repeat;
-  background-image: url(/assets/snowflake.png);
-  filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
+  background-image: url("/assets/decorations/winter/winter-snowflake.png");
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(1200%) hue-rotate(200deg) brightness(90%) contrast(110%);
 }
-.winter-theme .decoration-snowman {
+.winter-theme .decorations-container .decoration-snowman {
   position: absolute;
   z-index: 0;
   width: clamp(30px, 5vw, 50px);
   height: clamp(30px, 5vw, 50px);
   background-size: contain;
   background-repeat: no-repeat;
-  background-image: url(/assets/snowman.png);
-  filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
+  background-image: url("/assets/decorations/winter/winter-snowman.png");
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(1200%) hue-rotate(200deg) brightness(90%) contrast(110%);
 }
-.winter-theme .decoration-hot-chocolate {
+.winter-theme .decorations-container .decoration-hot-chocolate {
   position: absolute;
   z-index: 0;
   width: clamp(30px, 5vw, 50px);
   height: clamp(30px, 5vw, 50px);
   background-size: contain;
   background-repeat: no-repeat;
-  background-image: url(/assets/hot-chocolate.png);
-  filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
+  background-image: url("/assets/decorations/winter/winter-hot-chocolate.png");
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(1200%) hue-rotate(200deg) brightness(90%) contrast(110%);
+}
+
+.spring-theme {
+  position: relative;
+  background-color: #eaffea;
+  color: #004d00;
+  width: 100%;
+  height: 100%;
+}
+.spring-theme .decorations-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.spring-theme .decorations-container .decoration-flower {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/spring/spring-flower.png");
+  filter: brightness(0) saturate(100%) invert(70%) sepia(100%) saturate(2000%) hue-rotate(310deg) brightness(100%) contrast(98%);
+}
+.spring-theme .decorations-container .decoration-butterfly {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/spring/spring-butterfly.png");
+  filter: brightness(0) saturate(100%) invert(70%) sepia(100%) saturate(2000%) hue-rotate(310deg) brightness(100%) contrast(98%);
+}
+.spring-theme .decorations-container .decoration-nest {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/spring/spring-nest.png");
+  filter: brightness(0) saturate(100%) invert(70%) sepia(100%) saturate(2000%) hue-rotate(310deg) brightness(100%) contrast(98%);
+}
+
+.autumn-theme {
+  position: relative;
+  background-color: #fff4e6;
+  color: #663300;
+  width: 100%;
+  height: 100%;
+}
+.autumn-theme .decorations-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.autumn-theme .decorations-container .decoration-mushroom {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/autumn/autumn-mushroom.png");
+  filter: brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(1800%) hue-rotate(25deg) brightness(95%) contrast(105%);
+}
+.autumn-theme .decorations-container .decoration-acorns {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/autumn/autumn-acorns.png");
+  filter: brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(1800%) hue-rotate(25deg) brightness(95%) contrast(105%);
+}
+.autumn-theme .decorations-container .decoration-owl {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/autumn/autumn-owl.png");
+  filter: brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(1800%) hue-rotate(25deg) brightness(95%) contrast(105%);
+}
+
+.halloween-theme {
+  position: relative;
+  background-color: #1e1e1e;
+  color: #ff7518;
+  width: 100%;
+  height: 100%;
+}
+.halloween-theme .decorations-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.halloween-theme .decorations-container .decoration-bat {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/halloween/halloween-bat.png");
+  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(7500%) hue-rotate(0deg) brightness(80%) contrast(130%);
+}
+.halloween-theme .decorations-container .decoration-ghost {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/halloween/halloween-ghost.png");
+  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(7500%) hue-rotate(0deg) brightness(80%) contrast(130%);
+}
+.halloween-theme .decorations-container .decoration-witch-hat {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/halloween/halloween-witch-hat.png");
+  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(7500%) hue-rotate(0deg) brightness(80%) contrast(130%);
+}
+
+.christmas-theme {
+  position: relative;
+  background-color: #ffefef;
+  color: #004d4d;
+  width: 100%;
+  height: 100%;
+}
+.christmas-theme .decorations-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.christmas-theme .decorations-container .decoration-christmas-tree {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/christmas/christmas-tree.png");
+  filter: brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(800%) hue-rotate(120deg) brightness(95%) contrast(100%);
+}
+.christmas-theme .decorations-container .decoration-candy {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/christmas/christmas-candy.png");
+  filter: brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(800%) hue-rotate(120deg) brightness(95%) contrast(100%);
+}
+.christmas-theme .decorations-container .decoration-lights {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/christmas/christmas-lights.png");
+  filter: brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(800%) hue-rotate(120deg) brightness(95%) contrast(100%);
+}
+
+.easter-theme {
+  position: relative;
+  background-color: #fffbea;
+  color: #ffa500;
+  width: 100%;
+  height: 100%;
+}
+.easter-theme .decorations-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.easter-theme .decorations-container .decoration-egg {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/easter/easter-egg.png");
+  filter: brightness(0) saturate(100%) invert(69%) sepia(83%) saturate(420%) hue-rotate(310deg) brightness(92%) contrast(99%);
+}
+.easter-theme .decorations-container .decoration-bunny {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/easter/easter-bunny.png");
+  filter: brightness(0) saturate(100%) invert(69%) sepia(83%) saturate(420%) hue-rotate(310deg) brightness(92%) contrast(99%);
+}
+.easter-theme .decorations-container .decoration-carrot {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/easter/easter-carrot.png");
+  filter: brightness(0) saturate(100%) invert(69%) sepia(83%) saturate(420%) hue-rotate(310deg) brightness(92%) contrast(99%);
+}
+
+.back-to-school-theme {
+  position: relative;
+  background-color: #f7f7f7;
+  color: #333333;
+  width: 100%;
+  height: 100%;
+}
+.back-to-school-theme .decorations-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.back-to-school-theme .decorations-container .decoration-bag {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/back-to-school/back-to-school-bag.png");
+  filter: brightness(0) saturate(100%) invert(26%) sepia(92%) saturate(3600%) hue-rotate(240deg) brightness(89%) contrast(115%);
+}
+.back-to-school-theme .decorations-container .decoration-ruler {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/back-to-school/back-to-school-ruler.png");
+  filter: brightness(0) saturate(100%) invert(26%) sepia(92%) saturate(3600%) hue-rotate(240deg) brightness(89%) contrast(115%);
+}
+.back-to-school-theme .decorations-container .decoration-book {
+  position: absolute;
+  z-index: 0;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/decorations/back-to-school/back-to-school-book.png");
+  filter: brightness(0) saturate(100%) invert(26%) sepia(92%) saturate(3600%) hue-rotate(240deg) brightness(89%) contrast(115%);
+}
+
+.default-theme {
+  position: relative;
+  background-color: #ffffff;
+  color: #000000;
+  width: 100%;
+  height: 100%;
+}
+.default-theme .decorations-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }/*# sourceMappingURL=themes.css.map */

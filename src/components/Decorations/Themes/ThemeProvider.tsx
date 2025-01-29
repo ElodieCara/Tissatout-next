@@ -7,14 +7,7 @@ import React, {
     useEffect,
     ReactNode,
 } from "react";
-import SummerDecorations from "@/components/Decorations/Themes/Summer/Summer";
-import WinterDecorations from "@/components/Decorations/Themes/Winter/Winter";
-import HalloweenDecorations from "@/components/Decorations/Themes/Halloween/Halloween";
-import ChristmasDecorations from "@/components/Decorations/Themes/Christmas/Christmas";
-import SpringDecorations from "./Spring/Spring";
-import AutumnDecorations from "./Autumn/Autumn";
 import { Theme } from "@/types/theme";
-import BackToSchoolDecorations from "./Back_to_school/BackToSchool";
 import { calculateEaster } from "@/utils/dateHelpers";
 import ThemeDecorations from "@/components/Decorations/Themes/ThemeDecorations";
 import { decorationsConfig } from "@/data/decorationsConfig";
@@ -36,6 +29,7 @@ interface ThemeContextType {
     theme: Theme;
     setForceTheme: (theme: Theme | null) => void;
 }
+
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
@@ -92,7 +86,7 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
 
     useEffect(() => {
         // Appliquer la classe CSS du thème sur <body>
-        document.body.className = `${themeToApply}-theme`;
+        document.body.className = `${themeToApply}`;
     }, [themeToApply]);
 
 
@@ -123,18 +117,8 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
                 </select>
             </div>
 
-            <ThemeDecorations
-                decorations={decorationsConfig[themeToApply] || []} // Toujours renvoyer un tableau vide
-                theme={themeToApply}
-            />
+            <ThemeDecorations theme={themeToApply} />
 
-            {/* {themeToApply === "back-to-school-theme" && <BackToSchoolDecorations />}
-            {themeToApply === "summer-theme" && <SummerDecorations />}
-            {themeToApply === "winter-theme" && <WinterDecorations />}
-            {themeToApply === "spring-theme" && <SpringDecorations />}
-            {themeToApply === "autumn-theme" && <AutumnDecorations />}
-            {themeToApply === "halloween-theme" && <HalloweenDecorations />}
-            {themeToApply === "christmas-theme" && <ChristmasDecorations />} */}
             <div key={themeToApply}>
                 {children}
             </div>

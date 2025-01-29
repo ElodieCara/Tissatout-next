@@ -55,15 +55,17 @@
     }
 }
 
-@mixin decoration($class-name, $image) {
-    .#{$class-name} {
+@mixin decoration($class-name, $image, $icon-filter) {
+    .decorations-container .#{$class-name} {
         position: absolute;
         z-index: 0;
         width: clamp(30px, 5vw, 50px);
         height: clamp(30px, 5vw, 50px);
         background-size: contain;
         background-repeat: no-repeat;
-        background-image: url(#{$image});
-        filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
+        background-image: url('#{$image}');
+        @debug "Filter appliqué : #{$icon-filter}";
+        filter: $icon-filter;
     }
+
 }

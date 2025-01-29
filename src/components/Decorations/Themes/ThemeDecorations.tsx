@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-
-interface Decoration {
-    className: string;
-}
+import { decorationsConfig } from "@/data/decorationsConfig";
+import { Theme } from "@/types/theme";
 
 interface ThemeDecorationsProps {
-    decorations: Decoration[];
-    theme: string;
+    theme: Theme; // Seul le thème est nécessaire
 }
 
-const ThemeDecorations: React.FC<ThemeDecorationsProps> = ({ decorations, theme }) => {
+const ThemeDecorations: React.FC<ThemeDecorationsProps> = ({ theme }) => {
     const [mainHeight, setMainHeight] = useState(0);
+
+    // Récupérer les décorations correspondant au thème
+    const decorations = decorationsConfig[theme] || decorationsConfig["default-theme"];
 
     useEffect(() => {
         const mainElement = document.querySelector("main");
@@ -21,17 +21,18 @@ const ThemeDecorations: React.FC<ThemeDecorationsProps> = ({ decorations, theme 
 
     useEffect(() => {
         console.log("Theme:", theme);
-        console.log("Received decorations:", decorations);
+        console.log("Decorations for theme:", decorations);
     }, [theme, decorations]);
 
-    // Ne générez rien si `decorations` est vide
+    // Ne rien générer si aucune décoration n'est disponible
     if (!decorations || decorations.length === 0) {
         console.warn(`No decorations available for theme: ${theme}`);
         return null;
     }
 
+    // Génération des décorations dynamiques
     const repeatedDecorations = Array.from({ length: 32 }, (_, i) => {
-        const baseClass = decorations[i % decorations.length].className; // Sécurisé maintenant
+        const baseClass = decorations[i % decorations.length].className; // Récupération des classes
         const totalItems = 20;
         const top = (i / totalItems) * (mainHeight * 0.6);
 
@@ -48,7 +49,7 @@ const ThemeDecorations: React.FC<ThemeDecorationsProps> = ({ decorations, theme 
     });
 
     return (
-        <div className={`${theme}-decorations decorations-container`}>
+        <div className={`${theme}-theme decorations-container`}>
             {repeatedDecorations.map((decoration, index) => (
                 <div
                     key={index}

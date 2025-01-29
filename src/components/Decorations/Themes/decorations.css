@@ -1,9 +1,1 @@
-.decoration {
-  position: absolute;
-  z-index: 0;
-  width: clamp(30px, 5vw, 50px);
-  height: clamp(30px, 5vw, 50px);
-  background-size: contain;
-  background-repeat: no-repeat;
-  filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
-}/*# sourceMappingURL=decorations.css.map */
+/*# sourceMappingURL=decorations.css.map */
