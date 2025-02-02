@@ -8,8 +8,12 @@ export interface Slide {
 export interface Section {
     title: string;
     color: string;
+    content: string;
+    activities: string[];
     buttonImage: StaticImageData; // Pour les images
     imageCard: StaticImageData;
+    description: string;
+    conclusion: string;
 }
 
 export interface News {
@@ -27,3 +31,4 @@ export interface Idea {
     title: string;
     description: string;
 }
+

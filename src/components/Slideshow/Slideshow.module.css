@@ -20,7 +20,7 @@
 }
 .container__slide__buttons {
   position: absolute;
-  top: 150px;
+  top: 208px;
   left: 30px;
   right: 30px;
   display: flex;
@@ -29,7 +29,7 @@
 }
 .container__slide__pagination {
   position: absolute;
-  bottom: 80px;
+  bottom: 37px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -55,8 +55,8 @@
 }
 .container__slide__text {
   position: absolute;
-  bottom: 125px;
-  left: 150px;
+  bottom: 65px;
+  left: 156px;
   color: white;
   font-size: large;
   width: 40%;

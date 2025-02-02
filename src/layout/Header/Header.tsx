@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaFacebook, FaPinterest } from "react-icons/fa";
 import { FaXTwitter, FaMagnifyingGlass } from "react-icons/fa6";
+import Navbar from "@/components/Navbar/Navbar";
 
 const Header: React.FC = () => {
     const [click, setClick] = useState(false);
@@ -36,7 +37,9 @@ const Header: React.FC = () => {
                             style={{ objectFit: "contain" }} // Garde les proportions
                         />
                     </div>
-                    <h1 className="header__masthead__nav-main__title">Tissatout</h1>
+                    <Link href="/">
+                        <h1 className="header__masthead__nav-main__title">Tissatout</h1>
+                    </Link>
                     <form
                         className="header__masthead__nav-main__input"
                         action="#"
@@ -49,28 +52,7 @@ const Header: React.FC = () => {
                     </form>
                 </nav>
             </div>
-            {/* Sub-masthead */}
-            <div className="header__sub-masthead">
-                <nav className="header__sub-masthead__nav">
-                    <div className="header__sub-masthead__nav__container">
-                        <ul className="header__sub-masthead__nav__container__navbar">
-                            {["Accueil", "Articles", "Coloriages", "Jeux", "À propos", "Contact"].map(
-                                (title, index) => (
-                                    <li
-                                        key={index}
-                                        className="header__sub-masthead__nav__container__navbar-menu"
-                                    >
-                                        <Link href={`/${title.toLowerCase()}`} legacyBehavior>
-                                            <a onClick={handleClick}>{title}</a>
-                                        </Link>
-                                    </li>
-                                )
-                            )}
-                        </ul>
-                    </div>
-                </nav>
-
-            </div>
+            <Navbar />
         </header>
     );
 };

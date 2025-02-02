@@ -49,3 +49,8 @@ h4 {
 p {
     @include mix.font-tertiary; // Utilisez le préfixe `mix`
 }
+
+strong {
+    font-weight: normal;
+    /* Enlève le gras */
+}

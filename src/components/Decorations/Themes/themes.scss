@@ -1,17 +1,19 @@
 // Decorations/themes
 @use '../../../styles/utils/variables' as *;
 @use '../../../styles/base/mixins' as *;
+@use "sass:map";
+
 
 @each $theme, $settings in $themes {
     @debug $theme;
 
     .#{$theme}-theme {
-        @include theme-decorations(map-get($settings, bg-color),
-            map-get($settings, text-color));
+        @include theme-decorations(map.get($settings, bg-color),
+            map.get($settings, text-color));
 
-        $icon-filter: map-get($settings, icon-filter); // Récupérer le bon filtre
+        $icon-filter: map.get($settings, icon-filter); // Récupérer le bon filtre
 
-        @each $decoration, $image in map-get($settings, decorations) {
+        @each $decoration, $image in map.get($settings, decorations) {
             @debug $decoration; // Vérifie les décorations générées
             @debug $image; // Vérifie les chemins d'image
             @debug "Filter appliqué : #{$icon-filter}"; // Vérifie le filter récupéré

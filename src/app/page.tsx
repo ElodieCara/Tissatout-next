@@ -42,7 +42,7 @@ export default function HomePage() {
       </ThemeProvider>
       {/* Section des actualités */}
       <section className="container__news">
-        <h2>Actualités</h2>
+        <h2>Nouveautés</h2>
         <div className="news-content">
           <div className="news-content__images-gallery">
             <div className="news-content__images-gallery__slide-container">

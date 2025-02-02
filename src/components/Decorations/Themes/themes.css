@@ -1,12 +1,12 @@
 .summer-theme {
   position: relative;
-  background-color: #f0f8ff;
+  background-color: #f9fbfd;
   color: #003366;
   width: 100%;
   height: 100%;
 }
 .summer-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -46,13 +46,13 @@
 
 .winter-theme {
   position: relative;
-  background-color: #eaf7ff;
+  background-color: #f8fbfd;
   color: #001f3f;
   width: 100%;
   height: 100%;
 }
 .winter-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -98,7 +98,7 @@
   height: 100%;
 }
 .spring-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -144,7 +144,7 @@
   height: 100%;
 }
 .autumn-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -184,13 +184,13 @@
 
 .halloween-theme {
   position: relative;
-  background-color: #1e1e1e;
-  color: #ff7518;
+  background-color: #fdf4e3;
+  color: #2c3f64;
   width: 100%;
   height: 100%;
 }
 .halloween-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -205,7 +205,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/halloween/halloween-bat.png");
-  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(7500%) hue-rotate(0deg) brightness(80%) contrast(130%);
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(2000%) hue-rotate(20deg) brightness(95%) contrast(105%);
 }
 .halloween-theme .decorations-container .decoration-ghost {
   position: absolute;
@@ -215,7 +215,7 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/halloween/halloween-ghost.png");
-  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(7500%) hue-rotate(0deg) brightness(80%) contrast(130%);
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(2000%) hue-rotate(20deg) brightness(95%) contrast(105%);
 }
 .halloween-theme .decorations-container .decoration-witch-hat {
   position: absolute;
@@ -225,18 +225,18 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/halloween/halloween-witch-hat.png");
-  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(7500%) hue-rotate(0deg) brightness(80%) contrast(130%);
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(2000%) hue-rotate(20deg) brightness(95%) contrast(105%);
 }
 
 .christmas-theme {
   position: relative;
-  background-color: #ffefef;
+  background-color: white;
   color: #004d4d;
   width: 100%;
   height: 100%;
 }
 .christmas-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -251,7 +251,6 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/christmas/christmas-tree.png");
-  filter: brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(800%) hue-rotate(120deg) brightness(95%) contrast(100%);
 }
 .christmas-theme .decorations-container .decoration-candy {
   position: absolute;
@@ -261,7 +260,6 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/christmas/christmas-candy.png");
-  filter: brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(800%) hue-rotate(120deg) brightness(95%) contrast(100%);
 }
 .christmas-theme .decorations-container .decoration-lights {
   position: absolute;
@@ -271,7 +269,6 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/christmas/christmas-lights.png");
-  filter: brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(800%) hue-rotate(120deg) brightness(95%) contrast(100%);
 }
 
 .easter-theme {
@@ -282,7 +279,7 @@
   height: 100%;
 }
 .easter-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -328,7 +325,7 @@
   height: 100%;
 }
 .back-to-school-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -374,7 +371,7 @@
   height: 100%;
 }
 .default-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;

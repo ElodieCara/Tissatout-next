@@ -1,3 +1,5 @@
+@use "../../styles/utils/variables" as *;
+
 .articles-gallery {
     display: flex;
     margin-bottom: 15px;
@@ -28,6 +30,7 @@
 
         &__title {
             font-weight: bold;
+            color: $primary-color !important;
         }
 
         &__description {
@@ -38,6 +41,7 @@
 
         &__date {
             font-size: 100%;
+            color: $primary-color !important;
         }
     }
 }

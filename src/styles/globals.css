@@ -28,7 +28,7 @@ a {
   font-size: 0.875rem;
   font-weight: normal;
   line-height: 1.5;
-  letter-spacing: 3px;
+  text-transform: uppercase;
   text-decoration: none;
   color: white;
 }
@@ -38,7 +38,7 @@ h1 {
   font-size: 2.5rem;
   font-weight: bold;
   line-height: 1.5;
-  letter-spacing: 3px;
+  text-transform: uppercase;
 }
 
 h2 {
@@ -126,6 +126,7 @@ p {
 }
 .articles-gallery__body__title {
   font-weight: bold;
+  color: #2c3f64 !important;
 }
 .articles-gallery__body__description {
   width: 40vh;
@@ -134,6 +135,7 @@ p {
 }
 .articles-gallery__body__date {
   font-size: 100%;
+  color: #2c3f64 !important;
 }
 
 .container__slide {
@@ -275,13 +277,13 @@ p {
 }
 .summer-theme {
   position: relative;
-  background-color: #f0f8ff;
+  background-color: #f9fbfd;
   color: #003366;
   width: 100%;
   height: 100%;
 }
 .summer-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -296,7 +298,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/summer/summer-star.png");
-  filter: summer;
+  filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
 }
 .summer-theme .decorations-container .decoration-balloon {
   position: absolute;
@@ -306,7 +308,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/summer/summer-balloon.png");
-  filter: summer;
+  filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
 }
 .summer-theme .decorations-container .decoration-rocket {
   position: absolute;
@@ -316,18 +318,18 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/summer/summer-rocket.png");
-  filter: summer;
+  filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%);
 }
 
 .winter-theme {
   position: relative;
-  background-color: #eaf7ff;
+  background-color: #f8fbfd;
   color: #001f3f;
   width: 100%;
   height: 100%;
 }
 .winter-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -342,7 +344,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/winter/winter-snowflake.png");
-  filter: winter;
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(1200%) hue-rotate(200deg) brightness(90%) contrast(110%);
 }
 .winter-theme .decorations-container .decoration-snowman {
   position: absolute;
@@ -352,7 +354,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/winter/winter-snowman.png");
-  filter: winter;
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(1200%) hue-rotate(200deg) brightness(90%) contrast(110%);
 }
 .winter-theme .decorations-container .decoration-hot-chocolate {
   position: absolute;
@@ -362,7 +364,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/winter/winter-hot-chocolate.png");
-  filter: winter;
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(1200%) hue-rotate(200deg) brightness(90%) contrast(110%);
 }
 
 .spring-theme {
@@ -373,7 +375,7 @@ p {
   height: 100%;
 }
 .spring-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -388,7 +390,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/spring/spring-flower.png");
-  filter: spring;
+  filter: brightness(0) saturate(100%) invert(70%) sepia(100%) saturate(2000%) hue-rotate(310deg) brightness(100%) contrast(98%);
 }
 .spring-theme .decorations-container .decoration-butterfly {
   position: absolute;
@@ -398,7 +400,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/spring/spring-butterfly.png");
-  filter: spring;
+  filter: brightness(0) saturate(100%) invert(70%) sepia(100%) saturate(2000%) hue-rotate(310deg) brightness(100%) contrast(98%);
 }
 .spring-theme .decorations-container .decoration-nest {
   position: absolute;
@@ -408,7 +410,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/spring/spring-nest.png");
-  filter: spring;
+  filter: brightness(0) saturate(100%) invert(70%) sepia(100%) saturate(2000%) hue-rotate(310deg) brightness(100%) contrast(98%);
 }
 
 .autumn-theme {
@@ -419,7 +421,7 @@ p {
   height: 100%;
 }
 .autumn-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -434,7 +436,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/autumn/autumn-mushroom.png");
-  filter: autumn;
+  filter: brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(1800%) hue-rotate(25deg) brightness(95%) contrast(105%);
 }
 .autumn-theme .decorations-container .decoration-acorns {
   position: absolute;
@@ -444,7 +446,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/autumn/autumn-acorns.png");
-  filter: autumn;
+  filter: brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(1800%) hue-rotate(25deg) brightness(95%) contrast(105%);
 }
 .autumn-theme .decorations-container .decoration-owl {
   position: absolute;
@@ -454,18 +456,18 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/autumn/autumn-owl.png");
-  filter: autumn;
+  filter: brightness(0) saturate(100%) invert(40%) sepia(100%) saturate(1800%) hue-rotate(25deg) brightness(95%) contrast(105%);
 }
 
 .halloween-theme {
   position: relative;
-  background-color: #1e1e1e;
-  color: #ff7518;
+  background-color: #fdf4e3;
+  color: #2c3f64;
   width: 100%;
   height: 100%;
 }
 .halloween-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -480,7 +482,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/halloween/halloween-bat.png");
-  filter: halloween;
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(2000%) hue-rotate(20deg) brightness(95%) contrast(105%);
 }
 .halloween-theme .decorations-container .decoration-ghost {
   position: absolute;
@@ -490,7 +492,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/halloween/halloween-ghost.png");
-  filter: halloween;
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(2000%) hue-rotate(20deg) brightness(95%) contrast(105%);
 }
 .halloween-theme .decorations-container .decoration-witch-hat {
   position: absolute;
@@ -500,18 +502,18 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/halloween/halloween-witch-hat.png");
-  filter: halloween;
+  filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(2000%) hue-rotate(20deg) brightness(95%) contrast(105%);
 }
 
 .christmas-theme {
   position: relative;
-  background-color: #ffefef;
+  background-color: white;
   color: #004d4d;
   width: 100%;
   height: 100%;
 }
 .christmas-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -526,7 +528,6 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/christmas/christmas-tree.png");
-  filter: christmas;
 }
 .christmas-theme .decorations-container .decoration-candy {
   position: absolute;
@@ -536,7 +537,6 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/christmas/christmas-candy.png");
-  filter: christmas;
 }
 .christmas-theme .decorations-container .decoration-lights {
   position: absolute;
@@ -546,7 +546,6 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/christmas/christmas-lights.png");
-  filter: christmas;
 }
 
 .easter-theme {
@@ -557,7 +556,7 @@ p {
   height: 100%;
 }
 .easter-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -572,7 +571,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/easter/easter-egg.png");
-  filter: easter;
+  filter: brightness(0) saturate(100%) invert(69%) sepia(83%) saturate(420%) hue-rotate(310deg) brightness(92%) contrast(99%);
 }
 .easter-theme .decorations-container .decoration-bunny {
   position: absolute;
@@ -582,7 +581,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/easter/easter-bunny.png");
-  filter: easter;
+  filter: brightness(0) saturate(100%) invert(69%) sepia(83%) saturate(420%) hue-rotate(310deg) brightness(92%) contrast(99%);
 }
 .easter-theme .decorations-container .decoration-carrot {
   position: absolute;
@@ -592,7 +591,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/easter/easter-carrot.png");
-  filter: easter;
+  filter: brightness(0) saturate(100%) invert(69%) sepia(83%) saturate(420%) hue-rotate(310deg) brightness(92%) contrast(99%);
 }
 
 .back-to-school-theme {
@@ -603,7 +602,7 @@ p {
   height: 100%;
 }
 .back-to-school-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -618,7 +617,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/back-to-school/back-to-school-bag.png");
-  filter: back-to-school;
+  filter: brightness(0) saturate(100%) invert(26%) sepia(92%) saturate(3600%) hue-rotate(240deg) brightness(89%) contrast(115%);
 }
 .back-to-school-theme .decorations-container .decoration-ruler {
   position: absolute;
@@ -628,7 +627,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/back-to-school/back-to-school-ruler.png");
-  filter: back-to-school;
+  filter: brightness(0) saturate(100%) invert(26%) sepia(92%) saturate(3600%) hue-rotate(240deg) brightness(89%) contrast(115%);
 }
 .back-to-school-theme .decorations-container .decoration-book {
   position: absolute;
@@ -638,7 +637,7 @@ p {
   background-size: contain;
   background-repeat: no-repeat;
   background-image: url("/assets/decorations/back-to-school/back-to-school-book.png");
-  filter: back-to-school;
+  filter: brightness(0) saturate(100%) invert(26%) sepia(92%) saturate(3600%) hue-rotate(240deg) brightness(89%) contrast(115%);
 }
 
 .default-theme {
@@ -649,7 +648,7 @@ p {
   height: 100%;
 }
 .default-theme .decorations-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -680,7 +679,7 @@ p {
   height: 80px;
   margin: 0 50px;
   border-radius: 60px;
-  background-color: #202d48;
+  background-color: #243351;
 }
 .header__masthead__nav-main__logo img {
   height: 242%;
@@ -757,30 +756,28 @@ p {
   transition: 0.3s;
   cursor: pointer;
   padding: 20px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  text-transform: uppercase;
 }
 .header__sub-masthead__nav__container__navbar-menu:nth-child(4n+1) {
-  background: url("../../assets/Rectangle 3.png") no-repeat;
+  background: url("../../../public/assets/Rectangle 3.png") no-repeat;
   background-position: center;
   background-size: 100% 100%;
   text-align: center;
 }
 .header__sub-masthead__nav__container__navbar-menu:nth-child(4n+2) {
-  background: url("../../assets/Rectangle 4.png") no-repeat;
+  background: url("../../../public/assets/Rectangle 4.png") no-repeat;
   text-align: center;
   background-position: center;
   background-size: 100% 100%;
 }
 .header__sub-masthead__nav__container__navbar-menu:nth-child(4n+3) {
-  background: url("../../assets/Rectangle 5.png") no-repeat;
+  background: url("../../../public/assets/Rectangle 5.png") no-repeat;
   background-position: center;
   background-size: 100% 100%;
   text-align: center;
 }
 .header__sub-masthead__nav__container__navbar-menu:nth-child(4n+4) {
-  background: url("../../assets/Rectangle 6.png") no-repeat;
+  background: url("../../../public/assets/Rectangle 6.png") no-repeat;
   background-position: center;
   background-size: 100% 100%;
   text-align: center;
@@ -788,6 +785,14 @@ p {
 .header__sub-masthead__nav__container__navbar-menu:hover {
   transform: translateY(-10px);
   transition: transform 0.3s ease-in-out;
+}
+@media (max-width: 768px) {
+  .header .header__sub-masthead__nav__container {
+    flex-direction: column;
+  }
+  .header .header__sub-masthead__nav__container__navbar-menu {
+    max-width: 100%;
+  }
 }
 
 .container__section {
@@ -974,12 +979,6 @@ p {
   /* Supprimer toute marge pour que le carré touche la ligne */
   cursor: pointer;
 }
-.container__subscribe__link--square-button:hover .container__subscribe__link--square, .container__subscribe__link--subscribe-button:hover .container__subscribe__link--square {
-  background-color: #e19616;
-}
-.container__subscribe__link--square-button:hover .container__subscribe__link--text, .container__subscribe__link--subscribe-button:hover .container__subscribe__link--text {
-  color: #1c2941;
-}
 .container__subscribe__link--square {
   background-color: #ecac3e;
   width: 30px;
@@ -1104,6 +1103,7 @@ p {
   background-color: #ecac3e;
 }
 .container__ideas .ideas-content__card {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 20px;

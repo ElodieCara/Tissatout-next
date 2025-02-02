@@ -1,3 +1,5 @@
+@use "../../styles/utils/variables" as vars;
+
 .container__subscribe {
     max-width: 1200px;
     margin: 0 auto;
@@ -21,7 +23,7 @@
             border: none;
             height: 2px;
             /* Épaisseur de la ligne */
-            background-color: $secondary-color;
+            background-color: vars.$secondary-color;
             /* Couleur des lignes */
             margin: 0;
             /* Supprimer toute marge */
@@ -41,16 +43,16 @@
             cursor: pointer;
 
             &:hover .container__subscribe__link--square {
-                background-color: darken($secondary-color, 10%);
+                //background-color: color.adjust($secondary-color, 10%);
             }
 
             &:hover .container__subscribe__link--text {
-                color: darken($primary-color, 10%);
+                //color: color.adjust($primary-color, 10%);
             }
         }
 
         &--square {
-            background-color: $secondary-color;
+            background-color: vars.$secondary-color;
             width: 30px;
             height: 30px;
             border-radius: 5px;
@@ -68,7 +70,7 @@
             font-weight: bold;
             text-align: center;
             width: max-content;
-            color: $primary-color;
+            color: vars.$primary-color;
         }
     }
 }

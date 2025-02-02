@@ -1,8 +1,8 @@
 //--------- button Navbar --------
-$btn-orange: url("../../assets/Rectangle 3.png");
-$btn-red: url("../../assets/Rectangle 4.png");
-$btn-green: url("../../assets/Rectangle 5.png");
-$btn-blue: url("../../assets/Rectangle 6.png");
+$btn-orange: url("../../../public/assets/Rectangle\ 3.png");
+$btn-red: url("../../../public/assets/Rectangle 4.png");
+$btn-green: url("../../../public/assets/Rectangle 5.png");
+$btn-blue: url("../../../public/assets/Rectangle 6.png");
 
 //---------------------------------------------------
 $rectangle-orange: url("../../assets/Rectangle 12.png");
@@ -17,7 +17,7 @@ $icon-d8btn: url("../../assets/d8btn.png");
 $primary-color: #2c3f64;
 $secondary-color: #ecac3e;
 $tertiary-color: #d75500;
-$dark-primary-color: darken($primary-color, 8%);
+$dark-primary-color: #243351;
 
 // Autres variables comme les tailles de police, couleurs, etc.
 $font-size-small: 0.875rem;
@@ -29,14 +29,14 @@ $font-size-xxlarge: 2.5rem;
 //-----------------------------------------------------
 
 $themes: (
-    summer: (bg-color: #f0f8ff,
+    summer: (bg-color: #f9fbfd,
         text-color: #003366,
         icon-filter: brightness(0) saturate(100%) invert(75%) sepia(100%) saturate(2000%) hue-rotate(1deg) brightness(99%) contrast(100%), // JAUNE SOLEIL ☀️
         decorations: (star: '/assets/decorations/summer/summer-star.png',
             balloon: '/assets/decorations/summer/summer-balloon.png',
             rocket: '/assets/decorations/summer/summer-rocket.png'
         )),
-    winter: (bg-color: #eaf7ff,
+    winter: (bg-color: #f8fbfd,
         text-color: #001f3f,
         icon-filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(1200%) hue-rotate(200deg) brightness(90%) contrast(110%), // BLEU GLACÉ ❄️
         decorations: (snowflake: '/assets/decorations/winter/winter-snowflake.png',
@@ -57,16 +57,16 @@ $themes: (
             acorns: '/assets/decorations/autumn/autumn-acorns.png',
             owl: '/assets/decorations/autumn/autumn-owl.png'
         )),
-    halloween: (bg-color: #1e1e1e,
-        text-color: #ff7518,
-        icon-filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(7500%) hue-rotate(0deg) brightness(80%) contrast(130%), // ROUGE EFFRAYANT 🎃
+    halloween: (bg-color: #fdf4e3,
+        text-color: #2c3f64,
+        icon-filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(2000%) hue-rotate(20deg) brightness(95%) contrast(105%), // Orange doré pour les icônes 🎃
         decorations: (bat: '/assets/decorations/halloween/halloween-bat.png',
             ghost: '/assets/decorations/halloween/halloween-ghost.png',
             witch-hat: '/assets/decorations/halloween/halloween-witch-hat.png'
         )),
-    christmas: (bg-color: #ffefef,
+    christmas: (bg-color: white,
         text-color: #004d4d,
-        icon-filter: brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(800%) hue-rotate(120deg) brightness(95%) contrast(100%), // VERT SAPIN 🎄
+        // icon-filter: brightness(0) saturate(100%) invert(30%) sepia(90%) saturate(800%) hue-rotate(120deg) brightness(95%) contrast(100%), // VERT SAPIN 🎄
         decorations: (christmas-tree: '/assets/decorations/christmas/christmas-tree.png',
             candy: '/assets/decorations/christmas/christmas-candy.png',
             lights: '/assets/decorations/christmas/christmas-lights.png'
