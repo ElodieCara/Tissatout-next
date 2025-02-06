@@ -14,13 +14,32 @@ import arrowNext from "@/assets/arrow-circle-left.png";
 import Slideshow from "@/components/Slideshow/Slideshow";
 import { slide as slides } from "../data/home";
 
+interface Article {
+  id: string;
+  title: string;
+  content: string;
+  image?: string;
+  description?: string;
+  date?: string;
+  iconSrc?: string;
+}
+
 
 export default function HomePage() {
-  const [articles, setArticles] = useState(news);
+  const [articles, setArticles] = useState<Article[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const articlesPerPage = 3; // Nombre d'articles par slide
   const totalSlides = Math.ceil(articles.length / articlesPerPage);
+
+  useEffect(() => {
+    // Récupération des articles via l'API
+    fetch("/api/articles")
+      .then((res) => res.json())
+      .then((data) => setArticles(data))
+      .catch((err) => console.error("Erreur lors de la récupération des articles :", err));
+  }, []);
+
 
   // Gestion des actualités : Suivant
   const nextSlide = () => {
@@ -55,9 +74,9 @@ export default function HomePage() {
                   .map((article) => (
                     <Link href={`/news/${article.id}`} key={article.id}>
                       <Card
-                        cover={article.image}
+                        cover={article.image || "/default-image.png"}
                         title={article.title}
-                        content={article.description}
+                        content={article.description || article.content.substring(0, 100)}
                         type="large"
                       />
                     </Link>
@@ -98,7 +117,7 @@ export default function HomePage() {
                 <ArticleCard
                   iconSrc={article.iconSrc || ""}
                   title={article.title}
-                  description={article.description}
+                  description={article.description || "Description non disponible"}
                   date={article.date || ""}
                 />
               </Link>

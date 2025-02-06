@@ -85,9 +85,11 @@
         flex-direction: column;
         letter-spacing: 1px;
 
+
         & h1 {
-            letter-spacing: 0.1rem;
+            letter-spacing: 0.2rem;
             font-size: 28px;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
         }
 
         & h2 {
@@ -96,6 +98,7 @@
 
         & p {
             font-size: bold !important;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
         }
 
         & button {

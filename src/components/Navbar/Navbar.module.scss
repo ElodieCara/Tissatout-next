@@ -21,7 +21,7 @@
             z-index: 999;
 
             &__navbar {
-                width: 60%;
+                width: 62%;
                 height: 100%;
                 list-style: none;
                 padding: 0;
@@ -40,10 +40,10 @@
                     font-size: 20px;
                     font-family: sans-serif;
                     text-transform: capitalize;
-                    line-height: 3em;
+                    line-height: 4em;
                     transition: 0.3s;
                     cursor: pointer;
-                    padding: 20px;
+                    padding: 10px;
                     text-transform: uppercase;
 
                     &:nth-child(4n + 1) {

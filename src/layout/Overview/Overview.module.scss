@@ -13,18 +13,13 @@
 
     &__theme {
         position: absolute;
-        /* Fixe l'icône par rapport au conteneur */
         top: 97px;
-        /* Distance depuis le haut */
         right: -50px;
-        /* Distance depuis la droite */
         z-index: 10;
 
         & .theme-icon {
             width: 130px;
-            /* Taille fixe */
             height: auto;
-            /* Conserve les proportions */
             display: block;
         }
     }
@@ -37,7 +32,7 @@
         position: absolute;
         background-image: vars.$rectangle-yellow;
         margin-right: 300px;
-        width: 850px; // Ajuster la largeur de la carte 1
+        width: 850px;
         height: 100%;
         background-repeat: no-repeat;
         background-position: center;
@@ -49,30 +44,34 @@
             &__button {
                 width: 200px;
                 height: 100px;
-                background-color: vars.$primary-color; // Utilisation de la variable SASS
+                background-color: vars.$primary-color;
                 margin-bottom: 10px;
                 padding: 10px;
                 border-radius: 33px;
                 cursor: pointer;
-                text-align: center; // Centrer le texte horizontalement
-                color: white; // Couleur du texte blanc
-                display: flex; // Pour centrer le texte horizontalement et verticalement
-                align-items: center; // Centrer verticalement
-                justify-content: center; // Centrer horizontalement
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); // Ajouter une ombre autour des boutons
-                transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s; // Ajout d'une transition fluide
+                text-align: center;
+                color: white;
+                text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+                font-size: x-large;
+                font-weight: bold;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s;
                 pointer-events: auto;
 
+
                 &:hover {
-                    background-color: darken(vars.$primary-color, 10%); // Assombrir légèrement la couleur au survol
+                    background-color: darken(vars.$primary-color, 10%);
                     transform: scale(1.05);
                 }
 
                 &.active {
-                    background-color: lighten(vars.$primary-color, 15%); // Couleur plus claire pour l'état actif
-                    color: #fff; // Texte blanc pour le contraste
+                    background-color: lighten(vars.$primary-color, 15%);
+                    color: #fff;
                     font-weight: bold;
-                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); // Ombre plus marquée pour l'état actif
+                    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
                     transform: scale(1.1);
                 }
             }
@@ -108,13 +107,14 @@
                     margin-bottom: 1rem;
                 }
 
+                & p {
+                    padding: 10px;
+                }
+
                 .activities-list {
                     list-style: none;
-                    /* Pas de puces */
                     padding: 0;
-                    /* Pas de marge interne */
                     margin: 1rem 0;
-                    /* Espace au-dessus et en dessous de la liste */
                 }
 
                 .activities-list__item {
@@ -123,27 +123,18 @@
                     padding: 6px 0;
                     font-size: 1rem;
                     color: #333;
-                    cursor: pointer;
-                    transition: color 0.3s ease, text-decoration 0.3s ease;
-                    pointer-events: auto;
-
-                    /* Effet au survol */
-                    &:hover {
-                        color: #007bff;
-                        /* Texte bleu clair au survol */
-                        text-decoration: underline;
-                        /* Souligne pour montrer l’interactivité */
-                    }
 
                     /* Icône avant chaque texte */
                     .activities-list__icon {
                         font-size: 1.2rem;
-                        /* Taille de l'icône */
                         margin-right: 8px;
-                        /* Espace entre l'icône et le texte */
                         color: #007bff;
-                        /* Couleur de l'icône assortie au reste */
                     }
+                }
+
+                .activities-button {
+                    pointer-events: auto;
+                    color: white;
                 }
             }
 
@@ -160,8 +151,6 @@
                 background-size: contain;
                 background-repeat: no-repeat;
                 background-position: center;
-                // border: black 1px solid;
-                // transform: rotate(3.71deg);
 
                 animation: fadeIn 0.5s ease-in-out;
             }

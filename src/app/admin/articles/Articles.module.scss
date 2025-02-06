@@ -1,0 +1,58 @@
+@use "../../../styles/utils/variables" as *;
+
+.admin {
+    &__list {
+        background: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        &-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid $border-color;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            span {
+                font-weight: bold;
+                color: $dark-primary-color;
+            }
+
+            small {
+                color: gray;
+            }
+
+            .admin__actions {
+                display: flex;
+                gap: 8px;
+
+                .edit {
+                    background: $secondary-color;
+                }
+
+                .delete {
+                    background: $danger-color;
+                }
+
+                .edit:hover {
+                    background: darken($secondary-color, 10%);
+                }
+
+                .delete:hover {
+                    background: darken($danger-color, 10%);
+                }
+            }
+        }
+    }
+}

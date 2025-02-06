@@ -1,0 +1,107 @@
+@use "../../styles/utils/variables" as *;
+@use "../../styles/base/mixins" as *;
+
+.admin-form {
+    max-width: 600px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 6rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    h2 {
+        text-align: center;
+        color: $dark-primary-color;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    &__group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        label {
+            font-weight: bold;
+            color: $primary-color;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid $border-color;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: $light-gray;
+            transition: border 0.2s ease-in-out;
+
+            &:focus {
+                border-color: $primary-color;
+                outline: none;
+            }
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+    }
+
+    // 🟢 UPLOAD D'IMAGE
+    &__upload {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 1rem;
+        border: 2px dashed $border-color;
+        border-radius: 6px;
+        background: $light-gray;
+        text-align: center;
+        cursor: pointer;
+        transition: border 0.3s ease;
+
+        &:hover {
+            border-color: $primary-color;
+        }
+
+        label {
+            font-weight: bold;
+            color: $primary-color;
+            cursor: pointer;
+        }
+
+        input {
+            display: none;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+    }
+
+    &__button {
+        background: $primary-color;
+        color: white;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s ease-in-out;
+
+        &:hover {
+            background: darken($primary-color, 10%);
+        }
+    }
+}

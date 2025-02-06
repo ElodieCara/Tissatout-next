@@ -5,6 +5,7 @@ import { Theme } from "@/types/theme";
 import { useTheme } from "@/components/Decorations/Themes/ThemeProvider";
 import Image from "next/image";
 import Link from "next/link";
+import Button from "@/components/Button/Button";
 
 const Overview: React.FC = () => {
     const [content, setContent] = useState(sections[0].content);
@@ -64,23 +65,35 @@ const Overview: React.FC = () => {
                     {/* Texte principal */}
                     <div className="container__section__card-2__content-panel__text">
                         <h3>{content}</h3>
+
+                        <Button
+                            className={`activities-button red-button`}
+                            href={`/nos-univers/${encodeURIComponent(activeSection.title)}`}
+                        >
+                            Explorer
+                        </Button>
+
+
+
                         <p>{description}</p>
 
                         {/* Liste des activités */}
                         <ul className="activities-list">
                             {activeSection.activities.map((activity, index) => (
                                 <li key={index} className="activities-list__item">
-                                    {/* ✅ Rend chaque activité cliquable et envoie vers la page correspondante */}
-                                    <Link href={`/nos-univers/${encodeURIComponent(activeSection.title)}`}>
-                                        <span className="activity-link">{activity}</span>
-                                    </Link>
+                                    <span>{activity}</span>
                                 </li>
                             ))}
                         </ul>
 
                         {/* Conclusion */}
                         <p className="conclusion">{conclusion}</p>
+
+
+
                     </div>
+
+
 
                     {/* Image principale */}
                     <div
