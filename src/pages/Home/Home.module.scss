@@ -5,7 +5,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    // height: 100vh;
+    width: 1200px;
+    margin: 0 auto;
 
     & h2 {
         padding-bottom: 70px;
@@ -35,7 +36,8 @@
         &__images-gallery {
             display: flex;
             flex-direction: column;
-            width: 100%; // Réduit la largeur à 70% de la largeur totale
+            width: 100%;
+            max-width: 450px; // Réduit la largeur à 70% de la largeur totale
             margin: 0 auto;
 
 

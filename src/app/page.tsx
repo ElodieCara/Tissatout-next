@@ -20,6 +20,8 @@ interface Article {
   content: string;
   image?: string;
   description?: string;
+  tags?: string[];
+  category?: string;
   date?: string;
   iconSrc?: string;
 }
@@ -66,21 +68,27 @@ export default function HomePage() {
           <div className="news-content__images-gallery">
             <div className="news-content__images-gallery__slide-container">
               <div className="news-content__images-gallery__slide-wrapper">
-                {articles
-                  .slice(
-                    currentSlide * articlesPerPage,
-                    (currentSlide + 1) * articlesPerPage
-                  )
-                  .map((article) => (
-                    <Link href={`/news/${article.id}`} key={article.id}>
-                      <Card
-                        cover={article.image || "/default-image.png"}
-                        title={article.title}
-                        content={article.description || article.content.substring(0, 100)}
-                        type="large"
-                      />
-                    </Link>
-                  ))}
+                {Array.isArray(articles) ? (
+                  articles
+                    .slice(
+                      currentSlide * articlesPerPage,
+                      (currentSlide + 1) * articlesPerPage
+                    )
+                    .map((article) => (
+                      <Link href={`/news/${article.id}`} key={article.id}>
+                        <Card
+                          cover={article.image || "/default-image.png"}
+                          title={article.title}
+                          category={article.category}
+                          tags={article.tags || []}
+                          content={article.description || article.content.substring(0, 100)}
+                          type="large"
+                        />
+                      </Link>
+                    ))
+                ) : (
+                  <p>Aucun article disponible.</p>
+                )}
               </div>
             </div>
             <div className="news-content__images-gallery__controls">
@@ -112,16 +120,20 @@ export default function HomePage() {
             </div>
           </div>
           <div className="news-content__articles-gallery">
-            {articles.slice(3).map((article) => (
-              <Link href={`/news/${article.id}`} key={article.id}>
-                <ArticleCard
-                  iconSrc={article.iconSrc || ""}
-                  title={article.title}
-                  description={article.description || "Description non disponible"}
-                  date={article.date || ""}
-                />
-              </Link>
-            ))}
+            {Array.isArray(articles) ? (
+              articles.slice(0, 5).map((article) => (
+                <Link href={`/news/${article.id}`} key={article.id}>
+                  <ArticleCard
+                    iconSrc={article.iconSrc || ""}
+                    title={article.title}
+                    description={article.description || "Description non disponible"}
+                    date={article.date || ""}
+                  />
+                </Link>
+              ))
+            ) : (
+              <p>Aucun article disponible.</p>
+            )}
           </div>
         </div>
       </section>

@@ -3,18 +3,40 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Breadcrumb from "./Breadcrumb";
 
+// 🎨 Icônes associées aux catégories
+const categoryIcons: Record<string, string> = {
+    "lecture": "/icons/lecture.png",
+    "chiffre": "/icons/chiffre.png",
+    "logique": "/icons/logique.png",
+    "mobilité": "/icons/mobilite.png"
+};
 
 interface Article {
     id?: string;
     title: string;
     content: string;
     image?: string;
+    iconSrc?: string;
+    category: string;
+    tags?: string[];
+    author: string;
     description?: string;
     date?: string;
 }
 
 export default function AdminArticleForm({ articleId }: { articleId?: string }) {
-    const [form, setForm] = useState<Article>({ title: "", content: "", image: "", description: "", date: "" });
+    const [form, setForm] = useState<Article>({
+        title: "",
+        content: "",
+        image: "",
+        iconSrc: "",
+        category: "",
+        tags: [],
+        author: "",
+        description: "",
+        date: ""
+    });
+
     const [message, setMessage] = useState("");
     const router = useRouter();
 
@@ -23,12 +45,42 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         if (articleId && articleId !== "new") {
             fetch(`/api/articles/${articleId}`)
                 .then((res) => res.json())
-                .then((data) => setForm(data));
+                .then((data) => {
+                    console.log("📥 Article reçu :", data);
+                    setForm({
+                        title: data.title || "",
+                        content: data.content || "",
+                        image: data.image || "",
+                        iconSrc: data.iconSrc || categoryIcons[data.category] || "",
+                        category: data.category || "",
+                        tags: data.tags || [],
+                        author: data.author || "",
+                        description: data.description || "",
+                        date: data.date ? data.date.substring(0, 10) : "" // ✅ Formatage de la date
+                    });
+                });
         }
     }, [articleId]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+    // 🟡 Gérer les changements dans le formulaire
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+
+        // ✅ Mettre à jour l'icône automatiquement si la catégorie change
+        if (name === "category") {
+            setForm({
+                ...form,
+                category: value,
+                iconSrc: categoryIcons[value] || ""
+            });
+        }
+        // ✅ Gestion des tags (convertir string en tableau)
+        else if (name === "tags") {
+            setForm({ ...form, tags: value.split(",").map(tag => tag.trim()) });
+        }
+        else {
+            setForm({ ...form, [name]: value });
+        }
     };
 
     // 🟡 Gérer l'upload d'image
@@ -39,12 +91,9 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         const formData = new FormData();
         formData.append("file", file);
 
-        const res = await fetch("/api/upload", {
-            method: "POST",
-            body: formData,
-        });
-
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
         const data = await res.json();
+
         if (res.ok) {
             setForm({ ...form, image: data.imageUrl });
             setMessage("Image uploadée !");
@@ -66,10 +115,10 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         });
 
         if (res.ok) {
-            setMessage("Article enregistré !");
+            setMessage("✅ Article enregistré !");
             setTimeout(() => router.push("/admin"), 1000);
         } else {
-            setMessage("Erreur !");
+            setMessage("❌ Erreur lors de l'enregistrement.");
         }
     };
 
@@ -78,6 +127,7 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
             <Breadcrumb />
             <h2>{articleId === "new" ? "Ajouter un Article" : "Modifier l'Article"}</h2>
             {message && <p className="admin-form__message">{message}</p>}
+
             <form onSubmit={handleSubmit}>
                 <div className="admin-form__group">
                     <label htmlFor="title">Titre</label>
@@ -85,11 +135,36 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                 </div>
 
                 <div className="admin-form__group">
+                    <label htmlFor="tags">Tags (séparés par des virgules)</label>
+                    <input type="text" id="tags" name="tags" placeholder="Ex: 3-5 ans, 6-8 ans" value={form.tags?.join(", ") || ""} onChange={handleChange} />
+                </div>
+
+                <div className="admin-form__group">
                     <label htmlFor="content">Contenu</label>
                     <textarea id="content" name="content" placeholder="Contenu" value={form.content} onChange={handleChange} required />
                 </div>
 
-                {/* 📌 Bloc d'Upload d'Image */}
+                {/* 📌 Sélection de la catégorie */}
+                <div className="admin-form__group">
+                    <label htmlFor="category">Catégorie</label>
+                    <select id="category" name="category" value={form.category} onChange={handleChange} required>
+                        <option value="">Choisir une catégorie</option>
+                        <option value="lecture">📘 Lecture</option>
+                        <option value="chiffre">🔢 Chiffre</option>
+                        <option value="logique">🧩 Jeux de logique</option>
+                        <option value="mobilité">🚀 Jeux de mobilité</option>
+                    </select>
+                </div>
+
+                {/* ✅ Affichage de l'icône associée */}
+                {form.iconSrc && (
+                    <div className="admin-form__group">
+                        <p>Icône associée :</p>
+                        <img src={form.iconSrc} alt="Icône de catégorie" width="50" height="50" />
+                    </div>
+                )}
+
+                {/* 📌 Upload d'image */}
                 <div className="admin-form__upload">
                     <label htmlFor="imageUpload">📸 Glissez une image ici ou cliquez</label>
                     <input type="file" id="imageUpload" accept="image/*" onChange={handleImageUpload} />

@@ -8,14 +8,18 @@ generator client {
 }
 
 model Article {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  content   String
-  image     String?
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String
+  image       String?  // URL de l’image
+  iconSrc     String?  // URL de l'icône de la catégorie
+  category    String?
+  tags        String[] // Tableau de tags (stocké sous forme de JSON)
+  author      String?
   description String?
-  date      DateTime? @db.Date
-  createdAt DateTime @default(now())
+  date        DateTime?
 }
+
 
 model User {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId

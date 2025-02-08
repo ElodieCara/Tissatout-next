@@ -21,9 +21,13 @@ export interface News {
     image: StaticImageData;
     title: string;
     iconSrc: StaticImageData;
+    category: string; // 📌 Catégorie sous forme de texte
+    tags: string[]; // 📌 Tableau de tags (âges)
+    author: string;
     description: string;
     date: string;
 }
+
 
 export interface Idea {
     id: number;

@@ -34,14 +34,18 @@ export default function AdminArticles() {
                 ➕ Ajouter un Article
             </button>
             <div className="admin__list">
-                {articles.map((article) => (
-                    <div key={article.id} className="admin__list-item">
-                        {article.image && <img src={article.image} alt={article.title} width="80" />}
-                        <span>{article.title}</span>
-                        <button onClick={() => router.push(`/admin/articles/${article.id}`)}>✏️ Modifier</button>
-                        <button onClick={() => handleDelete(article.id)}>🗑️ Supprimer</button>
-                    </div>
-                ))}
+                {Array.isArray(articles) ? (
+                    articles.map((article) => (
+                        <div key={article.id} className="admin__list-item">
+                            {article.image && <img src={article.image} alt={article.title} width="80" />}
+                            <span>{article.title}</span>
+                            <button onClick={() => router.push(`/admin/articles/${article.id}`)}>✏️ Modifier</button>
+                            <button onClick={() => handleDelete(article.id)}>🗑️ Supprimer</button>
+                        </div>
+                    ))
+                ) : (
+                    <p>Aucun article disponible.</p>
+                )}
             </div>
         </div>
     );
