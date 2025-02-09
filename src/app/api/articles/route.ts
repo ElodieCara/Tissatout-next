@@ -4,8 +4,27 @@ import { NextResponse } from "next/server";
 // 🟢 Récupérer tous les articles (READ)
 export async function GET() {
     try {
-        const articles = await prisma.article.findMany();
+        const articles = await prisma.article.findMany({
+            orderBy: {
+                date: "desc", // Tri par date décroissante (le plus récent en premier)
+            },
+        });
+
         console.log("📤 Articles envoyés :", articles); // ✅ Vérifier la réponse Prisma
+
+        // ✅ Formater la date avant d'envoyer les articles
+        const formattedArticles = articles.map(article => ({
+            ...article,
+            date: article.date
+                ? new Date(article.date).toLocaleDateString("fr-FR", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                })
+                : "Date inconnue",
+        }));
+
+        console.log("📤 Articles formatés :", formattedArticles);
 
         if (!articles || !Array.isArray(articles)) {
             console.error("⚠️ Prisma a retourné une valeur incorrecte :", articles);

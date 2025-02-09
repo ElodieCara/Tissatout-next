@@ -16,11 +16,11 @@ const Card: React.FC<CardProps> = ({ cover, title, content, type, category, tags
     return (
         <div className="card">
             <div className="card__image">
-                <Image className="img" src={cover} alt={title} width={300} height={200} unoptimized />
+                <Image className="img" src={cover} alt={title} width={300} height={200} quality={100} />
                 {/* Icône de la catégorie en overlay sur l'image */}
                 {iconSrc && (
                     <div className="card__icon">
-                        <Image src={iconSrc} alt={category || "Icône"} width={40} height={40} />
+                        <Image src={iconSrc} alt={category || "Icône"} width={40} height={40} unoptimized />
                     </div>
                 )}
             </div>

@@ -16,10 +16,13 @@ export default function ArticlesPage() {
     const [articles, setArticles] = useState<Article[]>([]);
 
     useEffect(() => {
-        fetch("/api/articles") // 🔹 Récupération des articles depuis l'API
+        fetch("/api/articles")
             .then((res) => res.json())
-            .then((data) => setArticles(data))
-            .catch((err) => console.error("Erreur lors de la récupération des articles :", err));
+            .then((data) => {
+                console.log("📥 Articles reçus depuis l'API :", data); // ✅ Vérifie ce que le serveur renvoie
+                setArticles(data);
+            })
+            .catch((err) => console.error("❌ Erreur API :", err));
     }, []);
 
     return (

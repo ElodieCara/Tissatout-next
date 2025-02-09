@@ -105,6 +105,9 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
     // 🟡 Gérer l'ajout ou la modification
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        console.log("Payload envoyé :", form);
+
         const method = articleId && articleId !== "new" ? "PUT" : "POST";
         const url = articleId && articleId !== "new" ? `/api/articles/${articleId}` : "/api/articles";
 
@@ -172,13 +175,41 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                 </div>
 
                 <div className="admin-form__group">
-                    <label htmlFor="description">Description</label>
+                    <label htmlFor="description">Description (max. 250 caractères)</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Entrez une brève description..."
+                        value={form.description}
+                        onChange={(e) => {
+                            if (e.target.value.length > 200) {
+                                alert("❌ La description ne peut pas dépasser 250 caractères !");
+                            } else {
+                                setForm({ ...form, description: e.target.value });
+                            }
+                        }}
+                        maxLength={250} // ✅ Empêche de taper plus de 250 caractères
+                    />
+                    <p>{form.description || "".length} / 250 caractères</p> {/* ✅ Affiche le compteur */}
                     <input type="text" id="description" name="description" placeholder="Description" value={form.description} onChange={handleChange} />
                 </div>
 
                 <div className="admin-form__group">
                     <label htmlFor="date">Date</label>
                     <input type="date" id="date" name="date" value={form.date} onChange={handleChange} />
+                </div>
+
+                <div className="admin-form__group">
+                    <label htmlFor="author">Auteur</label>
+                    <input
+                        type="text"
+                        id="author"
+                        name="author"
+                        placeholder="Nom de l'auteur"
+                        value={form.author}
+                        onChange={handleChange}
+                        required
+                    />
                 </div>
 
                 <button type="submit" className="admin-form__button">{articleId === "new" ? "Ajouter" : "Mettre à jour"}</button>

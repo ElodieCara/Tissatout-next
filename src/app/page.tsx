@@ -42,6 +42,11 @@ export default function HomePage() {
       .catch((err) => console.error("Erreur lors de la récupération des articles :", err));
   }, []);
 
+  useEffect(() => {
+    setTimeout(() => {
+      document.documentElement.style.setProperty("--page-height", `${document.body.scrollHeight}px`);
+    }, 500);
+  }, [articles]);
 
   // Gestion des actualités : Suivant
   const nextSlide = () => {
@@ -60,110 +65,131 @@ export default function HomePage() {
       <Slideshow images={slides} />
       <ThemeProvider>
         <Overview />
-      </ThemeProvider>
-      {/* Section des actualités */}
-      <section className="container__news">
-        <h2>Nouveautés</h2>
-        <div className="news-content">
-          <div className="news-content__images-gallery">
-            <div className="news-content__images-gallery__slide-container">
-              <div className="news-content__images-gallery__slide-wrapper">
-                {Array.isArray(articles) ? (
-                  articles
-                    .slice(
-                      currentSlide * articlesPerPage,
-                      (currentSlide + 1) * articlesPerPage
-                    )
-                    .map((article) => (
-                      <Link href={`/news/${article.id}`} key={article.id}>
-                        <Card
-                          cover={article.image || "/default-image.png"}
-                          title={article.title}
-                          category={article.category}
-                          tags={article.tags || []}
-                          content={article.description || article.content.substring(0, 100)}
-                          type="large"
-                        />
-                      </Link>
-                    ))
-                ) : (
-                  <p>Aucun article disponible.</p>
-                )}
+
+        {/* Section des actualités */}
+        <section className="container__news">
+          <h2>Nouveautés</h2>
+          <div className="news-content">
+            <div className="news-content__images-gallery">
+              <div className="news-content__images-gallery__slide-container">
+                <div className="news-content__images-gallery__slide-wrapper">
+                  {Array.isArray(articles) ? (
+                    [...articles]
+                      .filter((article) => article.date) // Ne garde que les articles avec une date
+                      .sort((a: Article, b: Article) =>
+                        new Date(b.date!).getTime() - new Date(a.date!).getTime()
+                      )
+                      .slice(
+                        currentSlide * articlesPerPage,
+                        (currentSlide + 1) * articlesPerPage
+                      )
+                      .map((article) => (
+                        <Link href={`/news/${article.id}`} key={article.id}>
+                          <Card
+                            cover={article.image || "/default-image.png"}
+                            title={article.title}
+                            category={article.category}
+                            tags={article.tags || []}
+                            content={article.description || article.content.substring(0, 100)}
+                            type="large"
+                          />
+                        </Link>
+                      ))
+                  ) : (
+                    <p>Aucun article disponible.</p>
+                  )}
+
+                </div>
+              </div>
+              <div className="news-content__images-gallery__controls">
+                <Image
+                  className="arrow-prev"
+                  src={arrowPrev}
+                  alt="Précédent"
+                  width={50}
+                  height={50}
+                  onClick={prevSlide}
+                />
+                <div className="news-content__images-gallery__slide-pagination">
+                  {Array.from({ length: totalSlides }).map((_, idx) => (
+                    <span
+                      key={idx}
+                      className={`dot ${idx === currentSlide ? "active" : ""}`}
+                      onClick={() => setCurrentSlide(idx)}
+                    />
+                  ))}
+                </div>
+                <Image
+                  className="arrow-next"
+                  src={arrowNext}
+                  alt="Suivant"
+                  width={50}
+                  height={50}
+                  onClick={nextSlide}
+                />
               </div>
             </div>
-            <div className="news-content__images-gallery__controls">
-              <Image
-                className="arrow-prev"
-                src={arrowPrev}
-                alt="Précédent"
-                width={50}
-                height={50}
-                onClick={prevSlide}
-              />
-              <div className="news-content__images-gallery__slide-pagination">
-                {Array.from({ length: totalSlides }).map((_, idx) => (
-                  <span
-                    key={idx}
-                    className={`dot ${idx === currentSlide ? "active" : ""}`}
-                    onClick={() => setCurrentSlide(idx)}
-                  />
-                ))}
-              </div>
-              <Image
-                className="arrow-next"
-                src={arrowNext}
-                alt="Suivant"
-                width={50}
-                height={50}
-                onClick={nextSlide}
-              />
+            <div className="news-content__articles-gallery">
+              {Array.isArray(articles) ? (
+                articles.slice(3, 8).map((article) => {
+                  const formattedDate = article.date
+                    ? new Date(article.date).toLocaleDateString("fr-FR", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })
+                    : "Date inconnue"; // ✅ Ajoute une valeur par défaut
+
+                  return (
+                    <Link href={`/news/${article.id}`} key={article.id}>
+                      <ArticleCard
+                        iconSrc={article.iconSrc || ""}
+                        title={article.title}
+                        description={article.description
+                          ? article.description.length > 100
+                            ? article.description.substring(0, 250) + "..." // ✅ Limite à 100 caractères
+                            : article.description
+                          : "Description non disponible"
+                        }
+                        date={formattedDate} // ✅ Utilise la date bien formatée
+                      />
+                    </Link>
+                  );
+                })
+              ) : (
+                <p>Aucun article disponible.</p>
+              )}
             </div>
+
           </div>
-          <div className="news-content__articles-gallery">
-            {Array.isArray(articles) ? (
-              articles.slice(0, 5).map((article) => (
-                <Link href={`/news/${article.id}`} key={article.id}>
-                  <ArticleCard
-                    iconSrc={article.iconSrc || ""}
-                    title={article.title}
-                    description={article.description || "Description non disponible"}
-                    date={article.date || ""}
+        </section>
+
+        {/* Section des idées */}
+        <section className="container__ideas">
+          <h2>Idées</h2>
+          <div className="ideas-content">
+            <div className="ideas-content__card">
+              {ideas.map((idea, index) => (
+                <Link
+                  href={`/news/${idea.id}`}
+                  key={idea.id}
+                  className={`ideas-content__card__link ${index === 0 || index === 3 ? "large" : "small"
+                    }`}
+                >
+                  <Card
+                    cover={idea.image}
+                    title={idea.title}
+                    content={idea.description}
+                    type={index === 0 || index === 3 ? "large" : "small"}
                   />
                 </Link>
-              ))
-            ) : (
-              <p>Aucun article disponible.</p>
-            )}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Section des idées */}
-      <section className="container__ideas">
-        <h2>Idées</h2>
-        <div className="ideas-content">
-          <div className="ideas-content__card">
-            {ideas.map((idea, index) => (
-              <Link
-                href={`/news/${idea.id}`}
-                key={idea.id}
-                className={`ideas-content__card__link ${index === 0 || index === 3 ? "large" : "small"
-                  }`}
-              >
-                <Card
-                  cover={idea.image}
-                  title={idea.title}
-                  content={idea.description}
-                  type={index === 0 || index === 3 ? "large" : "small"}
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <Subscribe />
-
+        <Subscribe />
+      </ThemeProvider>
     </>
   );
 }
