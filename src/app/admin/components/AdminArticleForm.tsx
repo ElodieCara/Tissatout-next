@@ -8,7 +8,8 @@ const categoryIcons: Record<string, string> = {
     "lecture": "/icons/lecture.png",
     "chiffre": "/icons/chiffre.png",
     "logique": "/icons/logique.png",
-    "mobilité": "/icons/mobilite.png"
+    "mobilité": "/icons/mobilite.png",
+    "craft": "/icons/crafts.png"
 };
 
 interface Article {
@@ -156,6 +157,7 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                         <option value="chiffre">🔢 Chiffre</option>
                         <option value="logique">🧩 Jeux de logique</option>
                         <option value="mobilité">🚀 Jeux de mobilité</option>
+                        <option value="craft">✂️ Loisirs créatifs</option>
                     </select>
                 </div>
 
@@ -175,14 +177,14 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                 </div>
 
                 <div className="admin-form__group">
-                    <label htmlFor="description">Description (max. 250 caractères)</label>
+                    <label htmlFor="description">Description (max. 150 caractères)</label>
                     <textarea
                         id="description"
                         name="description"
                         placeholder="Entrez une brève description..."
                         value={form.description}
                         onChange={(e) => {
-                            if (e.target.value.length > 200) {
+                            if (e.target.value.length > 150) {
                                 alert("❌ La description ne peut pas dépasser 250 caractères !");
                             } else {
                                 setForm({ ...form, description: e.target.value });
@@ -190,7 +192,7 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                         }}
                         maxLength={250} // ✅ Empêche de taper plus de 250 caractères
                     />
-                    <p>{form.description || "".length} / 250 caractères</p> {/* ✅ Affiche le compteur */}
+                    <p>{form.description || "".length} / 150 caractères</p> {/* ✅ Affiche le compteur */}
                     <input type="text" id="description" name="description" placeholder="Description" value={form.description} onChange={handleChange} />
                 </div>
 

@@ -60,10 +60,10 @@
         // ✅ Tags en bas de l’image
         &__tags {
             position: absolute;
-            bottom: 260px;
+            bottom: 236px;
             left: 305px;
             display: flex;
-            gap: 5px;
+            gap: 10px;
             flex-wrap: wrap;
             z-index: 5;
 

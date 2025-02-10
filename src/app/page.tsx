@@ -30,6 +30,8 @@ interface Article {
 export default function HomePage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [recentArticlesByCategory, setRecentArticlesByCategory] = useState<Article[]>([]);
+
 
   const articlesPerPage = 3; // Nombre d'articles par slide
   const totalSlides = Math.ceil(articles.length / articlesPerPage);
@@ -38,9 +40,33 @@ export default function HomePage() {
     // Récupération des articles via l'API
     fetch("/api/articles")
       .then((res) => res.json())
-      .then((data) => setArticles(data))
+      .then((data) => {
+        setArticles(data);
+        const filteredArticles = getMostRecentArticlesByCategory(data);
+        setRecentArticlesByCategory(filteredArticles);
+      })
       .catch((err) => console.error("Erreur lors de la récupération des articles :", err));
   }, []);
+
+  // Fonction pour récupérer l'article le plus récent par catégorie
+  const getMostRecentArticlesByCategory = (articles: Article[]) => {
+    const groupedByCategory: { [key: string]: Article[] } = {};
+
+    // Regrouper les articles par catégorie
+    articles.forEach((article) => {
+      if (article.category) {
+        if (!groupedByCategory[article.category]) {
+          groupedByCategory[article.category] = [];
+        }
+        groupedByCategory[article.category].push(article);
+      }
+    });
+
+    // Récupérer l'article le plus récent pour chaque catégorie
+    return Object.values(groupedByCategory).map((categoryArticles) => {
+      return categoryArticles.sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime())[0];
+    });
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -130,28 +156,29 @@ export default function HomePage() {
               </div>
             </div>
             <div className="news-content__articles-gallery">
-              {Array.isArray(articles) ? (
-                articles.slice(3, 8).map((article) => {
+              {recentArticlesByCategory.length > 0 ? (
+                recentArticlesByCategory.map((article) => {
                   const formattedDate = article.date
                     ? new Date(article.date).toLocaleDateString("fr-FR", {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
                     })
-                    : "Date inconnue"; // ✅ Ajoute une valeur par défaut
+                    : "Date inconnue";
 
                   return (
                     <Link href={`/news/${article.id}`} key={article.id}>
                       <ArticleCard
                         iconSrc={article.iconSrc || ""}
                         title={article.title}
-                        description={article.description
-                          ? article.description.length > 100
-                            ? article.description.substring(0, 250) + "..." // ✅ Limite à 100 caractères
-                            : article.description
-                          : "Description non disponible"
+                        description={
+                          article.description
+                            ? article.description.length > 100
+                              ? article.description.substring(0, 250) + "..."
+                              : article.description
+                            : "Description non disponible"
                         }
-                        date={formattedDate} // ✅ Utilise la date bien formatée
+                        date={formattedDate}
                       />
                     </Link>
                   );
