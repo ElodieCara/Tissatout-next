@@ -41,6 +41,28 @@
         }
     }
 
+    &__button {
+        background: $secondary-color;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border: none;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background 0.3s ease;
+        font-weight: bold;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+            background: darken($secondary-color, 10%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+
     // 🟢 CONTENU (PARTIE CENTRALE)
     &__content {
         background: white;
@@ -135,7 +157,7 @@
             }
 
             &-button {
-                background: $secondary-color;
+                background: transparent;
                 color: white;
                 padding: 0.5rem 1rem;
                 font-size: 0.9rem;
@@ -143,27 +165,37 @@
                 border-radius: 4px;
                 cursor: pointer;
                 font-weight: bold;
-
-                &:hover {
-                    background: darken($secondary-color, 10%);
-                }
+                display: flex;
+                gap: 10px;
             }
 
             // 🟠 Bouton Modifier
             &-button.edit {
                 background: $tertiary-color;
+                transition: all 0.3s ease-in-out;
 
                 &:hover {
                     background: darken($tertiary-color, 10%);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                }
+
+                &:active {
+                    transform: scale(0.95);
                 }
             }
 
             // 🔴 Bouton Supprimer
             &-button.delete {
                 background: $danger-color;
+                transition: all 0.3s ease-in-out;
 
                 &:hover {
-                    background: darken($danger-color, 10%);
+                    background: darken($tertiary-color, 10%);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                }
+
+                &:active {
+                    transform: scale(0.95);
                 }
             }
         }

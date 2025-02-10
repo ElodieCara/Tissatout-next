@@ -39,9 +39,21 @@ export default function AdminArticles() {
                         <div key={article.id} className="admin__list-item">
                             {article.image && <img src={article.image} alt={article.title} width="80" />}
                             <span>{article.title}</span>
-                            <button onClick={() => router.push(`/admin/articles/${article.id}`)}>✏️ Modifier</button>
-                            <button onClick={() => handleDelete(article.id)}>🗑️ Supprimer</button>
+                            <div className="admin__list-item-button">
+                                <button
+                                    onClick={() => router.push(`/admin/articles/${article.id}`)}
+                                    className="admin__list-item-button edit" // Ajouter une classe pour "Modifier"
+                                >
+                                    ✏️ Modifier
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(article.id)}
+                                    className="admin__list-item-button delete" // Ajouter une classe pour "Supprimer"
+                                >
+                                    🗑️ Supprimer
+                                </button></div>
                         </div>
+
                     ))
                 ) : (
                     <p>Aucun article disponible.</p>
