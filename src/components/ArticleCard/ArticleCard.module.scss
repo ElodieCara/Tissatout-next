@@ -3,6 +3,11 @@
 .articles-gallery {
     display: flex;
     margin-bottom: 28px;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: scale(1.1);
+    }
 
     &__icon {
         width: 250px;

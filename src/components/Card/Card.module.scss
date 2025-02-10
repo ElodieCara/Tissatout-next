@@ -8,6 +8,8 @@
     margin: 0 0 10%;
     position: relative;
 
+
+
     &__image {
         height: 80%;
         width: 100%;
@@ -61,11 +63,18 @@
         &__tags {
             position: absolute;
             bottom: 236px;
-            left: 305px;
+            /* Ajustez selon votre design */
+            right: 15px;
+            /* Positionné sur la droite */
             display: flex;
             gap: 10px;
+            /* Espacement entre les tags */
             flex-wrap: wrap;
             z-index: 5;
+
+            &>span:only-child {
+                margin: 0 auto;
+            }
 
             & span {
                 background-color: $secondary-color;

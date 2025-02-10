@@ -28,7 +28,7 @@
         grid-template-columns: 1fr 1fr;
         overflow: hidden;
         gap: 5%;
-
+        padding: 15px;
         box-sizing: border-box;
 
         &__images-gallery {
@@ -49,7 +49,16 @@
                     margin: 0 0 6% !important;
                     overflow: hidden;
                     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-                    text-transform: unset !important
+                    text-transform: unset !important;
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+                    &:hover {
+                        transform: translateY(-5px);
+                        /* Légère élévation */
+                        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                        /* Ombre plus marquée */
+                    }
                 }
             }
 
