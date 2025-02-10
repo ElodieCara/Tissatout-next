@@ -109,15 +109,21 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                 </div>
                 <div className="admin-form__group">
                     <label htmlFor="theme">Thème</label>
-                    <input
-                        type="text"
+                    <select
                         id="theme"
                         name="theme"
-                        placeholder="Thème de l'idée"
                         value={form.theme}
                         onChange={handleChange}
                         required
-                    />
+                    >
+                        <option value="">Sélectionnez un thème</option>
+                        <option value="winter">❄️ Hiver</option>
+                        <option value="summer">🌞 Été</option>
+                        <option value="spring">🌸 Printemps</option>
+                        <option value="autumn">🍂 Automne</option>
+                        <option value="halloween">🎃 Halloween</option>
+                        <option value="christmas">🎄 Noël</option>
+                    </select>
                 </div>
                 <button type="submit" className="admin-form__button">
                     {ideaId ? "Mettre à jour" : "Ajouter"}

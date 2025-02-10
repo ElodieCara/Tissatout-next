@@ -52,6 +52,16 @@ function HomeContent() {
   const articlesPerPage = 3; // Nombre d'articles par slide
   const totalSlides = Math.ceil(articles.length / articlesPerPage);
 
+  const themeMapping: Record<string, string> = {
+    "Hiver": "winter",
+    "Printemps": "spring",
+    "Été": "summer",
+    "Automne": "autumn",
+    "Halloween": "halloween",
+    "Noël": "christmas"
+  };
+
+
   useEffect(() => {
     // 🟢 Récupérer les articles depuis l'API
     fetch("/api/articles")
@@ -66,17 +76,21 @@ function HomeContent() {
 
   // 🔵 Récupérer les idées en fonction du **thème actif**
   useEffect(() => {
-    fetch(`/api/ideas?theme=${theme}`)
+    if (!theme) {
+      console.log("❌ Aucun thème détecté !");
+      return;
+    }
+
+    const normalizedTheme = theme.replace("-theme", "");
+    console.log("🔍 Thème actif avant requête API :", theme);
+
+    fetch(`/api/ideas?theme=${encodeURIComponent(normalizedTheme)}`)
       .then((res) => res.json())
       .then((data) => {
-        if (data.error) {
-          setIdeasError("❌ Aucune idée disponible.");
-        } else {
-          setIdeas(data);
-          setIdeasError(null);
-        }
+        console.log("📤 Idées reçues :", data);
+        setIdeas(data);
       })
-      .catch(() => setIdeasError("❌ Erreur lors de la récupération des idées."));
+      .catch((err) => console.error("❌ Erreur lors de la récupération des idées :", err));
   }, [theme]);
 
   // Fonction pour récupérer l'article le plus récent par catégorie

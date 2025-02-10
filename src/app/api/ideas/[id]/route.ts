@@ -1,9 +1,13 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-// 🟢 Récupérer une idée par ID (READ)
+// 🟢 Récupérer une idée par ID
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
     try {
+        if (!params.id) {
+            return NextResponse.json({ error: "ID manquant" }, { status: 400 });
+        }
+
         const idea = await prisma.idea.findUnique({
             where: { id: params.id },
         });
@@ -19,11 +23,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-// 🔵 Modifier une idée par ID (UPDATE)
+// 🔵 Modifier une idée par ID
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
     try {
+        if (!params.id) {
+            return NextResponse.json({ error: "ID manquant" }, { status: 400 });
+        }
+
         const body = await req.json();
-        console.log("📥 Données reçues :", body);
 
         const updatedIdea = await prisma.idea.update({
             where: { id: params.id },
@@ -42,9 +49,13 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-// 🔴 Supprimer une idée par ID (DELETE)
+// 🔴 Supprimer une idée par ID
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
     try {
+        if (!params.id) {
+            return NextResponse.json({ error: "ID manquant" }, { status: 400 });
+        }
+
         await prisma.idea.delete({
             where: { id: params.id },
         });

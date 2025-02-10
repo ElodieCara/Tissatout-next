@@ -1,25 +1,44 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-// 🟢 Récupérer toutes les idées (READ)
-export async function GET() {
+// 🎨 Correspondance FR → EN
+const themeMapping: Record<string, string> = {
+    "Hiver": "winter",
+    "Printemps": "spring",
+    "Été": "summer",
+    "Automne": "autumn",
+    "Halloween": "halloween",
+    "Noël": "christmas"
+};
+
+// 🟢 Récupérer toutes les idées avec filtre par thème
+export async function GET(req: Request) {
     try {
-        const ideas = await prisma.idea.findMany({
-            orderBy: {
-                createdAt: "desc", // Tri par date de création décroissante
-            },
-        });
+        const { searchParams } = new URL(req.url);
+        const themeFr = searchParams.get("theme"); // Thème reçu en FR
 
-        console.log("📤 Idées envoyées :", ideas); // ✅ Vérifier la réponse Prisma
-
-        if (!ideas || !Array.isArray(ideas)) {
-            console.error("⚠️ Prisma a retourné une valeur incorrecte :", ideas);
-            return NextResponse.json({ error: "Aucune idée trouvée", data: [] }, { status: 200 });
+        if (!themeFr) {
+            console.log("🔎 Aucun thème sélectionné, récupération de toutes les idées.");
         }
 
+        // Convertit en EN si trouvé, sinon garde tel quel
+        const themeEn = themeFr ? themeMapping[themeFr] || themeFr : null;
+
+        console.log("🎨 Thème reçu (FR) :", themeFr);
+        console.log("🌎 Thème utilisé en base (EN) :", themeEn);
+
+        // 🔍 Filtrer uniquement si un thème est sélectionné
+        const whereClause = themeEn ? { theme: themeEn } : {};
+
+        const ideas = await prisma.idea.findMany({
+            where: whereClause,
+            orderBy: { createdAt: "desc" },
+        });
+
+        console.log("📤 Idées envoyées :", ideas);
         return NextResponse.json(ideas);
     } catch (error) {
-        console.error("❌ Erreur lors de la récupération des idées :", error);
+        console.error("❌ Erreur API :", error);
         return NextResponse.json({ error: "Erreur serveur", details: (error as Error).message }, { status: 500 });
     }
 }
