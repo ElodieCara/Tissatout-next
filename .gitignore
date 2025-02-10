@@ -43,3 +43,7 @@ next-env.d.ts
 # Ignorer les fichiers CSS générés par Sass
 *.css
 *.css.map
+
+# Ignorer les fichiers images et assets
+/public/images/
+/assets/
