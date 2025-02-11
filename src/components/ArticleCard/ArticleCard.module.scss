@@ -3,10 +3,10 @@
 .articles-gallery {
     display: flex;
     margin-bottom: 28px;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
 
     &:hover {
-        transform: scale(1.1);
+        transform: translateY(-5px); // 🔥 Effet de soulèvement au lieu de scale
     }
 
     &__icon {
