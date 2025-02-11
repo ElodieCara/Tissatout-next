@@ -47,3 +47,4 @@ next-env.d.ts
 # Ignorer les fichiers images et assets
 /public/images/
 /assets/
+public/uploads/

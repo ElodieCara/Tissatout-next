@@ -25,20 +25,22 @@ const Card: React.FC<CardProps> = ({ cover, title, content, type, category, tags
                 )}
             </div>
             <div className="card__content">
-                <h3>{title}</h3>
+                <div className="card__content__text">
+                    <h3>{title}</h3>
 
-                {/* <p className="card__content__description">{content}</p> */}
+                    {/* <p className="card__content__description">{content}</p> */}
 
-                {/* ✅ Affichage des tags */}
-                {tags && tags.length > 0 && (
-                    <div className="card__content__tags">
-                        {tags.map((tag, index) => (
-                            <span key={index} className="card__content__tags__tag">{tag}</span>
-                        ))}
-                    </div>
-                )}
+                    {/* ✅ Affichage des tags */}
+                    {tags && tags.length > 0 && (
+                        <div className="card__content__tags">
+                            {tags.map((tag, index) => (
+                                <span key={index} className="card__content__tags__tag">{tag}</span>
+                            ))}
+                        </div>
+                    )}
 
-                <p>{content}</p>
+                    <p>{content}</p>
+                </div>
                 <div className="card__content__actions">
                     <Button className={`card__content__actions__button ${buttonColor ?? (type === "large" ? "yellow-button" : "blue-button")}`}>
                         En savoir plus
