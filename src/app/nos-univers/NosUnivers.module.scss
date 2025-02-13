@@ -1,0 +1,59 @@
+// .nos-univers {
+//     text-align: center;
+//     padding: 50px 20px;
+// }
+
+// .nos-univers__banner {
+//     background: linear-gradient(135deg, #ffcc00, #ff6699);
+//     color: white;
+//     padding: 40px;
+//     border-radius: 15px;
+//     margin-bottom: 30px;
+//     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+// }
+
+.nos-univers__categories {
+    display: flex;
+    flex-direction: column;
+    /* ✅ Forcer les cartes en colonne */
+    align-items: center;
+    /* ✅ Centrer les cartes */
+    gap: 20px;
+    width: 100%;
+    /* ✅ Assurer qu'elles occupent bien la largeur */
+    margin-top: 30px;
+
+    &-wrapper {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 50px;
+    }
+}
+
+.category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 220px;
+    background: #ffcc00;
+    border-radius: 15px;
+    text-decoration: none;
+    color: #333;
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.category-card__image img {
+    border-radius: 10px;
+}
+
+.category-card__content h3 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+}

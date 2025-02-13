@@ -18,13 +18,13 @@ const Header: React.FC = () => {
             <div className="header__masthead">
                 <div className="header__masthead__social">
                     <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                        <FaFacebook size={30} />
+                        <FaFacebook size={18} />
                     </a>
                     <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                        <FaXTwitter size={30} />
+                        <FaXTwitter size={18} />
                     </a>
                     <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer">
-                        <FaPinterest size={30} />
+                        <FaPinterest size={18} />
                     </a>
                 </div>
                 <nav className="header__masthead__nav-main">

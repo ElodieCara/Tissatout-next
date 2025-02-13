@@ -7,14 +7,14 @@
     &__masthead {
         display: flex;
         flex-direction: column;
-        gap: 15px;
-        margin-bottom: 50px;
+        //gap: 15px;
+        margin-bottom: 30px;
 
         &__social {
             display: flex;
             justify-content: flex-end;
-            gap: 1rem;
-            padding: 5px 10px;
+            gap: 0.5rem;
+            padding: 2px 8px;
 
             & a {
                 color: white;
@@ -26,8 +26,8 @@
             align-items: center;
             text-transform: uppercase;
             color: white;
-            height: 80px;
-            margin: 0 50px;
+            height: 45px;
+            margin: 0 155px;
             border-radius: 60px;
             background-color: vars.$dark-primary-color;
 
@@ -57,7 +57,7 @@
                         display: flex;
                         border-radius: 5px 0 0 5px;
                         border: 1px solid #343536;
-                        padding: 13px 25px;
+                        padding: 10px 20px;
                         appearance: none;
                         background-clip: padding-box;
                         transition: border-color 0.15s ease-in-out,

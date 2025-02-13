@@ -15,7 +15,7 @@ const ThemeDecorations: React.FC<ThemeDecorationsProps> = ({ theme }) => {
     useEffect(() => {
         const mainElement = document.querySelector("main");
         if (mainElement) {
-            setMainHeight(mainElement.scrollHeight);
+            setMainHeight(Math.max(mainElement.scrollHeight, window.innerHeight));
         }
     }, []);
 
@@ -33,8 +33,8 @@ const ThemeDecorations: React.FC<ThemeDecorationsProps> = ({ theme }) => {
     // Génération des décorations dynamiques
     const repeatedDecorations = Array.from({ length: 40 }, (_, i) => {
         const baseClass = decorations[i % decorations.length].className; // Récupération des classes
-        const totalItems = 20;
-        const top = (i / totalItems) * (mainHeight * 0.6);
+        const totalItems = 15;
+        const top = (i / totalItems) * (mainHeight * 0.7);
 
         const horizontalOffset = 4 + (i % 4) * 3;
         const sideStyle =

@@ -242,7 +242,7 @@ function HomeContent() {
         {ideasError ? <p className="error">{ideasError}</p> : null}
         <div className="ideas-content">
           <div className="ideas-content__card">
-            {ideas.map((idea, index) => (
+            {ideas.slice(0, 4).map((idea, index) => (
               <Link
                 href={`/ideas/${idea.id}`}
                 key={idea.id}

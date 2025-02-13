@@ -21,7 +21,7 @@
             z-index: 999;
 
             &__navbar {
-                width: 62%;
+                width: 50%;
                 height: 100%;
                 list-style: none;
                 padding: 0;
@@ -29,22 +29,26 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-
                 // position: relative;
                 // top: 50px;
 
                 &-menu {
-                    width: 70%; // Ajustez la largeur selon vos besoins
-                    height: auto; // Ajustez la hauteur selon vos besoins
-                    margin: 0 8px; // Espacement entre les boutons
-                    font-size: 20px;
+                    width: 30%;
+                    height: 100%;
+                    margin: 0 3px;
+                    font-size: 13px;
                     font-family: sans-serif;
                     text-transform: capitalize;
-                    line-height: 4em;
+                    line-height: 0em;
                     transition: 0.3s;
                     cursor: pointer;
-                    padding: 10px;
+                    padding: 40px;
                     text-transform: uppercase;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+
 
                     &:nth-child(4n + 1) {
                         background: vars.$btn-orange no-repeat;
