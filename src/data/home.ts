@@ -39,6 +39,11 @@ export const sections: Section[] = [
             "📖 Comptines illustrées pour enrichir son imaginaire.",
         ],
         conclusion: "Offrez-lui des moments d’émerveillement tout en partageant des instants magiques ensemble. 💕",
+        tags: [
+            { label: "Éveil & Motricité", color: "yellow" },
+            { label: "Coloriages", color: "blue" },
+            { label: "Comptines", color: "orange" }
+        ]
     },
     {
         title: "Dès 3 ans",
@@ -53,6 +58,11 @@ export const sections: Section[] = [
             "🔵 Jeux de reconnaissance des formes et des couleurs pour apprendre en s’amusant.",
         ],
         conclusion: "Transformez chaque journée en une nouvelle découverte ludique et enrichissante. ✨",
+        tags: [
+            { label: "Créativité", color: "green" },
+            { label: "Bricolage", color: "red" },
+            { label: "Jeux éducatifs", color: "blue" }
+        ]
     },
     {
         title: "Dès 6 ans",
@@ -67,6 +77,11 @@ export const sections: Section[] = [
             "🧠 Participer à des jeux de logique et des défis amusants pour réfléchir tout en s’amusant.",
         ],
         conclusion: "Encouragez-le à relever ses premiers défis et à développer son autonomie en toute confiance ! 🌟",
+        tags: [
+            { label: "Activités artistiques", color: "blue" },
+            { label: "Jeux de logique", color: "red" },
+            { label: "Défis éducatifs", color: "orange" }
+        ]
     },
     {
         title: "Dès 10 ans",
@@ -81,21 +96,26 @@ export const sections: Section[] = [
             "🎭 S’engager dans des projets créatifs avancés pour laisser libre cours à leur imagination.",
         ],
         conclusion: "Offrez-leur des outils pour s’épanouir et exprimer pleinement leur créativité tout en s’amusant. 🌟",
+        tags: [
+            { label: "DIY & Création", color: "green" },
+            { label: "Énigmes & Réflexion", color: "red" },
+            { label: "Projets créatifs", color: "blue" }
+        ]
     },
 ];
 
 
 
-export const news: News[] = [
-    { id: 1, image: N1, title: "exemple 1", iconSrc: ABC, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
-    { id: 2, image: N2, title: "exemple 2", iconSrc: ABC, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
-    { id: 3, image: N3, title: "exemple 3", iconSrc: ABC, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
-    { id: 4, image: N1, title: "exemple 4", iconSrc: ABC, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
-    { id: 5, image: N1, title: "exemple 5", iconSrc: Chariot, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
-    { id: 6, image: N1, title: "exemple 6", iconSrc: Blocs, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
-    { id: 7, image: N1, title: "exemple 7", iconSrc: Toys, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
-    { id: 8, image: N1, title: "exemple 8", iconSrc: ABC, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
-];
+// export const news: News[] = [
+//     { id: 1, image: N1, title: "exemple 1", iconSrc: ABC, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
+//     { id: 2, image: N2, title: "exemple 2", iconSrc: ABC, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
+//     { id: 3, image: N3, title: "exemple 3", iconSrc: ABC, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
+//     { id: 4, image: N1, title: "exemple 4", iconSrc: ABC, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
+//     { id: 5, image: N1, title: "exemple 5", iconSrc: Chariot, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
+//     { id: 6, image: N1, title: "exemple 6", iconSrc: Blocs, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
+//     { id: 7, image: N1, title: "exemple 7", iconSrc: Toys, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
+//     { id: 8, image: N1, title: "exemple 8", iconSrc: ABC, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
+// ];
 
 export const ideas: Idea[] = [
     { id: 1, image: N1, title: "Titre", description: "Lorem ipsum" },

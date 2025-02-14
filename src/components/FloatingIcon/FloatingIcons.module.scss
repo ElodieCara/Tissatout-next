@@ -1,0 +1,30 @@
+.floating-icons {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; // Empêche l'interaction avec les éléments
+    z-index: -1; // Derrière le contenu
+}
+
+.floating-icon {
+    position: absolute;
+    font-size: 40px;
+    /* 🔥 Plus grand */
+    font-weight: bold;
+    opacity: 0.9;
+    filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.3));
+    /* 🔥 Effet net */
+    animation: floatAnimation 4s infinite ease-in-out alternate;
+}
+
+@keyframes floatAnimation {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-10px);
+    }
+}

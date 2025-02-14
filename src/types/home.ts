@@ -14,6 +14,7 @@ export interface Section {
     imageCard: StaticImageData;
     description: string;
     conclusion: string;
+    tags?: Tag[];
 }
 
 export interface News {
@@ -36,3 +37,7 @@ export interface Idea {
     description: string;
 }
 
+export interface Tag {
+    label: string;
+    color: string;
+}
