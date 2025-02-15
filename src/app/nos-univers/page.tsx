@@ -22,19 +22,21 @@ export default function Home() {
                 <Banner
                     src="/assets/slide3.png"
                     title="Explorez Nos Univers ✨"
-                    description="Des activités et inspirations adaptées à chaque âge !"
+                    description="Découvrez des activités adaptées à chaque âge pour stimuler la créativité, l’éveil et l’apprentissage des enfants. Trouvez des idées originales pour apprendre en s’amusant !"
                 />
             </header>
 
-            <div className="nos-univers__categories-wrapper">
+
+
+            <div className="nos-univers__categories">
                 <FloatingIcons />
-                <section className="nos-univers__categories">
+                <section className="nos-univers__categories-wrapper">
                     {sections.map((section, index) => (
-                        <div key={section.title} className="category-card-container">
-                            <Link href={`/nos-univers/${encodeURIComponent(section.title)}`} className="category-card">
+                        <div key={section.title} className="nos-univers__categories__card">
+                            <Link href={`/nos-univers/${encodeURIComponent(section.title)}`} className="nos-univers__categories__card-link">
                                 {/* ✅ Vérification avant d'afficher les tags */}
                                 {section.tags && (
-                                    <div className="category-card__tags">
+                                    <div className="nos-univers__categories__card__tags">
                                         {section.tags.map((tag: Tag, i: number) => (
                                             <span key={i} className={`tag tag--${tag.color}`}>
                                                 {tag.label}
@@ -43,11 +45,11 @@ export default function Home() {
                                     </div>
                                 )}
 
-                                <div className="category-card__image">
+                                <div className="nos-univers__categories__card__image">
                                     <Image src={section.imageCard} alt={section.title} width={160} height={160} />
                                 </div>
-                                <div className="category-card__content">
-                                    <h2 className="category-card__content__title">{section.title}</h2>
+                                <div className="nos-univers__categories__card__content">
+                                    <h2 className="nos-univers__categories__card__title">{section.title}</h2>
                                     <p>{section.content}</p>
                                     <p>{section.conclusion}</p>
                                     <Button className="small">Explorer cet univers</Button>
@@ -55,7 +57,7 @@ export default function Home() {
                             </Link>
 
                             {/* ✅ Ajoute la peluche sous le premier cadre seulement */}
-                            {index === 0 && <div className="squished-plush">🧸</div>}
+                            {index === 0 && <div className="nos-univers__categories__squished-plush">🧸</div>}
                         </div>
                     ))}
                 </section>

@@ -4,17 +4,17 @@
 @use "sass:math";
 
 .nos-univers {
-    text-align: center;
+    position: relative;
+    height: 500px;
+    // &__banner {
+    //     background: linear-gradient(135deg, #ffcc00, #ff6699);
+    //     color: white;
+    //     padding: 40px;
+    //     margin-bottom: 30px;
+    //     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    // }
 
-    &__banner {
-        background: linear-gradient(135deg, #ffcc00, #ff6699);
-        color: white;
-        padding: 40px;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
-
-    &__categories-wrapper {
+    &__categories {
         display: flex;
         justify-content: center;
         width: 100%;
@@ -25,171 +25,196 @@
         background-size: contain;
         background-repeat: repeat;
         background-position: center;
-    }
 
-    &__categories {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 20px;
-        width: 100%;
-        max-width: 900px;
-    }
-}
-
-.category-card-container {
-    position: relative; // ✅ Permet de positionner la peluche sous la carte
-}
-
-.category-card {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 40px;
-    margin-bottom: 30px;
-    width: 100%;
-    max-width: 1200px;
-    min-height: 320px;
-    background: vars.$secondary-color;
-    border-radius: 15px;
-    padding: 15px 40px;
-    text-decoration: none;
-    color: #333;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 2px 16px 11px 0px #00000026, -5px -5px 15px #fff3;
-    position: relative;
-
-    // ✅ Incliner uniquement le premier cadre
-    &:first-child {
-        transform: rotate(2deg);
-
-        .category-card__image,
-        .category-card__content,
-        .tag {
-            transform: rotate(-2deg);
-        }
-    }
-
-    &:hover {
-        transform: scale(1.03) rotate(0deg);
-        box-shadow: 15px 15px 25px rgba(0, 0, 0, 0.2),
-            -8px -8px 20px rgba(255, 255, 255, 0.2);
-    }
-
-    &__tags {
-        position: absolute;
-        top: 15px;
-        right: -35px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-
-        .tag:nth-child(1) {
-            margin-left: 0px;
-        }
-
-        .tag:nth-child(2) {
-            margin-left: 10px;
-        }
-
-        .tag:nth-child(3) {
-            margin-left: 20px;
-        }
-
-        .tag:nth-child(4) {
-            margin-left: 30px;
-        }
-    }
-
-    .tag {
-        font-size: 12px;
-        font-weight: bold;
-        text-transform: uppercase;
-        padding: 5px 10px;
-        border-radius: 8px;
-        color: white;
-        box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    // Couleurs des tags
-    .tag--blue {
-        background-color: #2985B5;
-    }
-
-    .tag--orange {
-        background-color: #76714D;
-    }
-
-    .tag--green {
-        background-color: #76714D;
-    }
-
-    .tag--red {
-        background-color: #C9AB8F;
-    }
-
-    .tag--yellow {
-        background-color: #BF1D17;
-    }
-
-    &__image {
-        flex-shrink: 0;
-        width: 230px;
-        height: 230px;
-        border-radius: 15px;
-        overflow: hidden;
-        background: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
-
-        img {
+        &-wrapper {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            place-items: center;
+            gap: 20px;
             width: 100%;
-            height: 100%;
-            object-fit: contain;
+            max-width: 1000px;
+            justify-content: center; // ✅ Centre la grille
+            background-color: #F8F5F1;
+            position: relative;
+            z-index: 1;
+            overflow: visible;
+        }
+
+        &__card {
+            position: relative;
+            width: 565px;
+
+
+            // ✅ Ordre d'empilement inversé pour la 2ème colonne
+            &:nth-child(odd) {
+                z-index: 2;
+            }
+
+            // Colonne gauche
+            &:nth-child(even) {
+                z-index: 1;
+            }
+
+
+
+            &__tags {
+                position: absolute;
+                top: 15px;
+                right: -35px;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+                z-index: 1000;
+
+                .tag:nth-child(1) {
+                    margin-left: 0px;
+                }
+
+                .tag:nth-child(2) {
+                    margin-left: 10px;
+                }
+
+                .tag:nth-child(3) {
+                    margin-left: 20px;
+                }
+
+                .tag:nth-child(4) {
+                    margin-left: 30px;
+                }
+            }
+
+            &-link {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 10px;
+                margin-bottom: 30px;
+                width: 100%;
+                max-width: 1200px;
+                min-height: 320px;
+                background: vars.$secondary-color;
+                border-radius: 15px;
+                padding: 15px 40px;
+                text-decoration: none;
+                color: #333;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                box-shadow: 2px 16px 11px 0px #00000026, -5px -5px 15px #fff3;
+                position: relative;
+                z-index: auto;
+
+                // ✅ Incliner uniquement le premier cadre
+                &:first-child {
+                    transform: rotate(1deg);
+                }
+
+
+                &:hover {
+                    transform: scale(1.03) rotate(0deg);
+                    box-shadow: 15px 15px 25px rgba(0, 0, 0, 0.2),
+                        -8px -8px 20px rgba(255, 255, 255, 0.2);
+                    z-index: 100;
+                }
+
+                .tag {
+                    font-size: 12px;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    padding: 5px 10px;
+                    border-radius: 8px;
+                    color: white;
+                    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+                    position: relative;
+                    z-index: 201 !important;
+                    pointer-events: auto;
+                    z-index: 501;
+                }
+
+                // Couleurs des tags
+                .tag--blue {
+                    background-color: #2985B5;
+                }
+
+                .tag--orange {
+                    background-color: #76714D;
+                }
+
+                .tag--green {
+                    background-color: #76714D;
+                }
+
+                .tag--red {
+                    background-color: #C9AB8F;
+                }
+
+                .tag--yellow {
+                    background-color: #BF1D17;
+                }
+            }
+
+            &__image {
+                flex-shrink: 0;
+                width: 160px;
+                height: 260px;
+                border-radius: 15px;
+                overflow: hidden;
+                background: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+            }
+
+            &__content {
+                flex: 1;
+                padding: 0 20px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                text-align: left;
+                gap: 15px;
+
+                &__title {
+                    font-size: 22px;
+                    font-weight: bold;
+                    font-family: "Comic Sans MS", sans-serif;
+                    color: #2c3f64;
+                }
+
+                p {
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: #444;
+                }
+            }
+
+            &:hover {
+                transform: scale(1.03);
+                z-index: 100;
+
+                .nos-univers__categories__squished-plush {
+                    transform: translateX(-50%) scale(1.8, 0.4);
+                    opacity: 0.8;
+                }
+            }
+        }
+
+        &__squished-plush {
+            position: absolute;
+            bottom: -40px; // 🔥 Juste sous le cadre
+            left: 50%;
+            transform: translateX(-50%) scale(1, 1); // 🧸 Debout par défaut
+            font-size: 50px;
+            opacity: 0.9;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            z-index: -1; // ✅ Sous le cadre
+
         }
     }
-
-    &__content {
-        flex: 1;
-        padding: 0 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        text-align: left;
-        gap: 15px;
-
-        &__title {
-            font-size: 22px;
-            font-weight: bold;
-            font-family: "Comic Sans MS", sans-serif;
-            color: #2c3f64;
-        }
-
-        p {
-            font-size: 16px;
-            font-weight: 500;
-            color: #444;
-        }
-    }
-}
-
-// ✅ Styles pour la peluche écrasée
-.squished-plush {
-    position: absolute;
-    bottom: -40px; // 🔥 Juste sous le cadre
-    left: 50%;
-    transform: translateX(-50%) scale(1, 1); // 🧸 Debout par défaut
-    font-size: 50px;
-    opacity: 0.9;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    z-index: -1; // ✅ Sous le cadre
-}
-
-// 🖱️ Effet hover : la peluche s’écrase
-.category-card-container:hover .squished-plush {
-    transform: translateX(-50%) scale(1.8, 0.4); // 🧸 Écrasée !
-    opacity: 0.8;
 }

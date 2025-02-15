@@ -2,11 +2,6 @@
 @use '../../styles/base/mixins' as mix;
 @use '../../styles/base/typography' as typ;
 
-.nos-univers {
-    position: relative;
-    height: 500px;
-}
-
 .nos-univers__banner {
     position: relative;
     width: 100%;
@@ -40,12 +35,12 @@
 
     &-content {
         position: absolute;
-        bottom: 25%;
-        left: 10%;
+        bottom: 23%;
+        left: 5%;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        /* ✅ Espacement entre éléments */
+        width: 30%;
 
         & h1 {
             font-size: 45px; // ✅ Un peu plus grand pour bien ressortir
