@@ -10,11 +10,13 @@ import Banner from "@/components/Banner/Banner";
 import Button from "@/components/Button/Button";
 import { Tag } from "@/types/home";
 import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
+import RubanTrivium from "@/components/Ruban/Ruban";
+import BackToTop from "@/components/BackToTop/BackToTop";
 
-const categories = ["grammaire", "logique", "rhetorique"];
+const categories = ["grammaire", "logique", "rhetorique", "motricite"];
 
 export default function Home() {
-    const [selectedCategory, setSelectedCategory] = useState<"grammaire" | "logique" | "rhetorique">("grammaire");
+    const [selectedCategory, setSelectedCategory] = useState<"grammaire" | "logique" | "rhetorique" | "motricite">("grammaire");
 
     return (
         <>
@@ -33,7 +35,10 @@ export default function Home() {
 
             <div className="nos-univers__categories">
                 <FloatingIcons />
-                <section className="nos-univers__categories-wrapper">
+                {/* ✅ Ajout du bouton BackToTop */}
+                <BackToTop />
+                <h2 className="nos-univers__categories-title">🌱 Les univers par âge</h2>
+                <section id="univers" className="nos-univers__categories-wrapper">
                     {sections.map((section, index) => (
                         <div key={section.title} className="nos-univers__categories__card">
                             <Link href={`/nos-univers/${encodeURIComponent(section.title)}`} className="nos-univers__categories__card-link">
@@ -64,9 +69,16 @@ export default function Home() {
                         </div>
                     ))}
                 </section>
-                {/* ACTIVITÉS EN SLIDER */}
-                <section className="nos-univers__activites">
-                    <h2>🎯 Des activités adaptées à chaque âge</h2>
+
+                {/* ACTIVITÉS TRIVIUM */}
+                <section id="trivium" className="nos-univers__trivium">
+                    <h2 className="nos-univers__trivium-title">📖 Des activités selon le Trivium </h2>
+                    <RubanTrivium />
+                </section>
+
+                {/* ACTIVITÉS THEMATIQUE */}
+                <section id="interets" className="nos-univers__activites">
+                    <h2>🎯 Des activités par thématique</h2>
 
                     {/* ✅ Introduction sur le Trivium */}
                     <p className="nos-univers__activites-intro">
@@ -74,15 +86,16 @@ export default function Home() {
                         <br /><strong>Grammaire</strong> 📖 (acquérir les bases),
                         <strong> Logique</strong> 🧠 (structurer et raisonner),
                         <strong> Rhétorique</strong> 🎤 (exprimer et transmettre).
+                        <br />Mais aussi :⚡ <strong>Motricité & Sport</strong> 🏃‍♂️ (développer le corps et l’équilibre)
                     </p>
 
                     {/* ✅ Filtre de sélection */}
                     <div className="nos-univers__activites-filter">
-                        {categories.map((category) => (
+                        {["grammaire", "logique", "rhetorique", "motricite"].map((category) => (
                             <button
                                 key={category}
                                 className={`filter-button ${selectedCategory === category ? "active" : ""}`}
-                                onClick={() => setSelectedCategory(category as "grammaire" | "logique" | "rhetorique")}
+                                onClick={() => setSelectedCategory(category as "grammaire" | "logique" | "rhetorique" | "motricite")}
                             >
                                 {category.charAt(0).toUpperCase() + category.slice(1)}
                             </button>
@@ -93,7 +106,13 @@ export default function Home() {
                     <div className="nos-univers__activites-grid">
                         {activities[selectedCategory].map((activity) => (
                             <Link key={activity.title} href={activity.link} className="nos-univers__activites__card">
-                                <span>{activity.icon}</span>
+                                <Image
+                                    src={activity.icon}
+                                    alt={activity.title}
+                                    width={50}
+                                    height={50}
+                                    className="activity-icon"
+                                />
                                 <p>{activity.title}</p>
                             </Link>
                         ))}

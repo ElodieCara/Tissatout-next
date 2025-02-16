@@ -19,6 +19,13 @@ export default function Banner({ src, title, description }: BannerProps) {
 
     if (!isClient) return null; // Empêche le rendu serveur
 
+    const scrollToSection = (id: string) => {
+        const section = document.getElementById(id);
+        if (section) {
+            section.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
     return (
         <header className="nos-univers__banner">
             <div className="nos-univers__banner-image">
@@ -34,9 +41,11 @@ export default function Banner({ src, title, description }: BannerProps) {
             <div className="nos-univers__banner-content">
                 <h1>{title}</h1>
                 <p>{description}</p>
-                <Button className="large" onClick={() => console.log("Action à définir")}>
-                    Découvrir les univers
-                </Button>
+                <div className="nos-univers__banner-content-buttons">
+                    <Button className="large" onClick={() => scrollToSection("univers")}>🌟 Par Âge</Button>
+                    <Button className="large" onClick={() => scrollToSection("trivium")}>🎓 Trivium</Button>
+                    <Button className="large" onClick={() => scrollToSection("interets")}>🎭 Centres d’Intérêt</Button>
+                </div>
             </div>
         </header>
     );

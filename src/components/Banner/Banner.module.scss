@@ -56,19 +56,24 @@
             color: vars.$primary-color;
         }
 
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #ecac3e;
-            border: none;
-            border-radius: 30px;
-            color: #2c3f64;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
+        &-buttons {
+            display: flex;
+            gap: 22px;
 
-            &:hover {
-                background: darken(#ecac3e, 10%);
+            button {
+                margin-top: 20px;
+                padding: 10px 20px;
+                background: #ecac3e;
+                border: none;
+                border-radius: 30px;
+                color: #2c3f64;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background 0.3s;
+
+                &:hover {
+                    background: darken(#ecac3e, 10%);
+                }
             }
         }
     }
