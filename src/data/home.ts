@@ -17,7 +17,10 @@ import Blocs from "@/assets/news/blocs-de-jouets.png";
 import Chariot from "@/assets/news/chariot.png";
 import Toys from "@/assets/news/toys.png";
 
-import { Slide, Section, News, Idea } from "@/types/home"; // Types définis
+import { Slide, Section, News, Idea, Activity } from "@/types/home"; // Types définis
+
+
+export type ActivityCategory = "grammaire" | "logique" | "rhetorique";
 
 export const slide: Slide[] = [
     { id: 1, image: Slide1 },
@@ -123,3 +126,32 @@ export const ideas: Idea[] = [
     { id: 3, image: N3, title: "Titre", description: "Lorem ipsum" },
     { id: 4, image: N2, title: "Titre", description: "Lorem ipsum" },
 ];
+
+
+
+export const activities: Record<ActivityCategory, Activity[]> = {
+    grammaire: [
+        { title: "Coloriages & Dessin", icon: "🎨", link: "/coloriages" },
+        { title: "Histoires & Comptines", icon: "📖", link: "/histoires-comptines" },
+        { title: "Musique & Chansons", icon: "🎶", link: "/musique-chansons" },
+        { title: "Activités Manuelles", icon: "✂️", link: "/activites-manuelles" },
+        { title: "Peinture et collage", icon: "🖍️", link: "/peinture-collage" },
+        { title: "Marionnettes & Jeux sensoriels", icon: "🐾", link: "/marionnettes-sensoriel" },
+    ],
+    logique: [
+        { title: "Construction & Lego", icon: "🏗️", link: "/construction-lego" },
+        { title: "Défis éducatifs & Enigmes", icon: "🎯", link: "/defis-educatifs" },
+        { title: "Jeux éducatifs", icon: "🧩", link: "/jeux-educatifs" },
+        { title: "Jeux de réflexion & stratégie", icon: "🧠", link: "/jeux-strategie" },
+        { title: "Expériences scientifiques", icon: "🧪", link: "/sciences-enfants" },
+        { title: "Mathématiques ludiques", icon: "🔢", link: "/maths-ludiques" },
+    ],
+    rhetorique: [
+        { title: "Théâtre & Jeux de rôle", icon: "🎭", link: "/theatre-jeux-role" },
+        { title: "Projets DIY & Création", icon: "🔨", link: "/projets-diy" },
+        { title: "Rédaction d’histoires", icon: "📚", link: "/redaction-histoires" },
+        { title: "Expression orale & Débats", icon: "🎤", link: "/expression-orale" },
+        { title: "Création de mini-magazines", icon: "📰", link: "/mini-magazine" },
+        { title: "Stop-motion et cinéma", icon: "🎬", link: "/cinema-stopmotion" },
+    ]
+};

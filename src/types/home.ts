@@ -29,7 +29,6 @@ export interface News {
     date: string;
 }
 
-
 export interface Idea {
     id: number;
     image: StaticImageData;
@@ -41,3 +40,10 @@ export interface Tag {
     label: string;
     color: string;
 }
+
+export type Activity = {
+    title: string;
+    icon: string;
+    link: string;
+};
+

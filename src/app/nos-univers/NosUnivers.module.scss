@@ -25,6 +25,8 @@
         background-size: contain;
         background-repeat: repeat;
         background-position: center;
+        flex-direction: column;
+        align-items: center;
 
         &-wrapper {
             display: grid;
@@ -215,6 +217,195 @@
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
             z-index: -1; // ✅ Sous le cadre
 
+        }
+    }
+
+    // Activités 
+    &__activites {
+        text-align: center;
+        padding: 50px 0;
+
+        h2 {
+            padding-bottom: 70px;
+            color: #2c3f64;
+            font-weight: bold;
+            font-size: 30px;
+            margin: 0 331px;
+
+            &::after {
+                content: "";
+                display: block;
+                width: 80px;
+                height: 4px;
+                margin: 10px 0 10px 10px;
+                background-color: #ecac3e;
+            }
+
+        }
+
+        /* 🔹 Introduction */
+        &-intro {
+            font-size: 16px;
+            max-width: 700px;
+            margin: 0 auto 20px auto;
+            color: #444;
+            line-height: 1.5;
+        }
+
+        /* 🔹 Boutons de filtre */
+        &-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+
+            .filter-button {
+                background: #ccc;
+                color: #333;
+                border: none;
+                padding: 10px 20px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: 0.3s;
+
+                &.active {
+                    background: #0056b3;
+                    color: white;
+                }
+
+                &:hover {
+                    background: #004099;
+                    color: white;
+                }
+
+
+            }
+        }
+
+        &-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); // ✅ 3 colonnes
+            gap: 20px; // ✅ Espacement entre les cartes
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        &__card {
+            background: vars.$primary-color;
+            color: white;
+            border-radius: 15px;
+            padding: 20px; // ✅ Espace intérieur plus grand
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px; // ✅ Hauteur plus grande
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+            &:hover {
+                transform: scale(1.05);
+                box-shadow: 0px 6px 15px rgba(0, 86, 179, 0.5);
+            }
+
+            span {
+                font-size: 42px;
+                margin-bottom: 10px;
+            }
+
+            p {
+                font-size: 18px;
+                font-weight: bold;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            &-grid {
+                grid-template-columns: repeat(2, 1fr); // ✅ 2 colonnes sur tablette
+            }
+        }
+
+        @media (max-width: 768px) {
+            &-grid {
+                grid-template-columns: repeat(1, 1fr); // ✅ 1 colonne sur mobile
+            }
+        }
+    }
+
+    &__conseils {
+        margin-top: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: left;
+
+        &__container {
+            display: flex;
+            align-items: center;
+            background: #F8F5F1;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 1000px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
+            gap: 20px;
+
+            @media (max-width: 768px) {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        &__image {
+            flex-shrink: 0;
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+            overflow: hidden;
+
+            img {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+
+            @media (max-width: 768px) {
+                width: 100%;
+            }
+        }
+
+        &__content {
+            flex: 1;
+
+            h2 {
+                font-size: 24px;
+                color: #333;
+                margin-bottom: 10px;
+            }
+
+            p {
+                font-size: 16px;
+                color: #555;
+                margin-bottom: 15px;
+            }
+
+            .btn {
+                display: inline-block;
+                padding: 10px 15px;
+                background: #EF476F;
+                color: white;
+                font-size: 14px;
+                border-radius: 8px;
+                text-decoration: none;
+                transition: background 0.3s;
+
+                &:hover {
+                    background: #D43F63;
+                }
+            }
         }
     }
 }

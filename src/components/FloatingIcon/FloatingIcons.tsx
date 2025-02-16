@@ -48,7 +48,7 @@ export default function FloatingIcons() {
     }));
 
     return (
-        <div className="floating-icons" style={{ height: `${height}px` }}>
+        <div className="floating-icons">
             {icons.map(({ id, style, icon }) => (
                 <span key={id} className="floating-icon" style={style}>
                     {icon}
