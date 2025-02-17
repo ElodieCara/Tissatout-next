@@ -280,6 +280,7 @@
             max-width: 700px;
             margin: 0 auto 20px auto;
             line-height: 1.5;
+            font-size: vars.$font-size-large;
         }
 
         /* 🔹 Boutons de filtre */
@@ -291,15 +292,15 @@
             @include mix.font-secondary;
 
             .filter-button {
-                background: #ccc;
-                color: #333;
-                border: none;
-                padding: 10px 20px;
-                font-size: 16px;
-                font-weight: bold;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: 0.3s;
+                background: vars.$secondary-color;
+                // color: #333;
+                // border: none;
+                // padding: 10px 20px;
+                // font-size: 16px;
+                // font-weight: bold;
+                // border-radius: 8px;
+                // cursor: pointer;
+                // transition: 0.3s;
                 @include mix.font-tertiary;
 
                 &.active {
@@ -308,7 +309,7 @@
                 }
 
                 &:hover {
-                    background: vars.$secondary-color;
+                    background: vars.$tertiary-color;
                     color: white;
                 }
 
@@ -326,7 +327,14 @@
         }
 
         &__card {
-            background: vars.$primary-color;
+            //background: vars.$primary-color;
+            background: linear-gradient(250deg,
+                    vars.$secondary-color 55%,
+                    vars.$tertiary-color 80%,
+                    vars.$danger-color 100%);
+            background-size: 200% 200%;
+            background-position: 0 50%;
+            transform: translateZ(0);
             color: white;
             border-radius: 15px;
             padding: 20px; // ✅ Espace intérieur plus grand
@@ -337,6 +345,24 @@
             justify-content: center;
             height: 200px; // ✅ Hauteur plus grande
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transform: skewX(-4deg) translateZ(0);
+            animation: neonBackground 15s ease infinite;
+
+
+
+            @keyframes neonBackground {
+                0% {
+                    background-position: 0% 50%;
+                }
+
+                50% {
+                    background-position: 100% 50%;
+                }
+
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
 
             &:hover {
                 transform: scale(1.05);

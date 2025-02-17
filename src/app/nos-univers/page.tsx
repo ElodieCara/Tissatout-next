@@ -82,23 +82,19 @@ export default function Home() {
 
                     {/* ✅ Introduction sur le Trivium */}
                     <p className="nos-univers__activites-intro">
-                        Nous appliquons la méthode du <strong>Trivium</strong> pour organiser les apprentissages :
-                        <br /><strong>Grammaire</strong> 📖 (acquérir les bases),
-                        <strong> Logique</strong> 🧠 (structurer et raisonner),
-                        <strong> Rhétorique</strong> 🎤 (exprimer et transmettre).
-                        <br />Mais aussi :⚡ <strong>Motricité & Sport</strong> 🏃‍♂️ (développer le corps et l’équilibre)
+                        Découvrez des activités ludiques et éducatives classées par thématiques pour apprendre, créer et s’amuser à tout âge ! 🚀✨
                     </p>
 
                     {/* ✅ Filtre de sélection */}
                     <div className="nos-univers__activites-filter">
                         {["grammaire", "logique", "rhetorique", "motricite"].map((category) => (
-                            <button
+                            <Button
                                 key={category}
                                 className={`filter-button ${selectedCategory === category ? "active" : ""}`}
                                 onClick={() => setSelectedCategory(category as "grammaire" | "logique" | "rhetorique" | "motricite")}
                             >
                                 {category.charAt(0).toUpperCase() + category.slice(1)}
-                            </button>
+                            </Button>
                         ))}
                     </div>
 
@@ -109,9 +105,11 @@ export default function Home() {
                                 <Image
                                     src={activity.icon}
                                     alt={activity.title}
-                                    width={50}
-                                    height={50}
+                                    width={150}
+                                    height={150}
                                     className="activity-icon"
+                                    loading="lazy"
+
                                 />
                                 <p>{activity.title}</p>
                             </Link>
