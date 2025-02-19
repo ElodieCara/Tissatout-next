@@ -8,9 +8,10 @@ interface BannerProps {
     src: string;
     title: string;
     description: string;
+    showButtons?: boolean;
 }
 
-export default function Banner({ src, title, description }: BannerProps) {
+export default function Banner({ src, title, description, showButtons = false }: BannerProps) {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -27,7 +28,7 @@ export default function Banner({ src, title, description }: BannerProps) {
     };
 
     return (
-        <header className="nos-univers__banner">
+        <div className="nos-univers__banner">
             <div className="nos-univers__banner-image">
                 <Image
                     src={src}
@@ -41,12 +42,15 @@ export default function Banner({ src, title, description }: BannerProps) {
             <div className="nos-univers__banner-content">
                 <h1>{title}</h1>
                 <p>{description}</p>
-                <div className="nos-univers__banner-content-buttons">
-                    <Button className="large" onClick={() => scrollToSection("univers")}>🌟 Par Âge</Button>
-                    <Button className="large" onClick={() => scrollToSection("trivium")}>🎓 Trivium</Button>
-                    <Button className="large" onClick={() => scrollToSection("interets")}>🎭 Centres d’Intérêt</Button>
-                </div>
+                {/* ✅ Afficher les boutons uniquement si showButtons est true */}
+                {showButtons && (
+                    <div className="nos-univers__banner-content-buttons">
+                        <Button className="large" onClick={() => scrollToSection("univers")}>🌟 Par Âge</Button>
+                        <Button className="large" onClick={() => scrollToSection("trivium")}>🎓 Trivium</Button>
+                        <Button className="large" onClick={() => scrollToSection("interets")}>🎭 Centres d’Intérêt</Button>
+                    </div>
+                )}
             </div>
-        </header>
+        </div>
     );
 }

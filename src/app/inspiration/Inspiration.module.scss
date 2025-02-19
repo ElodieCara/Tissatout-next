@@ -1,0 +1,232 @@
+@use '../../styles/utils/variables' as vars;
+@use '../../styles/base/mixins' as mix;
+@use '../../styles/base/typography' as typ;
+
+
+.inspiration {
+
+    &__header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    &__filterButtons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    &__content {
+        max-width: 1100px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 20px;
+
+
+        &__newsGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+            height: 100%;
+
+            .card {
+                background-color: vars.$primary-color;
+                border-radius: 12px;
+                padding: 15px;
+                transition: transform 0.3s ease-in-out;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                position: relative;
+                cursor: pointer;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); // ✅ Ombre subtile
+
+                &:hover {
+                    transform: translateY(-5px); // ✅ Léger effet de levitation
+                    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); // ✅ Ombre plus prononcée
+                }
+
+                .card__icon {
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    width: 40px;
+                    height: 40px;
+                    background: vars.$primary-color;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                    z-index: 10;
+
+                    img {
+                        width: 25px;
+                        height: 25px;
+                        object-fit: contain;
+                    }
+                }
+
+                .card__image {
+                    width: 100%;
+                    height: 45%;
+                    border-radius: 10px;
+                    overflow: hidden;
+                    position: relative;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                .card__content {
+                    text-align: left;
+                    padding: 10px;
+                    height: 55%;
+                    display: flex;
+
+                    &__text {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-start;
+                        justify-content: space-between;
+
+                        &__title {
+                            font-size: 1.2rem;
+                            font-weight: bold;
+                            color: white;
+                            text-align: left;
+                        }
+
+                        &__description {
+                            font-size: 14px;
+                            color: #DDD;
+                            line-height: 1.4;
+                            display: -webkit-box;
+                            display: box; // ✅ Ajout de la version standard
+                            -webkit-line-clamp: 2;
+                            line-clamp: 2; // ✅ Ajout de la version standard pour compatibilité
+                            -webkit-box-orient: vertical;
+                            box-orient: vertical; // ✅ Ajout de la version standard
+                            max-height: 3em;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            text-align: left;
+                        }
+
+                        &__date {
+                            font-size: 0.85rem;
+                            color: #BBB; // ✅ Couleur plus discrète
+                            margin-bottom: 5px;
+                            text-align: left; // ✅ Alignement à gauche
+                        }
+
+                    }
+
+                    &__tags {
+                        bottom: 271px;
+                    }
+                }
+            }
+        }
+
+        &__loadMore {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+
+            & button {
+                display: flex !important;
+            }
+
+        }
+
+
+        // &__card {
+        //     background-color: #f8f9fa;
+        //     border-radius: 12px;
+        //     padding: 15px;
+        //     transition: transform 0.3s ease-in-out;
+        //     display: flex;
+        //     flex-direction: column;
+        //     justify-content: space-between;
+        //     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        //     position: relative;
+
+        //     &:hover {
+        //         transform: translateY(-3px);
+        //         border-color: #f4a261;
+        //     }
+
+        //     .card__icon {
+        //         position: absolute;
+        //         top: 10px;
+        //         left: 10px;
+        //         width: 40px;
+        //         height: 40px;
+        //         background: white;
+        //         border-radius: 50%;
+        //         display: flex;
+        //         align-items: center;
+        //         justify-content: center;
+        //         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        //         z-index: 10;
+
+        //         img {
+        //             width: 25px;
+        //             height: 25px;
+        //             object-fit: contain;
+        //         }
+        //     }
+
+        //     .card__image {
+        //         width: 100%;
+        //         height: 150px;
+        //         border-radius: 10px;
+        //         overflow: hidden;
+        //         position: relative;
+
+        //         img {
+        //             width: 100%;
+        //             height: 100%;
+        //             object-fit: cover;
+        //         }
+        //     }
+
+        //     .card__content {
+        //         text-align: center;
+        //         padding: 10px;
+
+        //         .card__title {
+        //             font-size: 1.2rem;
+        //             font-weight: bold;
+        //             color: #333;
+        //         }
+
+        //         .card__description {
+        //             font-size: 14px;
+        //             color: #555;
+        //             line-height: 1.4;
+        //             max-height: 60px;
+        //             overflow: hidden;
+        //             text-overflow: ellipsis;
+        //         }
+        //     }
+        // }
+    }
+}
+
+
+// ✅ Adaptation responsive
+@media (max-width: 768px) {
+    .inspiration__content__newsGrid {
+        grid-template-columns: 1fr;
+    }
+}

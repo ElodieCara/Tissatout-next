@@ -30,6 +30,7 @@ export default function Home() {
                     src="/assets/slide3.png"
                     title="Explorez Nos Univers ✨"
                     description="Découvrez des activités adaptées à chaque âge pour stimuler la créativité, l’éveil et l’apprentissage des enfants. Trouvez des idées originales pour apprendre en s’amusant !"
+                    showButtons={true} // ✅ Boutons affichés
                 />
             </header>
 
