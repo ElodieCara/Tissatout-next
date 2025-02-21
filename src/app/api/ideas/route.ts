@@ -8,37 +8,35 @@ const themeMapping: Record<string, string> = {
     "Été": "summer",
     "Automne": "autumn",
     "Halloween": "halloween",
-    "Noël": "christmas"
+    "Noël": "christmas",
+    "Pâques": "easter" // Ajout de Pâques si jamais tu l'utilises
 };
 
-// 🟢 Récupérer toutes les idées avec filtre par thème
+
+// 🟢 Récupérer toutes les idées ou filtrer par thème
 export async function GET(req: Request) {
     try {
         const { searchParams } = new URL(req.url);
-        const themeFr = searchParams.get("theme"); // Thème reçu en FR
+        const themeFr = searchParams.get("theme")?.trim() || null; // 🔍 Suppression des espaces vides
 
-        if (!themeFr) {
-            console.log("🔎 Aucun thème sélectionné, récupération de toutes les idées.");
-        }
-
-        // Convertit en EN si trouvé, sinon garde tel quel
-        const themeEn = themeFr ? themeMapping[themeFr] || themeFr : null;
+        // Convertit en EN si trouvé, sinon garde le FR
+        const themeEn = themeFr && themeMapping[themeFr] ? themeMapping[themeFr] : themeFr;
 
         console.log("🎨 Thème reçu (FR) :", themeFr);
-        console.log("🌎 Thème utilisé en base (EN) :", themeEn);
+        console.log("🌎 Thème utilisé en base (EN) :", themeEn || "Tous thèmes");
 
-        // 🔍 Filtrer uniquement si un thème est sélectionné
-        const whereClause = themeEn ? { theme: themeEn } : {};
+        // Si aucun thème n'est sélectionné, récupérer TOUTES les idées
+        const whereClause = themeEn ? { theme: themeEn } : undefined;
 
         const ideas = await prisma.idea.findMany({
             where: whereClause,
             orderBy: { createdAt: "desc" },
         });
 
-        console.log("📤 Idées envoyées :", ideas);
+        console.log(`📤 ${ideas.length} idée(s) envoyée(s)`);
         return NextResponse.json(ideas);
     } catch (error) {
-        console.error("❌ Erreur API :", error);
+        console.error("❌ Erreur API GET /api/ideas :", error);
         return NextResponse.json({ error: "Erreur serveur", details: (error as Error).message }, { status: 500 });
     }
 }
@@ -49,24 +47,29 @@ export async function POST(req: Request) {
         const body = await req.json();
         console.log("📥 Requête reçue :", body); // ✅ Vérifie les données reçues
 
-        if (!body.title || !body.description || !body.theme) {
-            return NextResponse.json({ error: "❌ Champs manquants" }, { status: 400 });
+        // ✅ Vérification des champs obligatoires
+        if (!body.title?.trim() || !body.description?.trim() || !body.theme?.trim()) {
+            return NextResponse.json({ error: "❌ Tous les champs (title, description, theme) sont requis." }, { status: 400 });
         }
 
+        // ✅ Vérifier si le thème est valide (convertir en anglais si besoin)
+        const themeEn = themeMapping[body.theme] || body.theme;
+
+        // ✅ Création de la nouvelle idée
         const newIdea = await prisma.idea.create({
             data: {
-                title: body.title,
-                description: body.description,
-                image: body.image || null, // Image optionnelle
-                theme: body.theme, // Thème obligatoire
+                title: body.title.trim(),
+                description: body.description.trim(),
+                image: body.image?.trim() || null, // Image optionnelle
+                theme: themeEn, // Thème obligatoire
             },
         });
 
-        console.log("✅ Idée ajoutée :", newIdea);
+        console.log("✅ Idée ajoutée avec succès :", newIdea);
         return NextResponse.json(newIdea, { status: 201 });
 
     } catch (error) {
-        console.error("❌ Erreur API :", error);
+        console.error("❌ Erreur API POST /api/ideas :", error);
         return NextResponse.json({ error: "Erreur serveur", details: (error as Error).message }, { status: 500 });
     }
 }

@@ -145,83 +145,275 @@
             & button {
                 display: flex !important;
             }
-
         }
-
-
-        // &__card {
-        //     background-color: #f8f9fa;
-        //     border-radius: 12px;
-        //     padding: 15px;
-        //     transition: transform 0.3s ease-in-out;
-        //     display: flex;
-        //     flex-direction: column;
-        //     justify-content: space-between;
-        //     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        //     position: relative;
-
-        //     &:hover {
-        //         transform: translateY(-3px);
-        //         border-color: #f4a261;
-        //     }
-
-        //     .card__icon {
-        //         position: absolute;
-        //         top: 10px;
-        //         left: 10px;
-        //         width: 40px;
-        //         height: 40px;
-        //         background: white;
-        //         border-radius: 50%;
-        //         display: flex;
-        //         align-items: center;
-        //         justify-content: center;
-        //         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        //         z-index: 10;
-
-        //         img {
-        //             width: 25px;
-        //             height: 25px;
-        //             object-fit: contain;
-        //         }
-        //     }
-
-        //     .card__image {
-        //         width: 100%;
-        //         height: 150px;
-        //         border-radius: 10px;
-        //         overflow: hidden;
-        //         position: relative;
-
-        //         img {
-        //             width: 100%;
-        //             height: 100%;
-        //             object-fit: cover;
-        //         }
-        //     }
-
-        //     .card__content {
-        //         text-align: center;
-        //         padding: 10px;
-
-        //         .card__title {
-        //             font-size: 1.2rem;
-        //             font-weight: bold;
-        //             color: #333;
-        //         }
-
-        //         .card__description {
-        //             font-size: 14px;
-        //             color: #555;
-        //             line-height: 1.4;
-        //             max-height: 60px;
-        //             overflow: hidden;
-        //             text-overflow: ellipsis;
-        //         }
-        //     }
-        // }
     }
 }
+
+// *************************** Idées *************************
+// ✅ Section principale des idées
+.container__inspiration--ideas {
+    text-align: center;
+    padding: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+
+    h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: vars.$primary-color; // ✅ Couleur bien visible
+        margin-bottom: 20px;
+    }
+}
+
+// ✅ Filtres (saisons et fêtes)
+.container__inspiration__filters {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow-x: auto; // ✅ Permet de scroller horizontalement
+    padding: 10px 0;
+    white-space: nowrap;
+
+    .container__inspiration__filters-buttons {
+        display: flex;
+        gap: 15px;
+        padding: 10px;
+        overflow-x: auto;
+        scrollbar-width: thin; // ✅ Masque la barre de scroll sur Firefox
+        scrollbar-color: transparent transparent;
+
+        &::-webkit-scrollbar {
+            height: 5px; // ✅ Réduit la hauteur de la barre de scroll
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: vars.$primary-color;
+            border-radius: 5px;
+        }
+    }
+
+    .filter-circle-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .filter-circle {
+        width: 70px; // ✅ Taille réduite pour ne pas prendre trop de place
+        height: 70px;
+        border-radius: 50%;
+        background-color: white;
+        border: 2px solid vars.$primary-color;
+        color: vars.$primary-color;
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+        .filter-circle__icon {
+            font-size: 1.8rem; // ✅ Icône plus grande mais pas trop
+        }
+
+        &:hover {
+            background-color: vars.$primary-color;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        &.active {
+            background-color: vars.$primary-color;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transform: scale(1.1);
+        }
+    }
+
+    .filter-circle__text {
+        margin-top: 5px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: vars.$primary-color;
+    }
+}
+
+// ✅ Responsive : Ajustement pour mobile
+@media (max-width: 768px) {
+    .container__inspiration__filters-buttons {
+        gap: 10px;
+    }
+
+    .filter-circle {
+        width: 60px;
+        height: 60px;
+        font-size: 0.8rem;
+
+        .filter-circle__icon {
+            font-size: 1.5rem;
+        }
+    }
+}
+
+
+// ✅ Animation rebond au clic
+@keyframes bounce {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+// ✅ Grille des idées avec animations
+.container__inspiration--ideas-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+// ✅ Card Magazine avec fond coloré
+.inspiration__card {
+    display: flex;
+    align-items: center;
+    background: vars.$primary-color;
+    border-radius: 12px;
+    padding: 15px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid darken(vars.$primary-color, 10%);
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    // ✅ Image à gauche
+    .inspiration__card__image {
+        flex: 1;
+        max-width: 200px;
+        height: 150px;
+        border-radius: 10px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    // ✅ Texte à droite
+    .inspiration__card__content {
+        flex: 2;
+        padding: 0 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+
+        .inspiration__card__title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .inspiration__card__date {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 0.8;
+            margin-bottom: 8px;
+        }
+
+        .inspiration__card__description {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+            max-height: 4.5em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left !important;
+        }
+
+        .inspiration__card__button {
+            margin-top: 10px;
+            align-self: flex-end;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            background: white;
+            color: vars.$primary-color;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+
+            &:hover {
+                background: lighten(vars.$primary-color, 10%); // ✅ Effet hover plus clair
+                color: white;
+            }
+        }
+    }
+}
+
+// ✅ Responsive : Adaptation pour mobile
+@media (max-width: 768px) {
+    .inspiration__card {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .inspiration__card__image {
+            max-width: 100%;
+            height: 180px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .inspiration__card__content {
+            padding: 15px;
+        }
+    }
+}
+
+
+
+
+// ✅ Adaptation responsive pour mobile
+@media (max-width: 768px) {
+    .container__inspiration--ideas-content {
+        grid-template-columns: 1fr;
+    }
+
+    .container__inspiration__filters {
+        flex-direction: column;
+        align-items: center;
+
+        button {
+            width: 80%;
+            text-align: center;
+        }
+    }
+}
+
 
 
 // ✅ Adaptation responsive
