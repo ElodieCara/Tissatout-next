@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Breadcrumb from "./Breadcrumb";
 
 interface Advice {
     id?: string;
@@ -31,7 +32,8 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
                 .then((data) => {
                     console.log("📥 Conseil reçu :", data);
                     setForm(data);
-                });
+                })
+                .catch(() => setMessage("❌ Impossible de charger le conseil."));
         }
     }, [adviceId]);
 
@@ -40,7 +42,7 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // 📸 Gérer l'upload d'image
+    // 📸 Gérer l'upload d'image COMME AVANT
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -52,7 +54,7 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
         const data = await res.json();
 
         if (res.ok) {
-            setForm({ ...form, imageUrl: data.imageUrl });
+            setForm((prev) => ({ ...prev, imageUrl: data.imageUrl })); // ✅ REVIENT À L'ANCIENNE MÉTHODE
             setMessage("✅ Image uploadée !");
         } else {
             setMessage("❌ Erreur lors de l'upload.");
@@ -62,7 +64,7 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
     // 📤 Envoyer le formulaire (création/modification)
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Payload envoyé :", form);
+        console.log("📤 Payload envoyé :", form);
 
         const method = adviceId && adviceId !== "new" ? "PUT" : "POST";
         const url = adviceId && adviceId !== "new" ? `/api/advice/${adviceId}` : "/api/advice";
@@ -83,32 +85,49 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
 
     return (
         <div className="admin-form">
+            <Breadcrumb />
             <h2>{adviceId === "new" ? "Ajouter un Conseil" : "Modifier le Conseil"}</h2>
             {message && <p className="admin-form__message">{message}</p>}
 
             <form onSubmit={handleSubmit}>
-                <div>
+                <div className="admin-form__group">
                     <label htmlFor="title">Titre</label>
                     <input type="text" name="title" value={form.title} onChange={handleChange} required />
                 </div>
 
-                <div>
+                <div className="admin-form__group">
+                    <label htmlFor="description">Description</label>
+                    <textarea name="description" value={form.description} onChange={handleChange} />
+                </div>
+
+                <div className="admin-form__group">
                     <label htmlFor="content">Contenu</label>
                     <textarea name="content" value={form.content} onChange={handleChange} required />
                 </div>
 
-                <div>
+                <div className="admin-form__group">
                     <label htmlFor="category">Catégorie</label>
-                    <input type="text" name="category" value={form.category} onChange={handleChange} required />
+                    <select name="category" value={form.category} onChange={handleChange} required>
+                        <option value="">Sélectionner une catégorie</option>
+                        <option value="savoirs">📚 Savoirs & Lettres</option>
+                        <option value="harmonie">🎶 Harmonie & Discipline</option>
+                        <option value="eloquence">🏰 Rhétorique & Expression</option>
+                    </select>
                 </div>
 
-                <div>
+                <div className="admin-form__upload">
                     <label htmlFor="imageUpload">📸 Image</label>
                     <input type="file" accept="image/*" onChange={handleImageUpload} />
-                    {form.imageUrl && <img src={form.imageUrl} alt="Aperçu" width="100" />}
+                    {form.imageUrl && (
+                        <div className="admin-form__upload-preview">
+                            <img src={form.imageUrl} alt="Aperçu" />
+                        </div>
+                    )}
                 </div>
 
-                <button type="submit">{adviceId === "new" ? "Ajouter" : "Mettre à jour"}</button>
+                <button type="submit" className="admin-form__button">
+                    {adviceId === "new" ? "Ajouter" : "Mettre à jour"}
+                </button>
             </form>
         </div>
     );

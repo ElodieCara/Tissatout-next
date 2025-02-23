@@ -1,5 +1,6 @@
-import AdminAdvice from "@/app/admin/components/AdminAdvice";
+import { redirect } from "next/navigation";
 
-export default function AdvicePage() {
-    return <AdminAdvice />;
+export default function AdviceRedirectPage() {
+    redirect("/admin?section=advice"); // ✅ Redirige automatiquement
+    return null;
 }

@@ -62,19 +62,23 @@ export async function PUT(req: Request, context: { params: { id: string } }) {
 }
 
 // 🔴 Supprimer un conseil
-export async function DELETE(req: Request, context: { params: { id: string } }) {
+export async function DELETE(req: Request, context: any) {
     try {
-        const { id } = context.params; // ✅ Utilisation correcte de `params`
+        const id = await context.params.id; // ✅ Attendre l'accès aux params
 
         if (!id) {
-            return NextResponse.json({ error: "❌ ID du conseil manquant." }, { status: 400 });
+            return NextResponse.json({ error: "❌ ID manquant." }, { status: 400 });
         }
 
-        await prisma.advice.delete({ where: { id } });
+        await prisma.advice.delete({
+            where: { id },
+        });
 
-        return NextResponse.json({ message: "✅ Conseil supprimé !" });
+        return NextResponse.json({ message: "✅ Conseil supprimé avec succès !" });
     } catch (error) {
-        console.error("❌ Erreur API DELETE Advice:", error);
+        console.error("❌ Erreur API DELETE Advice :", error);
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
+
+
