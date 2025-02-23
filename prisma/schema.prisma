@@ -49,6 +49,16 @@ model Activity {
   ageCategoryId String @db.ObjectId
 }
 
+model Advice {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  content     String?
+  category    String
+  imageUrl    String? 
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
 
 
 model User {

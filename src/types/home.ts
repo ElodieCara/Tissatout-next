@@ -29,11 +29,25 @@ export interface News {
     date: string;
 }
 
+export interface Article {
+    id: string;
+    title: string;
+    content: string;
+    description?: string;
+    image?: string;
+    iconSrc?: string;
+    date?: string;
+    category?: string;
+    tags?: string[];
+}
+
 export interface Idea {
-    id: number;
-    image: StaticImageData;
+    id: string;
     title: string;
     description: string;
+    image?: string;
+    theme: string;
+    createdAt: string;
 }
 
 export interface Tag {
@@ -47,3 +61,11 @@ export type Activity = {
     link: string;
 };
 
+export interface Advice {
+    id: string;
+    title: string;
+    content: string;
+    description?: string;
+    category: string;
+    imageUrl?: string;
+}

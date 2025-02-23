@@ -6,6 +6,7 @@ import AdminColoring from "./AdminColoring";
 import AdminNews from "./AdminNews";
 import AdminIdeas from "./AdminIdeas";
 import Breadcrumb from "./Breadcrumb";
+import AdminAdvice from "./AdminAdvice";
 
 export default function AdminPage() {
     const searchParams = useSearchParams();
@@ -47,6 +48,12 @@ export default function AdminPage() {
                 >
                     💡 Idées (Saisons, Événements)
                 </button>
+                <button
+                    onClick={() => handleSectionChange("advice")}
+                    className={activeSection === "advice" ? "active" : ""}
+                >
+                    📜 Conseils
+                </button>
             </nav>
 
             <div className="admin__content">
@@ -54,6 +61,7 @@ export default function AdminPage() {
                 {activeSection === "coloring" && <AdminColoring />}
                 {activeSection === "news" && <AdminNews />}
                 {activeSection === "ideas" && <AdminIdeas />}
+                {activeSection === "advice" && <AdminAdvice />}
             </div>
         </div>
     );

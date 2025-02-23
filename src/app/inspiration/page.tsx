@@ -7,27 +7,8 @@ import BackToTop from "@/components/BackToTop/BackToTop";
 import Button from "@/components/Button/Button";
 import Card from "@/components/Card/Card";
 import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
-
-interface Article {
-    id: string;
-    title: string;
-    content: string;
-    description?: string;
-    image?: string;
-    iconSrc?: string;
-    date?: string;
-    category?: string;
-    tags?: string[];
-}
-
-interface Idea {
-    id: string;
-    title: string;
-    description: string;
-    image?: string;
-    theme: string;
-    createdAt: string;
-}
+import { useRouter } from "next/navigation";
+import { Article, Idea, Advice } from "../../types/home";
 
 const categories = [
     { key: "articles", label: "💡 Inspirations" },
@@ -66,6 +47,28 @@ export default function Inspiration() {
     const [visibleArticles, setVisibleArticles] = useState(10);
     const [visibleIdeas, setVisibleIdeas] = useState(10);
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedMedievalCategory, setSelectedMedievalCategory] = useState<string | null>(null);
+    const [visibleMedievalAdvices, setVisibleMedievalAdvices] = useState(5);
+    const [advices, setAdvices] = useState<Advice[]>([]);
+
+
+    // ✅ Fonction pour gérer la sélection d'une catégorie
+    const handleMedievalCategoryClick = (category: string) => {
+        if (selectedMedievalCategory === category) {
+            setSelectedMedievalCategory(null); // 🛑 Désélectionne si déjà actif
+        } else {
+            setSelectedMedievalCategory(category);
+            setVisibleMedievalAdvices(5);
+        }
+    };
+
+    // ✅ Fonction pour charger plus de conseils
+    const loadMoreMedievalAdvices = () => {
+        setVisibleMedievalAdvices((prev) => prev + 5);
+    };
+
+
+    const router = useRouter();
 
     const formatDate = (dateString?: string) => {
         if (!dateString) return "Date inconnue"; // ✅ Gestion des cas où la date est absente
@@ -91,9 +94,6 @@ export default function Inspiration() {
         }, 1500); // ⏳ Simule un délai d'1,5s
     };
 
-
-
-
     // Charger les articles
     useEffect(() => {
         fetch("/api/articles")
@@ -115,6 +115,15 @@ export default function Inspiration() {
                 setError("Impossible de charger les idées.");
             });
     }, []);
+
+    //Charge tous les conseils    
+    useEffect(() => {
+        fetch("/api/advice")
+            .then((res) => res.json())
+            .then((data) => setAdvices(data))
+            .catch((err) => console.error("❌ Erreur chargement des conseils :", err));
+    }, []);
+
 
     // Fonction pour filtrer les idées
     const handleThemeFilter = (theme: string | null) => {
@@ -138,9 +147,6 @@ export default function Inspiration() {
             setFilteredIdeas(allIdeas);
         }
     };
-
-
-
 
     return (
         <>
@@ -274,18 +280,72 @@ export default function Inspiration() {
                         </section>
                     )}
 
-                    {/* Affichage des conseils */}
-                    {selectedCategory === "conseils" && (
-                        <section>
-                            <h2>📝 Conseils & Astuces</h2>
-                            <ul>
-                                <li>🌱 Développement de l’enfant</li>
-                                <li>🎭 Éveil créatif et jeux éducatifs</li>
-                                <li>📚 Conseils pédagogiques pour parents & éducateurs</li>
-                            </ul>
-                        </section>
-                    )}
-                </section>
+                    {/* 📜 Affichage des conseils médiévaux */}
+                    <div className="container__inspiration--advice">
+                        <h2>📜 Conseils d’Éducation Médiévale</h2>
+                        <p>Découvrez des méthodes ancestrales pour guider l’apprentissage des enfants.</p>
+
+                        {/* 🏰 Catégories médiévales */}
+                        <div className="medieval__categories">
+                            {[
+                                { key: "savoirs", icon: "📚", title: "Savoirs & Lettres", description: "Lecture, écriture, mémorisation et récitation." },
+                                { key: "harmonie", icon: "🎶", title: "Harmonie & Discipline", description: "L’importance de la musique, du rythme et de la concentration." },
+                                { key: "eloquence", icon: "🏰", title: "Rhétorique & Expression", description: "Maîtriser l’art du discours et du récit." }
+                            ].map(({ key, icon, title, description }) => (
+                                <div key={key} className={`medieval__card ${selectedMedievalCategory === key ? "active" : ""}`}
+                                    onClick={() => handleMedievalCategoryClick(key)}>
+                                    <div className="medieval__card__icon">{icon}</div>
+                                    <h3>{title}</h3>
+                                    <p>{description}</p>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* 📖 Conseils affichés dynamiquement */}
+                        {selectedMedievalCategory && (
+                            <div className="medieval__advice">
+                                <h3>
+                                    📖{" "}
+                                    {selectedMedievalCategory === "savoirs"
+                                        ? "Savoirs & Lettres"
+                                        : selectedMedievalCategory === "harmonie"
+                                            ? "Harmonie & Discipline"
+                                            : "Rhétorique & Expression"}
+                                </h3>
+
+                                <div className="medieval__advice__list">
+                                    {advices
+                                        .filter((advice) => advice.category === selectedMedievalCategory)
+                                        .slice(0, visibleMedievalAdvices)
+                                        .map((advice) => (
+                                            <div key={advice.id} className="medieval__advice__item">
+                                                {advice.imageUrl && (
+                                                    <div className="medieval__advice__item-image">
+                                                        <img src={advice.imageUrl || "images/default.png"} alt={advice.title} />
+                                                    </div>
+                                                )}
+                                                <h4>{advice.title}</h4>
+                                                <p>
+                                                    {advice.description
+                                                        ? advice.description.substring(0, 120)
+                                                        : advice.content.substring(0, 120)}
+                                                    ...
+                                                </p>
+                                            </div>
+                                        ))}
+                                    {visibleMedievalAdvices < advices.filter((advice) => advice.category === selectedMedievalCategory).length && (
+                                        <button onClick={loadMoreMedievalAdvices} className="medieval__loadMore-button">
+                                            Voir plus
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+
+                    </div>
+
+                </section >
             </div >
         </>
     );
