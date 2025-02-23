@@ -1,6 +1,6 @@
-@use '../../styles/utils/variables' as vars;
-@use '../../styles/base/mixins' as mix;
-@use '../../styles/base/typography' as typ;
+@use '../../../styles/utils/variables' as vars;
+@use '../../../styles/base/mixins' as mix;
+@use '../../../styles/base/typography' as typ;
 
 .inspiration {
     &__header {
@@ -144,7 +144,7 @@
     }
 }
 
-// ✅ Animation rebond (si nécessaire uniquement pour ce composant)
+// ✅ Animation rebond (si besoin dans ce composant, sinon déplacer dans un fichier global)
 @keyframes bounce {
     0% {
         transform: scale(1);

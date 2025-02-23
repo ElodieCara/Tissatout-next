@@ -1,0 +1,217 @@
+@use '../../../styles/utils/variables' as vars;
+@use '../../../styles/base/mixins' as mix;
+@use '../../../styles/base/typography' as typ;
+
+// *************************** Idées *************************
+.container__inspiration--ideas {
+    text-align: center;
+    padding: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+
+    h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        color: vars.$primary-color; // ✅ Couleur bien visible
+        margin-bottom: 20px;
+    }
+}
+
+// ✅ Filtres (saisons et fêtes)
+.container__inspiration__filters {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow-x: auto; // ✅ Permet de scroller horizontalement
+    padding: 10px 0;
+    white-space: nowrap;
+
+    .container__inspiration__filters-buttons {
+        display: flex;
+        gap: 15px;
+        padding: 10px;
+        overflow-x: auto;
+        scrollbar-width: thin; // ✅ Barre de scroll plus fine sur Firefox
+        scrollbar-color: transparent transparent;
+
+        &::-webkit-scrollbar {
+            height: 5px; // ✅ Réduit la hauteur de la barre de scroll
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: vars.$primary-color;
+            border-radius: 5px;
+        }
+    }
+
+    .filter-circle-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .filter-circle {
+        width: 70px; // ✅ Taille réduite
+        height: 70px;
+        border-radius: 50%;
+        background-color: white;
+        border: 2px solid vars.$primary-color;
+        color: vars.$primary-color;
+        font-size: 1rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+        .filter-circle__icon {
+            font-size: 1.8rem;
+        }
+
+        &:hover {
+            background-color: vars.$primary-color;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        &.active {
+            background-color: vars.$primary-color;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transform: scale(1.1);
+        }
+    }
+
+    .filter-circle__text {
+        margin-top: 5px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: vars.$primary-color;
+    }
+}
+
+// ✅ Grille des idées
+.container__inspiration--ideas-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+
+// ✅ Card Magazine (idées)
+.inspiration__card {
+    display: flex;
+    align-items: center;
+    background: vars.$primary-color;
+    border-radius: 12px;
+    padding: 15px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid darken(vars.$primary-color, 10%);
+
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    // ✅ Image
+    .inspiration__card__image {
+        flex: 1;
+        max-width: 200px;
+        height: 150px;
+        border-radius: 10px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease-in-out;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    // ✅ Texte
+    .inspiration__card__content {
+        flex: 2;
+        padding: 0 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+
+        .inspiration__card__title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .inspiration__card__date {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 8px;
+        }
+
+        .inspiration__card__description {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+            max-height: 4.5em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left !important;
+        }
+
+        .inspiration__card__button {
+            margin-top: 10px;
+            align-self: flex-end;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            background: white;
+            color: vars.$primary-color;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease-in-out;
+
+            &:hover {
+                background: lighten(vars.$primary-color, 10%);
+                color: white;
+            }
+        }
+    }
+}
+
+// ✅ Responsive
+@media (max-width: 768px) {
+    .container__inspiration__filters-buttons {
+        gap: 10px;
+    }
+
+    .filter-circle {
+        width: 60px;
+        height: 60px;
+        font-size: 0.8rem;
+
+        .filter-circle__icon {
+            font-size: 1.5rem;
+        }
+    }
+
+    //   .container__inspiration--ideas-content {
+    //     // Exemple si tu veux un affichage en colonne sur mobile
+    //     // flex-direction: column; 
+    //   }
+}
