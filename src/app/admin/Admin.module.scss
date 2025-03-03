@@ -60,6 +60,7 @@
         transition: background 0.3s ease;
         font-weight: bold;
         transition: all 0.3s ease-in-out;
+        margin: 2px;
 
         &:hover {
             background: darken($secondary-color, 10%);

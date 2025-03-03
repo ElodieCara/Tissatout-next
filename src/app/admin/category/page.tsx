@@ -12,14 +12,14 @@ interface DrawingCategory {
     description?: string;
     iconSrc?: string;
     parentId?: string | null;
-    // children?: DrawingCategory[]; // si tu veux la hiérarchie
 }
 
 export default function AdminCategoryList() {
     const [categories, setCategories] = useState<DrawingCategory[]>([]);
     const router = useRouter();
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // Charger les catégories
     useEffect(() => {
         fetch("/api/drawings/categories")
             .then((res) => res.json())
@@ -28,14 +28,16 @@ export default function AdminCategoryList() {
                     setCategories(data);
                 } else {
                     console.error("Réponse inattendue:", data);
+                    setError("Erreur lors du chargement des catégories.");
                 }
             })
             .catch((err) => {
                 console.error("Erreur lors du fetch des catégories:", err);
-            });
+                setError("Impossible de charger les catégories.");
+            })
+            .finally(() => setLoading(false));
     }, []);
 
-    // Supprimer
     const handleDelete = async (id: string) => {
         if (!confirm("Voulez-vous vraiment supprimer cette catégorie ?")) return;
         try {
@@ -46,41 +48,48 @@ export default function AdminCategoryList() {
                 const data = await res.json();
                 throw new Error(data.error || "Erreur lors de la suppression");
             }
-            // Retirer la catégorie du state
             setCategories((prev) => prev.filter((cat) => cat.id !== id));
         } catch (err: any) {
             alert(err.message);
         }
     };
 
-    // Render
     return (
-        <div style={{ padding: "2rem" }}>
+        <div className="admin">
             <Breadcrumb />
-            <h1>Liste des catégories</h1>
+            <h2 className="admin__title">📂 Liste des catégories</h2>
 
-            {/* Bouton pour créer une nouvelle catégorie racine */}
-            <Link href="/admin/category/new">
-                <button style={{ marginBottom: "1rem" }}>+ Ajouter une Catégorie</button>
-            </Link>
+            <div className="admin__menu">
+                <Link href="/admin/category/new">
+                    <button className="admin__button">➕ Ajouter une Catégorie</button>
+                </Link>
+            </div>
 
-            {categories.length === 0 ? (
-                <p>Aucune catégorie pour l’instant.</p>
+            {loading ? (
+                <p className="admin__message">⏳ Chargement des catégories...</p>
+            ) : error ? (
+                <p className="admin__message admin__message--error">❌ {error}</p>
+            ) : categories.length === 0 ? (
+                <p className="admin__message">Aucune catégorie pour l’instant.</p>
             ) : (
-                <ul style={{ listStyle: "none", paddingLeft: 0 }}>
+                <ul className="admin__list">
                     {categories.map((cat) => (
-                        <li key={cat.id} style={{ marginBottom: "1rem" }}>
-                            <strong>{cat.name}</strong>
-                            {cat.parentId && <span> (sous-catégorie)</span>}
+                        <li key={cat.id} className="admin__list-item">
+                            <div className="admin__list-title">
+                                <strong>{cat.name}</strong>
+                                {cat.parentId && <span className="admin__badge">Sous-catégorie</span>}
+                            </div>
 
-
-                            <div style={{ marginTop: "0.5rem" }}>
-                                <button onClick={() => router.push(`/admin/category/edit/${cat.id}`)}>
+                            <div className="admin__list-actions">
+                                <button
+                                    className="admin__button admin__button--edit"
+                                    onClick={() => router.push(`/admin/category/edit/${cat.id}`)}
+                                >
                                     ✏️ Modifier
                                 </button>
                                 <button
+                                    className="admin__button admin__button--delete"
                                     onClick={() => handleDelete(cat.id)}
-                                    style={{ marginLeft: "0.5rem" }}
                                 >
                                     🗑️ Supprimer
                                 </button>
