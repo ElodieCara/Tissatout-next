@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Breadcrumb from "../../components/Breadcrumb";
 
 interface Category {
@@ -23,8 +24,7 @@ export default function CreateCategoryPage() {
     const [section, setSection] = useState("");
     const [newSection, setNewSection] = useState("");
     const [name, setName] = useState("");
-    const [newCategoryName, setNewCategoryName] = useState(""); // Ajout du champ
-
+    const [newCategoryName, setNewCategoryName] = useState("");
     const [iconSrc, setIconSrc] = useState("");
     const [description, setDescription] = useState("");
     const [parentId, setParentId] = useState("");
@@ -36,7 +36,6 @@ export default function CreateCategoryPage() {
 
     const router = useRouter();
 
-    // 🔄 Charger les sections et catégories
     useEffect(() => {
         async function fetchData() {
             try {
@@ -44,45 +43,22 @@ export default function CreateCategoryPage() {
                     fetch("/api/drawings/sections"),
                     fetch("/api/drawings/categories")
                 ]);
-
                 const sectionsData: Section[] = await sectionsRes.json();
                 const categoriesData: Category[] = await categoriesRes.json();
-
-                if (!Array.isArray(sectionsData) || !Array.isArray(categoriesData)) {
-                    throw new Error("Données invalides reçues.");
-                }
-
                 setSections(sectionsData);
                 setCategories(categoriesData);
             } catch (err) {
-                console.error("❌ Erreur lors du chargement :", err);
                 setMessage("❌ Impossible de charger les données.");
             }
         }
-
         fetchData();
     }, []);
 
-    // 📤 Envoi du formulaire
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setMessage("");
         setLoading(true);
 
-        // 🛑 Validation stricte
-        if (!isNewCategory && !name) {
-            setMessage("❌ Le nom de la catégorie est obligatoire.");
-            setLoading(false);
-            return;
-        }
-
-        if (!isNewSection && !section) {
-            setMessage("❌ Sélectionnez une section existante ou créez-en une nouvelle.");
-            setLoading(false);
-            return;
-        }
-
-        // 🔍 Trouver l'ID de la section sélectionnée
         const selectedSectionId = isNewSection ? null : sections.find(s => s.name === section)?.id || null;
 
         try {
@@ -110,97 +86,62 @@ export default function CreateCategoryPage() {
                 setMessage(`❌ Erreur: ${errorData.error}`);
             }
         } catch (err) {
-            console.error(err);
             setMessage("❌ Erreur lors de la création de la catégorie.");
             setLoading(false);
         }
     };
 
     return (
-        <div style={{ padding: "2rem", maxWidth: "600px", margin: "auto" }}>
+        <div className="admin-form">
             <Breadcrumb />
-            <h2 style={{ textAlign: "center", marginBottom: "1rem" }}>🆕 Ajouter une Catégorie</h2>
-            {message && <p style={{ textAlign: "center", color: message.includes("✅") ? "green" : "red" }}>{message}</p>}
+            <h2 className="admin-form__title">Ajouter une Catégorie</h2>
 
-            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <button onClick={() => router.push("/admin/category")} className="admin-form__button admin-form__button--primary">
+                📂 Voir toutes les catégories
+            </button>
 
-                {/* Sélection ou création d'une section */}
-                <label>📂 Section :</label>
-                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                    <select
-                        value={section}
-                        onChange={(e) => setSection(e.target.value)}
-                        disabled={isNewSection || sections.length === 0}
-                        style={{ flex: 1 }}
-                    >
-                        <option value="">-- Sélectionner une section --</option>
-                        {sections.map((sec) => (
-                            <option key={sec.id} value={sec.name}>
-                                {sec.name}
-                            </option>
-                        ))}
-                    </select>
+            {message && <p className="admin-form__message">{message}</p>}
 
-                    <button
-                        type="button"
-                        onClick={() => setIsNewSection(!isNewSection)}
-                        style={{ padding: "0.5rem", background: "#007bff", color: "white", borderRadius: "5px", border: "none" }}
-                    >
-                        ➕ {isNewSection ? "Annuler" : "Nouvelle Section"}
-                    </button>
+            <form onSubmit={handleSubmit} className="admin-form__container">
+                <div className="admin-form__group">
+                    <label>📂 Section :</label>
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                        <select value={section} onChange={(e) => setSection(e.target.value)} disabled={isNewSection || sections.length === 0} className="admin-form__select">
+                            <option value="">-- Sélectionner une section --</option>
+                            {sections.map((sec) => (
+                                <option key={sec.id} value={sec.name}>{sec.name}</option>
+                            ))}
+                        </select>
+                        <button type="button" onClick={() => setIsNewSection(!isNewSection)} className="admin-form__button admin-form__button--small">+</button>
+                    </div>
                 </div>
 
                 {isNewSection && (
-                    <input
-                        type="text"
-                        value={newSection}
-                        onChange={(e) => setNewSection(e.target.value)}
-                        placeholder="Ex: Saisons et Fêtes"
-                        required
-                    />
+                    <input type="text" value={newSection} onChange={(e) => setNewSection(e.target.value)} placeholder="Ex: Saisons et Fêtes" required className="admin-form__input" style={{ flex: "1", padding: "0.75rem", borderRadius: "8px", border: "1px solid #ddd" }} />
                 )}
 
-                {/* Sélection ou création d'une catégorie */}
-                <label>🏷️ Catégorie :</label>
-                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                    <select
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        disabled={isNewCategory || categories.length === 0}
-                        style={{ flex: 1 }}
-                    >
-                        <option value="">-- Sélectionner une catégorie --</option>
-                        {categories.map((cat) => (
-                            <option key={cat.id} value={cat.name}>
-                                {cat.name}
-                            </option>
-                        ))}
-                    </select>
-
-                    <button
-                        type="button"
-                        onClick={() => setIsNewCategory(!isNewCategory)}
-                        style={{ padding: "0.5rem", background: "#007bff", color: "white", borderRadius: "5px", border: "none" }}
-                    >
-                        ➕ {isNewCategory ? "Annuler" : "Nouvelle Catégorie"}
-                    </button>
+                <div className="admin-form__group">
+                    <label>🏷️ Catégorie :</label>
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                        <select value={name} onChange={(e) => setName(e.target.value)} disabled={isNewCategory || categories.length === 0} className="admin-form__select">
+                            <option value="">-- Sélectionner une catégorie --</option>
+                            {categories.map((cat) => (
+                                <option key={cat.id} value={cat.name}>{cat.name}</option>
+                            ))}
+                        </select>
+                        <button type="button" onClick={() => setIsNewCategory(!isNewCategory)} className="admin-form__button admin-form__button--small">+</button>
+                    </div>
                 </div>
 
                 {isNewCategory && (
-                    <input
-                        type="text"
-                        value={newCategoryName}
-                        onChange={(e) => setNewCategoryName(e.target.value)}
-                        placeholder="Ex: Hiver ❄️"
-                        required
-                    />
+                    <input type="text" value={newCategoryName} onChange={(e) => setNewCategoryName(e.target.value)} placeholder="Ex: Hiver ❄️" required className="admin-form__input" style={{ flex: "1", padding: "0.75rem", borderRadius: "8px", border: "1px solid #ddd" }} />
                 )}
-
-                {/* Bouton de validation */}
-                <button type="submit" style={{ padding: "1rem", backgroundColor: "#007bff", color: "#fff", fontSize: "1rem" }} disabled={loading}>
-                    {loading ? "⏳ En cours..." : "✅ Créer la catégorie"}
-                </button>
-            </form>
-        </div>
+                <div style={{ width: "100%", marginTop: "1rem" }}>
+                    <button type="submit" className="admin-form__button admin-form__button--yellow" disabled={loading}>
+                        {loading ? "⏳ En cours..." : "✅ Créer la catégorie"}
+                    </button>
+                </div>
+            </form >
+        </div >
     );
 }
