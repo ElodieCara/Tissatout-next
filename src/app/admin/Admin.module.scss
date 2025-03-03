@@ -18,6 +18,10 @@
         margin-bottom: 1rem;
     }
 
+    & label {
+        color: $dark-primary-color;
+    }
+
     // 🟢 MENU DE NAVIGATION
     &__menu {
         display: flex;

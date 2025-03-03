@@ -154,7 +154,7 @@ export default function AdminColoringForm({ coloringId }: { coloringId?: string 
 
                         {/* 🔗 Bouton pour ajouter une catégorie */}
                         <Link href="/admin/category/new">
-                            <button type="button" style={{ cursor: "pointer", padding: "6px 10px", background: "#007bff", color: "white", border: "none", borderRadius: "5px" }}>
+                            <button type="button" className="admin-form__button admin-form__button--small">
                                 +
                             </button>
                         </Link>

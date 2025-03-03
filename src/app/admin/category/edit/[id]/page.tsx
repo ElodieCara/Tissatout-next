@@ -106,7 +106,7 @@ export default function EditCategoryPage() {
     return (
         <div className="admin">
             <Breadcrumb />
-            <h2 className="admin__title">📝 Modifier la catégorie</h2>
+            <h2 >📝 Modifier la catégorie</h2>
             {message && <p className={`admin__message ${message.includes("✅") ? "admin__message--success" : "admin__message--error"}`}>{message}</p>}
 
             <form onSubmit={handleSubmit} className="admin__form">
@@ -120,12 +120,6 @@ export default function EditCategoryPage() {
                         <option key={sec.id} value={sec.id}>{sec.name}</option>
                     ))}
                 </select>
-
-                <label>🖼️ Icône (URL) :</label>
-                <input value={iconSrc} onChange={(e) => setIconSrc(e.target.value)} className="admin__form-input" />
-
-                <label>📝 Description :</label>
-                <input value={description} onChange={(e) => setDescription(e.target.value)} className="admin__form-input" />
 
                 <label>📂 Sous-catégorie :</label>
                 <select value={parentId} onChange={(e) => setParentId(e.target.value)} className="admin__form-input">

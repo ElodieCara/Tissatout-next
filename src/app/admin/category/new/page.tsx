@@ -94,10 +94,10 @@ export default function CreateCategoryPage() {
     return (
         <div className="admin-form">
             <Breadcrumb />
-            <h2 className="admin-form__title">Ajouter une Catégorie</h2>
+            <h2 className="admin-form__title">Ajouter une Catégorie/Section</h2>
 
             <button onClick={() => router.push("/admin/category")} className="admin-form__button admin-form__button--primary">
-                📂 Voir toutes les catégories
+                📂 Voir toutes les catégories/sections
             </button>
 
             {message && <p className="admin-form__message">{message}</p>}
@@ -138,7 +138,7 @@ export default function CreateCategoryPage() {
                 )}
                 <div style={{ width: "100%", marginTop: "1rem" }}>
                     <button type="submit" className="admin-form__button admin-form__button--yellow" disabled={loading}>
-                        {loading ? "⏳ En cours..." : "✅ Créer la catégorie"}
+                        {loading ? "⏳ En cours..." : "✅ Créer "}
                     </button>
                 </div>
             </form >
