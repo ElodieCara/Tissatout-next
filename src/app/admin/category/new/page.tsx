@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Breadcrumb from "../../components/Breadcrumb";
 
 interface Category {
     id: string;
@@ -17,9 +18,13 @@ interface Section {
 
 export default function CreateCategoryPage() {
     const [isNewSection, setIsNewSection] = useState(false);
+    const [isNewCategory, setIsNewCategory] = useState(false);
+
     const [section, setSection] = useState("");
     const [newSection, setNewSection] = useState("");
     const [name, setName] = useState("");
+    const [newCategoryName, setNewCategoryName] = useState(""); // Ajout du champ
+
     const [iconSrc, setIconSrc] = useState("");
     const [description, setDescription] = useState("");
     const [parentId, setParentId] = useState("");
@@ -65,7 +70,7 @@ export default function CreateCategoryPage() {
         setLoading(true);
 
         // 🛑 Validation stricte
-        if (!name) {
+        if (!isNewCategory && !name) {
             setMessage("❌ Le nom de la catégorie est obligatoire.");
             setLoading(false);
             return;
@@ -87,7 +92,7 @@ export default function CreateCategoryPage() {
                 body: JSON.stringify({
                     sectionId: selectedSectionId,
                     section: isNewSection ? newSection : undefined,
-                    name,
+                    name: isNewCategory ? newCategoryName : name,
                     iconSrc,
                     description,
                     parentId: parentId || null,
@@ -113,6 +118,7 @@ export default function CreateCategoryPage() {
 
     return (
         <div style={{ padding: "2rem", maxWidth: "600px", margin: "auto" }}>
+            <Breadcrumb />
             <h2 style={{ textAlign: "center", marginBottom: "1rem" }}>🆕 Ajouter une Catégorie</h2>
             {message && <p style={{ textAlign: "center", color: message.includes("✅") ? "green" : "red" }}>{message}</p>}
 
@@ -154,46 +160,41 @@ export default function CreateCategoryPage() {
                     />
                 )}
 
-                {/* Nom de la catégorie */}
-                <label>🏷️ Nom de la catégorie :</label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Ex: Hiver ❄️"
-                    required
-                />
-
-                {/* Icône */}
-                <label>🖼️ Icône (URL) :</label>
-                <input
-                    type="text"
-                    value={iconSrc}
-                    onChange={(e) => setIconSrc(e.target.value)}
-                    placeholder="Ex: /icons/hiver.png"
-                />
-
-                {/* Description */}
-                <label>📝 Description :</label>
-                <input
-                    type="text"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Facultatif"
-                />
-
-                {/* Sélection du parent */}
-                <label>📂 Parent (optionnel) :</label>
-                <select value={parentId} onChange={(e) => setParentId(e.target.value)}>
-                    <option value="">-- Aucune (catégorie principale) --</option>
-                    {categories
-                        .filter((cat) => cat.sectionId === sections.find(s => s.name === section)?.id && !cat.parentId)
-                        .map((cat) => (
-                            <option key={cat.id} value={cat.id}>
+                {/* Sélection ou création d'une catégorie */}
+                <label>🏷️ Catégorie :</label>
+                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                    <select
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        disabled={isNewCategory || categories.length === 0}
+                        style={{ flex: 1 }}
+                    >
+                        <option value="">-- Sélectionner une catégorie --</option>
+                        {categories.map((cat) => (
+                            <option key={cat.id} value={cat.name}>
                                 {cat.name}
                             </option>
                         ))}
-                </select>
+                    </select>
+
+                    <button
+                        type="button"
+                        onClick={() => setIsNewCategory(!isNewCategory)}
+                        style={{ padding: "0.5rem", background: "#007bff", color: "white", borderRadius: "5px", border: "none" }}
+                    >
+                        ➕ {isNewCategory ? "Annuler" : "Nouvelle Catégorie"}
+                    </button>
+                </div>
+
+                {isNewCategory && (
+                    <input
+                        type="text"
+                        value={newCategoryName}
+                        onChange={(e) => setNewCategoryName(e.target.value)}
+                        placeholder="Ex: Hiver ❄️"
+                        required
+                    />
+                )}
 
                 {/* Bouton de validation */}
                 <button type="submit" style={{ padding: "1rem", backgroundColor: "#007bff", color: "#fff", fontSize: "1rem" }} disabled={loading}>

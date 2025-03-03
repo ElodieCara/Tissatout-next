@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Breadcrumb from "../components/Breadcrumb";
 
 interface DrawingCategory {
     id: string;
@@ -55,6 +56,7 @@ export default function AdminCategoryList() {
     // Render
     return (
         <div style={{ padding: "2rem" }}>
+            <Breadcrumb />
             <h1>Liste des catégories</h1>
 
             {/* Bouton pour créer une nouvelle catégorie racine */}
