@@ -67,3 +67,40 @@ model User {
   email     String @unique
   createdAt DateTime @default(now())
 }
+
+model Drawing {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  imageUrl    String
+  views       Int      @default(0)
+  categoryId  String?   @db.ObjectId
+  category    DrawingCategory? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model CategorySection {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String   @unique
+  description String?
+  iconSrc     String?
+
+  categories  DrawingCategory[]
+}
+
+model DrawingCategory {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  sectionId String?   @db.ObjectId
+  section   CategorySection? @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  parentId  String?  @db.ObjectId
+  parent    DrawingCategory? @relation(name: "CategoryHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children  DrawingCategory[] @relation(name: "CategoryHierarchy")
+
+  drawings  Drawing[]
+}
+
+
+
+

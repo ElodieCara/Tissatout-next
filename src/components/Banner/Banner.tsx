@@ -1,17 +1,22 @@
-"use client"; // Si tu es dans `app/`, Next.js 13+
+"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button/Button";
 
+interface ButtonProps {
+    label: string;
+    targetId: string;
+}
+
 interface BannerProps {
     src: string;
     title: string;
     description: string;
-    showButtons?: boolean;
+    buttons?: ButtonProps[]; // Permet de passer une liste de boutons dynamiques
 }
 
-export default function Banner({ src, title, description, showButtons = false }: BannerProps) {
+export default function Banner({ src, title, description, buttons = [] }: BannerProps) {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -42,12 +47,19 @@ export default function Banner({ src, title, description, showButtons = false }:
             <div className="nos-univers__banner-content">
                 <h1>{title}</h1>
                 <p>{description}</p>
-                {/* ✅ Afficher les boutons uniquement si showButtons est true */}
-                {showButtons && (
+
+                {/* ✅ Afficher les boutons dynamiques uniquement s'ils sont définis */}
+                {buttons.length > 0 && (
                     <div className="nos-univers__banner-content-buttons">
-                        <Button className="large" onClick={() => scrollToSection("univers")}>🌟 Par Âge</Button>
-                        <Button className="large" onClick={() => scrollToSection("trivium")}>🎓 Trivium</Button>
-                        <Button className="large" onClick={() => scrollToSection("interets")}>🎭 Centres d’Intérêt</Button>
+                        {buttons.map((button, index) => (
+                            <Button
+                                key={index}
+                                className="large"
+                                onClick={() => scrollToSection(button.targetId)}
+                            >
+                                {button.label}
+                            </Button>
+                        ))}
                     </div>
                 )}
             </div>

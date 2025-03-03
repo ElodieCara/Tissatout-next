@@ -9,7 +9,12 @@ interface AdminIdeaFormProps {
 }
 
 export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
-    const [form, setForm] = useState({ title: "", description: "", image: "", theme: "" });
+    const [form, setForm] = useState({
+        title: "",
+        description: "",
+        image: "",
+        theme: ""
+    });
     const [message, setMessage] = useState("");
     const router = useRouter();
 
@@ -19,7 +24,7 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
             fetch(`/api/ideas/${ideaId}`)
                 .then((res) => res.json())
                 .then((data) => setForm(data))
-                .catch((err) => console.error("Erreur lors du chargement de l'idée :", err));
+                .catch(() => setMessage("❌ Erreur lors du chargement de l'idée."));
         }
     }, [ideaId]);
 
@@ -35,14 +40,18 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
         const formData = new FormData();
         formData.append("file", file);
 
-        const res = await fetch("/api/upload", { method: "POST", body: formData });
-        const data = await res.json();
+        try {
+            const res = await fetch("/api/upload", { method: "POST", body: formData });
+            const data = await res.json();
 
-        if (res.ok) {
-            setForm({ ...form, image: data.imageUrl });
-            setMessage("Image uploadée !");
-        } else {
-            setMessage("Erreur lors de l'upload.");
+            if (res.ok) {
+                setForm((prev) => ({ ...prev, image: data.imageUrl }));
+                setMessage("✅ Image uploadée !");
+            } else {
+                setMessage("❌ Erreur lors de l'upload.");
+            }
+        } catch {
+            setMessage("❌ Erreur de connexion lors de l'upload.");
         }
     };
 
@@ -51,17 +60,21 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
         const method = ideaId ? "PUT" : "POST";
         const url = ideaId ? `/api/ideas/${ideaId}` : "/api/ideas";
 
-        const res = await fetch(url, {
-            method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(form),
-        });
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(form),
+            });
 
-        if (res.ok) {
-            setMessage(`Idée ${ideaId ? "mise à jour" : "ajoutée"} avec succès !`);
-            setTimeout(() => router.push("/admin?section=ideas"), 1000);
-        } else {
-            setMessage("Erreur lors de l'enregistrement de l'idée.");
+            if (res.ok) {
+                setMessage(`✅ Idée ${ideaId ? "mise à jour" : "ajoutée"} avec succès !`);
+                setTimeout(() => router.push("/admin?section=ideas"), 1000);
+            } else {
+                setMessage("❌ Erreur lors de l'enregistrement de l'idée.");
+            }
+        } catch {
+            setMessage("❌ Erreur de connexion avec le serveur.");
         }
     };
 
@@ -90,32 +103,19 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                         name="description"
                         placeholder="Entrez une brève description..."
                         value={form.description}
-                        onChange={(e) => {
-                            if (e.target.value.length > 150) {
-                                alert("❌ La description ne peut pas dépasser 150 caractères !");
-                            } else {
-                                setForm({ ...form, description: e.target.value });
-                            }
-                        }}
+                        onChange={(e) => setForm({ ...form, description: e.target.value.slice(0, 150) })}
                         maxLength={150}
                     />
                     <p>{form.description.length} / 150 caractères</p>
                 </div>
-                {/* 📌 Upload d'image */}
                 <div className="admin-form__upload">
-                    <label htmlFor="imageUpload">📸 Glissez une image ici ou cliquez</label>
+                    <label htmlFor="imageUpload">📸 Image</label>
                     <input type="file" id="imageUpload" accept="image/*" onChange={handleImageUpload} />
-                    {form.image && <img src={form.image} alt="Aperçu" />}
+                    {form.image && <img src={form.image} alt="Aperçu" className="admin-form__image-preview" />}
                 </div>
                 <div className="admin-form__group">
                     <label htmlFor="theme">Thème</label>
-                    <select
-                        id="theme"
-                        name="theme"
-                        value={form.theme}
-                        onChange={handleChange}
-                        required
-                    >
+                    <select id="theme" name="theme" value={form.theme} onChange={handleChange} required>
                         <option value="">Sélectionnez un thème</option>
                         <option value="winter">❄️ Hiver</option>
                         <option value="summer">🌞 Été</option>

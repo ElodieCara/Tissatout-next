@@ -1,0 +1,35 @@
+.drawing-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 15px;
+    transition: transform 0.3s ease-in-out;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+
+    &__image {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    &__content {
+        text-align: center;
+        margin-top: 10px;
+
+        &-theme {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        &-views {
+            font-size: 14px;
+            color: gray;
+        }
+    }
+}
