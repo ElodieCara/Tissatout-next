@@ -6,7 +6,17 @@ const categoriesData = {
     "Saisons et Fêtes": ["Hiver", "Printemps", "Été", "Automne", "Noël", "Halloween", "Pâques"],
     "Thèmes": ["Animaux", "Véhicules", "Espace", "Pirates"],
     "Âge": ["Tout Petits (0-3 ans)", "Dès 3 ans", "Dès 6 ans", "Dès 10 ans"],
-    "Éducatif & Trivium": ["Mathématiques", "Sciences", "Histoire", "Arts"]
+    "Éducatif & Trivium": [
+        "🎭 Grammaire - Lettres",
+        "🎭 Grammaire - Mots",
+        "🎭 Grammaire - Chiffres",
+        "🤔 Logique - Puzzle",
+        "🤔 Logique - Coloriages numérotés",
+        "🤔 Logique - Labyrinthe",
+        "🎤 Rhétorique - Histoires",
+        "🎤 Rhétorique - Mythologie",
+        "🎤 Rhétorique - Philosophie"
+    ]
 };
 
 async function initCategories() {

@@ -1,36 +1,56 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import Head from "next/head";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
 import Banner from "@/components/Banner/Banner";
-import Head from "next/head";
 import DrawingCard from "@/components/DrawingCard/DrawingCard";
-import { useEffect, useState } from "react";
 import { Drawing } from "@/types/drawing";
+
+// 🎯 Gestion des catégories et sous-catégories
+const categoriesData = {
+    "Saisons et Fêtes": ["Hiver", "Printemps", "Été", "Automne", "Noël", "Halloween", "Pâques"],
+    "Thèmes": ["Animaux", "Véhicules", "Espace", "Pirates"],
+    "Âge": ["Tout Petits (0-3 ans)", "Dès 3 ans", "Dès 6 ans", "Dès 10 ans"],
+    "Éducatif & Trivium": [
+        "Grammaire - Lettres",
+        "Grammaire - Mots",
+        "Grammaire - Chiffres",
+        "Logique - Puzzle",
+        "Logique - Coloriages numérotés",
+        "Logique - Labyrinthe",
+        "Rhétorique - Histoires",
+        "Rhétorique - Mythologie",
+        "Rhétorique - Philosophie"
+    ]
+};
+
+
+// 🔥 Détection de la saison actuelle pour afficher les coloriages correspondants
+const getCurrentSeason = () => {
+    const month = new Date().getMonth() + 1; // Janvier = 1, Février = 2...
+    if ([12, 1, 2].includes(month)) return "Hiver";
+    if ([3, 4, 5].includes(month)) return "Printemps";
+    if ([6, 7, 8].includes(month)) return "Été";
+    if ([9, 10, 11].includes(month)) return "Automne";
+    return "Hiver";
+};
 
 export default function ColoragesPage() {
     const [drawings, setDrawings] = useState<Drawing[]>([]);
+    const currentSeason = getCurrentSeason();
 
     useEffect(() => {
         fetch("/api/drawings")
-            .then((res) => {
-                console.log("🔍 Réponse brute de l'API :", res);
-                return res.json();
-            })
+            .then((res) => res.json())
             .then((data) => {
-                console.log("📥 Données reçues :", data);
+                console.log("📥 Données API reçues :", data); // 🔍 Vérifie les catégories des coloriages
                 setDrawings(data);
             })
-            .catch((error) => {
-                console.error("❌ Erreur lors du fetch :", error);
-            });
+            .catch((error) => console.error("❌ Erreur lors du fetch :", error));
     }, []);
 
-
-    // 🎨 Filtrage des coloriages par catégorie
-    const themesDrawings = drawings.filter(d => d.category?.name === "Thèmes");
-    const trendingDrawings = drawings.sort((a, b) => b.views - a.views).slice(0, 6); // 🔥 Top 6 tendances
-    const educativeDrawings = drawings.filter(d => d.category?.name === "Éducatif");
 
     return (
         <>
@@ -49,11 +69,12 @@ export default function ColoragesPage() {
                 <Banner
                     src="/assets/slide3.png"
                     title="💡 Coloriages à imprimer"
-                    description="Découvrez des centaines de coloriages à imprimer et à colorier ! Choisissez parmi des thèmes variés : animaux, mandalas, héros, saisons et bien plus encore. Inspirez-vous, amusez-vous et libérez votre créativité ! 🎨"
+                    description="Découvrez des centaines de coloriages à imprimer et à colorier ! Choisissez parmi des thèmes variés : animaux, mandalas, héros, saisons et bien plus encore."
                     buttons={[
-                        { label: "🎨 Explorer les thèmes", targetId: "themes" },
-                        { label: "🔥 Voir les tendances", targetId: "tendances" },
-                        { label: "📚 Coloriages éducatifs", targetId: "educatif" }
+                        { label: `📅 Coloriages de ${currentSeason}`, targetId: "saisons" },
+                        { label: "🎨 Thèmes", targetId: "themes" },
+                        { label: "👶 Par âge", targetId: "ages" },
+                        { label: "📚 Éducatifs", targetId: "educatif" }
                     ]}
                 />
             </header>
@@ -61,50 +82,85 @@ export default function ColoragesPage() {
             <main className="coloriages__container">
                 <FloatingIcons />
                 <BackToTop />
-                <section id="themes" className="coloriages__theme-explorer">
-                    <h2>🎨 Explorez nos thèmes</h2>
-                    <p>Découvrez une variété de coloriages classés par thèmes : animaux, nature, mandalas...</p>
-                    <div className="coloriages__theme-explorer__grid">
-                        {themesDrawings.map((drawing) => (
-                            <DrawingCard
-                                key={drawing.id}
-                                imageUrl={drawing.imageUrl}
-                                theme={drawing.category?.name || "Inconnu"}
-                                views={drawing.views ?? 0}
-                            />
-                        ))}
+
+                {/* 1️⃣ Coloriages de saison */}
+                <section id="saisons" className="coloriages__theme-explorer">
+                    <h2>📅 Coloriages de {currentSeason}</h2>
+                    <p>Retrouvez les coloriages liés à la saison actuelle et aux fêtes du moment.</p>
+                    <div className="coloriages__theme-grid">
+                        {drawings
+                            .filter(d => d.category?.name === currentSeason)
+                            .map(drawing => (
+                                <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.category?.name ?? "Inconnu"} views={drawing.views ?? 0} />
+                            ))}
                     </div>
                 </section>
 
-                <section id="tendances" className="coloriages__theme-tendances">
-                    <h2>🔥 Les tendances du moment</h2>
-                    <p>Voici les coloriages les plus populaires en ce moment, imprimés par des milliers d’enfants et parents.</p>
-                    <div className="coloriages__theme-tendances__grid">
-                        {trendingDrawings.map((drawing) => (
-                            <DrawingCard
-                                key={drawing.id}
-                                imageUrl={drawing.imageUrl}
-                                theme={drawing.category?.name || "Inconnu"}
-                                views={drawing.views ?? 0}
-                            />
-                        ))}
-                    </div>
+                {/* 2️⃣ Coloriages par thème */}
+                <section id="themes">
+                    <h2>🎨 Coloriages par thème</h2>
+                    {categoriesData.Thèmes.map((theme) => (
+                        <div key={theme}>
+                            <h3>🖍 {theme}</h3>
+                            <div className="coloriages__theme-grid">
+                                {drawings
+                                    .filter(d => d.category?.name === theme)
+                                    .map(drawing => (
+                                        <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.category?.name ?? "Inconnu"} views={drawing.views ?? 0} />
+                                    ))}
+                            </div>
+                        </div>
+                    ))}
                 </section>
 
-                <section id="educatif" className="coloriages__theme-educatifs">
-                    <h2>📚 Coloriages éducatifs</h2>
-                    <p>Apprenez en coloriant ! Lettres, chiffres, logique et bien plus encore.</p>
-                    <div className="coloriages__theme-educatifs__grid">
-                        {educativeDrawings.map((drawing) => (
-                            <DrawingCard
-                                key={drawing.id}
-                                imageUrl={drawing.imageUrl}
-                                theme={drawing.category?.name || "Inconnu"}
-                                views={drawing.views ?? 0}
-                            />
-                        ))}
-                    </div>
+                {/* 3️⃣ Coloriages par âge */}
+                <section id="ages">
+                    <h2>👶 Coloriages par âge</h2>
+                    {Object.entries(categoriesData["Âge"]).map(([label, category]) => (
+                        <div key={category}>
+                            <h3>🖍 {label}</h3>
+                            <div className="coloriages__theme-grid">
+                                {drawings
+                                    .filter(d => d.category?.name === category)
+                                    .map(drawing => (
+                                        <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.category?.name ?? "Inconnu"} views={drawing.views ?? 0} />
+                                    ))}
+                            </div>
+                        </div>
+                    ))}
                 </section>
+
+                {/* 4️⃣ Coloriages éducatifs (Trivium) 📚 */}
+                <section id="educatif">
+                    <h2>📚 Coloriages éducatifs (Trivium)</h2>
+
+                    {categoriesData["Éducatif & Trivium"].map(sub => {
+                        const subDrawings = drawings.filter(d => d.category?.name === sub);
+                        console.log(`🖍 ${sub} ->`, subDrawings); // 🔍 Vérifie si les coloriages sont bien récupérés
+
+                        return (
+                            <div key={sub}>
+                                <h3>🖍 {sub}</h3>
+                                <div className="coloriages__theme-grid">
+                                    {subDrawings.length > 0 ? (
+                                        subDrawings.map(drawing => (
+                                            <DrawingCard
+                                                key={drawing.id}
+                                                imageUrl={drawing.imageUrl}
+                                                theme={drawing.category?.name ?? "Inconnu"}
+                                                views={drawing.views ?? 0}
+                                            />
+                                        ))
+                                    ) : (
+                                        <p>⏳ Aucun coloriage disponible pour le moment...</p>
+                                    )}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </section>
+
+
 
             </main>
         </>

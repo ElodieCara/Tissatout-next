@@ -28,9 +28,50 @@
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.coloriages__theme-explorer__grid {
+// .coloriages__theme-explorer__grid {
+//     display: grid;
+//     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+//     gap: 20px;
+//     margin-top: 20px;
+// }
+
+.coloriages__theme-explorer__grid,
+.coloriages__theme-tendances__grid,
+.coloriages__theme-educatifs__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 vignettes par ligne */
+    gap: 10px;
     margin-top: 20px;
+    justify-items: center;
+}
+
+@media (max-width: 1024px) {
+
+    .coloriages__theme-explorer__grid,
+    .coloriages__theme-tendances__grid,
+    .coloriages__theme-educatifs__grid {
+        grid-template-columns: repeat(3, 1fr);
+        /* 3 vignettes par ligne sur tablettes */
+    }
+}
+
+@media (max-width: 768px) {
+
+    .coloriages__theme-explorer__grid,
+    .coloriages__theme-tendances__grid,
+    .coloriages__theme-educatifs__grid {
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 vignettes par ligne sur mobiles */
+    }
+}
+
+@media (max-width: 480px) {
+
+    .coloriages__theme-explorer__grid,
+    .coloriages__theme-tendances__grid,
+    .coloriages__theme-educatifs__grid {
+        grid-template-columns: repeat(1, 1fr);
+        /* 1 vignette par ligne sur petits écrans */
+    }
 }
