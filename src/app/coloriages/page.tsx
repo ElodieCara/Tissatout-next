@@ -26,7 +26,6 @@ const categoriesData = {
     ]
 };
 
-
 // 🔥 Détection de la saison actuelle pour afficher les coloriages correspondants
 const getCurrentSeason = () => {
     const month = new Date().getMonth() + 1; // Janvier = 1, Février = 2...
@@ -34,7 +33,7 @@ const getCurrentSeason = () => {
     if ([3, 4, 5].includes(month)) return "Printemps";
     if ([6, 7, 8].includes(month)) return "Été";
     if ([9, 10, 11].includes(month)) return "Automne";
-    return "Hiver";
+    return "Été";
 };
 
 export default function ColoragesPage() {
@@ -84,20 +83,20 @@ export default function ColoragesPage() {
                 <BackToTop />
 
                 {/* 1️⃣ Coloriages de saison */}
-                <section id="saisons" className="coloriages__theme-explorer">
+                <section id="saisons" className="coloriages__theme-section">
                     <h2>📅 Coloriages de {currentSeason}</h2>
                     <p>Retrouvez les coloriages liés à la saison actuelle et aux fêtes du moment.</p>
                     <div className="coloriages__theme-grid">
                         {drawings
                             .filter(d => d.category?.name === currentSeason)
                             .map(drawing => (
-                                <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.category?.name ?? "Inconnu"} views={drawing.views ?? 0} />
+                                <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} />
                             ))}
                     </div>
                 </section>
 
                 {/* 2️⃣ Coloriages par thème */}
-                <section id="themes">
+                <section id="themes" className="coloriages__theme-section">
                     <h2>🎨 Coloriages par thème</h2>
                     {categoriesData.Thèmes.map((theme) => (
                         <div key={theme}>
@@ -106,7 +105,7 @@ export default function ColoragesPage() {
                                 {drawings
                                     .filter(d => d.category?.name === theme)
                                     .map(drawing => (
-                                        <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.category?.name ?? "Inconnu"} views={drawing.views ?? 0} />
+                                        <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} />
                                     ))}
                             </div>
                         </div>
@@ -114,7 +113,7 @@ export default function ColoragesPage() {
                 </section>
 
                 {/* 3️⃣ Coloriages par âge */}
-                <section id="ages">
+                <section id="ages" className="coloriages__theme-section">
                     <h2>👶 Coloriages par âge</h2>
                     {Object.entries(categoriesData["Âge"]).map(([label, category]) => (
                         <div key={category}>
@@ -123,7 +122,7 @@ export default function ColoragesPage() {
                                 {drawings
                                     .filter(d => d.category?.name === category)
                                     .map(drawing => (
-                                        <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.category?.name ?? "Inconnu"} views={drawing.views ?? 0} />
+                                        <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} />
                                     ))}
                             </div>
                         </div>
@@ -131,7 +130,7 @@ export default function ColoragesPage() {
                 </section>
 
                 {/* 4️⃣ Coloriages éducatifs (Trivium) 📚 */}
-                <section id="educatif">
+                <section id="educatif" className="coloriages__theme-section">
                     <h2>📚 Coloriages éducatifs (Trivium)</h2>
 
                     {categoriesData["Éducatif & Trivium"].map(sub => {
@@ -147,7 +146,7 @@ export default function ColoragesPage() {
                                             <DrawingCard
                                                 key={drawing.id}
                                                 imageUrl={drawing.imageUrl}
-                                                theme={drawing.category?.name ?? "Inconnu"}
+                                                theme={drawing.title}
                                                 views={drawing.views ?? 0}
                                             />
                                         ))

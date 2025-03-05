@@ -1,3 +1,8 @@
+@use '../../styles/utils/variables' as *;
+@use '../../styles/base/mixins' as *;
+@use "sass:map";
+
+
 .drawing-card {
     background: white;
     border-radius: 15px;
