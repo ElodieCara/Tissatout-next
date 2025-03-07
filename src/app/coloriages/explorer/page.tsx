@@ -122,8 +122,7 @@ export default function ExplorerPage() {
                 </aside>
 
                 <div className="explorer-content">
-                    {!selectedTheme && <p>📌 Sélectionnez un thème à gauche pour afficher les sous-catégories.</p>}
-
+                    {/* ✅ N'affiche le contenu QUE si une catégorie est sélectionnée */}
                     {selectedTheme && !selectedSubCategory && (
                         <div>
                             <h2>{selectedTheme}</h2>
@@ -169,8 +168,78 @@ export default function ExplorerPage() {
                             </div>
                         </div>
                     )}
-
                 </div>
+
+                {/* ✅ Masquer cette section si une catégorie est sélectionnée */}
+                {!selectedTheme && (
+                    <div className="explorer-enhanced">
+                        {/* 1️⃣ Bannière attrayante */}
+                        <div className="explorer-banner">
+                            <img src="/images/banner.jpg" alt="Bannière" className="banner-image" />
+                            <div className="banner-content">
+                                <h1>🎨 Bienvenue dans l’univers des coloriages !</h1>
+                                <p>Explorez des centaines de coloriages gratuits à imprimer.</p>
+                                <p>Découvrez nos catégories et trouvez votre prochain dessin à colorier !</p>
+                                <button className="cta-button" onClick={() => setSelectedTheme('Tendances')}>
+                                    Explorer les coloriages
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* 2️⃣ Section "Tendances" */}
+                        <div className="trending-section">
+                            <h2>🔥 Tendances</h2>
+                            <div className="explorer-grid">
+                                {drawings.slice(0, 5).map((drawing: Drawing) => (
+                                    <Link key={drawing.id} href={`/coloriages/${drawing.id}`}>
+                                        <DrawingCard
+                                            id={drawing.id}
+                                            imageUrl={drawing.imageUrl}
+                                            theme={drawing.title}
+                                            views={drawing.views ?? 0}
+                                            likeCount={drawing.likes ?? 0}
+                                        />
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 3️⃣ Sélection des "Coups de cœur" selon la saison */}
+                        <div className="seasonal-highlights">
+                            <h2>📌 Coups de cœur</h2>
+                            <p>🎃 C’est bientôt Halloween ! Découvrez nos coloriages effrayants 👻</p>
+                            <div className="explorer-grid">
+                                {categoriesData["Halloween"]?.map((subCategory: string) => (
+                                    <div key={subCategory} className="sub-category-card">
+                                        <img
+                                            src={topImages[subCategory]?.imageUrl || "/images/default-placeholder.png"}
+                                            alt={subCategory}
+                                            className="sub-category-image"
+                                        />
+                                        <h3>{subCategory}</h3>
+                                        <p>❤️ {topImages[subCategory]?.likes ?? 0} likes</p>
+                                        <p>{coloringCounts[subCategory] || 0} coloriages disponibles</p>
+                                        <button className="see-more" onClick={() => handleSubCategoryClick(subCategory)}>
+                                            Voir plus
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 4️⃣ Moteur de recherche */}
+                        <div className="search-bar">
+                            <input type="text" placeholder="🔍 Rechercher un coloriage..." />
+                        </div>
+
+                        {/* 5️⃣ Section éducative */}
+                        <div className="educational-section">
+                            <h2>🧠 Apprendre en s’amusant</h2>
+                            <p>Découvrez nos coloriages éducatifs pour apprendre les lettres, les chiffres et bien plus encore !</p>
+                        </div>
+                    </div>
+                )}
+
                 <FloatingIcons />
                 <BackToTop />
             </main>

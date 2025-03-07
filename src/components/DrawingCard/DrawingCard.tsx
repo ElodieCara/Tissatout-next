@@ -8,9 +8,21 @@ interface DrawingCardProps {
     theme: string;
     views?: number;
     likeCount?: number;
+    showLikes?: boolean;
+    showViews?: boolean;
+    showButton?: boolean;
 }
 
-export default function DrawingCard({ id, imageUrl, theme, views = 0, likeCount = 0 }: DrawingCardProps) {
+export default function DrawingCard({
+    id,
+    imageUrl,
+    theme,
+    views = 0,
+    likeCount = 0,
+    showLikes = false,
+    showViews = false,
+    showButton = true
+}: DrawingCardProps) {
     const [localLikeCount, setLocalLikeCount] = useState(likeCount);
 
     const handleLike = async () => {
@@ -41,16 +53,17 @@ export default function DrawingCard({ id, imageUrl, theme, views = 0, likeCount 
                         height={200}
                         className="drawing-card__image"
                     />
+                    <h3 className="drawing-card__content-theme">{theme}</h3>
                 </a>
             </Link>
             <div className="drawing-card__content">
-                <h3 className="drawing-card__content-theme">{theme}</h3>
-                {views > 0 && <p className="drawing-card__content-views">{views} vues</p>}
-                {localLikeCount > 0 && <p>❤️ {localLikeCount} likes</p>}
-                <button onClick={handleLike} className="drawing-like-button">❤️ Liker</button>
-                <Link href={`/coloriages/${id}`} legacyBehavior>
-                    <a className="drawing-button">Voir le coloriage</a>
-                </Link>
+                {showViews && views > 0 && <p className="drawing-card__content-views">{views} vues</p>}
+                {showLikes && likeCount > 0 && <p>❤️ {likeCount} likes</p>}
+                {showButton && (
+                    <Link href={`/coloriages/${id}`} legacyBehavior>
+                        <a className="drawing-button">Voir le coloriage</a>
+                    </Link>
+                )}
             </div>
         </div>
     );
