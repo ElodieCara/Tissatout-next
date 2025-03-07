@@ -44,7 +44,7 @@ export default function DrawingPage() {
                     imageUrl={drawing.imageUrl}
                     theme={drawing.title}
                     views={drawing.views ?? 0}
-                    likes={drawing.likes ?? 0}
+                    likeCount={drawing.likes ?? 0}
                 />
             ) : (
                 <p>Chargement du coloriage...</p>

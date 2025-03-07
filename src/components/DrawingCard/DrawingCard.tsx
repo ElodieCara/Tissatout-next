@@ -1,16 +1,17 @@
 import Image from "next/image";
 import { useState } from "react";
+import Link from "next/link";
 
 interface DrawingCardProps {
     id: string;
     imageUrl: string;
     theme: string;
-    views: number;
-    likes: number;
+    views?: number;
+    likeCount?: number;
 }
 
-export default function DrawingCard({ id, imageUrl, theme, views, likes }: DrawingCardProps) {
-    const [likeCount, setLikeCount] = useState(likes);
+export default function DrawingCard({ id, imageUrl, theme, views = 0, likeCount = 0 }: DrawingCardProps) {
+    const [localLikeCount, setLocalLikeCount] = useState(likeCount);
 
     const handleLike = async () => {
         try {
@@ -23,7 +24,7 @@ export default function DrawingCard({ id, imageUrl, theme, views, likes }: Drawi
             if (!res.ok) throw new Error("Échec du like");
 
             const data = await res.json();
-            setLikeCount(data.likes);
+            setLocalLikeCount(data.likes);
         } catch (error) {
             console.error("❌ Erreur lors du like :", error);
         }
@@ -31,18 +32,25 @@ export default function DrawingCard({ id, imageUrl, theme, views, likes }: Drawi
 
     return (
         <div className="drawing-card">
-            <Image
-                src={imageUrl}
-                alt={theme}
-                width={300}
-                height={200}
-                className="drawing-card__image"
-            />
+            <Link href={`/coloriages/${id}`} legacyBehavior>
+                <a className="drawing-card__image-link">
+                    <Image
+                        src={imageUrl}
+                        alt={theme}
+                        width={300}
+                        height={200}
+                        className="drawing-card__image"
+                    />
+                </a>
+            </Link>
             <div className="drawing-card__content">
                 <h3 className="drawing-card__content-theme">{theme}</h3>
-                <p className="drawing-card__content-views">{views} vues</p>
-                <p>❤️ {likeCount} likes</p>
-                <button onClick={handleLike}>❤️ Liker</button>
+                {views > 0 && <p className="drawing-card__content-views">{views} vues</p>}
+                {localLikeCount > 0 && <p>❤️ {localLikeCount} likes</p>}
+                <button onClick={handleLike} className="drawing-like-button">❤️ Liker</button>
+                <Link href={`/coloriages/${id}`} legacyBehavior>
+                    <a className="drawing-button">Voir le coloriage</a>
+                </Link>
             </div>
         </div>
     );

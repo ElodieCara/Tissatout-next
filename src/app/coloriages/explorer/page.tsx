@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Head from "next/head";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
@@ -27,11 +28,31 @@ const categoriesData: Record<string, string[]> = {
 };
 
 export default function ExplorerPage() {
-    const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
+    const searchParams = useSearchParams();
+    const initialTheme = searchParams?.get("categorie") ?? null;
+
+
+    const [selectedTheme, setSelectedTheme] = useState<string | null>(initialTheme);
     const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
     const [drawings, setDrawings] = useState<Drawing[]>([]);
     const [topImages, setTopImages] = useState<Record<string, { imageUrl: string; likes: number }>>({});
     const [coloringCounts, setColoringCounts] = useState<Record<string, number>>({});
+
+    useEffect(() => {
+        if (!selectedTheme) return;
+
+        const fetchDrawings = async () => {
+            try {
+                const res = await fetch(`/api/drawings?category=${encodeURIComponent(selectedTheme)}`);
+                const data = await res.json();
+                setDrawings(data);
+            } catch (error) {
+                console.error("❌ Erreur lors du fetch :", error);
+            }
+        };
+
+        fetchDrawings();
+    }, [selectedTheme]);
 
     useEffect(() => {
         if (!selectedTheme) return;
@@ -138,7 +159,7 @@ export default function ExplorerPage() {
                                                 imageUrl={drawing.imageUrl}
                                                 theme={drawing.title}
                                                 views={drawing.views ?? 0}
-                                                likes={drawing.likes ?? 0}
+                                                likeCount={drawing.likes ?? 0}
                                             />
                                         </Link>
                                     ))

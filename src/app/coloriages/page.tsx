@@ -7,6 +7,7 @@ import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
 import Banner from "@/components/Banner/Banner";
 import DrawingCard from "@/components/DrawingCard/DrawingCard";
 import { Drawing } from "@/types/drawing";
+import Link from "next/link";
 
 // 🎯 Gestion des catégories et sous-catégories
 const categoriesData = {
@@ -90,7 +91,7 @@ export default function ColoragesPage() {
                         {drawings
                             .filter(d => d.category?.name === currentSeason)
                             .map(drawing => (
-                                <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likes={drawing.likes ?? 0} />
+                                <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likeCount={drawing.likes ?? 0} />
                             ))}
                     </div>
                 </section>
@@ -105,7 +106,7 @@ export default function ColoragesPage() {
                                 {drawings
                                     .filter(d => d.category?.name === theme)
                                     .map(drawing => (
-                                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likes={drawing.likes ?? 0} />
+                                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likeCount={drawing.likes ?? 0} />
                                     ))}
                             </div>
                         </div>
@@ -122,7 +123,7 @@ export default function ColoragesPage() {
                                 {drawings
                                     .filter(d => d.category?.name === category)
                                     .map(drawing => (
-                                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likes={drawing.likes ?? 0} />
+                                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likeCount={drawing.likes ?? 0} />
                                     ))}
                             </div>
                         </div>
@@ -141,20 +142,17 @@ export default function ColoragesPage() {
                             <div key={sub}>
                                 <h3>🖍 {sub}</h3>
                                 <div className="coloriages__theme-grid">
-                                    {subDrawings.length > 0 ? (
-                                        subDrawings.map(drawing => (
+                                    {drawings
+                                        .filter(d => d.category?.name === currentSeason)
+                                        .map(drawing => (
                                             <DrawingCard
                                                 key={drawing.id}
                                                 id={drawing.id}
                                                 imageUrl={drawing.imageUrl}
                                                 theme={drawing.title}
                                                 views={drawing.views ?? 0}
-                                                likes={drawing.likes ?? 0}
-                                            />
-                                        ))
-                                    ) : (
-                                        <p>⏳ Aucun coloriage disponible pour le moment...</p>
-                                    )}
+                                                likeCount={drawing.likes ?? 0}
+                                            />))}
                                 </div>
                             </div>
                         );

@@ -8,7 +8,7 @@ export default function DrawingList({ title, drawings }: { title: string; drawin
             <div className="drawing-grid">
                 {drawings.length > 0 ? (
                     drawings.map((drawing) => (
-                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likes={drawing.likes ?? 0} />
+                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likeCount={drawing.likes ?? 0} />
                     ))
                 ) : (
                     <p>⏳ Aucun coloriage disponible...</p>
