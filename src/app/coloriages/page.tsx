@@ -70,13 +70,13 @@ export default function ColoragesPage() {
                     title="💡 Coloriages à imprimer"
                     description="Découvrez des centaines de coloriages à imprimer et à colorier ! Choisissez parmi des thèmes variés : animaux, mandalas, héros, saisons et bien plus encore."
                     buttons={[
-                        { label: `📅 Coloriages de ${currentSeason}`, targetId: "saisons" },
-                        { label: "🎨 Thèmes", targetId: "themes" },
-                        { label: "👶 Par âge", targetId: "ages" },
-                        { label: "📚 Éducatifs", targetId: "educatif" }
+                        { label: "📅 Explorer les coloriages", href: "/coloriages/explorer" }, // ✅ Redirection externe
+                        { label: "🔍 Rechercher un thème", targetId: "themes" }, // ✅ Scroll vers section
                     ]}
                 />
             </header>
+
+
 
             <main className="coloriages__container">
                 <FloatingIcons />
@@ -90,7 +90,7 @@ export default function ColoragesPage() {
                         {drawings
                             .filter(d => d.category?.name === currentSeason)
                             .map(drawing => (
-                                <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} />
+                                <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likes={drawing.likes ?? 0} />
                             ))}
                     </div>
                 </section>
@@ -105,7 +105,7 @@ export default function ColoragesPage() {
                                 {drawings
                                     .filter(d => d.category?.name === theme)
                                     .map(drawing => (
-                                        <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} />
+                                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likes={drawing.likes ?? 0} />
                                     ))}
                             </div>
                         </div>
@@ -122,7 +122,7 @@ export default function ColoragesPage() {
                                 {drawings
                                     .filter(d => d.category?.name === category)
                                     .map(drawing => (
-                                        <DrawingCard key={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} />
+                                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likes={drawing.likes ?? 0} />
                                     ))}
                             </div>
                         </div>
@@ -145,9 +145,11 @@ export default function ColoragesPage() {
                                         subDrawings.map(drawing => (
                                             <DrawingCard
                                                 key={drawing.id}
+                                                id={drawing.id}
                                                 imageUrl={drawing.imageUrl}
                                                 theme={drawing.title}
                                                 views={drawing.views ?? 0}
+                                                likes={drawing.likes ?? 0}
                                             />
                                         ))
                                     ) : (

@@ -8,21 +8,26 @@ const prisma = new PrismaClient()
  * GET: Récupérer tous les dessins
  * Inclure la catégorie pour chaque dessin
  */
-export async function GET() {
+export async function GET(req: Request) {
     try {
+        const { searchParams } = new URL(req.url);
+        const category = searchParams.get("category");
+        const sort = searchParams.get("sort");
+        const limit = parseInt(searchParams.get("limit") || "1000", 10);
+
         const drawings = await prisma.drawing.findMany({
+            where: category ? { category: { name: category } } : {},
             include: {
                 category: true,
             },
-            orderBy: {
-                createdAt: "desc",
-            },
-        })
+            orderBy: sort === "likes" ? { likes: "desc" } : { createdAt: "desc" },
+            take: limit,
+        });
 
-        return NextResponse.json(drawings)
+        return NextResponse.json(drawings);
     } catch (error) {
-        console.error("❌ GET drawings error:", error)
-        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 })
+        console.error("❌ GET drawings error:", error);
+        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
 

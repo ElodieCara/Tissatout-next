@@ -6,4 +6,6 @@ export interface Drawing {
     category?: {
         name: string;
     };
+    likes: number;
 }
+

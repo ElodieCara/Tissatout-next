@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import Button from "@/components/Button/Button";
 
 interface ButtonProps {
     label: string;
-    targetId: string;
+    targetId?: string; // Optionnel pour les ancres internes
+    href?: string; // Optionnel pour la redirection externe
 }
 
 interface BannerProps {
@@ -51,15 +53,17 @@ export default function Banner({ src, title, description, buttons = [] }: Banner
                 {/* ✅ Afficher les boutons dynamiques uniquement s'ils sont définis */}
                 {buttons.length > 0 && (
                     <div className="nos-univers__banner-content-buttons">
-                        {buttons.map((button, index) => (
-                            <Button
-                                key={index}
-                                className="large"
-                                onClick={() => scrollToSection(button.targetId)}
-                            >
-                                {button.label}
-                            </Button>
-                        ))}
+                        {buttons.map((button, index) =>
+                            button.href ? (
+                                <Link key={index} href={button.href} passHref>
+                                    <Button className="large">{button.label}</Button>
+                                </Link>
+                            ) : (
+                                <Button key={index} className="large" onClick={() => scrollToSection(button.targetId!)}>
+                                    {button.label}
+                                </Button>
+                            )
+                        )}
                     </div>
                 )}
             </div>
