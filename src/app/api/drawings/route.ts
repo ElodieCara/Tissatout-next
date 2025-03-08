@@ -15,14 +15,23 @@ export async function GET(req: Request) {
         const sort = searchParams.get("sort");
         const limit = parseInt(searchParams.get("limit") || "1000", 10);
 
+        console.log("📢 Requête API - Catégorie demandée :", category);
+
         const drawings = await prisma.drawing.findMany({
-            where: category ? { category: { name: category } } : {},
+            where: category ? { category: { name: { equals: category, mode: "insensitive" } } } : {},
             include: {
-                category: true,
+                category: {
+                    select: { name: true }, // ✅ On sélectionne uniquement le nom
+                },
             },
-            orderBy: sort === "likes" ? { likes: "desc" } : { createdAt: "desc" },
+            orderBy: sort === "likes" ? { likes: "desc" } : { views: "desc" }, // ✅ Trie par "likes" ou "views"
             take: limit,
         });
+
+        // Ajouter ce log pour vérifier la structure et le contenu des données
+        console.log("📊 Données des dessins récupérées:", JSON.stringify(drawings.slice(0, 2), null, 2));
+        console.log("🔢 Nombre total de dessins:", drawings.length);
+        console.log("👁️ Dessins avec views défini:", drawings.filter(d => d.views !== undefined).length);
 
         return NextResponse.json(drawings);
     } catch (error) {

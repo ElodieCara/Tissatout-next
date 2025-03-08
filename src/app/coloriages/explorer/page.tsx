@@ -8,6 +8,7 @@ import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
 import DrawingCard from "@/components/DrawingCard/DrawingCard";
 import { Drawing } from "@/types/drawing";
 import Link from "next/link";
+import Banner from "@/components/Banner/Banner";
 
 
 const categoriesData: Record<string, string[]> = {
@@ -30,13 +31,75 @@ const categoriesData: Record<string, string[]> = {
 export default function ExplorerPage() {
     const searchParams = useSearchParams();
     const initialTheme = searchParams?.get("categorie") ?? null;
-
-
+    const [trendingDrawings, setTrendingDrawings] = useState<Drawing[]>([]);
+    const [topLikedDrawings, setTopLikedDrawings] = useState<Record<string, Drawing[]>>({});
+    const [globalTopDrawings, setGlobalTopDrawings] = useState<Drawing[]>([]);
+    const [educationalDrawings, setEducationalDrawings] = useState<Record<string, Drawing[]>>({});
     const [selectedTheme, setSelectedTheme] = useState<string | null>(initialTheme);
     const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
     const [drawings, setDrawings] = useState<Drawing[]>([]);
     const [topImages, setTopImages] = useState<Record<string, { imageUrl: string; likes: number }>>({});
     const [coloringCounts, setColoringCounts] = useState<Record<string, number>>({});
+
+    useEffect(() => {
+        const fetchGlobalTopDrawings = async () => {
+            try {
+                // Récupérer les 4 dessins les plus likés toutes catégories confondues
+                const res = await fetch(`/api/drawings?sort=likes&limit=4`);
+                const data = await res.json();
+
+                console.log("❤️ Dessins les plus likés globalement :", data); // DEBUG
+
+                setGlobalTopDrawings(data);
+            } catch (error) {
+                console.error("❌ Erreur lors du fetch des dessins les plus likés globalement :", error);
+            }
+        };
+
+        fetchGlobalTopDrawings();
+    }, []);
+
+    useEffect(() => {
+        const fetchEducationalDrawings = async () => {
+            const educationalCategory = "Éducatif & Trivium";
+            const subCategories = {
+                "Grammaire": categoriesData[educationalCategory]?.filter(cat => cat.startsWith("Grammaire"))[0],
+                "Logique": categoriesData[educationalCategory]?.filter(cat => cat.startsWith("Logique"))[0],
+                "Rhétorique": categoriesData[educationalCategory]?.filter(cat => cat.startsWith("Rhétorique"))[0]
+            };
+
+            const newEducationalDrawings: Record<string, Drawing[]> = {};
+
+            try {
+                // Pour chaque sous-catégorie, récupérer l'image la plus likée
+                for (const [key, subCategory] of Object.entries(subCategories)) {
+                    if (subCategory) {
+                        const res = await fetch(`/api/drawings?category=${encodeURIComponent(subCategory)}&sort=likes&limit=1`);
+                        const data = await res.json();
+                        newEducationalDrawings[key] = data;
+                    }
+                }
+
+                // Ajouter une 4ème sous-catégorie au hasard pour compléter
+                const randomCategory = categoriesData[educationalCategory]?.find(
+                    cat => !Object.values(subCategories).includes(cat)
+                );
+
+                if (randomCategory) {
+                    const res = await fetch(`/api/drawings?category=${encodeURIComponent(randomCategory)}&sort=likes&limit=1`);
+                    const data = await res.json();
+                    newEducationalDrawings["Bonus"] = data;
+                }
+
+                console.log("🧠 Dessins éducatifs récupérés :", newEducationalDrawings);
+                setEducationalDrawings(newEducationalDrawings);
+            } catch (error) {
+                console.error("❌ Erreur lors du fetch des dessins éducatifs :", error);
+            }
+        };
+
+        fetchEducationalDrawings();
+    }, []);
 
     useEffect(() => {
         if (!selectedTheme) return;
@@ -45,6 +108,9 @@ export default function ExplorerPage() {
             try {
                 const res = await fetch(`/api/drawings?category=${encodeURIComponent(selectedTheme)}`);
                 const data = await res.json();
+
+                console.log("🔍 Dessins récupérés :", data); // DEBUG
+
                 setDrawings(data);
             } catch (error) {
                 console.error("❌ Erreur lors du fetch :", error);
@@ -53,6 +119,27 @@ export default function ExplorerPage() {
 
         fetchDrawings();
     }, [selectedTheme]);
+
+    // Effet séparé pour charger les tendances
+    useEffect(() => {
+        const fetchTrendingDrawings = async () => {
+            try {
+                // Récupérer les dessins les plus vus, sans filtre de catégorie
+                const res = await fetch(`/api/drawings?sort=views&limit=4`);
+                const data = await res.json();
+
+                console.log("🔥 Tendances récupérées :", data); // DEBUG
+
+                // Stockez-les dans un state séparé pour les tendances
+                setTrendingDrawings(data);
+            } catch (error) {
+                console.error("❌ Erreur lors du fetch des tendances :", error);
+            }
+        };
+
+        fetchTrendingDrawings();
+    }, []); // Exécuté une seule fois au chargement
+
 
     useEffect(() => {
         if (!selectedTheme) return;
@@ -88,6 +175,36 @@ export default function ExplorerPage() {
         fetchData();
     }, [selectedTheme]);
 
+    useEffect(() => {
+        const fetchTopLikedDrawings = async () => {
+            const newTopLikedDrawings: Record<string, Drawing[]> = {};
+
+            // Si Halloween est défini dans categoriesData
+            if (categoriesData["Saisons et Fêtes"]?.includes("Halloween")) {
+                await Promise.all(
+                    // Vous pouvez remplacer ceci par les sous-catégories Halloween si elles existent
+                    categoriesData["Saisons et Fêtes"]
+                        .filter(cat => cat === "Halloween")
+                        .map(async (subCategory) => {
+                            try {
+                                // Récupérer les 3 images les plus likées pour chaque sous-catégorie
+                                const res = await fetch(`/api/drawings?category=${encodeURIComponent(subCategory)}&sort=likes&limit=3`);
+                                const data = await res.json();
+                                newTopLikedDrawings[subCategory] = data;
+                            } catch (error) {
+                                console.error(`❌ Erreur pour les likes de ${subCategory} :`, error);
+                                newTopLikedDrawings[subCategory] = [];
+                            }
+                        })
+                );
+            }
+
+            setTopLikedDrawings(newTopLikedDrawings);
+        };
+
+        fetchTopLikedDrawings();
+    }, []);
+
     const handleThemeClick = (theme: string) => {
         setSelectedTheme(theme);
         setSelectedSubCategory(null);
@@ -103,13 +220,20 @@ export default function ExplorerPage() {
             console.error("❌ Erreur lors du fetch des dessins :", error);
         }
     };
+    console.log("🎨 Données des dessins :", drawings);
 
     return (
         <>
             <Head>
                 <title>Explorer les coloriages - Tissatout</title>
             </Head>
+            <Banner
+                src="/assets/slide3.png"
+                title="💡 Inspiration & Conseils"
+                description="Trouvez des idées d’activités et des conseils adaptés à chaque saison et moment clé du développement !"
+            />
             <main className="explorer-container">
+                <BackToTop />
                 <aside className="sidebar">
                     <h3>Catégories</h3>
                     <ul>
@@ -180,9 +304,10 @@ export default function ExplorerPage() {
                                 <h1>🎨 Bienvenue dans l’univers des coloriages !</h1>
                                 <p>Explorez des centaines de coloriages gratuits à imprimer.</p>
                                 <p>Découvrez nos catégories et trouvez votre prochain dessin à colorier !</p>
-                                <button className="cta-button" onClick={() => setSelectedTheme('Tendances')}>
-                                    Explorer les coloriages
-                                </button>
+                                {/* 🔍 Moteur de recherche */}
+                                <div className="search-bar">
+                                    <input type="text" placeholder="🔍 Rechercher un coloriage..." />
+                                </div>
                             </div>
                         </div>
 
@@ -190,26 +315,55 @@ export default function ExplorerPage() {
                         <div className="trending-section">
                             <h2>🔥 Tendances</h2>
                             <div className="explorer-grid">
-                                {drawings.slice(0, 5).map((drawing: Drawing) => (
-                                    <Link key={drawing.id} href={`/coloriages/${drawing.id}`}>
-                                        <DrawingCard
-                                            id={drawing.id}
-                                            imageUrl={drawing.imageUrl}
-                                            theme={drawing.title}
-                                            views={drawing.views ?? 0}
-                                            likeCount={drawing.likes ?? 0}
-                                        />
-                                    </Link>
-                                ))}
+                                {trendingDrawings.length > 0 ? (
+                                    trendingDrawings
+                                        .map((drawing) => (
+                                            <Link key={drawing.id} href={`/coloriages/${drawing.id}`}>
+                                                <DrawingCard
+                                                    id={drawing.id}
+                                                    imageUrl={drawing.imageUrl}
+                                                    theme={drawing.title}
+                                                    views={drawing.views ?? 0}
+                                                    likeCount={drawing.likes ?? 0}
+                                                    showButton={false}
+                                                />
+                                            </Link>
+                                        ))
+                                ) : (
+                                    <p>⏳ Chargement des tendances...</p>
+                                )}
                             </div>
                         </div>
+
+
 
                         {/* 3️⃣ Sélection des "Coups de cœur" selon la saison */}
                         <div className="seasonal-highlights">
                             <h2>📌 Coups de cœur</h2>
-                            <p>🎃 C’est bientôt Halloween ! Découvrez nos coloriages effrayants 👻</p>
+                            <p>Découvrez nos coloriages les plus appréciés par la communauté ❤️</p>
+
                             <div className="explorer-grid">
-                                {categoriesData["Halloween"]?.map((subCategory: string) => (
+                                {globalTopDrawings && globalTopDrawings.length > 0 ? (
+                                    globalTopDrawings.map((drawing: Drawing) => (
+                                        <Link key={drawing.id} href={`/coloriages/${drawing.id}`}>
+                                            <DrawingCard
+                                                id={drawing.id}
+                                                imageUrl={drawing.imageUrl}
+                                                theme={drawing.title}
+                                                views={drawing.views ?? 0}
+                                                likeCount={drawing.likes ?? 0}
+                                                showButton={false}
+                                            />
+                                        </Link>
+                                    ))
+                                ) : (
+                                    <p>⏳ Chargement des coloriages les plus appréciés...</p>
+                                )}
+                            </div>
+
+                            {/* Vous pouvez conserver cette partie si vous souhaitez aussi afficher les sous-catégories */}
+                            {/* <div className="explorer-grid">
+                                {categoriesData["Saisons et Fêtes"]?.filter(cat => cat === "Halloween").map((subCategory: string) => (
                                     <div key={subCategory} className="sub-category-card">
                                         <img
                                             src={topImages[subCategory]?.imageUrl || "/images/default-placeholder.png"}
@@ -224,24 +378,35 @@ export default function ExplorerPage() {
                                         </button>
                                     </div>
                                 ))}
-                            </div>
+                            </div> */}
                         </div>
 
-                        {/* 4️⃣ Moteur de recherche */}
-                        <div className="search-bar">
-                            <input type="text" placeholder="🔍 Rechercher un coloriage..." />
-                        </div>
 
-                        {/* 5️⃣ Section éducative */}
+                        {/* 4️⃣ Section éducative */}
                         <div className="educational-section">
-                            <h2>🧠 Apprendre en s’amusant</h2>
+                            <h2>🧠 Apprendre en s'amusant</h2>
                             <p>Découvrez nos coloriages éducatifs pour apprendre les lettres, les chiffres et bien plus encore !</p>
+
+                            <div className="explorer-grid">
+                                {Object.entries(educationalDrawings).map(([category, drawings]) => (
+                                    drawings.length > 0 && (
+                                        <Link key={drawings[0].id} href={`/coloriages/${drawings[0].id}`}>
+                                            <DrawingCard
+                                                id={drawings[0].id}
+                                                imageUrl={drawings[0]?.imageUrl || "/images/default-placeholder.png"}
+                                                theme={category}
+                                                views={drawings[0]?.views ?? 0}
+                                                likeCount={drawings[0]?.likes ?? 0}
+                                                showButton={true}
+                                            />
+                                        </Link>
+                                    )
+                                ))}
+                            </div>
                         </div>
                     </div>
                 )}
 
-                <FloatingIcons />
-                <BackToTop />
             </main>
         </>
     );

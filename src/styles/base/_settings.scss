@@ -38,7 +38,7 @@ h1 {
 }
 
 h2 {
-    @include mix.font-secondary(vars.$font-size-xlarge, bold); // Utilisez le préfixe `mix`
+    @include mix.font-secondary(vars.$font-size-large, bold); // Utilisez le préfixe `mix`
 }
 
 h3 {
@@ -46,7 +46,7 @@ h3 {
 }
 
 h4 {
-    @include mix.font-tertiary(vars.$font-size-xlarge, bold); // Utilisez le préfixe `mix`
+    @include mix.font-tertiary(vars.$font-size-small, bold); // Utilisez le préfixe `mix`
 }
 
 p {

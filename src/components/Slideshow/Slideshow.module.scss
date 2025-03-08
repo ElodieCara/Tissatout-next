@@ -4,7 +4,7 @@
 .container__slide {
     position: relative;
     width: 100%;
-    height: 450px;
+    height: 350px;
     z-index: 1; // Place le slide au-dessus des décorations
 
     &__image {
@@ -33,7 +33,7 @@
 
     &__buttons {
         position: absolute;
-        top: 208px; // Ajustez selon la hauteur de __image moins un offset
+        top: 145px; // Ajustez selon la hauteur de __image moins un offset
         left: 30px;
         right: 30px;
         display: flex;
@@ -75,7 +75,7 @@
 
     &__text {
         position: absolute;
-        bottom: 40px; // Ajustez cette valeur pour positionner correctement le texte
+        bottom: 25px;
         left: 156px;
         color: white;
         font-size: large;
@@ -102,7 +102,7 @@
         }
 
         & button {
-            margin-top: 20px;
+            margin-top: 13px;
         }
 
         &::before {

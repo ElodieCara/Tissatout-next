@@ -27,14 +27,12 @@
     font-family: typo.$font-family-secondary;
     font-size: $size;
     font-weight: $weight;
-    line-height: 1.5;
 }
 
 @mixin font-tertiary($size: vars.$font-size-base, $weight: normal) {
     font-family: typo.$font-family-tertiary;
     font-size: $size;
     font-weight: $weight;
-    line-height: 1.5;
 }
 
 // Decorations

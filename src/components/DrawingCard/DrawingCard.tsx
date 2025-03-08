@@ -44,18 +44,18 @@ export default function DrawingCard({
 
     return (
         <div className="drawing-card">
-            <Link href={`/coloriages/${id}`} legacyBehavior>
-                <a className="drawing-card__image-link">
-                    <Image
-                        src={imageUrl}
-                        alt={theme}
-                        width={300}
-                        height={200}
-                        className="drawing-card__image"
-                    />
-                    <h3 className="drawing-card__content-theme">{theme}</h3>
-                </a>
-            </Link>
+
+            <div className="drawing-card__image-link">
+                <Image
+                    src={imageUrl}
+                    alt={theme}
+                    width={300}
+                    height={200}
+                    className="drawing-card__image"
+                />
+                <h3 className="drawing-card__content-theme">{theme}</h3>
+            </div>
+
             <div className="drawing-card__content">
                 {showViews && views > 0 && <p className="drawing-card__content-views">{views} vues</p>}
                 {showLikes && likeCount > 0 && <p>❤️ {likeCount} likes</p>}

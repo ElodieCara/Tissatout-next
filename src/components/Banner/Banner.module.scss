@@ -5,7 +5,7 @@
 .nos-univers__banner {
     position: relative;
     width: 100%;
-    height: 500px; // Même hauteur que ton slideshow
+    height: 300px; // Même hauteur que ton slideshow
     overflow: hidden;
     z-index: 1; // Assure que la bannière est bien positionnée
 
@@ -35,7 +35,7 @@
 
     &-content {
         position: absolute;
-        bottom: 23%;
+        bottom: 6%;
         left: 5%;
         display: flex;
         flex-direction: column;
@@ -43,7 +43,6 @@
         width: 30%;
 
         & h1 {
-            font-size: 45px; // ✅ Un peu plus grand pour bien ressortir
             font-weight: bold;
             text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
         }
