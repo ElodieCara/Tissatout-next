@@ -2,7 +2,6 @@
 @use '../../styles/base/mixins' as *;
 @use "sass:map";
 
-
 .drawing-card {
     background: white;
     border-radius: 15px;
@@ -14,20 +13,22 @@
     flex-direction: column;
     align-items: center;
     width: 200px;
-    /* Taille fixe pour toutes les cartes */
 
     &:hover {
         transform: scale(1.05);
     }
 
-    &__image {
+    &__image-container {
         width: 180px;
-        /* Largeur fixe */
         height: 180px;
-        /* Hauteur fixe */
         border-radius: 10px;
+        overflow: hidden;
+    }
+
+    &__image {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
-        /* Évite la déformation en remplissant l'espace */
     }
 
     &__content {
@@ -39,12 +40,46 @@
             font-weight: bold;
             margin: 5px 0;
             color: #333;
-            /* Rendre le texte visible */
         }
 
         &-views {
             font-size: 14px;
             color: gray;
         }
+    }
+
+    &__like-button {
+        background: none;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+        padding: 5px;
+        color: gray;
+
+        &:hover {
+            transform: scale(1.1);
+            color: red;
+        }
+
+        &.liked {
+            color: red;
+            transform: scale(1.2);
+            animation: pop 0.3s ease-in-out;
+        }
+    }
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }

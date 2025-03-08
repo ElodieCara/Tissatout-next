@@ -21,6 +21,7 @@
 @import "../components/Ruban/Ruban.module.scss";
 @import "../components/BackToTop/BackToTop.module.scss";
 @import "../components/DrawingCard/DrawingCard.modules.scss";
+@import "../app//coloriages/explorer/components/ExplorerSidebar.module.scss";
 
 // Layout
 @import "../layout/header/Header.module.scss";
@@ -41,4 +42,3 @@
 @import "../app/inspiration/components/InspirationArticles.module.scss";
 @import "../app/inspiration/components/InspirationIdeas.module.scss";
 @import "../app/coloriages/explorer/Explorer.module.scss";
-@import "../app/coloriages/explorer/Explorer-enhanced.module.scss";
