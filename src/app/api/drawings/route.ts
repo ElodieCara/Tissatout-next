@@ -87,3 +87,39 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 })
     }
 }
+
+
+/**
+ * PUT: Incrémenter le nombre de likes d'un dessin
+ */
+export async function PUT(req: Request) {
+    try {
+        const { id } = await req.json();
+
+        if (!id) {
+            return NextResponse.json(
+                { error: "ID du dessin requis" },
+                { status: 400 }
+            );
+        }
+
+        // Vérification de l'ID MongoDB
+        if (!ObjectId.isValid(id)) {
+            return NextResponse.json(
+                { error: "ID invalide" },
+                { status: 400 }
+            );
+        }
+
+        // Mise à jour du nombre de likes
+        const updatedDrawing = await prisma.drawing.update({
+            where: { id },
+            data: { likes: { increment: 1 } }, // ✅ Ajoute +1 like
+        });
+
+        return NextResponse.json({ likes: updatedDrawing.likes });
+    } catch (error) {
+        console.error("❌ PUT Like error:", error);
+        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+    }
+}

@@ -11,6 +11,7 @@ import ExplorerBanner from "./components/ExplorerBanner";
 import TrendingSection from "./components/TrendingSection";
 import EducationalSection from "./components/EducationalSection";
 import SeasonalHighlights from "./components/SeasonalHightlights";
+import Breadcrumb from "@/app/admin/components/Breadcrumb";
 
 interface Drawing {
     id: string;
@@ -118,8 +119,9 @@ export default function ExplorerPage() {
             </Head>
             <Banner
                 src="/assets/slide3.png"
-                title="💡 Inspiration & Conseils"
-                description="Trouvez des idées d'activités et des conseils adaptés à chaque saison et moment clé du développement !"
+                title="🎨 Bienvenue dans l'univers des coloriages !"
+                description="Explorez des centaines de coloriages gratuits à imprimer."
+            //onClick={() => setSelectedTheme('Tendances')}
             />
             <main className="explorer-container">
                 <BackToTop />
@@ -128,8 +130,13 @@ export default function ExplorerPage() {
                     selectedTheme={selectedTheme}
                     onThemeSelect={handleThemeClick}
                 />
-
                 <div className="explorer-content">
+                    <Breadcrumb
+                        selectedTheme={selectedTheme}
+                        selectedSubCategory={selectedSubCategory}
+                        onThemeSelect={setSelectedTheme}
+                        onSubCategorySelect={setSelectedSubCategory}
+                    />
                     {/* Display subcategories when a theme is selected but no subcategory is chosen */}
                     {selectedTheme && !selectedSubCategory && (
                         <div>
@@ -153,7 +160,7 @@ export default function ExplorerPage() {
                         </div>
                     )}
 
-                    {/* Display drawings when a subcategory is selected */}
+                    Display drawings when a subcategory is selected
                     {selectedSubCategory && (
                         <div>
                             <h2>{selectedSubCategory}</h2>
@@ -183,8 +190,10 @@ export default function ExplorerPage() {
                         {/* Banner */}
                         <ExplorerBanner
                             imageUrl="/images/banner.jpg"
-                            title="🎨 Bienvenue dans l'univers des coloriages !"
-                            description="Explorez des centaines de coloriages gratuits à imprimer."
+                            title="🎨 Découvrez les Meilleurs Coloriages !"
+                            description="🌟 Tendances – Explorez les coloriages les plus appréciés du moment, aimés et téléchargés par notre communauté.
+                                        🍂 Saisonnier – Trouvez des coloriages adaptés aux fêtes et aux saisons : Noël, Halloween, Printemps, Été et bien plus encore !
+                                        📚 Éducatif – Apprenez en vous amusant avec nos coloriages pédagogiques basés sur le Trivium : grammaire, logique et rhétorique."
                             onClick={() => setSelectedTheme('Tendances')}
                         />
 

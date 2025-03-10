@@ -1,0 +1,159 @@
+@use "../../../styles/utils/variables" as *;
+
+.drawing-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+
+    &__layout {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        gap: 20px;
+    }
+
+    &__sidebar {
+        width: 250px;
+        flex-shrink: 0;
+        background-color: #1e1e1e;
+        border-radius: 10px;
+        padding: 15px;
+        color: white;
+    }
+
+    &__content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        padding: 10px 0;
+        border-bottom: 2px solid #ddd;
+    }
+
+    &__title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    &__views {
+        font-size: 14px;
+        color: gray;
+        margin-top: 5px;
+    }
+
+    &__main {
+        display: flex;
+        gap: 30px;
+        align-items: center;
+    }
+
+    &__image-container {
+        position: relative;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    // ❤️ Like positionné en haut à gauche de l’image
+    &__like-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__like-button {
+        background: none;
+        border: none;
+        font-size: 22px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease-in-out;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+
+        &:disabled {
+            cursor: default;
+        }
+    }
+
+    &__heart-icon {
+        font-size: 24px;
+        transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+
+        &.liked {
+            color: #e63946; // Rouge vif après le like
+            transform: scale(1.2);
+        }
+    }
+
+    &__likes-count {
+        font-size: 18px;
+        font-weight: bold;
+        transition: color 0.3s ease-in-out;
+
+        .liked & {
+            color: #e63946;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        gap: 10px;
+    }
+
+    &__button {
+        background: #0070f3;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+
+        &:hover {
+            background: #005bb5;
+        }
+    }
+
+    &__share {
+        display: flex;
+        gap: 10px;
+    }
+
+    &__return,
+    &__navigation {
+        margin-top: 20px;
+    }
+
+    // 📜 Style du texte descriptif SEO
+    &__description {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        font-size: 16px;
+        text-align: justify;
+        color: #333;
+        width: 100%;
+    }
+}

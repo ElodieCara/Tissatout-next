@@ -1,0 +1,65 @@
+@use '../../styles/utils/variables' as *;
+
+.drawing-sidebar {
+    background: #222; // 🌑 Fond sombre
+    color: #fff; // ✨ Texte clair pour le contraste
+    padding: 20px;
+    border-radius: 10px; // 🎭 Coins arrondis pour un design moderne
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); // 📏 Effet d’ombre
+
+    &__title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    &--loading,
+    &--error {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #ff6b6b; // 🔥 Rouge pour les erreurs
+    }
+
+    &__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 15px; // 📏 Espacement entre les éléments
+    }
+
+    &__item {
+        background: #333; // 🔲 Fond légèrement plus clair pour chaque item
+        padding: 10px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        transition: background 0.3s;
+
+        &:hover {
+            background: #444; // 🎨 Effet hover
+        }
+    }
+
+    &__card {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    &__image {
+        width: 60px;
+        height: 60px;
+        border-radius: 5px;
+        object-fit: cover;
+        background: #2c3f64; // 🎭 Fond en cas d’image non chargée
+    }
+
+    &__title {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #f1f1f1;
+    }
+}

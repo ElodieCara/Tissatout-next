@@ -1,43 +1,43 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 
-export default function Breadcrumb() {
-    const pathname = usePathname() || "/admin";
-    const pathSegments = pathname.split("/").filter((segment) => segment);
+interface BreadcrumbProps {
+    selectedTheme?: string | null;
+    selectedSubCategory?: string | null;
+    onThemeSelect: (theme: string | null) => void;
+    onSubCategorySelect: (subCategory: string | null) => void;
+}
 
-    // 🔹 Mapping des sections pour des noms lisibles
-    const sectionNames: Record<string, string> = {
-        admin: "🏠 Accueil",
-        articles: "📄 Articles",
-        advice: "📜 Conseils",
-        ideas: "💡 Idées",
-    };
-
+export default function Breadcrumb({ selectedTheme, selectedSubCategory, onThemeSelect, onSubCategorySelect }: BreadcrumbProps) {
     return (
         <nav className="breadcrumb">
             <ul>
+                {/* Accueil */}
                 <li>
-                    <Link href="/admin">🏠 Accueil</Link>
+                    <span onClick={() => { onThemeSelect(null); onSubCategorySelect(null); }}>🏠 Accueil</span>
                 </li>
 
-                {pathSegments.map((segment, index) => {
-                    const url = `/${pathSegments.slice(0, index + 1).join("/")}`;
-                    const isLast = index === pathSegments.length - 1;
-                    const segmentName = sectionNames[segment] || decodeURIComponent(segment);
-
-                    // 🔹 Si c'est le dernier élément, on enlève le lien (ex: Modifier un article)
-                    return (
-                        <li key={url}>
-                            <span className="breadcrumb__separator"> &gt; </span>
-                            {isLast ? (
-                                <span>{segmentName}</span>
-                            ) : (
-                                <Link href={url}>{segmentName}</Link>
-                            )}
+                {/* Thème sélectionné */}
+                {selectedTheme && (
+                    <>
+                        <span className="breadcrumb__separator"> &gt; </span>
+                        <li>
+                            <span onClick={() => { onThemeSelect(selectedTheme); onSubCategorySelect(null); }}>
+                                {selectedTheme}
+                            </span>
                         </li>
-                    );
-                })}
+                    </>
+                )}
+
+                {/* Sous-catégorie sélectionnée */}
+                {selectedSubCategory && (
+                    <>
+                        <span className="breadcrumb__separator"> &gt; </span>
+                        <li>
+                            <span className="active">{selectedSubCategory}</span>
+                        </li>
+                    </>
+                )}
             </ul>
         </nav>
     );
