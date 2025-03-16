@@ -80,7 +80,11 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
 
     return (
         <div className="admin-form">
-            <Breadcrumb />
+            <Breadcrumb
+                onThemeSelect={(theme) => console.log("Thème sélectionné:", theme)}
+                onSubCategorySelect={(subCategory) => console.log("Sous-catégorie sélectionnée:", subCategory)}
+            />
+
             <h2>{ideaId ? "Modifier l'Idée" : "Ajouter une Nouvelle Idée"} 💡</h2>
             {message && <p className="admin-form__message">{message}</p>}
             <form onSubmit={handleSubmit}>

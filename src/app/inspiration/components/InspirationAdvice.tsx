@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 
 interface Advice {
@@ -19,34 +19,8 @@ const medievalCategories = [
 // ✅ Image par défaut (à mettre dans `public/`)
 const defaultImage = "/default.jpg";
 
-export default function InspirationAdvice() {
-    const [advices, setAdvices] = useState<Advice[]>([]);
+export default function InspirationAdvice({ advices }: { advices: Advice[] }) {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                const res = await fetch("/api/advice");
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-                const data = await res.json();
-                if (!Array.isArray(data)) throw new Error("Invalid data format");
-
-                console.log("✅ Conseils chargés :", data); // 🔍 Vérifie les données reçues
-                setAdvices(data);
-            } catch (error) {
-                console.error("Fetch error:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadData();
-    }, []);
-
-    if (loading) return <div>Chargement...</div>;
-
     return (
         <section className="container__advice">
             <h2>📜 Conseils d’Éducation Médiévale</h2>

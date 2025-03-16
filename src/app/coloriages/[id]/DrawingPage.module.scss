@@ -18,7 +18,7 @@
     &__sidebar {
         width: 250px;
         flex-shrink: 0;
-        background-color: #1e1e1e;
+        background-color: $primary-color;
         border-radius: 10px;
         padding: 15px;
         color: white;
@@ -67,6 +67,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        border-radius: 30px;
+
+        &>* {
+            border-radius: 30px;
+        }
     }
 
     // ❤️ Like positionné en haut à gauche de l’image
@@ -137,6 +142,7 @@
 
     &__share {
         display: flex;
+        justify-content: center;
         gap: 10px;
     }
 

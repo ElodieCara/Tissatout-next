@@ -93,7 +93,11 @@ export default function CreateCategoryPage() {
 
     return (
         <div className="admin-form">
-            <Breadcrumb />
+            <Breadcrumb
+                onThemeSelect={(theme) => console.log("Thème sélectionné:", theme)}
+                onSubCategorySelect={(subCategory) => console.log("Sous-catégorie sélectionnée:", subCategory)}
+            />
+
             <h2 className="admin-form__title">Ajouter une Catégorie/Section</h2>
 
             <button onClick={() => router.push("/admin/category")} className="admin-form__button admin-form__button--primary">

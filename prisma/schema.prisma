@@ -100,6 +100,9 @@ model DrawingCategory {
   children  DrawingCategory[] @relation(name: "CategoryHierarchy")
 
   drawings  Drawing[]
+
+  description String? 
+  iconSrc     String?
 }
 
 

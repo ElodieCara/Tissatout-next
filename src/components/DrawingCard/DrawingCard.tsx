@@ -60,6 +60,7 @@ export default function DrawingCard({
                         width={300}
                         height={200}
                         className="drawing-card__image"
+                        priority={true}
                     />
                 </div>
                 <div className="drawing-card__content">

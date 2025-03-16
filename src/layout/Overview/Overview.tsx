@@ -101,8 +101,8 @@ const Overview: React.FC = () => {
                         <Image
                             src={cardImage.src}
                             alt="Image de la section"
-                            layout="fill"
-                            objectFit="contain"
+                            fill
+                            sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                     </div>
                 </div>

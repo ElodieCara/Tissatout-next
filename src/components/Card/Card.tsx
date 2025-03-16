@@ -22,13 +22,13 @@ const Card: React.FC<CardProps> = ({ cover, title, content, date, type, category
             {/* ✅ Icône de catégorie en haut à gauche */}
             {iconSrc && (
                 <div className="card__icon">
-                    <Image src={iconSrc} alt={category || "Icône"} width={30} height={30} />
+                    <Image src={iconSrc} alt={category || "Icône"} width={30} height={30} priority={true} />
                 </div>
             )}
 
             {/* ✅ Image principale */}
             <div className="card__image">
-                <Image src={cover} alt={title} width={300} height={200} quality={100} />
+                <Image src={cover} alt={title} width={300} height={200} quality={100} priority={true} />
             </div>
 
             {/* ✅ Contenu de la carte */}

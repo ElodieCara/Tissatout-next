@@ -54,6 +54,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ images }) => {
                     width={50}
                     height={50}
                     onClick={prevSlide}
+                    priority={true}
                 />
                 <Image
                     className="container__slide__buttons__arrow--next"
@@ -62,6 +63,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ images }) => {
                     width={50}
                     height={50}
                     onClick={nextSlide}
+                    priority={true}
                 />
             </div>
             <div className="container__slide__pagination">

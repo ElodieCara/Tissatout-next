@@ -128,7 +128,11 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
 
     return (
         <div className="admin-form">
-            <Breadcrumb />
+            <Breadcrumb
+                onThemeSelect={(theme) => console.log("Thème sélectionné:", theme)}
+                onSubCategorySelect={(subCategory) => console.log("Sous-catégorie sélectionnée:", subCategory)}
+            />
+
             <h2>{articleId === "new" ? "Ajouter un Article" : "Modifier l'Article"}</h2>
             {message && <p className="admin-form__message">{message}</p>}
 

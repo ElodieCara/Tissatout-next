@@ -22,7 +22,10 @@ export default function AdminPage() {
 
     return (
         <div className="admin">
-            <Breadcrumb />
+            <Breadcrumb
+                onThemeSelect={(theme) => console.log("Thème sélectionné:", theme)}
+                onSubCategorySelect={(subCategory) => console.log("Sous-catégorie sélectionnée:", subCategory)}
+            />
             <nav className="admin__menu">
                 <button
                     onClick={() => handleSectionChange("articles")}

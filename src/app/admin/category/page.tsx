@@ -84,7 +84,10 @@ export default function AdminCategoryList() {
 
     return (
         <div className="admin">
-            <Breadcrumb />
+            <Breadcrumb
+                onThemeSelect={(theme) => console.log("Thème sélectionné:", theme)}
+                onSubCategorySelect={(subCategory) => console.log("Sous-catégorie sélectionnée:", subCategory)}
+            />
             <h2 className="admin__title">📂 Liste des sections et catégories</h2>
 
             <div className="admin__menu">
@@ -109,7 +112,7 @@ export default function AdminCategoryList() {
                                 <div className="admin__list-actions">
                                     <button
                                         className="admin__button admin__button--edit"
-                                        onClick={() => router.push(`/admin/section/edit/${sec.id}`)}
+                                        onClick={() => router.push(`/admin/category/edit/${sec.id}`)}
                                     >
                                         ✏️ Modifier
                                     </button>

@@ -38,6 +38,8 @@ export default function EditCategoryPage() {
     const categoryId = params.id as string;
 
     useEffect(() => {
+        console.log("📌 ID récupéré depuis `params` :", params?.id);
+
         async function fetchCategory() {
             try {
                 const res = await fetch(`/api/drawings/categories/${categoryId}`);
@@ -105,7 +107,11 @@ export default function EditCategoryPage() {
 
     return (
         <div className="admin">
-            <Breadcrumb />
+            <Breadcrumb
+                onThemeSelect={(theme) => console.log("Thème sélectionné:", theme)}
+                onSubCategorySelect={(subCategory) => console.log("Sous-catégorie sélectionnée:", subCategory)}
+            />
+
             <h2 >📝 Modifier la catégorie</h2>
             {message && <p className={`admin__message ${message.includes("✅") ? "admin__message--success" : "admin__message--error"}`}>{message}</p>}
 

@@ -13,13 +13,13 @@ export default function DrawingBreadcrumb({ category, drawingTitle }: DrawingBre
             <ul>
                 {/* Accueil */}
                 <li>
-                    <Link href="/">🏠 Accueil</Link>
+                    <Link href="/"> Accueil</Link>
                 </li>
                 <span className="breadcrumb__separator"> &gt; </span>
 
                 {/* Explorer */}
                 <li>
-                    <Link href="/coloriages">📚 Explorer</Link>
+                    <Link href="/coloriages"> Explorer</Link>
                 </li>
 
                 {/* Catégorie */}
@@ -28,7 +28,7 @@ export default function DrawingBreadcrumb({ category, drawingTitle }: DrawingBre
                         <span className="breadcrumb__separator"> &gt; </span>
                         <li>
                             <Link href={`/coloriages?categorie=${encodeURIComponent(category)}`}>
-                                📂 {category}
+                                {category}
                             </Link>
                         </li>
                     </>
@@ -38,7 +38,7 @@ export default function DrawingBreadcrumb({ category, drawingTitle }: DrawingBre
                 {drawingTitle && (
                     <>
                         <span className="breadcrumb__separator"> &gt; </span>
-                        <li className="active">🖼️ {drawingTitle}</li>
+                        <li className="active"> {drawingTitle}</li>
                     </>
                 )}
             </ul>
