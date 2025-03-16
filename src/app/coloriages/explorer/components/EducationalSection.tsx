@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import DrawingCard from "@/components/DrawingCard/DrawingCard";
 import { Drawing } from "@/types/drawing";
 
@@ -16,32 +15,11 @@ const categoriesData: Record<string, string[]> = {
     ]
 };
 
-export default function EducationalSection() {
-    const [educationalDrawings, setEducationalDrawings] = useState<Record<string, Drawing[]>>({});
+interface EducationalSectionProps {
+    educationalDrawings: Record<string, Drawing[]>;
+}
 
-    useEffect(() => {
-        const fetchEducationalDrawings = async () => {
-            const educationalCategory = "Éducatif & Trivium";
-            const subCategories = categoriesData[educationalCategory]?.slice(0, 3);
-
-            const newEducationalDrawings: Record<string, Drawing[]> = {};
-
-            try {
-                for (const subCategory of subCategories) {
-                    const res = await fetch(`/api/drawings?category=${encodeURIComponent(subCategory)}&sort=likes&limit=1`);
-                    const data = await res.json();
-                    newEducationalDrawings[subCategory] = data;
-                }
-
-                setEducationalDrawings(newEducationalDrawings);
-            } catch (error) {
-                console.error("❌ Erreur lors du fetch des dessins éducatifs :", error);
-            }
-        };
-
-        fetchEducationalDrawings();
-    }, []);
-
+export default function EducationalSection({ educationalDrawings }: EducationalSectionProps) {
     return (
         <div className="educational-section">
             <h2>🧠 Apprendre en s'amusant</h2>

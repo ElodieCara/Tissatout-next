@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Drawing } from "@/types/drawing";
 import Banner from "@/components/Banner/Banner";
 import Button from "@/components/Button/Button";
+import Breadcrumb from "@/app/admin/components/Breadcrumb";
+import DrawingBreadcrumb from "./components/DrawingBreadcrumb/DrawingBreadcrumb";
 
 export default function DrawingPage({ drawing }: { drawing: Drawing }) {
     const [localLikes, setLocalLikes] = useState<number>(drawing.likes);
@@ -75,6 +77,8 @@ export default function DrawingPage({ drawing }: { drawing: Drawing }) {
                 description="Trouvez des idées d'activités et des conseils adaptés à chaque saison et moment clé du développement !" />
 
             <div className="drawing-page">
+                <DrawingBreadcrumb category={drawing.category?.name} drawingTitle={drawing.title} />
+
                 <div className="drawing-page__header">
                     <h1 className="drawing-page__title">{drawing.title}</h1>
                     <p className="drawing-page__views">👀 {drawing.views} vues</p>

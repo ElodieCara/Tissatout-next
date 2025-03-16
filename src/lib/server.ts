@@ -39,25 +39,148 @@ export async function getDrawings(): Promise<Drawing[]> {
     }));
 }
 
-
 /** ✅ Récupère un coloriage spécifique par son ID */
 export async function getDrawingById(id: string): Promise<Drawing | null> {
-    console.log("🔍 Recherche du dessin avec l'ID :", id); // Vérifier que l’ID est bien reçu
+    console.log("🔍 Recherche du dessin avec l'ID :", id);
 
     try {
-        const drawing = await prisma.drawing.findUnique({
-            where: { id }, // PAS D'ObjectId ici, juste une chaîne de caractères
+        return await prisma.drawing.findUnique({
+            where: { id },
+            include: { category: true }, // ✅ Inclure la catégorie pour éviter les erreurs
         });
-
-        if (!drawing) {
-            console.error("❌ Prisma : Aucun dessin trouvé !");
-            return null;
-        }
-
-        console.log("✅ Prisma a trouvé :", drawing);
-        return drawing;
     } catch (error) {
         console.error("❌ Erreur Prisma :", error);
         return null;
     }
+}
+
+/** ✅ Récupère des dessins similaires */
+export async function getSimilarDrawings(category: string, currentId: string, limit: number = 4) {
+    return prisma.drawing.findMany({
+        where: {
+            category: { name: category },
+            id: { not: currentId }
+        },
+        include: { category: true },
+        orderBy: { createdAt: "desc" },
+        take: limit,
+    });
+}
+
+/** ✅ Récupère toutes les catégories + leurs dessins */
+export async function getAllCategoriesWithDrawings() {
+    const categoriesData: Record<string, string[]> = {
+        "Saisons et Fêtes": ["Hiver", "Printemps", "Été", "Automne", "Noël", "Halloween", "Pâques"],
+        "Thèmes": ["Animaux", "Véhicules", "Espace", "Pirates"],
+        "Âge": ["Tout Petits (0-3 ans)", "Dès 3 ans", "Dès 6 ans", "Dès 10 ans"],
+        "Éducatif & Trivium": [
+            "Grammaire - Lettres", "Grammaire - Mots", "Grammaire - Chiffres",
+            "Logique - Puzzle", "Logique - Coloriages numérotés", "Logique - Labyrinthe",
+            "Rhétorique - Histoires", "Rhétorique - Mythologie", "Rhétorique - Philosophie"
+        ]
+    };
+
+    const drawings = await prisma.drawing.findMany({
+        include: { category: true },
+        orderBy: { createdAt: "desc" },
+    });
+
+    const drawingsByCategory: Record<string, Drawing[]> = {};
+    const topImages: Record<string, { imageUrl: string; likes: number }> = {};
+    const coloringCounts: Record<string, number> = {};
+
+    for (const drawing of drawings) {
+        if (!drawing.category?.name) continue;
+        const category = drawing.category.name;
+        if (!drawingsByCategory[category]) {
+            drawingsByCategory[category] = [];
+        }
+        drawingsByCategory[category].push(drawing);
+
+        if (!topImages[category] || drawing.likes > (topImages[category]?.likes ?? 0)) {
+            topImages[category] = { imageUrl: drawing.imageUrl, likes: drawing.likes ?? 0 };
+        }
+
+        coloringCounts[category] = (coloringCounts[category] || 0) + 1;
+    }
+
+    return { categoriesData, drawingsByCategory, topImages, coloringCounts };
+}
+
+/** ✅ Récupère les coloriages éducatifs (Trivium & Quadrivium) */
+export async function getEducationalDrawings(): Promise<Record<string, Drawing[]>> {
+    const categoriesData: Record<string, string[]> = {
+        "Éducatif & Trivium": [
+            "Grammaire - Lettres",
+            "Grammaire - Mots",
+            "Grammaire - Chiffres",
+            "Logique - Puzzle",
+            "Logique - Coloriages numérotés",
+            "Logique - Labyrinthe",
+            "Rhétorique - Histoires",
+            "Rhétorique - Mythologie",
+            "Rhétorique - Philosophie"
+        ]
+    };
+
+    const educationalCategory = "Éducatif & Trivium";
+    const subCategories = categoriesData[educationalCategory]?.slice(0, 3);
+
+    const educationalDrawings: Record<string, Drawing[]> = {};
+
+    for (const subCategory of subCategories) {
+        const drawings = await prisma.drawing.findMany({
+            where: { category: { name: subCategory } },
+            orderBy: { likes: "desc" },
+            take: 1, // ✅ Récupère uniquement le coloriage le plus aimé
+            include: { category: true }
+        });
+
+        educationalDrawings[subCategory] = drawings.map(d => ({
+            id: d.id,
+            title: d.title,
+            imageUrl: d.imageUrl,
+            views: d.views ?? 0,
+            likes: d.likes ?? 0,
+            category: d.category ? { name: d.category.name } : undefined
+        }));
+    }
+
+    return educationalDrawings;
+}
+
+/** ✅ Récupère les coloriages les plus likés */
+export async function getTopLikedDrawings(limit: number = 4): Promise<Drawing[]> {
+    const drawings = await prisma.drawing.findMany({
+        orderBy: { likes: "desc" }, // ✅ Trie par nombre de likes décroissant
+        take: limit, // ✅ Prend les X premiers dessins les plus aimés
+        include: { category: true },
+    });
+
+    return drawings.map(d => ({
+        id: d.id,
+        title: d.title,
+        imageUrl: d.imageUrl,
+        views: d.views ?? 0,
+        likes: d.likes ?? 0,
+        category: d.category ? { name: d.category.name } : undefined,
+    }));
+}
+
+/** ✅ Récupère les dessins les plus vus */
+export async function getTrendingDrawings(limit: number = 4): Promise<Drawing[]> {
+    const drawings = await prisma.drawing.findMany({
+        orderBy: { views: "desc" }, // ✅ Trie par nombre de vues décroissant
+        take: limit, // ✅ Prend les X premiers dessins les plus vus
+        include: { category: true }, // ✅ Inclut la catégorie pour éviter les erreurs TypeScript
+    });
+
+    return drawings.map(d => ({
+        id: d.id,
+        title: d.title,
+        imageUrl: d.imageUrl,
+        views: d.views ?? 0,
+        likes: d.likes ?? 0,
+        category: d.category ? { name: d.category.name } : undefined,
+    }));
 }

@@ -5,7 +5,7 @@ export interface Drawing {
     views: number;
     category?: {
         name: string;
-    };
+    } | null;
     likes: number;
 }
 
