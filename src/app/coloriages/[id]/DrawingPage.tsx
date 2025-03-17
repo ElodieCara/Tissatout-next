@@ -19,7 +19,7 @@ export default function DrawingPage({ drawing }: { drawing: Drawing }) {
 
         try {
             const res = await fetch("/api/drawings/like", {
-                method: "PUT",
+                method: "PUT", // ✅ Correspond maintenant à l'API
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id: drawing.id }),
             });
@@ -33,6 +33,7 @@ export default function DrawingPage({ drawing }: { drawing: Drawing }) {
             console.error("❌ Erreur lors du like :", error);
         }
     };
+
 
     /** ✅ Télécharger l'image */
     const handleDownload = () => {

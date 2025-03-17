@@ -1,25 +1,21 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== "POST") {
-        return res.status(405).json({ error: "Méthode non autorisée" });
-    }
-
-    const { id } = req.body;
-    if (!id) {
-        return res.status(400).json({ error: "ID du coloriage requis" });
-    }
-
+export async function PUT(req: Request) {
     try {
+        const { id } = await req.json();
+        if (!id) {
+            return NextResponse.json({ error: "ID du coloriage requis" }, { status: 400 });
+        }
+
         const updatedDrawing = await prisma.drawing.update({
             where: { id },
-            data: { likes: { increment: 1 } }, // ✅ Correction ici
+            data: { likes: { increment: 1 } }, // ✅ Incrémente le like
         });
 
-        return res.status(200).json(updatedDrawing);
+        return NextResponse.json({ likes: updatedDrawing.likes }, { status: 200 });
     } catch (error) {
-        console.error("❌ Erreur lors du like :", error);
-        return res.status(500).json({ error: "Erreur interne du serveur" });
+        console.error("❌ Erreur API Like :", error);
+        return NextResponse.json({ error: "Erreur interne du serveur" }, { status: 500 });
     }
 }
