@@ -44,8 +44,9 @@ export async function getDrawingById(id: string): Promise<Drawing | null> {
     console.log("🔍 Recherche du dessin avec l'ID :", id);
 
     try {
-        return await prisma.drawing.findUnique({
+        return await prisma.drawing.update({
             where: { id },
+            data: { views: { increment: 1 } },
             include: { category: true }, // ✅ Inclure la catégorie pour éviter les erreurs
         });
     } catch (error) {
