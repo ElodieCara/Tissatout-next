@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Drawing } from "@/types/drawing";
@@ -10,16 +10,40 @@ import Breadcrumb from "@/app/admin/components/Breadcrumb";
 import DrawingBreadcrumb from "./components/DrawingBreadcrumb/DrawingBreadcrumb";
 
 export default function DrawingPage({ drawing }: { drawing: Drawing }) {
-    const [localLikes, setLocalLikes] = useState<number>(drawing.likes);
+    const [localLikes, setLocalLikes] = useState<number>(drawing.likes ?? 0);
     const [liked, setLiked] = useState(false);
+    const [pageUrl, setPageUrl] = useState<string | null>(null);
+
+    // ✅ Vérification si on est côté client avant d'utiliser window
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setPageUrl(window.location.href);
+        }
+    }, []);
+
+    useEffect(() => {
+        const storedLikes = localStorage.getItem(`drawing_likes_${drawing.id}`);
+        if (storedLikes) {
+            setLocalLikes(storedLikes ? parseInt(storedLikes, 10) : 0);
+            setLiked(true);
+        }
+    }, [drawing.id]);
 
     /** ✅ Fonction de Like */
     const handleLike = async () => {
         if (liked) return;
 
         try {
+            // Mise à jour optimiste
+            const newLikes = localLikes + 1;
+            setLocalLikes(newLikes);
+            setLiked(true);
+
+            // Sauvegarde dans localStorage
+            localStorage.setItem(`drawing_likes_${drawing.id}`, newLikes.toString());
+
             const res = await fetch("/api/drawings/like", {
-                method: "PUT", // ✅ Correspond maintenant à l'API
+                method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id: drawing.id }),
             });
@@ -27,8 +51,11 @@ export default function DrawingPage({ drawing }: { drawing: Drawing }) {
             if (!res.ok) throw new Error("Échec du like");
 
             const data = await res.json();
+            console.log("Réponse API like:", data);
+
+            // Mettre à jour avec la valeur réelle
             setLocalLikes(data.likes);
-            setLiked(true);
+            localStorage.setItem(`drawing_likes_${drawing.id}`, data.likes.toString());
         } catch (error) {
             console.error("❌ Erreur lors du like :", error);
         }
@@ -106,15 +133,15 @@ export default function DrawingPage({ drawing }: { drawing: Drawing }) {
                         <Button className="large" variant="secondary" onClick={handleDownload}>⬇️ Télécharger</Button>
 
                         <div className="drawing-page__share">
-                            <Link href={`https://www.pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.href)}`} target="_blank">
+                            <Link href={`https://www.pinterest.com/pin/create/button/?url=${pageUrl ? encodeURIComponent(pageUrl) : ''}`} target="_blank">
                                 <Image src="/icons/sociale.png" alt="Pinterest" width={32} height={32} />
                             </Link>
 
-                            <Link href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`} target="_blank">
+                            <Link href={`https://www.facebook.com/sharer/sharer.php?u=${pageUrl ? encodeURIComponent(pageUrl) : ''}`} target="_blank">
                                 <Image src="/icons/facebook.png" alt="Facebook" width={32} height={32} />
                             </Link>
 
-                            <Link href={`mailto:?subject=Regarde ce coloriage !&body=${encodeURIComponent(window.location.href)}`}>
+                            <Link href={`mailto:?subject=Regarde ce coloriage !&body=${pageUrl ? encodeURIComponent(pageUrl) : ''}`}>
                                 <Image src="/icons/email.png" alt="Email" width={32} height={32} />
                             </Link>
                         </div>
