@@ -7,5 +7,6 @@ export interface Drawing {
         name: string;
     } | null;
     likes: number;
+    slug?: string;
 }
 

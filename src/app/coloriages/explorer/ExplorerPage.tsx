@@ -13,6 +13,7 @@ import EducationalSection from "./components/EducationalSection";
 import SeasonalHighlights from "./components/SeasonalHightlights";
 import Breadcrumb from "@/app/admin/components/Breadcrumb";
 import { Drawing } from "@/types/drawing";
+import { generateSlug } from "@/lib/utils";
 
 interface ExplorerPageProps {
     educationalDrawings: Record<string, Drawing[]>;
@@ -112,6 +113,7 @@ export default function ExplorerPage({
                                             theme={drawing.title}
                                             views={drawing.views ?? 0}
                                             likeCount={drawing.likes ?? 0}
+                                            slug={drawing.slug ?? generateSlug(drawing.title, drawing.id)}
                                         />
                                     ))
                                 ) : (

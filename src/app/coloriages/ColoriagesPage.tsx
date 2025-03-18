@@ -5,6 +5,7 @@ import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
 import Banner from "@/components/Banner/Banner";
 import DrawingCard from "@/components/DrawingCard/DrawingCard";
 import { Drawing } from "@/types/drawing";
+import { generateSlug } from "@/lib/utils";
 
 
 // 🎯 Gestion des catégories et sous-catégories
@@ -77,7 +78,14 @@ export default function ColoriagePage({ drawings }: { drawings: Drawing[] }) {
                             .filter(d => d.category?.name === currentSeason)
                             .slice(0, 4)
                             .map(drawing => (
-                                <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likeCount={drawing.likes ?? 0} />
+                                <DrawingCard
+                                    key={drawing.id}
+                                    id={drawing.id}
+                                    imageUrl={drawing.imageUrl}
+                                    theme={drawing.title}
+                                    views={drawing.views ?? 0}
+                                    likeCount={drawing.likes ?? 0}
+                                    slug={drawing.slug || generateSlug(drawing.title, drawing.id)} />
                             ))}
                     </div>
                 </section>
@@ -93,7 +101,7 @@ export default function ColoriagePage({ drawings }: { drawings: Drawing[] }) {
                                     .filter(d => d.category?.name === theme)
                                     .slice(0, 4)
                                     .map(drawing => (
-                                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likeCount={drawing.likes ?? 0} />
+                                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likeCount={drawing.likes ?? 0} slug={drawing.slug || generateSlug(drawing.title, drawing.id)} />
                                     ))}
                             </div>
                         </div>
@@ -111,7 +119,7 @@ export default function ColoriagePage({ drawings }: { drawings: Drawing[] }) {
                                     .filter(d => d.category?.name === category)
                                     .slice(0, 4)
                                     .map(drawing => (
-                                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likeCount={drawing.likes ?? 0} />
+                                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likeCount={drawing.likes ?? 0} slug={drawing.slug || generateSlug(drawing.title, drawing.id)} />
                                     ))}
                             </div>
                         </div>
@@ -139,6 +147,7 @@ export default function ColoriagePage({ drawings }: { drawings: Drawing[] }) {
                                                 theme={drawing.title}
                                                 views={drawing.views ?? 0}
                                                 likeCount={drawing.likes ?? 0}
+                                                slug={drawing.slug || generateSlug(drawing.title, drawing.id)}
                                             />
                                         ))
                                     ) : (

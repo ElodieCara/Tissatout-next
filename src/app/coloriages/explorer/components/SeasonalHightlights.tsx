@@ -1,6 +1,7 @@
 import React from "react";
 import DrawingCard from "@/components/DrawingCard/DrawingCard";
 import { Drawing } from "@/types/drawing";
+import { generateSlug } from "@/lib/utils";
 
 interface SeasonalHighlightsProps {
     showViews?: boolean;
@@ -31,6 +32,7 @@ const SeasonalHighlights: React.FC<SeasonalHighlightsProps> = ({
                             showButton={false}
                             showViews={showViews}
                             showLikes={showLikes}
+                            slug={drawing.slug || generateSlug(drawing.title, drawing.id)}
                         />
                     ))
                 ) : (

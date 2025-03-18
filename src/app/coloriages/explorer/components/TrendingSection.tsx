@@ -1,6 +1,7 @@
 import React from "react";
 import DrawingCard from "@/components/DrawingCard/DrawingCard";
 import { Drawing } from "@/types/drawing";
+import { generateSlug } from "@/lib/utils";
 
 interface TrendingSectionProps {
     trendingDrawings: Drawing[];
@@ -29,6 +30,7 @@ const TrendingSection: React.FC<TrendingSectionProps> = ({
                             showButton={false}
                             showViews={showViews}
                             showLikes={showLikes}
+                            slug={drawing.slug || generateSlug(drawing.title, drawing.id)}
                         />
                     ))
                 ) : (

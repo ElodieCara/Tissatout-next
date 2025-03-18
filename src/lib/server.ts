@@ -35,6 +35,7 @@ export async function getDrawings(): Promise<Drawing[]> {
         imageUrl: d.imageUrl,
         views: d.views ?? 0,
         likes: d.likes ?? 0,
+        slug: d.slug ?? "",
         category: d.category ? { name: d.category.name } : undefined,
     }));
 }
@@ -143,6 +144,7 @@ export async function getEducationalDrawings(): Promise<Record<string, Drawing[]
             imageUrl: d.imageUrl,
             views: d.views ?? 0,
             likes: d.likes ?? 0,
+            slug: d.slug ?? "",
             category: d.category ? { name: d.category.name } : undefined
         }));
     }
@@ -165,6 +167,7 @@ export async function getTopLikedDrawings(limit: number = 4): Promise<Drawing[]>
         views: d.views ?? 0,
         likes: d.likes ?? 0,
         category: d.category ? { name: d.category.name } : undefined,
+        slug: d.slug ?? "",
     }));
 }
 
@@ -182,6 +185,34 @@ export async function getTrendingDrawings(limit: number = 4): Promise<Drawing[]>
         imageUrl: d.imageUrl,
         views: d.views ?? 0,
         likes: d.likes ?? 0,
+        slug: d.slug ?? "",
         category: d.category ? { name: d.category.name } : undefined,
     }));
 }
+
+/** ✅ Récupère un coloriage spécifique par son SLUG */
+export async function getDrawingBySlug(slug: string): Promise<Drawing | null> {
+    console.log("🔍 Recherche du dessin avec le SLUG :", slug);
+
+    try {
+        // Étape 1 : Trouver le dessin via le SLUG
+        const drawing = await prisma.drawing.findUnique({
+            where: { slug }, // ✅ Vérifie que slug est bien unique
+            include: { category: true }, // ✅ Inclure la catégorie pour éviter les erreurs
+        });
+
+        if (!drawing) return null; // ❌ Ne pas faire d'update si le dessin n'existe pas
+
+        // Étape 2 : Incrémenter les vues
+        await prisma.drawing.update({
+            where: { id: drawing.id }, // ✅ On met à jour avec l'ID (toujours unique)
+            data: { views: { increment: 1 } }, // ✅ Incrémente les vues
+        });
+
+        return drawing; // ✅ Retourne le dessin mis à jour
+    } catch (error) {
+        console.error("❌ Erreur Prisma :", error);
+        return null;
+    }
+}
+

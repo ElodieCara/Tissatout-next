@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"; // ✅ Récupère l'URL actuelle
 
 interface DrawingCardProps {
     id: string;
+    slug: string;
     imageUrl: string;
     theme: string;
     views?: number;
@@ -16,6 +17,7 @@ interface DrawingCardProps {
 
 export default function DrawingCard({
     id,
+    slug,
     imageUrl,
     theme,
     views = 0,
@@ -27,8 +29,11 @@ export default function DrawingCard({
     const [localLikeCount, setLocalLikeCount] = useState(likeCount);
     const [liked, setLiked] = useState(false);
     const pathname = usePathname(); // ✅ Récupère l'URL actuelle
-    const isDetailPage = pathname === `/coloriages/${id}`; // ✅ Vérifie si c'est la page détaillée
+    console.log("🔍 URL actuelle :", pathname); // ✅ Debug
 
+    const truncatedId = id.substring(0, 6);
+    const pageSlug = `${slug}-${truncatedId}`;
+    const isDetailPage = pathname === `/coloriages/${pageSlug}`;
     const handleLike = async (e: React.MouseEvent) => {
         e.preventDefault(); // 🔥 Empêche le clic sur la carte de changer de page
 
@@ -53,7 +58,7 @@ export default function DrawingCard({
 
     return (
         <div className="drawing-card">
-            <Link href={`/coloriages/${id}`}>
+            <Link href={`/coloriages/${pageSlug}`}>
                 <div className="drawing-card__image-link">
                     <Image
                         src={imageUrl}
@@ -80,7 +85,7 @@ export default function DrawingCard({
                 </button>
             )}
             {showButton && (
-                <Link href={`/coloriages/${id}`} legacyBehavior>
+                <Link href={`/coloriages/${pageSlug}`} legacyBehavior>
                     <a className="drawing-button">Voir le coloriage</a>
                 </Link>
             )}

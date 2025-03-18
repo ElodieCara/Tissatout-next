@@ -1,5 +1,6 @@
 import DrawingCard from "@/components/DrawingCard/DrawingCard";
 import { Drawing } from "@/types/drawing";
+import { generateSlug } from "@/lib/utils";
 
 const categoriesData: Record<string, string[]> = {
     "Éducatif & Trivium": [
@@ -36,6 +37,7 @@ export default function EducationalSection({ educationalDrawings }: EducationalS
                             views={drawings[0]?.views ?? 0}
                             likeCount={drawings[0]?.likes ?? 0}
                             showButton={false}
+                            slug={drawings[0].slug || generateSlug(drawings[0].title, drawings[0].id)}
                         />
                     )
                 ))}
