@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // ✅ Récupère l'URL actuelle
 
 interface DrawingCardProps {
     id: string;
@@ -25,11 +26,13 @@ export default function DrawingCard({
 }: DrawingCardProps) {
     const [localLikeCount, setLocalLikeCount] = useState(likeCount);
     const [liked, setLiked] = useState(false);
+    const pathname = usePathname(); // ✅ Récupère l'URL actuelle
+    const isDetailPage = pathname === `/coloriages/${id}`; // ✅ Vérifie si c'est la page détaillée
 
     const handleLike = async (e: React.MouseEvent) => {
         e.preventDefault(); // 🔥 Empêche le clic sur la carte de changer de page
 
-        if (liked) return; // 🔥 Évite le spam de clics
+        if (liked || !isDetailPage) return; // 🔥 Bloque le like si ce n'est pas la page détaillée
 
         try {
             const res = await fetch("/api/drawings/like", {
@@ -48,9 +51,7 @@ export default function DrawingCard({
         }
     };
 
-
     return (
-
         <div className="drawing-card">
             <Link href={`/coloriages/${id}`}>
                 <div className="drawing-card__image-link">
@@ -73,6 +74,7 @@ export default function DrawingCard({
                 <button
                     className={`drawing-card__like-button ${liked ? "liked" : ""}`}
                     onClick={handleLike}
+                    disabled={!isDetailPage} // ✅ Désactive le bouton en dehors de la page détaillée
                 >
                     ❤️ {localLikeCount}
                 </button>
@@ -82,8 +84,6 @@ export default function DrawingCard({
                     <a className="drawing-button">Voir le coloriage</a>
                 </Link>
             )}
-
-
         </div>
     );
 }
