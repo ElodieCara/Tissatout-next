@@ -10,14 +10,15 @@ generator client {
 model Article {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
+  slug        String   @unique   // 🔥 Slug unique pour le SEO
   content     String
   image       String?  // URL de l’image
   iconSrc     String?  // URL de l'icône de la catégorie
   category    String?
   tags        String[] // Tableau de tags (stocké sous forme de JSON)
-  author      String?
+  author      String?  
   description String?
-  date        DateTime?
+  date        DateTime @default(now()) // Date par défaut à la création
 }
 
 model Idea {

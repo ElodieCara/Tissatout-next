@@ -221,8 +221,8 @@ export default function HomeContent({ articles }: { articles: Article[] }) {
                 </div>
             </section>
 
-
             <Subscribe />
         </>
     );
 }
+

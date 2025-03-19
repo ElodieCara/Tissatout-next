@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useState } from "react";
+
 import Link from "next/link";
 import Image from "next/image";
+import { getArticles } from "@/lib/articles";
 
 interface Article {
     id: string;
@@ -12,18 +13,8 @@ interface Article {
     date?: string;
 }
 
-export default function ArticlesPage() {
-    const [articles, setArticles] = useState<Article[]>([]);
-
-    useEffect(() => {
-        fetch("/api/articles")
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("📥 Articles reçus depuis l'API :", data); // ✅ Vérifie ce que le serveur renvoie
-                setArticles(data);
-            })
-            .catch((err) => console.error("❌ Erreur API :", err));
-    }, []);
+export default async function ArticlesPage() {
+    const articles = await getArticles(); // 🔥 Chargement côté serveur
 
     return (
         <main className="container">
@@ -39,7 +30,7 @@ export default function ArticlesPage() {
                             <p className="article-card__content">
                                 {article.description || article.content.substring(0, 100) + "..."}
                             </p>
-                            <p className="article-card__date">{article.date || "Date inconnue"}</p>
+                            <p className="article-card__date">{article.date ? new Date(article.date).toLocaleDateString("fr-FR") : "Date inconnue"}</p>
                         </Link>
                     ))
                 ) : (

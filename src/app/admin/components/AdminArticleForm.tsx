@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Breadcrumb from "./Breadcrumb";
+import { generateSlug } from "@/lib/utils";
 
 // 🎨 Icônes associées aux catégories
 const categoryIcons: Record<string, string> = {
@@ -14,6 +15,7 @@ const categoryIcons: Record<string, string> = {
 
 interface Article {
     id?: string;
+    slug?: string;
     title: string;
     content: string;
     image?: string;
@@ -112,10 +114,17 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         const method = articleId && articleId !== "new" ? "PUT" : "POST";
         const url = articleId && articleId !== "new" ? `/api/articles/${articleId}` : "/api/articles";
 
+        let payload = { ...form };
+
+        // 🔥 Si c'est un nouvel article, générer un slug
+        if (articleId === "new") {
+            payload.slug = generateSlug(form.title, crypto.randomUUID());
+        }
+
         const res = await fetch(url, {
             method,
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(form),
+            body: JSON.stringify(payload),
         });
 
         if (res.ok) {
