@@ -13,9 +13,11 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
         title: "",
         description: "",
         image: "",
-        theme: ""
+        theme: "",
+        ageCategories: [] as string[],
     });
     const [message, setMessage] = useState("");
+    const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
     const router = useRouter();
 
     // Charger les données de l'idée si un `ideaId` est passé
@@ -23,14 +25,40 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
         if (ideaId) {
             fetch(`/api/ideas/${ideaId}`)
                 .then((res) => res.json())
-                .then((data) => setForm(data))
+                .then((data) => {
+                    setForm({
+                        ...data,
+                        ageCategories: data.ageCategories?.map((ac: any) => ac.ageCategory.id) || [],
+                    });
+                })
                 .catch(() => setMessage("❌ Erreur lors du chargement de l'idée."));
         }
+
+        // Charger toutes les catégories d'âge disponibles
+        fetch("/api/ageCategories")
+            .then(res => res.json())
+            .then(data => {
+                console.log("📥 Catégories d'âge reçues :", data);
+                setAgeCategories(data);
+            });
     }, [ideaId]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
+    };
+
+    // ✅ Gérer la sélection des catégories d'âge
+    const handleAgeCategoryChange = (id: string) => {
+        setForm((prev) => {
+            const alreadySelected = prev.ageCategories.includes(id);
+            return {
+                ...prev,
+                ageCategories: alreadySelected
+                    ? prev.ageCategories.filter((ageId) => ageId !== id) // Décocher
+                    : [...prev.ageCategories, id], // Cocher
+            };
+        });
     };
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +140,24 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                     />
                     <p>{form.description.length} / 150 caractères</p>
                 </div>
+
+                {/* ✅ Sélection des catégories d'âge */}
+                <div className="admin-form__group">
+                    <label>📌 Âges concernés :</label>
+                    <div className="checkbox-group">
+                        {ageCategories.map((age) => (
+                            <label key={age.id} className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={form.ageCategories.includes(age.id)}
+                                    onChange={() => handleAgeCategoryChange(age.id)}
+                                />
+                                {age.title}
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
                 <div className="admin-form__upload">
                     <label htmlFor="imageUpload">📸 Image</label>
                     <input type="file" id="imageUpload" accept="image/*" onChange={handleImageUpload} />
