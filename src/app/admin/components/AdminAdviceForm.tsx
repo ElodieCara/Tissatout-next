@@ -10,6 +10,7 @@ interface Advice {
     category: string;
     description?: string;
     imageUrl?: string;
+    ageCategories?: string[];
 }
 
 export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
@@ -19,10 +20,12 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
         category: "",
         description: "",
         imageUrl: "",
+        ageCategories: [],
     });
 
     const [message, setMessage] = useState("");
     const router = useRouter();
+    const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
 
     // 🟢 Charger les données en modification
     useEffect(() => {
@@ -30,16 +33,40 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
             fetch(`/api/advice/${adviceId}`)
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log("📥 Conseil reçu :", data);
-                    setForm(data);
+                    setForm({
+                        ...data,
+                        ageCategories: data.ageCategories?.map((ac: any) => ac.ageCategory.id) || [],
+                    });
                 })
                 .catch(() => setMessage("❌ Impossible de charger le conseil."));
         }
+
+        // Charger toutes les catégories d'âge disponibles
+        fetch("/api/ageCategories")
+            .then(res => res.json())
+            .then(data => {
+                console.log("📥 Catégories d'âge reçues :", data);
+                setAgeCategories(data);
+            });
+
     }, [adviceId]);
 
     // 🟡 Gestion des changements dans le formulaire
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    // ✅ Gérer la sélection des âges
+    const handleAgeCategoryChange = (id: string) => {
+        setForm((prev) => {
+            const alreadySelected = prev.ageCategories?.includes(id);
+            return {
+                ...prev,
+                ageCategories: alreadySelected
+                    ? prev.ageCategories?.filter((ageId) => ageId !== id) // Décocher
+                    : [...(prev.ageCategories || []), id], // Cocher
+            };
+        });
     };
 
     // 📸 Gérer l'upload d'image COMME AVANT
@@ -117,6 +144,23 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
                         <option value="harmonie">🎶 Harmonie & Discipline</option>
                         <option value="eloquence">🏰 Rhétorique & Expression</option>
                     </select>
+                </div>
+
+                {/* ✅ Sélection des catégories d'âge */}
+                <div className="admin-form__group">
+                    <label>📌 Âges concernés :</label>
+                    <div className="checkbox-group">
+                        {ageCategories.map((age) => (
+                            <label key={age.id} className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={form.ageCategories?.includes(age.id)}
+                                    onChange={() => handleAgeCategoryChange(age.id)}
+                                />
+                                {age.title}
+                            </label>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="admin-form__upload">
