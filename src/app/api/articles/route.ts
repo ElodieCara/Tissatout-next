@@ -6,29 +6,12 @@ import { generateSlug } from "@/lib/utils";
 export async function GET() {
     try {
         const articles = await prisma.article.findMany({
-            orderBy: {
-                date: "desc", // Tri par date décroissante (le plus récent en premier)
-            },
+            orderBy: { date: "desc" },
         });
 
-        console.log("📤 Articles envoyés :", articles);
-
-        // ✅ Formater la date avant d'envoyer les articles
-        const formattedArticles = articles.map(article => ({
-            ...article,
-            date: article.date
-                ? new Date(article.date).toLocaleDateString("fr-FR", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                })
-                : "Date inconnue",
-        }));
-
-        return NextResponse.json(formattedArticles);
+        return NextResponse.json(articles);
     } catch (error) {
-        console.error("❌ Erreur lors de la récupération des articles :", error);
-        return NextResponse.json({ error: "Erreur serveur", details: (error as Error).message }, { status: 500 });
+        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
 
@@ -38,40 +21,40 @@ export async function POST(req: Request) {
         const body = await req.json();
         console.log("📥 Données reçues :", body);
 
-        // ✅ Vérifier si `body` est un tableau ou un objet unique
-        const articles = Array.isArray(body) ? body : [body];
-
-        // ✅ Vérifier que chaque article a bien `title`, `content`, `category`, `author`
-        for (const article of articles) {
-            if (!article.title || !article.content || !article.category || !article.author) {
-                return NextResponse.json({ message: "❌ Titre, contenu, catégorie et auteur requis" }, { status: 400 });
-            }
+        // ✅ Vérifier que tous les champs requis sont là
+        if (!body.title || !body.content || !body.category || !body.author) {
+            return NextResponse.json({ message: "❌ Titre, contenu, catégorie et auteur requis" }, { status: 400 });
         }
 
-        // ✅ Insérer plusieurs articles avec génération automatique du slug
-        const newArticles = await prisma.$transaction(
-            articles.map(article => {
-                const slug = generateSlug(article.title, crypto.randomUUID()); // ✅ Génère un slug unique
-                return prisma.article.create({
-                    data: {
-                        title: article.title,
-                        slug, // ✅ Ajout du slug généré
-                        content: article.content,
-                        image: article.image || null,
-                        iconSrc: article.iconSrc || "/icons/default.png",
-                        category: article.category,
-                        tags: article.tags || [],
-                        author: article.author, // Vérifie que c'est bien un `authorId` attendu
-                        description: article.description || null,
-                        date: article.date ? new Date(article.date) : new Date(), // ✅ Ajoute une date par défaut
-                    },
-                });
-            })
-        );
+        // ✅ Générer un slug unique
+        const slug = generateSlug(body.title, crypto.randomUUID());
 
-        return NextResponse.json({ message: "✅ Articles créés", count: newArticles.length }, { status: 201 });
+        // ✅ Insérer l'article
+        const newArticle = await prisma.article.create({
+            data: {
+                title: body.title,
+                slug,
+                content: body.content,
+                image: body.image || null,
+                iconSrc: body.iconSrc || "/icons/default.png",
+                category: body.category,
+                tags: body.tags || [],
+                author: body.author,
+                description: body.description || null,
+                date: body.date ? new Date(body.date) : new Date(),
+
+                // 🔥 Relier les âges SANS DUPLICATA
+                ageCategories: {
+                    create: body.ageCategories.map((ageCategoryId: string) => ({
+                        ageCategory: { connect: { id: ageCategoryId } },
+                    })),
+                },
+            },
+        });
+
+        return NextResponse.json(newArticle, { status: 201 });
     } catch (error) {
-        console.error("❌ Erreur lors de la création des articles :", error);
+        console.error("❌ Erreur lors de la création de l'article :", error);
         return NextResponse.json({ message: "Erreur serveur", error: (error as Error).message }, { status: 500 });
     }
 }

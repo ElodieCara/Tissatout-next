@@ -34,6 +34,7 @@ export const sections: Section[] = [
         color: "#ECAC3E",
         buttonImage: Btntp,
         imageCard: Tp,
+        slug: "tout-petits",
         content: "Tout-petits : éveil et magie des premiers moments 🎨✨",
         description: "Plongez avec votre enfant dans un univers d’éveil tout en douceur. 🌟 Découvrez des activités pensées pour stimuler sa curiosité et développer ses sens :",
         activities: [
@@ -53,6 +54,7 @@ export const sections: Section[] = [
         color: "rgb(2 141 2)",
         buttonImage: BtnD3,
         imageCard: D3,
+        slug: "des-3-ans",
         content: "Dès 3 ans : créativité et premières découvertes 🌈",
         description: "Accompagnez votre enfant dans ses premières aventures créatives et éducatives :",
         activities: [
@@ -72,6 +74,7 @@ export const sections: Section[] = [
         color: "#CF000F",
         buttonImage: BtnD6,
         imageCard: D6,
+        slug: "des-6-ans",
         content: "Dès 6 ans : exploration et autonomie 🚀",
         description: "Place à l’imagination débordante et aux premières explorations ! Votre enfant pourra :",
         activities: [
@@ -91,6 +94,7 @@ export const sections: Section[] = [
         color: "#0066D5",
         buttonImage: BtnD8,
         imageCard: D8,
+        slug: "des-10-ans",
         content: "Dès 10 ans : création et défis stimulants 🧠🎨",
         description: "Pour les esprits curieux et les créateurs en herbe, découvrez des activités captivantes :",
         activities: [
@@ -120,12 +124,12 @@ export const sections: Section[] = [
 //     { id: 8, image: N1, title: "exemple 8", iconSrc: ABC, description: "dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", date: "11/11/11" },
 // ];
 
-export const ideas: Idea[] = [
-    { id: 1, image: N1, title: "Titre", description: "Lorem ipsum" },
-    { id: 2, image: N2, title: "Titre", description: "Lorem ipsum" },
-    { id: 3, image: N3, title: "Titre", description: "Lorem ipsum" },
-    { id: 4, image: N2, title: "Titre", description: "Lorem ipsum" },
-];
+// export const ideas: Idea[] = [
+//     { id: 1, image: N1, title: "Titre", description: "Lorem ipsum" },
+//     { id: 2, image: N2, title: "Titre", description: "Lorem ipsum" },
+//     { id: 3, image: N3, title: "Titre", description: "Lorem ipsum" },
+//     { id: 4, image: N2, title: "Titre", description: "Lorem ipsum" },
+// ];
 
 
 

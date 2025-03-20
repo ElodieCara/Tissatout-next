@@ -25,6 +25,7 @@ interface Article {
     author: string;
     description?: string;
     date?: string;
+    ageCategories?: string[];
 }
 
 export default function AdminArticleForm({ articleId }: { articleId?: string }) {
@@ -37,11 +38,15 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         tags: [],
         author: "",
         description: "",
-        date: ""
+        date: "",
+        ageCategories: [],
     });
 
     const [message, setMessage] = useState("");
     const router = useRouter();
+    const [selectedAges, setSelectedAges] = useState<string[]>([]);
+    const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
+
 
     // 🟢 Charger l'article en modification
     useEffect(() => {
@@ -59,10 +64,21 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                         tags: data.tags || [],
                         author: data.author || "",
                         description: data.description || "",
-                        date: data.date ? data.date.substring(0, 10) : "" // ✅ Formatage de la date
+                        date: data.date ? data.date.substring(0, 10) : "", // ✅ Formatage de la date
+                        ageCategories: data.ageCategories?.map((ac: any) => ac.ageCategory.id) || [],
                     });
+                    setSelectedAges(data.ageCategories?.map((ac: any) => ac.ageCategory.id) || []);
                 });
         }
+
+        // 🟢 Charger toutes les catégories d'âge disponibles
+        fetch("/api/ageCategories")
+            .then(res => res.json())
+            .then(data => {
+                console.log("📥 Liste des catégories d'âge disponibles :", data);
+                setAgeCategories(data);
+            });
+
     }, [articleId]);
 
     // 🟡 Gérer les changements dans le formulaire
@@ -105,6 +121,12 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         }
     };
 
+    // ✅ Gérer la sélection des âges
+    const handleAgeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const values = Array.from(e.target.selectedOptions, (option) => option.value);
+        setSelectedAges(values);
+    };
+
     // 🟡 Gérer l'ajout ou la modification
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -114,7 +136,7 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         const method = articleId && articleId !== "new" ? "PUT" : "POST";
         const url = articleId && articleId !== "new" ? `/api/articles/${articleId}` : "/api/articles";
 
-        let payload = { ...form };
+        let payload = { ...form, ageCategoryIds: selectedAges };
 
         // 🔥 Si c'est un nouvel article, générer un slug
         if (articleId === "new") {
@@ -155,6 +177,31 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                     <label htmlFor="tags">Tags (séparés par des virgules)</label>
                     <input type="text" id="tags" name="tags" placeholder="Ex: 3-5 ans, 6-8 ans" value={form.tags?.join(", ") || ""} onChange={handleChange} />
                 </div>
+
+                {/*🧒 Sélection des âges concernés */}
+                <div className="admin-form__group">
+                    <label>Âges concernés :</label>
+                    <div className="checkbox-group">
+                        {ageCategories.map((age) => (
+                            <label key={age.id} className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    value={age.id}
+                                    checked={selectedAges.includes(age.id)}
+                                    onChange={(e) => {
+                                        const newSelectedAges = e.target.checked
+                                            ? [...selectedAges, age.id]
+                                            : selectedAges.filter((id) => id !== age.id);
+                                        setSelectedAges(newSelectedAges);
+                                        setForm({ ...form, ageCategories: newSelectedAges });
+                                    }}
+                                />
+                                {age.title}
+                            </label>
+                        ))}
+                    </div>
+                </div>
+
 
                 <div className="admin-form__group">
                     <label htmlFor="content">Contenu</label>
@@ -205,8 +252,8 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                         }}
                         maxLength={250} // ✅ Empêche de taper plus de 250 caractères
                     />
-                    <p>{form.description || "".length} / 150 caractères</p> {/* ✅ Affiche le compteur */}
-                    <input type="text" id="description" name="description" placeholder="Description" value={form.description} onChange={handleChange} />
+                    {/* <p>{form.description || "".length} / 150 caractères</p> {/* ✅ Affiche le compteur */}
+                    {/* <input type="text" id="description" name="description" placeholder="Description" value={form.description} onChange={handleChange} /> */}
                 </div>
 
                 <div className="admin-form__group">

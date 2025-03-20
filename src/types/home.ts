@@ -69,3 +69,9 @@ export interface Advice {
     category: string;
     imageUrl?: string;
 }
+
+export interface Section {
+    title: string;
+    description: string;
+    slug: string;  // ✅ Ajoute cette ligne ici !
+}

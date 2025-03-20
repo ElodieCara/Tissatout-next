@@ -10,15 +10,18 @@ generator client {
 model Article {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
-  slug        String   @unique   // 🔥 Slug unique pour le SEO
+  slug        String   @unique // 🔥 Slug unique pour le SEO
   content     String
-  image       String?  // URL de l’image
-  iconSrc     String?  // URL de l'icône de la catégorie
+  image       String? // URL de l’image
+  iconSrc     String? // URL de l'icône de la catégorie
   category    String?
   tags        String[] // Tableau de tags (stocké sous forme de JSON)
-  author      String?  
+  author      String?
   description String?
   date        DateTime @default(now()) // Date par défaut à la création
+
+  // ✅ Relation Many-to-Many gérée par un modèle pivot
+  ageCategories AgeCategoryArticle[]
 }
 
 model Idea {
@@ -29,25 +32,35 @@ model Idea {
   theme       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  // ✅ Relation Many-to-Many gérée par un modèle pivot
+  ageCategories AgeCategoryIdea[]
 }
 
 model AgeCategory {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  title     String   
-  slug      String   @unique
-  description String 
-  imageCard String   
-  imageBanner String 
-  activities Activity[]
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String @unique
+  description String
+  imageCard   String
+  imageBanner String
+
+  activities Activity[] // ✅ Relations avec clé étrangère proprement définies
+
+  // ✅ Relations gérées via des modèles pivot
+  articles AgeCategoryArticle[]
+  drawings AgeCategoryDrawing[]
+  advices  AgeCategoryAdvice[]
+  ideas    AgeCategoryIdea[]
 }
 
 model Activity {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  description String
-  link        String?
-  ageCategory AgeCategory @relation(fields: [ageCategoryId], references: [id])
-  ageCategoryId String @db.ObjectId
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String
+  link          String?
+  ageCategory   AgeCategory @relation(fields: [ageCategoryId], references: [id])
+  ageCategoryId String      @db.ObjectId
 }
 
 model Advice {
@@ -56,57 +69,95 @@ model Advice {
   description String?
   content     String?
   category    String
-  imageUrl    String? 
+  imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  // ✅ Relation Many-to-Many gérée par un modèle pivot
+  ageCategories AgeCategoryAdvice[]
 }
 
-
 model User {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  email     String @unique
+  email     String   @unique
   createdAt DateTime @default(now())
 }
 
 model Drawing {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  imageUrl    String
-  views       Int      @default(0)
-  categoryId  String?   @db.ObjectId
-  category    DrawingCategory? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  likes       Int    @default(0)
-  slug        String @unique 
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  imageUrl String
+
+  views      Int              @default(0)
+  categoryId String?          @db.ObjectId
+  category   DrawingCategory? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  likes      Int              @default(0)
+  slug       String           @unique
+
+  // ✅ Relation Many-to-Many gérée par un modèle pivot
+  ageCategories AgeCategoryDrawing[]
 }
 
 model CategorySection {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String   @unique
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String  @unique
   description String?
   iconSrc     String?
 
-  categories  DrawingCategory[]
+  categories DrawingCategory[]
 }
 
 model DrawingCategory {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String   @unique
-  sectionId String?   @db.ObjectId
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  name      String           @unique
+  sectionId String?          @db.ObjectId
   section   CategorySection? @relation(fields: [sectionId], references: [id], onDelete: Cascade)
 
-  parentId  String?  @db.ObjectId
-  parent    DrawingCategory? @relation(name: "CategoryHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  children  DrawingCategory[] @relation(name: "CategoryHierarchy")
+  parentId String?           @db.ObjectId
+  parent   DrawingCategory?  @relation(name: "CategoryHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children DrawingCategory[] @relation(name: "CategoryHierarchy")
 
-  drawings  Drawing[]
+  drawings Drawing[]
 
-  description String? 
+  description String?
   iconSrc     String?
 }
 
+model AgeCategoryArticle {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  ageCategoryId String @db.ObjectId
+  articleId     String @db.ObjectId
 
+  ageCategory AgeCategory @relation(fields: [ageCategoryId], references: [id], onDelete: Cascade)
+  article     Article     @relation(fields: [articleId], references: [id], onDelete: Cascade)
+}
 
+model AgeCategoryDrawing {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  ageCategoryId String @db.ObjectId
+  drawingId     String @db.ObjectId
 
+  ageCategory AgeCategory @relation(fields: [ageCategoryId], references: [id], onDelete: Cascade)
+  drawing     Drawing     @relation(fields: [drawingId], references: [id], onDelete: Cascade)
+}
+
+model AgeCategoryAdvice {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  ageCategoryId String @db.ObjectId
+  adviceId      String @db.ObjectId
+
+  ageCategory AgeCategory @relation(fields: [ageCategoryId], references: [id], onDelete: Cascade)
+  advice      Advice      @relation(fields: [adviceId], references: [id], onDelete: Cascade)
+}
+
+model AgeCategoryIdea {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  ageCategoryId String @db.ObjectId
+  ideaId        String @db.ObjectId
+
+  ageCategory AgeCategory @relation(fields: [ageCategoryId], references: [id], onDelete: Cascade)
+  idea        Idea        @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+}

@@ -46,8 +46,7 @@ export default function Home() {
                 <section id="univers" className="nos-univers__categories-wrapper">
                     {sections.map((section, index) => (
                         <div key={section.title} className="nos-univers__categories__card">
-                            <Link href={`/nos-univers/${encodeURIComponent(section.title)}`} className="nos-univers__categories__card-link">
-                                {/* ✅ Vérification avant d'afficher les tags */}
+                            <Link href={`/nos-univers/${section.slug}`} className="nos-univers__categories__card-link">                                {/* ✅ Vérification avant d'afficher les tags */}
                                 {section.tags && (
                                     <div className="nos-univers__categories__card__tags">
                                         {section.tags.map((tag: Tag, i: number) => (
