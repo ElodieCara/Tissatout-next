@@ -7,6 +7,7 @@ import AdminNews from "./AdminNews";
 import AdminIdeas from "./AdminIdeas";
 import Breadcrumb from "./Breadcrumb";
 import AdminAdvice from "./AdminAdvice";
+import AdminAgeCategory from "./AdminAgeCategory";
 
 export default function AdminPage() {
     const searchParams = useSearchParams();
@@ -26,6 +27,14 @@ export default function AdminPage() {
                 onThemeSelect={(theme) => console.log("Thème sélectionné:", theme)}
                 onSubCategorySelect={(subCategory) => console.log("Sous-catégorie sélectionnée:", subCategory)}
             />
+            <nav className="admin__menu">
+                <button
+                    onClick={() => handleSectionChange("ageCategory")}
+                    className={activeSection === "ageCategory" ? "active" : ""}
+                >
+                    👶 Catégories d’âge
+                </button>
+            </nav>
             <nav className="admin__menu">
                 <button
                     onClick={() => handleSectionChange("articles")}
@@ -59,12 +68,14 @@ export default function AdminPage() {
                 </button>
             </nav>
 
+
             <div className="admin__content">
                 {activeSection === "articles" && <AdminArticles />}
                 {activeSection === "coloring" && <AdminColoring />}
                 {activeSection === "news" && <AdminNews />}
                 {activeSection === "ideas" && <AdminIdeas />}
                 {activeSection === "advice" && <AdminAdvice />}
+                {activeSection === "ageCategory" && <AdminAgeCategory />}
             </div>
         </div>
     );
