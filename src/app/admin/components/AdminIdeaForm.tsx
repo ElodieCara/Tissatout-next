@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import Breadcrumb from "./Breadcrumb";
 
 interface AdminIdeaFormProps {
-    ideaId?: string; // Optionnel : utilisé pour modifier une idée
+    ideaId?: string;
+    slug?: string; // Optionnel : utilisé pour modifier une idée
 }
 
 export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
@@ -22,13 +23,13 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
 
     // Charger les données de l'idée si un `ideaId` est passé
     useEffect(() => {
-        if (ideaId) {
+        if (ideaId && ideaId !== "new") {
             fetch(`/api/ideas/${ideaId}`)
                 .then((res) => res.json())
                 .then((data) => {
                     setForm({
                         ...data,
-                        ageCategories: data.ageCategories?.map((ac: any) => ac.ageCategory.id) || [],
+                        ageCategories: Array.isArray(data.ageCategories) ? data.ageCategories : [],
                     });
                 })
                 .catch(() => setMessage("❌ Erreur lors du chargement de l'idée."));

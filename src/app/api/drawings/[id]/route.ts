@@ -4,79 +4,108 @@ import { ObjectId } from "mongodb";
 
 const prisma = new PrismaClient();
 
-// Récupérer un coloriage
-export async function GET(req: Request, context: { params: Promise<{ id: string }> }) {
+// 🟢 Récupérer un coloriage
+export async function GET(req: Request, { params }: { params: { id: string } }) {
     try {
-        const { id } = await context.params; // ✅ OBLIGATOIRE
-
-        if (!ObjectId.isValid(id)) {
-            return NextResponse.json({ error: "ID invalide" }, { status: 400 });
+        if (!params.id) {
+            return NextResponse.json({ error: "ID manquant" }, { status: 400 });
         }
 
         const drawing = await prisma.drawing.findUnique({
-            where: { id },
-            include: { category: true },
+            where: { id: params.id },
+            include: {
+                category: true,
+                ageCategories: {
+                    include: { ageCategory: true }, // ✅ Récupération des catégories d'âge liées
+                },
+            },
         });
 
         if (!drawing) {
             return NextResponse.json({ error: "Coloriage non trouvé" }, { status: 404 });
         }
 
-        return NextResponse.json(drawing);
+        return NextResponse.json({
+            ...drawing,
+            ageCategories: drawing.ageCategories.map((ac) => ac.ageCategoryId), // ✅ Transforme en tableau d'IDs
+        });
     } catch (error) {
-        console.error("❌ Erreur GET:", error);
-        return NextResponse.json(
-            { error: "Erreur interne du serveur" },
-            { status: 500 }
-        );
+        console.error("❌ Erreur GET coloriage :", error);
+        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
 
-// Modifier un coloriage
+// 🟡 Mettre à jour un coloriage avec les catégories d'âge
 export async function PUT(req: Request, context: { params: Promise<{ id: string }> }) {
     try {
-        const { id } = await context.params; // ✅ OBLIGATOIRE
-        const { title, imageUrl, categoryId } = await req.json();
+        const { id } = await context.params; // ✅ Attendre `params.id`
+        const body = await req.json();
+        const { title, imageUrl, categoryId, ageCategories, slug } = body;
 
         if (!title || !imageUrl || !categoryId) {
-            return NextResponse.json({ error: "Tous les champs sont requis" }, { status: 400 });
+            return NextResponse.json({ error: "❌ Titre, image et catégorie requis" }, { status: 400 });
         }
 
-        if (!ObjectId.isValid(id) || !ObjectId.isValid(categoryId)) {
-            return NextResponse.json({ error: "Format d'ID invalide" }, { status: 400 });
+        // Extraire les IDs des catégories d'âge
+        let ageCategoryIds: string[] = [];
+
+        if (Array.isArray(ageCategories)) {
+            ageCategoryIds = ageCategories.map(item => {
+                // Si c'est un objet avec une propriété id, extraire l'id
+                if (typeof item === 'object' && item !== null && 'id' in item) {
+                    return item.id;
+                }
+                // Si c'est déjà une string, la retourner directement
+                return typeof item === 'string' ? item : null;
+            }).filter(Boolean) as string[];
         }
 
+        console.log("🔄 Mise à jour avec les catégories d'âge:", ageCategoryIds);
+
+        // 🔄 Mise à jour du coloriage et des catégories d'âge
         const updatedDrawing = await prisma.drawing.update({
             where: { id },
-            data: { title, imageUrl, categoryId },
+            data: {
+                title,
+                imageUrl,
+                categoryId,
+                slug: slug || undefined,
+                ageCategories: {
+                    deleteMany: {}, // Supprimer les anciens liens
+                    create: ageCategoryIds.map((ageId: string) => ({
+                        ageCategoryId: ageId,
+                    })),
+                },
+            },
+            include: {
+                ageCategories: {
+                    include: { ageCategory: true },
+                },
+            },
         });
 
-        return NextResponse.json(updatedDrawing);
+        return NextResponse.json({
+            ...updatedDrawing,
+            ageCategories: updatedDrawing.ageCategories.map((ac) => ac.ageCategoryId), // ✅ Retourner seulement les IDs
+        });
     } catch (error) {
-        console.error("❌ Erreur PUT:", error);
-        return NextResponse.json(
-            { error: "Erreur serveur", details: (error as Error).message },
-            { status: 500 }
-        );
+        console.error("❌ Erreur PUT coloriage :", error);
+        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
 
-// Supprimer un coloriage
-export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
+// 🔴 Supprimer un coloriage
+export async function DELETE(req: Request, { params }: { params: { id: string } }) {
     try {
-        const { id } = await context.params; // ✅ OBLIGATOIRE
-
-        if (!ObjectId.isValid(id)) {
-            return NextResponse.json({ error: "ID invalide" }, { status: 400 });
+        if (!params.id) {
+            return NextResponse.json({ error: "ID manquant" }, { status: 400 });
         }
 
-        await prisma.drawing.delete({ where: { id } });
-        return NextResponse.json({ message: "Coloriage supprimé" });
+        await prisma.drawing.delete({ where: { id: params.id } });
+
+        return NextResponse.json({ message: "✅ Coloriage supprimé" });
     } catch (error) {
-        console.error("❌ Erreur DELETE:", error);
-        return NextResponse.json(
-            { error: "Erreur serveur", details: (error as Error).message },
-            { status: 500 }
-        );
+        console.error("❌ Erreur DELETE coloriage :", error);
+        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
-}
+} 

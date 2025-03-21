@@ -4,12 +4,15 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Breadcrumb from "./Breadcrumb";
 import Link from "next/link";
+import { generateSlug } from "@/lib/utils";
 
 interface Coloring {
     id?: string;
     title: string;
     imageUrl: string;
     categoryId: string;
+    ageCategories: string[];
+    slug?: string;
 }
 
 interface Category {
@@ -31,10 +34,12 @@ export default function AdminColoringForm({ coloringId }: { coloringId?: string 
         title: "",
         imageUrl: "",
         categoryId: "",
+        ageCategories: []
     });
 
     const [sections, setSections] = useState<Section[]>([]);
     const [categories, setCategories] = useState<CategoriesData>({});
+    const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
     const router = useRouter();
@@ -43,19 +48,22 @@ export default function AdminColoringForm({ coloringId }: { coloringId?: string 
     useEffect(() => {
         async function fetchData() {
             try {
-                const [sectionsRes, categoriesRes] = await Promise.all([
+                const [sectionsRes, categoriesRes, ageCategoriesRes] = await Promise.all([
                     fetch("/api/drawings/sections"),
-                    fetch("/api/drawings/categories")
+                    fetch("/api/drawings/categories"),
+                    fetch("/api/ageCategories")
                 ]);
 
                 const sectionsData: Section[] = await sectionsRes.json();
                 const categoriesData: Category[] = await categoriesRes.json();
+                const ageCategoriesData: { id: string; title: string }[] = await ageCategoriesRes.json();
 
-                if (!Array.isArray(sectionsData) || !Array.isArray(categoriesData)) {
+                if (!Array.isArray(sectionsData) || !Array.isArray(categoriesData) || !Array.isArray(ageCategoriesData)) {
                     throw new Error("Données invalides reçues.");
                 }
 
                 setSections(sectionsData);
+                setAgeCategories(ageCategoriesData);
 
                 // ✅ Organiser les catégories par section
                 const categorizedData: CategoriesData = {};
@@ -73,9 +81,54 @@ export default function AdminColoringForm({ coloringId }: { coloringId?: string 
         fetchData();
     }, []);
 
+    // 🔄 Chargement des données du coloriage
+    useEffect(() => {
+        if (!coloringId || coloringId === "new") return;
+
+        async function fetchColoring() {
+            try {
+                const res = await fetch(`/api/drawings/${coloringId}`);
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error("Erreur lors du chargement du coloriage");
+                }
+
+                console.log("🎨 Coloriage récupéré :", data);
+
+                setForm({
+                    ...data,
+                    ageCategories: Array.isArray(data.ageCategories) ? data.ageCategories : [], // ✅ Vérification pour éviter `undefined`
+                });
+
+                console.log("📌 Âges récupérés pour affichage :", data.ageCategories);
+            } catch (err) {
+                console.error("❌ Erreur lors du chargement du coloriage :", err);
+                setMessage("❌ Impossible de charger le coloriage.");
+            }
+        }
+
+        fetchColoring();
+    }, [coloringId]);
+
     // 🟡 Gestion des changements dans le formulaire
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    // ✅ Gérer la sélection des catégories d'âge
+    const handleAgeCategoryChange = (id: string) => {
+        setForm((prev) => {
+            const alreadySelected = prev.ageCategories.includes(id);
+            const updatedAgeCategories = alreadySelected
+                ? prev.ageCategories.filter((ageId) => ageId !== id) // Décocher
+                : [...prev.ageCategories, id]; // Cocher
+
+            return {
+                ...prev,
+                ageCategories: updatedAgeCategories
+            };
+        });
     };
 
     // 📸 Gérer l'upload d'image
@@ -105,20 +158,44 @@ export default function AdminColoringForm({ coloringId }: { coloringId?: string 
 
         const method = coloringId && coloringId !== "new" ? "PUT" : "POST";
         const url = coloringId && coloringId !== "new" ? `/api/drawings/${coloringId}` : "/api/drawings";
+        const slug = generateSlug(form.title, coloringId || crypto.randomUUID());
 
-        const res = await fetch(url, {
-            method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(form),
-        });
+        try {
+            // Log pour débogage
+            console.log("📤 Envoi des données:", {
+                title: form.title,
+                imageUrl: form.imageUrl,
+                categoryId: form.categoryId,
+                slug,
+                ageCategories: form.ageCategories // Envoyer directement le tableau de strings
+            });
 
-        setLoading(false);
+            const res = await fetch(url, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    title: form.title,
+                    imageUrl: form.imageUrl,
+                    categoryId: form.categoryId,
+                    slug,
+                    ageCategories: form.ageCategories // Envoi direct du tableau d'IDs
+                }),
+            });
 
-        if (res.ok) {
-            setMessage("✅ Coloriage enregistré !");
-            setTimeout(() => router.push("/admin?section=coloring"), 1000);
-        } else {
-            setMessage("❌ Erreur lors de l'enregistrement.");
+            const data = await res.json();
+
+            if (res.ok) {
+                setMessage("✅ Coloriage enregistré !");
+                setTimeout(() => router.push("/admin?section=coloring"), 1000);
+            } else {
+                console.error("❌ Erreur API:", data);
+                setMessage(`❌ Erreur: ${data.error || "Erreur lors de l'enregistrement"}`);
+            }
+        } catch (error) {
+            console.error("❌ Exception:", error);
+            setMessage("❌ Erreur technique lors de l'enregistrement");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -137,6 +214,23 @@ export default function AdminColoringForm({ coloringId }: { coloringId?: string 
                 <div className="admin-form__group">
                     <label htmlFor="title">Titre</label>
                     <input type="text" name="title" value={form.title} onChange={handleChange} required />
+                </div>
+
+                {/* ✅ Sélection des âges concernés */}
+                <div className="admin-form__group">
+                    <label>📌 Âges concernés :</label>
+                    <div className="checkbox-group">
+                        {ageCategories.map((age) => (
+                            <label key={age.id} className="checkbox-label">
+                                <input
+                                    type="checkbox"
+                                    checked={(form.ageCategories || []).includes(age.id)} // ✅ Sécurisé contre `undefined`
+                                    onChange={() => handleAgeCategoryChange(age.id)}
+                                />
+                                {age.title}
+                            </label>
+                        ))}
+                    </div>
                 </div>
 
                 {/* 📌 Sélection de la section et sous-catégorie */}

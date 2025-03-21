@@ -11,6 +11,7 @@ interface Advice {
     description?: string;
     imageUrl?: string;
     ageCategories?: string[];
+    slug?: string;
 }
 
 export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
@@ -35,7 +36,7 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
                 .then((data) => {
                     setForm({
                         ...data,
-                        ageCategories: data.ageCategories?.map((ac: any) => ac.ageCategory.id) || [],
+                        ageCategories: Array.isArray(data.ageCategories) ? data.ageCategories : [],
                     });
                 })
                 .catch(() => setMessage("❌ Impossible de charger le conseil."));
@@ -89,9 +90,9 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
     };
 
     // 📤 Envoyer le formulaire (création/modification)
+    // 📤 Envoyer le formulaire
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("📤 Payload envoyé :", form);
 
         const method = adviceId && adviceId !== "new" ? "PUT" : "POST";
         const url = adviceId && adviceId !== "new" ? `/api/advice/${adviceId}` : "/api/advice";
@@ -99,16 +100,23 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
         const res = await fetch(url, {
             method,
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(form),
+            body: JSON.stringify({
+                ...form,
+                ageCategories: form.ageCategories || [], // ✅ tableau de strings
+            }),
         });
+
+        const data = await res.json();
 
         if (res.ok) {
             setMessage("✅ Conseil enregistré !");
             setTimeout(() => router.push("/admin?section=advice"), 1000);
         } else {
-            setMessage("❌ Erreur lors de l'enregistrement.");
+            console.error("❌ Erreur :", data);
+            setMessage(`❌ Erreur : ${data.error || "Erreur inconnue"}`);
         }
     };
+
 
     return (
         <div className="admin-form">

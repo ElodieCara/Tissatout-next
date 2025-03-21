@@ -1,65 +1,90 @@
-import prisma from "@/lib/prisma";
+import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-// 🟢 Récupérer un conseil par ID
-export async function GET(req: Request, context: { params: { id: string } }) {
-    try {
-        const { id } = context.params; // ✅ Attendre `params` avant utilisation
+const prisma = new PrismaClient();
 
-        if (!id) {
-            return NextResponse.json({ error: "❌ ID du conseil manquant." }, { status: 400 });
-        }
+// 🟢 GET : Récupérer un conseil avec les catégories d'âge (en IDs simples)
+export async function GET(req: Request, context: { params: Promise<{ id: string }> }) {
+    try {
+        const { id } = await context.params;
+
+        if (!id) return NextResponse.json({ error: "❌ ID manquant." }, { status: 400 });
 
         const advice = await prisma.advice.findUnique({
             where: { id },
+            include: {
+                ageCategories: {
+                    include: { ageCategory: true },
+                },
+            },
         });
 
         if (!advice) {
             return NextResponse.json({ error: "❌ Conseil introuvable" }, { status: 404 });
         }
 
-        return NextResponse.json(advice);
+        return NextResponse.json({
+            ...advice,
+            ageCategories: advice.ageCategories.map(ac => ac.ageCategoryId),
+        });
     } catch (error) {
-        console.error("❌ Erreur API GET Advice:", error);
+        console.error("❌ Erreur GET advice :", error);
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
 
-// 🟡 Modifier un conseil
-export async function PUT(req: Request, context: { params: { id: string } }) {
-    try {
-        const { id } = context.params; // ✅ Utilisation correcte de `params`
 
-        if (!id) {
-            return NextResponse.json({ error: "❌ ID du conseil manquant." }, { status: 400 });
-        }
+// 🟡 Modifier un conseil
+export async function PUT(req: Request, context: { params: Promise<{ id: string }> }) {
+    try {
+        const { id } = await context.params;
+        if (!id) return NextResponse.json({ error: "❌ ID manquant." }, { status: 400 });
 
         const body = await req.json();
-        console.log("📥 Payload reçu pour mise à jour :", body);
+        const { title, content, category, description, imageUrl, ageCategories = [] } = body;
 
-        // ✅ Vérification des champs obligatoires
-        if (!body.title || !body.content || !body.category) {
+        if (!title || !content || !category) {
             return NextResponse.json({ error: "❌ Champs obligatoires manquants." }, { status: 400 });
         }
 
-        // ✅ Mise à jour sans modifier `id`
+        const ageCategoryIds = ageCategories
+            .map((item: any) =>
+                typeof item === "object" && item !== null && "id" in item ? item.id : item
+            )
+            .filter(Boolean);
+
         const updatedAdvice = await prisma.advice.update({
             where: { id },
             data: {
-                title: body.title,
-                description: body.description || null, // Facultatif
-                content: body.content,
-                category: body.category,
-                imageUrl: body.imageUrl || null, // Facultatif
+                title,
+                content,
+                category,
+                description: description || null,
+                imageUrl: imageUrl || null,
+                ageCategories: {
+                    deleteMany: {}, // 🔄 Réinitialiser les relations
+                    create: ageCategoryIds.map((ageId: string) => ({
+                        ageCategoryId: ageId,
+                    })),
+                },
+            },
+            include: {
+                ageCategories: {
+                    include: { ageCategory: true },
+                },
             },
         });
 
-        return NextResponse.json(updatedAdvice);
+        return NextResponse.json({
+            ...updatedAdvice,
+            ageCategories: updatedAdvice.ageCategories.map(ac => ac.ageCategoryId),
+        });
     } catch (error: any) {
-        console.error("❌ Erreur API PUT Advice:", error.message, error.stack);
+        console.error("❌ Erreur PUT advice :", error.message, error.stack);
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
+
 
 // 🔴 Supprimer un conseil
 export async function DELETE(req: Request, context: any) {

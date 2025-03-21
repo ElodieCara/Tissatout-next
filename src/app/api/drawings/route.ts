@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
-import { ObjectId } from "mongodb"
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import { ObjectId } from "mongodb";
+import { generateSlug } from "@/lib/utils";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 /**
  * GET: Récupérer tous les dessins
- * Inclure la catégorie pour chaque dessin
  */
 export async function GET(req: Request) {
     try {
@@ -20,18 +20,12 @@ export async function GET(req: Request) {
         const drawings = await prisma.drawing.findMany({
             where: category ? { category: { name: { equals: category, mode: "insensitive" } } } : {},
             include: {
-                category: {
-                    select: { name: true }, // ✅ On sélectionne uniquement le nom
-                },
+                category: { select: { name: true } },
+                ageCategories: { include: { ageCategory: true } }, // ✅ Inclure les catégories d'âge
             },
-            orderBy: sort === "likes" ? { likes: "desc" } : { views: "desc" }, // ✅ Trie par "likes" ou "views"
+            orderBy: sort === "likes" ? { likes: "desc" } : { views: "desc" },
             take: limit,
         });
-
-        // Ajouter ce log pour vérifier la structure et le contenu des données
-        console.log("📊 Données des dessins récupérées:", JSON.stringify(drawings.slice(0, 2), null, 2));
-        console.log("🔢 Nombre total de dessins:", drawings.length);
-        console.log("👁️ Dessins avec views défini:", drawings.filter(d => d.views !== undefined).length);
 
         return NextResponse.json(drawings);
     } catch (error) {
@@ -41,85 +35,123 @@ export async function GET(req: Request) {
 }
 
 /**
- * POST: Créer un nouveau dessin
- * - title
- * - imageUrl
- * - categoryId (doit exister)
+ * POST: Créer un nouveau coloriage avec ses catégories d'âge
  */
 export async function POST(req: Request) {
     try {
-        const { title, imageUrl, categoryId } = await req.json()
+        const { title, imageUrl, categoryId, ageCategories } = await req.json();
 
         if (!title || !imageUrl || !categoryId) {
             return NextResponse.json(
                 { error: "title, imageUrl, categoryId sont requis" },
-                { status: 400 },
-            )
+                { status: 400 }
+            );
         }
 
-        // Vérif categoryId
         if (!ObjectId.isValid(categoryId)) {
-            return NextResponse.json({ error: "categoryId invalide" }, { status: 400 })
+            return NextResponse.json({ error: "categoryId invalide" }, { status: 400 });
         }
 
-        const cat = await prisma.drawingCategory.findUnique({
-            where: { id: categoryId },
-        })
+        const cat = await prisma.drawingCategory.findUnique({ where: { id: categoryId } });
         if (!cat) {
             return NextResponse.json(
                 { error: "La catégorie spécifiée n'existe pas" },
-                { status: 400 },
-            )
+                { status: 400 }
+            );
         }
 
-        // Création
+        // Vérifier que les catégories d'âge existent
+        let ageCategoriesData = [];
+        if (ageCategories && Array.isArray(ageCategories)) {
+            ageCategoriesData = await prisma.ageCategory.findMany({
+                where: { id: { in: ageCategories } }
+            });
+
+            if (ageCategoriesData.length !== ageCategories.length) {
+                return NextResponse.json({ error: "Certaines catégories d'âge n'existent pas" }, { status: 400 });
+            }
+        }
+
+        // Création du coloriage
         const newDrawing = await prisma.drawing.create({
             data: {
                 title,
                 imageUrl,
                 categoryId,
+                slug: generateSlug(title),
+                ageCategories: {
+                    create: ageCategories.map((ageId: string) => ({
+                        ageCategory: { connect: { id: ageId } }
+                    }))
+                }
             },
-        })
+            include: { ageCategories: true } // ✅ Inclure les relations après création
+        });
 
-        return NextResponse.json(newDrawing, { status: 201 })
+        return NextResponse.json(newDrawing, { status: 201 });
     } catch (error) {
-        console.error("❌ POST drawing error:", error)
-        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 })
+        console.error("❌ POST drawing error:", error);
+        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
 
-
 /**
- * PUT: Incrémenter le nombre de likes d'un dessin
+ * PUT: Modifier un coloriage et ses catégories d'âge
  */
 export async function PUT(req: Request) {
     try {
-        const { id } = await req.json();
+        const { id, title, imageUrl, categoryId, ageCategories } = await req.json();
 
-        if (!id) {
+        if (!id || !title || !imageUrl || !categoryId) {
             return NextResponse.json(
-                { error: "ID du dessin requis" },
+                { error: "Tous les champs sont requis" },
                 { status: 400 }
             );
         }
 
-        // Vérification de l'ID MongoDB
-        if (!ObjectId.isValid(id)) {
-            return NextResponse.json(
-                { error: "ID invalide" },
-                { status: 400 }
-            );
+        if (!ObjectId.isValid(id) || !ObjectId.isValid(categoryId)) {
+            return NextResponse.json({ error: "ID invalide" }, { status: 400 });
         }
 
-        // Mise à jour du nombre de likes
+        // Vérifier si le coloriage existe
+        const existingDrawing = await prisma.drawing.findUnique({ where: { id } });
+        if (!existingDrawing) {
+            return NextResponse.json({ error: "Coloriage non trouvé" }, { status: 404 });
+        }
+
+        // Vérifier les catégories d'âge
+        let ageCategoriesData = [];
+        if (ageCategories && Array.isArray(ageCategories)) {
+            ageCategoriesData = await prisma.ageCategory.findMany({
+                where: { id: { in: ageCategories } }
+            });
+
+            if (ageCategoriesData.length !== ageCategories.length) {
+                return NextResponse.json({ error: "Certaines catégories d'âge n'existent pas" }, { status: 400 });
+            }
+        }
+
+        // Mise à jour du coloriage
         const updatedDrawing = await prisma.drawing.update({
             where: { id },
-            data: { likes: { increment: 1 } }, // ✅ Ajoute +1 like
+            data: {
+                title,
+                imageUrl,
+                categoryId,
+                slug: generateSlug(title),
+                ageCategories: {
+                    deleteMany: {}, // 🔥 Supprime les relations existantes
+                    create: ageCategories.map((ageId: string) => ({
+                        ageCategory: { connect: { id: ageId } }
+                    }))
+                }
+            },
+            include: { ageCategories: true }
         });
 
-        return NextResponse.json({ likes: updatedDrawing.likes });
+        return NextResponse.json(updatedDrawing);
     } catch (error) {
-        console.error("❌ PUT Like error:", error);
+        console.error("❌ PUT drawing error:", error);
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
