@@ -16,7 +16,21 @@ const categories = [
     { key: "advice", label: "📝 Conseils" }
 ];
 
-export default function InspirationPage({ articles, ideas, advices }: { articles: any[], ideas: any[], advices: any[] }) {
+export default function InspirationPage({
+    articles,
+    ideas,
+    advices,
+    inspirationBanner,
+    inspirationTitle,
+    inspirationDesc,
+}: {
+    articles: any[],
+    ideas: any[],
+    advices: any[],
+    inspirationBanner: string;
+    inspirationTitle: string;
+    inspirationDesc: string;
+}) {
     const [selectedCategory, setSelectedCategory] = useState("articles"); // 🔵 État de la section active
 
     return (
@@ -25,9 +39,9 @@ export default function InspirationPage({ articles, ideas, advices }: { articles
             <BackToTop />
             <header className="inspiration__header">
                 <Banner
-                    src="/assets/slide3.png"
-                    title="💡 Inspiration & Conseils"
-                    description="Trouvez des idées d’activités et des conseils adaptés à chaque saison et moment clé du développement !"
+                    src={inspirationBanner}
+                    title={inspirationTitle}
+                    description={inspirationDesc}
                 />
             </header>
 

@@ -8,9 +8,13 @@ type SlideshowProps = {
         id: number;
         image: string | StaticImageData;
     }[];
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    buttonLabel?: string;
 };
 
-const Slideshow: React.FC<SlideshowProps> = ({ images }) => {
+const Slideshow: React.FC<SlideshowProps> = ({ images, title, subtitle, description, buttonLabel }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
 
     const nextSlide = () => {
@@ -88,16 +92,11 @@ const Slideshow: React.FC<SlideshowProps> = ({ images }) => {
                 ))}
             </div>
             <div className="container__slide__text">
-                <h1>Des activités ludiques et éducatives pour vos enfants !</h1>
-                <h2>Créez, jouez, découvrez en famille !</h2>
-                <p>Sur <strong>Tissatout</strong>, trouvez des <strong>coloriages</strong>, des <strong>jeux éducatifs</strong> et des <strong>activités ludiques</strong> adaptées aux saisons et aux envies de chaque moment.</p>
-                {/* <ul>
-                    <li><strong>Des contenus amusants et éducatifs</strong> pour éveiller l’imaginaire et stimuler la créativité !</li>
-                    <li><strong>Des activités classées par thème et saison</strong> pour s’amuser toute l’année !</li>
-                    <li><strong>Des idées faciles à réaliser</strong> à la maison pour partager des moments magiques en famille.</li>
-                </ul> */}
+                {title && <h1>{title}</h1>}
+                {subtitle && <h2>{subtitle}</h2>}
+                {description && <p>{description}</p>}
                 <p><strong>Prêts à explorer ?</strong> Découvrez nos dernières idées et amusez-vous avec vos enfants ! </p>
-                <Button className="button large">En savoir plus</Button>
+                {buttonLabel && <Button className="button large">{buttonLabel}</Button>}
             </div>
 
         </div>

@@ -22,6 +22,9 @@ interface ExplorerPageProps {
     coloringCounts: Record<string, number>;
     topLikedDrawings: Drawing[];
     trendingDrawings: Drawing[];
+    coloringBanner: string;
+    coloringTitle: string;
+    coloringDesc: string;
 }
 
 const categoriesData: Record<string, string[]> = {
@@ -48,6 +51,9 @@ export default function ExplorerPage({
     coloringCounts,
     topLikedDrawings,
     trendingDrawings,
+    coloringBanner,
+    coloringTitle,
+    coloringDesc,
 }: ExplorerPageProps) {
     const searchParams = useSearchParams();
     const initialTheme = searchParams?.get("categorie") ?? null;
@@ -70,7 +76,11 @@ export default function ExplorerPage({
             <Head>
                 <title>Explorer les coloriages - Tissatout</title>
             </Head>
-            <Banner src="/assets/slide3.png" title="🎨 Bienvenue dans l'univers des coloriages !" description="Explorez des centaines de coloriages gratuits à imprimer." />
+            <Banner
+                src={coloringBanner}
+                title={coloringTitle}
+                description={coloringDesc}
+            />
 
             <main className="explorer-container">
                 <BackToTop />

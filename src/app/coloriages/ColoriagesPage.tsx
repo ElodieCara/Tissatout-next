@@ -36,7 +36,17 @@ const getCurrentSeason = () => {
     return "Été";
 };
 
-export default function ColoriagePage({ drawings }: { drawings: Drawing[] }) {
+export default function ColoriagePage({
+    drawings,
+    coloringBanner,
+    coloringTitle,
+    coloringDesc
+}: {
+    drawings: Drawing[],
+    coloringBanner: string,
+    coloringTitle: string,
+    coloringDesc: string
+}) {
     const currentSeason = getCurrentSeason();
 
     return (
@@ -54,12 +64,12 @@ export default function ColoriagePage({ drawings }: { drawings: Drawing[] }) {
 
             <header className="coloriages__header">
                 <Banner
-                    src="/assets/slide3.png"
-                    title="💡 Coloriages à imprimer"
-                    description="Découvrez des centaines de coloriages à imprimer et à colorier ! Choisissez parmi des thèmes variés : animaux, mandalas, héros, saisons et bien plus encore."
+                    src={coloringBanner}
+                    title={coloringTitle}
+                    description={coloringDesc}
                     buttons={[
-                        { label: "📅 Explorer les coloriages", href: "/coloriages/explorer" }, // ✅ Redirection externe
-                        { label: "🔍 Rechercher un thème", targetId: "themes" }, // ✅ Scroll vers section
+                        { label: "📅 Explorer les coloriages", href: "/coloriages/explorer" },
+                        { label: "🔍 Rechercher un thème", targetId: "themes" },
                     ]}
                 />
             </header>

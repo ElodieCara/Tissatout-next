@@ -160,17 +160,6 @@ export default function AdminAgeCategoryForm({
                     {form.imageCard && <img src={form.imageCard} alt="Image Card" className="admin-form__upload-preview" />}
                 </div>
 
-                {/* <div className="admin-form__group">
-                    <label htmlFor="imageBanner">Image (Bannière)</label>
-                    <input
-                        type="text"
-                        name="imageBanner"
-                        value={form.imageBanner}
-                        onChange={handleChange}
-                        className="admin-form__group-input"
-                    />
-                </div> */}
-
                 <button type="submit" className="admin-form__button">
                     {ageCategoryId === "new" ? "Ajouter" : "Mettre à jour"}
                 </button>

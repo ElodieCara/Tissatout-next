@@ -8,6 +8,8 @@ import AdminIdeas from "./AdminIdeas";
 import Breadcrumb from "./Breadcrumb";
 import AdminAdvice from "./AdminAdvice";
 import AdminAgeCategory from "./AdminAgeCategory";
+import AdminSiteSettings from "./AdminSiteSettings";
+
 
 export default function AdminPage() {
     const searchParams = useSearchParams();
@@ -34,7 +36,14 @@ export default function AdminPage() {
                 >
                     👶 Catégories d’âge
                 </button>
+                <button
+                    onClick={() => handleSectionChange("settings")}
+                    className={activeSection === "settings" ? "active" : ""}
+                >
+                    🎛️ Bannières
+                </button>
             </nav>
+
             <nav className="admin__menu">
                 <button
                     onClick={() => handleSectionChange("articles")}
@@ -70,6 +79,7 @@ export default function AdminPage() {
 
 
             <div className="admin__content">
+                {activeSection === "settings" && <AdminSiteSettings />}
                 {activeSection === "articles" && <AdminArticles />}
                 {activeSection === "coloring" && <AdminColoring />}
                 {activeSection === "news" && <AdminNews />}

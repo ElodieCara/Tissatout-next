@@ -3,17 +3,15 @@ import Banner from "@/components/Banner/Banner";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function AgePage({ ageCategory }: { ageCategory: any }) {
+export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: any, agePageBanner: string }) {
     return (
         <div>
             <header>
                 <Banner
-                    src="/assets/slide3.png"
-                    title="💡À chaque âge ses trésors d’activités"
-                    description=": Coloriages, conseils, inspirations et savoirs : retrouvez ici tout ce qui correspond aux besoins et au rythme de votre enfant."
-                />
+                    src={agePageBanner}
+                    title={ageCategory.title}
+                    description={ageCategory.description} />
             </header>
-
 
             <section className="age">
                 <div className="age__intro">

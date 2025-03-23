@@ -161,3 +161,47 @@ model AgeCategoryIdea {
   ageCategory AgeCategory @relation(fields: [ageCategoryId], references: [id], onDelete: Cascade)
   idea        Idea        @relation(fields: [ideaId], references: [id], onDelete: Cascade)
 }
+
+model SiteSettings {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+
+  // Accueil
+  homeBanner      String?
+  homeTitle       String?
+  homeDesc        String?
+
+  // Univers 
+  universBanner   String?
+  universTitle    String?
+  universDesc     String?
+
+  // Coloriages
+  coloringBanner  String?
+  coloringTitle   String?
+  coloringDesc    String?
+
+  // Conseils
+  adviceBanner    String?
+  adviceTitle     String?
+  adviceDesc      String?
+
+  // Idées
+  ideasBanner     String?
+  ideasTitle      String?
+  ideasDesc       String?
+
+  // Pages par âge
+  agePageBanner   String?
+  agePageTitle    String?
+  agePageDesc     String?
+
+  // Actualités
+  newsBanner      String?
+  newsTitle       String?
+  newsDesc        String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+

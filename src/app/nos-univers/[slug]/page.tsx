@@ -14,6 +14,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
     });
 
     if (!ageCategory) return notFound();
+    const siteSettings = await prisma.siteSettings.findFirst();
+    const agePageBanner = siteSettings?.agePageBanner || "/assets/slide3.png";
 
-    return <AgePage ageCategory={ageCategory} />;
+    return <AgePage ageCategory={ageCategory} agePageBanner={agePageBanner} />;
 }

@@ -33,6 +33,13 @@ interface Idea {
     theme: string;
 }
 
+interface HomeContentProps {
+    articles: Article[];
+    homeBanner: string;
+    homeTitle: string;
+    homeDesc: string;
+}
+
 // ✅ Fonction pour récupérer l'article le plus récent par catégorie
 const getMostRecentArticlesByCategory = (articles: Article[]) => {
     const groupedByCategory: { [key: string]: Article[] } = {};
@@ -52,7 +59,17 @@ const getMostRecentArticlesByCategory = (articles: Article[]) => {
     );
 };
 
-export default function HomeContent({ articles }: { articles: Article[] }) {
+export default function HomeContent({
+    articles,
+    homeBanner,
+    homeTitle,
+    homeDesc,
+}: {
+    articles: Article[];
+    homeBanner: string;
+    homeTitle: string;
+    homeDesc: string;
+}) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [recentArticlesByCategory, setRecentArticlesByCategory] = useState<Article[]>([]);
     const { theme } = useTheme(); // Thème actif
