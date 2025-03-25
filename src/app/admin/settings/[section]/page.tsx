@@ -3,6 +3,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import CustomHomeSettingsForm from "../../components/CustomHomeSettingsForm";
+
 
 interface SiteSettings {
     id?: string;
@@ -25,6 +27,10 @@ export default function AdminSettingsSectionPage() {
 
     const [form, setForm] = useState<SiteSettings>({});
     const [message, setMessage] = useState("");
+
+    if (section === "home") {
+        return <CustomHomeSettingsForm />;
+    }
 
     useEffect(() => {
         fetch("/api/site-settings")

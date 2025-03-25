@@ -166,9 +166,9 @@ model SiteSettings {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
 
   // Accueil
-  homeBanner      String?
-  homeTitle       String?
-  homeDesc        String?
+  homeBanners     String[] // ⬅️ devient un tableau d'URLs
+  homeTitle       String
+  homeDesc        String
 
   // Univers 
   universBanner   String?
@@ -204,4 +204,15 @@ model SiteSettings {
   updatedAt       DateTime @updatedAt
 }
 
+model HomeSlide {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  imageUrl    String
+  title       String
+  description String
+  buttonText  String
+  buttonLink  String
+  order       Int      // pour l'ordre d'affichage
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
 

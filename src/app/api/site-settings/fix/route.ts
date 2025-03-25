@@ -14,7 +14,7 @@ export async function GET() {
         const fixedSettings = await prisma.siteSettings.update({
             where: { id: settings.id },
             data: {
-                homeBanner: "",
+                homeBanners: [],
                 homeTitle: "",
                 homeDesc: "",
                 universBanner: "",

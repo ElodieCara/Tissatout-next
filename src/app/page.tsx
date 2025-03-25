@@ -21,8 +21,7 @@ export default async function HomePage() {
   const articles = await getArticles(); // Récupération des articles
   const settings = await prisma.siteSettings.findFirst();
 
-  const homeBanner = settings?.homeBanner || "/assets/slide1.jpg";
-  const homeTitle = settings?.homeTitle || "🎨 Bienvenue sur Tissatout !";
+  const homeBanners = settings?.homeBanners?.length ? settings.homeBanners : ["/assets/slide1.jpg"]; const homeTitle = settings?.homeTitle || "🎨 Bienvenue sur Tissatout !";
   const homeDesc =
     settings?.homeDesc ||
     "Explorez des idées et activités pour éveiller les enfants de tous âges.";
@@ -30,7 +29,7 @@ export default async function HomePage() {
   return (
     <ThemeProvider>
       <HomeContent articles={articles}
-        homeBanner={homeBanner}
+        homeBanners={homeBanners}
         homeTitle={homeTitle}
         homeDesc={homeDesc} />
     </ThemeProvider>

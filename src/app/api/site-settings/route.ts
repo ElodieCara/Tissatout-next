@@ -22,7 +22,7 @@ export async function GET() {
         if (!settings) {
             settings = await prisma.siteSettings.create({
                 data: {
-                    homeBanner: "",
+                    homeBanners: [],
                     homeTitle: "",
                     homeDesc: "",
                     universBanner: "",
@@ -64,7 +64,7 @@ export async function PUT(req: NextRequest) {
 
         if (!settings) {
             const created = await prisma.siteSettings.create({
-                data: cleanedBody as Prisma.SiteSettingsCreateInput,
+                data: cleanedBody as unknown as Prisma.SiteSettingsCreateInput,
             });
             return NextResponse.json(created);
         }

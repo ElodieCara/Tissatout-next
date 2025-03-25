@@ -11,7 +11,6 @@ import Subscribe from "@/layout/Subscribe/Subscribe";
 import arrowPrev from "@/assets/arrow-circle-right.png";
 import arrowNext from "@/assets/arrow-circle-left.png";
 import Slideshow from "@/components/Slideshow/Slideshow";
-import { slide as slides } from "../data/home";
 
 interface Article {
     id: string;
@@ -40,6 +39,16 @@ interface HomeContentProps {
     homeDesc: string;
 }
 
+interface HomeSlide {
+    id?: string;
+    imageUrl: string;
+    title: string;
+    description: string;
+    buttonText?: string;
+    buttonLink?: string;
+}
+
+
 // ✅ Fonction pour récupérer l'article le plus récent par catégorie
 const getMostRecentArticlesByCategory = (articles: Article[]) => {
     const groupedByCategory: { [key: string]: Article[] } = {};
@@ -61,12 +70,12 @@ const getMostRecentArticlesByCategory = (articles: Article[]) => {
 
 export default function HomeContent({
     articles,
-    homeBanner,
+    homeBanners,
     homeTitle,
     homeDesc,
 }: {
     articles: Article[];
-    homeBanner: string;
+    homeBanners: string[];
     homeTitle: string;
     homeDesc: string;
 }) {
@@ -105,6 +114,35 @@ export default function HomeContent({
 
     const nextSlide = () => setCurrentSlide((prev) => (prev < totalSlides - 1 ? prev + 1 : 0));
     const prevSlide = () => setCurrentSlide((prev) => (prev > 0 ? prev - 1 : totalSlides - 1));
+
+    const [slides, setSlides] = useState<HomeSlide[]>([]);
+
+    useEffect(() => {
+        fetch("/api/home-slides")
+            .then((res) => res.json())
+            .then((data) => {
+                const cleaned = data
+                    .filter((s: any) =>
+                        s &&
+                        typeof s.imageUrl === "string" &&
+                        s.imageUrl.trim() !== "" &&
+                        typeof s.title === "string" &&
+                        typeof s.description === "string"
+                    )
+                    .sort((a: any, b: any) => a.order - b.order); // Tri par ordre si nécessaire
+                console.table(cleaned);
+
+                // Optionnel : suppression des doublons par ID
+                const unique = cleaned.filter((s: any, index: number, self: any[]) =>
+                    index === self.findIndex(t => t.id === s.id)
+                );
+
+                setSlides(unique);
+            })
+            .catch(() => console.error("❌ Erreur lors du chargement des slides"));
+    }, []);
+
+
 
     return (
         <>

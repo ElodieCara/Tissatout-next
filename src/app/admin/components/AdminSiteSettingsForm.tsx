@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 interface SiteSettings {
     id?: string;
 
-    homeBanner: string;
+    homeBanners?: string[];
     homeTitle: string;
     homeDesc: string;
 
@@ -74,10 +74,15 @@ export default function AdminSiteSettingsForm({ settingsData }: AdminSiteSetting
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        const { homeBanners, ...rest } = form;
+
         // 🧼 Sanitize les null/undefined AVANT d’envoyer
-        const sanitizedForm = Object.fromEntries(
-            Object.entries(form).map(([key, value]) => [key, value ?? ""])
-        );
+        const sanitizedForm = {
+            ...Object.fromEntries(
+                Object.entries(rest).map(([key, value]) => [key, value ?? ""])
+            ),
+            homeBanners: homeBanners || [],
+        };
 
         try {
             const res = await fetch("/api/site-settings", {
@@ -103,11 +108,65 @@ export default function AdminSiteSettingsForm({ settingsData }: AdminSiteSetting
         <form onSubmit={handleSubmit} className="admin-form">
             {message && <p className="admin-form__message">{message}</p>}
 
+            {/* 🖼️ Slideshow d’accueil */}
+            <div className="admin-form__section">
+                <h3>🏠 Accueil — Slideshow</h3>
+
+                <label>Images actuelles</label>
+                <div className="admin-form__banners-list">
+                    {(form.homeBanners || []).map((url, idx) => (
+                        <div key={idx} className="admin-form__banner-item">
+                            <img src={url} alt={`Slide ${idx + 1}`} className="admin-form__preview" />
+                            <button
+                                type="button"
+                                className="btn-remove"
+                                onClick={() =>
+                                    setForm((prev) => ({
+                                        ...prev,
+                                        homeBanners: prev.homeBanners?.filter((_, i) => i !== idx),
+                                    }))
+                                }
+                            >
+                                Supprimer
+                            </button>
+                        </div>
+                    ))}
+                </div>
+
+                <label>Ajouter une image</label>
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+
+                        const formData = new FormData();
+                        formData.append("file", file);
+
+                        const res = await fetch("/api/upload", {
+                            method: "POST",
+                            body: formData,
+                        });
+
+                        if (res.ok) {
+                            const data = await res.json();
+                            setForm((prev) => ({
+                                ...prev,
+                                homeBanners: [...(prev.homeBanners || []), data.imageUrl],
+                            }));
+                        } else {
+                            setMessage("❌ Erreur lors de l'upload.");
+                        }
+                    }}
+                />
+            </div>
+
+            {/* 🌐 Toutes les autres sections */}
             {sections.map(({ key, label }) => (
                 <div key={key} className="admin-form__section">
                     <h3>{label}</h3>
 
-                    {/* Image */}
                     <label>Image</label>
                     <input
                         type="file"
@@ -125,7 +184,6 @@ export default function AdminSiteSettingsForm({ settingsData }: AdminSiteSetting
                         />
                     )}
 
-                    {/* Titre */}
                     <label>Titre</label>
                     <input
                         type="text"
@@ -138,7 +196,6 @@ export default function AdminSiteSettingsForm({ settingsData }: AdminSiteSetting
                         }
                     />
 
-                    {/* Description */}
                     <label>Description</label>
                     <textarea
                         value={form[`${key}Desc` as keyof SiteSettings] as string || ""}
@@ -154,5 +211,6 @@ export default function AdminSiteSettingsForm({ settingsData }: AdminSiteSetting
 
             <button type="submit" className="admin-form__button">Enregistrer</button>
         </form>
+
     );
 }

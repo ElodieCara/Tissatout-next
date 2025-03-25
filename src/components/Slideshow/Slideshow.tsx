@@ -2,11 +2,14 @@ import { useState } from "react";
 import Image, { StaticImageData } from "next/image";
 import Button from "../Button/Button";
 
-
 type SlideshowProps = {
     images: {
-        id: number;
-        image: string | StaticImageData;
+        id?: string | number;
+        imageUrl: string;
+        title: string;
+        description: string;
+        buttonText?: string;
+        buttonLink?: string;
     }[];
     title?: string;
     subtitle?: string;
@@ -14,8 +17,12 @@ type SlideshowProps = {
     buttonLabel?: string;
 };
 
-const Slideshow: React.FC<SlideshowProps> = ({ images, title, subtitle, description, buttonLabel }) => {
+
+const Slideshow: React.FC<SlideshowProps> = ({ images }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
+
+    // 🛡️ Sécurité : si aucune image, on ne rend rien
+    if (images.length === 0) return null;
 
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev + 1) % images.length);
@@ -35,21 +42,24 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, title, subtitle, descript
         { plein: "/assets/ballon-bleu-plein.png", vide: "/assets/ballon-bleu-vide.png" },
     ];
 
+    if (!images[currentSlide] || !images[currentSlide].imageUrl) return null;
+
+    const current = images[currentSlide];
+
     return (
         <div className="container__slide">
             <div className="container__slide__image">
-
                 <Image
-                    src={images[currentSlide].image}
+                    src={images[currentSlide].imageUrl}
                     alt={`Slide ${currentSlide + 1}`}
+                    width={1200}
+                    height={600}
                     style={{ width: "100%", height: "auto" }}
-                    priority={true} // Priorité de chargement pour la première image
+                    priority
                 />
-                {/* Ajout de la boule rouge */}
-
-                {/* <RedBtn /> */}
 
             </div>
+
             <div className="container__slide__buttons">
                 <Image
                     className="container__slide__buttons__arrow--prev"
@@ -58,7 +68,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, title, subtitle, descript
                     width={50}
                     height={50}
                     onClick={prevSlide}
-                    priority={true}
+                    priority
                 />
                 <Image
                     className="container__slide__buttons__arrow--next"
@@ -67,13 +77,14 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, title, subtitle, descript
                     width={50}
                     height={50}
                     onClick={nextSlide}
-                    priority={true}
+                    priority
                 />
             </div>
+
             <div className="container__slide__pagination">
-                {images.map((_, idx) => (
+                {images.map((slide, idx) => (
                     <span
-                        key={idx}
+                        key={slide.id ?? idx}
                         className={`dot ${idx === currentSlide ? "active" : ""}`}
                         onClick={() => goToSlide(idx)}
                     >
@@ -91,16 +102,17 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, title, subtitle, descript
                     </span>
                 ))}
             </div>
+
             <div className="container__slide__text">
-                {title && <h1>{title}</h1>}
-                {subtitle && <h2>{subtitle}</h2>}
-                {description && <p>{description}</p>}
-                <p><strong>Prêts à explorer ?</strong> Découvrez nos dernières idées et amusez-vous avec vos enfants ! </p>
-                {buttonLabel && <Button className="button large">{buttonLabel}</Button>}
+                {current.title && <h1>{current.title}</h1>}
+                {current.description && <p>{current.description}</p>}
+                {current.buttonText && current.buttonLink && (
+                    <a href={current.buttonLink}>
+                        <Button className="button large">{current.buttonText}</Button>
+                    </a>
+                )}
             </div>
-
         </div>
-
     );
 };
 

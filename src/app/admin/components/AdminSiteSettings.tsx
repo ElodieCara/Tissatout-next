@@ -5,7 +5,7 @@ import Link from "next/link";
 
 interface SiteSettings {
     id?: string;
-    homeBanner: string;
+    homeBanners?: string[];
     universBanner: string;
     coloringBanner: string;
     adviceBanner: string;
@@ -23,6 +23,12 @@ const sections = [
     { key: "agePage", label: "🧒 Pages d’âge" },
     { key: "news", label: "📰 Actualités" },
 ];
+
+const getBannerImage = (key: string, settings: SiteSettings) => {
+    if (key === "home") return settings.homeBanners?.[0] || "/images/placeholder.jpg";
+    return (settings[`${key}Banner` as keyof SiteSettings] as string) || "/images/placeholder.jpg";
+};
+
 
 export default function AdminSiteSettings() {
     const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -49,7 +55,7 @@ export default function AdminSiteSettings() {
                         className="admin__list-item clickable"
                     >
                         <img
-                            src={settings[`${key}Banner` as keyof SiteSettings] || "/images/placeholder.jpg"}
+                            src={getBannerImage(key, settings)}
                             alt={label}
                             className="admin__list-item-image"
                         />

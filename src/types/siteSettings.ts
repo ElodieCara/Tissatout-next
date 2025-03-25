@@ -1,6 +1,6 @@
 export interface SiteSettings {
     id?: string;
-    homeBanner: string;
+    homeBanners: string[];
     homeTitle: string;
     homeDesc: string;
     universBanner: string;
