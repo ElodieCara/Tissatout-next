@@ -14,6 +14,11 @@
     }
 }
 
+@mixin container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
 // Typography Mixins
 @mixin font-primary($size: vars.$font-size-base, $weight: normal, $spacing: 3px) {
     font-family: typo.$font-family-primary;
