@@ -1,6 +1,9 @@
+// ✅ FILE: AdminAdviceForm.tsx
 "use client";
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { generateSlug } from "@/lib/utils";
 import Breadcrumb from "./Breadcrumb";
 
 interface Advice {
@@ -28,7 +31,6 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
     const router = useRouter();
     const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
 
-    // 🟢 Charger les données en modification
     useEffect(() => {
         if (adviceId && adviceId !== "new") {
             fetch(`/api/advice/${adviceId}`)
@@ -42,35 +44,27 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
                 .catch(() => setMessage("❌ Impossible de charger le conseil."));
         }
 
-        // Charger toutes les catégories d'âge disponibles
         fetch("/api/ageCategories")
             .then(res => res.json())
-            .then(data => {
-                console.log("📥 Catégories d'âge reçues :", data);
-                setAgeCategories(data);
-            });
-
+            .then(data => setAgeCategories(data));
     }, [adviceId]);
 
-    // 🟡 Gestion des changements dans le formulaire
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    // ✅ Gérer la sélection des âges
     const handleAgeCategoryChange = (id: string) => {
         setForm((prev) => {
             const alreadySelected = prev.ageCategories?.includes(id);
             return {
                 ...prev,
                 ageCategories: alreadySelected
-                    ? prev.ageCategories?.filter((ageId) => ageId !== id) // Décocher
-                    : [...(prev.ageCategories || []), id], // Cocher
+                    ? prev.ageCategories?.filter((ageId) => ageId !== id)
+                    : [...(prev.ageCategories || []), id],
             };
         });
     };
 
-    // 📸 Gérer l'upload d'image COMME AVANT
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -82,27 +76,29 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
         const data = await res.json();
 
         if (res.ok) {
-            setForm((prev) => ({ ...prev, imageUrl: data.imageUrl })); // ✅ REVIENT À L'ANCIENNE MÉTHODE
+            setForm((prev) => ({ ...prev, imageUrl: data.imageUrl }));
             setMessage("✅ Image uploadée !");
         } else {
             setMessage("❌ Erreur lors de l'upload.");
         }
     };
 
-    // 📤 Envoyer le formulaire (création/modification)
-    // 📤 Envoyer le formulaire
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         const method = adviceId && adviceId !== "new" ? "PUT" : "POST";
         const url = adviceId && adviceId !== "new" ? `/api/advice/${adviceId}` : "/api/advice";
 
+        const safeId = crypto.randomUUID().slice(0, 6);
+        const slug = generateSlug(form.title, safeId);
+
         const res = await fetch(url, {
             method,
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 ...form,
-                ageCategories: form.ageCategories || [], // ✅ tableau de strings
+                slug,
+                ageCategories: form.ageCategories || [],
             }),
         });
 
@@ -116,7 +112,6 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
             setMessage(`❌ Erreur : ${data.error || "Erreur inconnue"}`);
         }
     };
-
 
     return (
         <div className="admin-form">
@@ -154,7 +149,6 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
                     </select>
                 </div>
 
-                {/* ✅ Sélection des catégories d'âge */}
                 <div className="admin-form__group">
                     <label>📌 Âges concernés :</label>
                     <div className="checkbox-group">

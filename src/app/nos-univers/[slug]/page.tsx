@@ -8,7 +8,14 @@ export default async function Page({ params }: { params: { slug: string } }) {
         include: {
             articles: { include: { article: true } },
             drawings: { include: { drawing: true } },
-            advices: { include: { advice: true } },
+            advices: {
+                include: { advice: true },
+                orderBy: {
+                    advice: {
+                        createdAt: "desc"
+                    }
+                }
+            },
             ideas: { include: { idea: true } },
         },
     });

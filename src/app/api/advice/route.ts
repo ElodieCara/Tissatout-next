@@ -1,12 +1,8 @@
+// ✅ FILE: src/app/api/advice/route.ts
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { generateSlug } from "@/lib/utils";
 
-// 🛑 Fonction pour échapper les caractères dangereux (XSS protection)
-function escapeHtml(text: string) {
-    return text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-// 🟢 Récupérer tous les conseils
 export async function GET() {
     try {
         const advices = await prisma.advice.findMany({
@@ -18,9 +14,11 @@ export async function GET() {
                 category: true,
                 createdAt: true,
                 imageUrl: true,
+                slug: true,
             },
             orderBy: { createdAt: "desc" },
         });
+
         return NextResponse.json(advices);
     } catch (error) {
         console.error("❌ Erreur API (GET) :", error);
@@ -28,23 +26,39 @@ export async function GET() {
     }
 }
 
-// 🟢 Ajouter un nouveau conseil (depuis l'admin)
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        if (!body.title || !body.content || !body.category) {
+        const { title, content, category, description, imageUrl, ageCategories } = body;
+
+        if (!title || !content || !category) {
             return NextResponse.json({ error: "❌ Champs obligatoires manquants" }, { status: 400 });
+        }
+
+        const safeId = crypto.randomUUID().slice(0, 6);
+        const slug = body.slug?.trim() || generateSlug(title, safeId);
+
+        const exists = await prisma.advice.findUnique({ where: { slug } });
+        if (exists) {
+            return NextResponse.json({ error: "Slug déjà utilisé." }, { status: 400 });
         }
 
         const newAdvice = await prisma.advice.create({
             data: {
-                title: body.title,
-                content: body.content,
-                category: body.category,
-                description: body.description,
-                imageUrl: body.imageUrl || "", // ✅ Ajout de l'image
+                title,
+                content,
+                category,
+                description,
+                imageUrl: imageUrl || "",
+                slug,
+                ageCategories: {
+                    create: ageCategories?.map((id: string) => ({
+                        ageCategoryId: id
+                    })) || [],
+                }
             },
         });
+
 
         return NextResponse.json(newAdvice, { status: 201 });
     } catch (error) {

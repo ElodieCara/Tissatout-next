@@ -3,6 +3,16 @@ import Banner from "@/components/Banner/Banner";
 import Button from "@/components/Button/Button";
 import Image from "next/image";
 import Link from "next/link";
+import { Advice } from "@prisma/client";
+
+function formatDate(date: string | Date) {
+    return new Date(date).toLocaleDateString("fr-FR", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+    });
+}
+
 
 export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: any, agePageBanner: string }) {
     return (
@@ -75,10 +85,64 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                 </div>
             </section>
 
+            {/* Conseils pour les parents */}
+            <section className="advices">
+                <div className="advices__header">
+                    <h2>🧸 Conseils pour {ageCategory.title.toLowerCase()}</h2>
+                    <Button className="large"><Link href="/conseils" className="advices__link-button">Voir tous les conseils</Link></Button>
+                </div>
+
+                <div className="advices__grid">
+                    {ageCategory.advices?.length > 0 ? (
+                        <>
+                            {/* Grand conseil principal */}
+                            <Link href={`/conseils/${ageCategory.advices[0].advice.slug}`} className="advices__main-card">
+                                <div className="advices__main-card__badge">Nouveau</div>
+                                <Image
+                                    src={ageCategory.advices[0].advice.imageUrl || "/images/default-advice.jpg"}
+                                    alt={ageCategory.advices[0].advice.title}
+                                    width={800}
+                                    height={400}
+                                />
+                                <div className="advices__main-card__info">
+                                    <p>By Tissatout</p>
+                                    <h3>{ageCategory.advices[0].advice.title}</h3>
+                                    <span className="advices__date">{formatDate(ageCategory.advices[0].advice.createdAt)}</span>
+                                    <p>{ageCategory.advices[0].advice.description}</p>
+                                </div>
+                            </Link>
+
+                            {/* Les 3 suivants à droite */}
+                            <div className="advices__side-list">
+                                {ageCategory.advices.slice(1, 5).map(({ advice }: { advice: Advice }) => (
+                                    <Link key={advice.id} href={`/conseils/${advice.slug}`} className="advices__mini-card">
+                                        <Image
+                                            src={advice.imageUrl || "/images/default-advice.jpg"}
+                                            alt={advice.title}
+                                            width={100}
+                                            height={100}
+                                        />
+                                        <div className="advices__mini-card__info">
+                                            <p>By Tissatout</p>
+                                            <h4>{advice.title}</h4>
+                                            <span className="advices__date">{formatDate(advice.createdAt)}</span>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <p>Aucun conseil disponible.</p>
+                    )}
+
+                </div>
+            </section>
+
+
 
             {/* Dessins à colorier */}
             <section>
-                <h2>🎨 Coloriages</h2>
+                <h2>🎨 Coloriages pour {ageCategory.title}</h2>
                 <div className="grid">
                     {ageCategory.drawings?.length > 0 ? (
                         ageCategory.drawings.map(({ drawing }: any) => (
@@ -95,7 +159,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
 
             {/* Idées d’activités */}
             <section>
-                <h2>💡 Idées d'activités</h2>
+                <h2>💡 Idées d'activités pour {ageCategory.title}</h2>
                 <div className="grid">
                     {ageCategory.ideas?.length > 0 ? (
                         ageCategory.ideas.map(({ idea }: any) => (
@@ -110,22 +174,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                 </div>
             </section>
 
-            {/* Conseils pour les parents */}
-            <section>
-                <h2>🧸 Conseils</h2>
-                <div className="grid">
-                    {ageCategory.advices?.length > 0 ? (
-                        ageCategory.advices.map(({ advice }: any) => (
-                            <Link key={advice.id} href={`/conseils/${advice.slug}`} className="card">
-                                <h3>{advice.title}</h3>
-                                <p>{advice.description}</p>
-                            </Link>
-                        ))
-                    ) : (
-                        <p>Aucun conseil disponible.</p>
-                    )}
-                </div>
-            </section>
+
         </div>
     );
 }
