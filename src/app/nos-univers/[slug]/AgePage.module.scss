@@ -1,9 +1,12 @@
+@use '../../../styles/base/mixins' as mix;
+@use '../../../styles/utils/variables' as vars;
+
 .age {
-    background-color: $primary-color;
+    background-color: vars.$primary-color;
     padding: 2rem 1rem;
 
     &>* {
-        @include container;
+        @include mix.container;
     }
 
     &__intro {
@@ -84,14 +87,14 @@
     }
 }
 
-//Articles par age
+//**********************Articles par age**********************************
 
 .articles {
     padding: 2rem;
     background: #f0f0f0;
 
     &>* {
-        @include container;
+        @include mix.container;
     }
 
     &__header {
@@ -157,25 +160,25 @@
             }
         }
 
-        @media (max-width: 768px) {
-            flex-direction: column;
+        // @media (max-width: 768px) {
+        //     flex-direction: column;
 
-            &.reverse {
-                flex-direction: column;
-            }
-        }
+        //     &.reverse {
+        //         flex-direction: column;
+        //     }
+        // }
     }
 
     &__image {
         flex: 0 0 45%;
-        height: 100%;
+        height: 220px;
         overflow: hidden;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); // 🌟 ici l’ombre
         border-radius: 25px;
 
         img {
             width: 100%;
-            height: 100%;
+            height: 220px;
             object-fit: cover; // 🧠 LA CLÉ
             border-radius: 0.5rem;
         }
@@ -196,7 +199,7 @@
     &__title {
         font-size: 1.5rem;
         font-weight: bold;
-        color: $primary-color;
+        color: vars.$primary-color;
         margin-bottom: 0.5rem;
 
         &.reverse {
@@ -214,12 +217,12 @@
     &__description {
         font-size: 1rem;
         margin-bottom: 1.2rem;
-        color: $primary-color;
+        color: vars.$primary-color;
     }
 
     &__button {
         background-color: #f7a900;
-        color: $primary-color;
+        color: vars.$primary-color;
         border: none;
         padding: 0.6rem 1.2rem;
         border-radius: 999px;
@@ -231,6 +234,273 @@
         &:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); // ombre plus marquée au hover
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .articles {
+        padding: 1rem;
+
+        &__header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            &__link-button {
+                align-self: flex-end;
+            }
+        }
+
+        &__card,
+        &__card.reverse {
+            flex-direction: column;
+            height: auto;
+            padding: 1rem;
+        }
+
+        &__image {
+            width: 100%;
+            height: 200px;
+            border-radius: 1rem;
+
+            img {
+                width: 100%;
+                object-fit: cover;
+                display: block;
+            }
+        }
+
+        &__content {
+            flex-direction: column !important;
+            align-items: flex-start;
+            gap: 1rem;
+
+            &__text {
+                align-items: flex-start;
+                text-align: left;
+            }
+        }
+
+        // ✅ SÉPARATEUR (même pour les reverse)
+        &__separator {
+            width: 100% !important; // 🔒 force horizontal
+            height: 3px !important;
+            margin: 1.5rem 0 !important;
+        }
+
+        &__title {
+            font-size: 1.2rem;
+        }
+
+        &__description {
+            font-size: 0.95rem;
+        }
+
+        &__button {
+            align-self: flex-start;
+        }
+    }
+}
+
+
+// **************** Conseils par age**************************
+
+.advices {
+    padding: 2rem;
+    background-color: #2c3f64;
+
+    &>* {
+        max-width: 1400px;
+        margin: auto;
+    }
+
+    &__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+
+        h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        &__link-button {
+            background-color: #f7a900;
+            color: #2c3f64;
+            padding: 0.6rem 1rem;
+            border-radius: 999px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    }
+
+    &__grid {
+        display: flex;
+        gap: 2rem;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+        }
+    }
+
+    &__main-card {
+        position: relative;
+        flex: 2;
+        background: white;
+        border-radius: 1rem;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        @include mix.card-hover-animation;
+
+        img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        &__info {
+            padding: 1.5rem;
+
+            p {
+                font-size: 0.9rem;
+                color: #555;
+            }
+
+            h3 {
+                font-size: 1.4rem;
+                margin: 0.5rem 0;
+                color: #2c3f64;
+            }
+
+            .advices__date {
+                font-size: 0.8rem;
+                color: #aaa;
+            }
+        }
+
+        &__badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: #f7a900;
+            color: white;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 10;
+        }
+    }
+
+    &__side-list {
+        flex: 1.5;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    &__mini-card {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        background: white;
+        border-radius: 1rem;
+        padding: 1rem;
+        @include mix.card-hover-animation;
+
+        img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        &__info {
+            display: flex;
+            flex-direction: column;
+
+            p {
+                font-size: 0.75rem;
+                color: #555;
+                margin-bottom: 0.3rem;
+            }
+
+            h4 {
+                font-size: 1rem;
+                font-weight: bold;
+                color: #2c3f64;
+                margin-bottom: 0.2rem;
+            }
+
+            .advices__date {
+                font-size: 0.7rem;
+                color: #aaa;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .advices {
+        padding: 1rem;
+
+        &__header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            &__link-button {
+                align-self: flex-end;
+            }
+        }
+
+        &__grid {
+            flex-direction: column;
+        }
+
+        &__main-card {
+            img {
+                height: auto;
+            }
+
+            &__info {
+                padding: 1rem;
+
+                h3 {
+                    font-size: 1.1rem;
+                }
+            }
+        }
+
+        &__mini-card {
+            padding: 0.8rem;
+
+            img {
+                width: 60px;
+                height: 60px;
+            }
+
+            &__info {
+                h4 {
+                    font-size: 0.95rem;
+                }
+            }
+        }
+
+        &__side-list {
+            gap: 1rem;
         }
     }
 }

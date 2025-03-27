@@ -19,6 +19,15 @@
     margin: 0 auto;
 }
 
+@mixin card-hover-animation {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+}
+
 // Typography Mixins
 @mixin font-primary($size: vars.$font-size-base, $weight: normal, $spacing: 3px) {
     font-family: typo.$font-family-primary;
