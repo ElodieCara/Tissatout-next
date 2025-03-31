@@ -52,10 +52,11 @@ const Slideshow: React.FC<SlideshowProps> = ({ images }) => {
                 <Image
                     src={images[currentSlide].imageUrl}
                     alt={`Slide ${currentSlide + 1}`}
-                    width={1200}
-                    height={600}
-                    style={{ width: "100%", height: "auto" }}
+                    fill
+                    style={{ objectFit: "cover" }}
                     priority
+                    quality={100}
+                    sizes="100vw"
                 />
 
             </div>

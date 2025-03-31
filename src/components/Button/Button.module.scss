@@ -1,3 +1,6 @@
+@use '../../styles/base/mixins' as mix;
+@use '../../styles/utils/variables' as vars;
+
 .button {
     display: flex;
     justify-content: center;
@@ -21,17 +24,17 @@
     }
 
     &.yellow-button {
-        background-color: #f0b429;
+        background-color: vars.$secondary-color;
         color: #2c3f64;
 
         &:hover {
-            background-color: #d19723;
+            background-color: vars.$secondary-color;
             transform: scale(1.05);
         }
     }
 
     &.blue-button {
-        background-color: #2c3f64;
+        background-color: vars.$dark-primary-color;
         color: #f0b429;
 
         &:hover {

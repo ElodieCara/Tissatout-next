@@ -29,17 +29,19 @@ const Header: React.FC = () => {
                 </div>
                 <nav className="header__masthead__nav-main">
                     <div className="header__masthead__nav-main__logo" style={{ position: "relative", width: "180px", height: "100px" }}>
-                        <Image
-                            src="/Tissatout.png"
-                            alt="Logo Tissatout"
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            style={{ objectFit: "contain" }} // Garde les proportions
-                        />
+                        <Link href="/">
+                            <Image
+                                src="/Tissatout.png"
+                                alt="Logo Tissatout"
+                                width={130}
+                                height={80}
+                                style={{ objectFit: "contain" }} // Garde les proportions
+                            />
+                        </Link>
                     </div>
-                    <Link href="/">
-                        <h1 className="header__masthead__nav-main__title">Tissatout</h1>
-                    </Link>
+
+                    {/* <h1 className="header__masthead__nav-main__title">Tissatout</h1> */}
+
                     <form
                         className="header__masthead__nav-main__input"
                         action="#"

@@ -43,6 +43,9 @@ model AgeCategory {
   title       String
   slug        String @unique
   description String
+  content     String?  
+  conclusion  String?
+  activityList  String[]
   imageCard   String
   imageBanner String
 

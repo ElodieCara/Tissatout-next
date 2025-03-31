@@ -12,7 +12,7 @@
 
 body {
     color: white;
-    background-color: #2c3f64;
+    //background-color: #2c3f64;
 }
 
 main {
@@ -21,7 +21,7 @@ main {
 }
 
 header {
-    background-color: #2c3f64;
+    background-color: vars.$primary-color;
     // height: 166px;
 }
 

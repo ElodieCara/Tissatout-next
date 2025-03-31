@@ -40,6 +40,9 @@ export async function PUT(
                 description: body.description,
                 imageCard: body.imageCard,
                 imageBanner: body.imageBanner,
+                content: body.content ?? "",
+                conclusion: body.conclusion ?? "",
+                activityList: body.activityList ?? [],
             },
         });
 

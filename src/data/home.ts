@@ -32,7 +32,7 @@ export const sections: Section[] = [
     {
         title: "Tout-petits",
         color: "#ECAC3E",
-        buttonImage: Btntp,
+        buttonImage: Tp,
         imageCard: Tp,
         slug: "tout-petits",
         content: "Tout-petits : éveil et magie des premiers moments 🎨✨",
@@ -52,7 +52,7 @@ export const sections: Section[] = [
     {
         title: "Dès 3 ans",
         color: "rgb(2 141 2)",
-        buttonImage: BtnD3,
+        buttonImage: D3,
         imageCard: D3,
         slug: "des-3-ans",
         content: "Dès 3 ans : créativité et premières découvertes 🌈",
@@ -72,7 +72,7 @@ export const sections: Section[] = [
     {
         title: "Dès 6 ans",
         color: "#CF000F",
-        buttonImage: BtnD6,
+        buttonImage: D6,
         imageCard: D6,
         slug: "des-6-ans",
         content: "Dès 6 ans : exploration et autonomie 🚀",
@@ -92,7 +92,7 @@ export const sections: Section[] = [
     {
         title: "Dès 10 ans",
         color: "#0066D5",
-        buttonImage: BtnD8,
+        buttonImage: D8,
         imageCard: D8,
         slug: "des-10-ans",
         content: "Dès 10 ans : création et défis stimulants 🧠🎨",

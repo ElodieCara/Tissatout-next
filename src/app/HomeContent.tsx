@@ -102,15 +102,22 @@ export default function HomeContent({
 
         fetch(`/api/ideas?theme=${encodeURIComponent(normalizedTheme)}`)
             .then((res) => res.json())
-            .then((data) => setIdeas(data))
-            .catch((err) => console.error("Erreur lors de la récupération des idées :", err));
+            .then((data) => {
+                if (Array.isArray(data)) {
+                    setIdeas(data);
+                } else if (Array.isArray(data.ideas)) {
+                    setIdeas(data.ideas);
+                } else {
+                    setIdeas([]);
+                    setIdeasError("Format inattendu reçu depuis l’API.");
+                }
+            })
+            .catch((err) => {
+                console.error("Erreur lors de la récupération des idées :", err);
+                setIdeasError("Impossible de charger les idées pour le moment.");
+            });
     }, [theme]);
 
-    useEffect(() => {
-        setTimeout(() => {
-            document.documentElement.style.setProperty("--page-height", `${document.body.scrollHeight}px`);
-        }, 500);
-    }, [JSON.stringify(articles), theme]);
 
     const nextSlide = () => setCurrentSlide((prev) => (prev < totalSlides - 1 ? prev + 1 : 0));
     const prevSlide = () => setCurrentSlide((prev) => (prev > 0 ? prev - 1 : totalSlides - 1));
@@ -258,7 +265,7 @@ export default function HomeContent({
                 {ideasError ? <p className="error">{ideasError}</p> : null}
                 <div className="ideas-content">
                     <div className="ideas-content__card">
-                        {ideas.slice(0, 4).map((idea, index) => (
+                        {Array.isArray(ideas) && ideas.slice(0, 4).map((idea, index) => (
                             <Link
                                 href={`/ideas/${idea.id}`}
                                 key={idea.id}

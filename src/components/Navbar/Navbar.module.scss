@@ -1,9 +1,12 @@
 @use "sass:color";
 @use "../../styles/utils/variables" as vars;
+@use "../../styles/base/mixins" as mix;
 
 //sub-masthead
 .header__sub-masthead {
     background-color: transparent;
+    @include mix.container;
+    margin-top: 10px;
 
     &__nav {
         display: flex;
@@ -19,6 +22,7 @@
             padding: 0;
             overflow-y: visible;
             z-index: 999;
+            margin-top: 10px;
 
             &__navbar {
                 width: 50%;
@@ -33,74 +37,62 @@
                 // top: 50px;
 
                 &-menu {
-                    width: 30%;
-                    height: 100%;
-                    margin: 0 3px;
-                    font-size: 13px;
-                    font-family: sans-serif;
-                    text-transform: capitalize;
-                    line-height: 0em;
-                    transition: 0.3s;
+
+                    border-radius: 8px;
+                    color: white;
+                    margin: 0 5px;
                     cursor: pointer;
-                    padding: 40px;
-                    text-transform: uppercase;
+                    transition: transform 0.3s ease, background-color 0.3s ease;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    white-space: normal; // pour permettre le retour à la ligne si besoin
                     text-align: center;
+                    height: 50px; // ou 45px
+                    padding: 0 30px; // plus long visuellement
+                    font-size: 0.9rem;
 
-
-                    &:nth-child(4n + 1) {
-                        background: vars.$btn-orange no-repeat;
-                        background-position: center;
-                        background-size: 100% 100%;
-                        text-align: center;
-                        // transform: rotate(20deg);
-                        // transform: perspective(200px) rotateY(20deg);
-                        // padding-bottom: 10%;
-
+                    // couleurs cycliques
+                    &:nth-child(6n+1) {
+                        background-color: #f9b233;
                     }
 
-                    &:nth-child(4n + 2) {
-                        background: vars.$btn-red no-repeat;
-                        text-align: center;
-                        // transform: rotate(-5deg);
-                        // transform: perspective(200px) rotateY(20deg);
-                        background-position: center;
-                        background-size: 100% 100%;
-                        // padding-top: 10%;
+                    // jaune
+                    &:nth-child(6n+2) {
+                        background-color: #f27d72;
                     }
 
-                    &:nth-child(4n + 3) {
-                        background: vars.$btn-green no-repeat;
-                        background-position: center;
-                        background-size: 100% 100%;
-                        text-align: center;
-                        // transform: rotate(5deg);
-                        // transform: perspective(200px) rotateY(20deg);
-                        // padding-top: 10%;
+                    // rouge pastel
+                    &:nth-child(6n+3) {
+                        background-color: #67c9c4;
                     }
 
-                    &:nth-child(4n + 4) {
-                        background: vars.$btn-blue no-repeat;
-                        background-position: center;
-                        background-size: 100% 100%;
-                        text-align: center;
-                        // padding-top: 10%;
-                        // transform: perspective(200px) rotateY(20deg);
-                        // transition: transform 0.3s ease-in-out;
+                    // turquoise
+                    &:nth-child(6n+4) {
+                        background-color: #5ba585;
                     }
 
-                    // &:nth-child(odd):hover {
-                    //   transform: translateY(-10px);
-                    //   // padding-bottom: 5%;
-                    // }
+                    // vert doux
+                    &:nth-child(6n+5) {
+                        background-color: #c7a269;
+                    }
+
+                    // sable
+                    &:nth-child(6n+6) {
+                        background-color: #f4c048;
+                    }
+
+                    // jaune doré
 
                     &:hover {
-                        transform: translateY(-10px);
-                        transition: transform 0.3s ease-in-out;
-                        // transform: perspective(200px) rotateX(45deg);
-                        // padding-top: 5%;
+                        transform: translateY(-6px);
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+                    }
+
+                    a {
+                        line-height: 1;
+                        font-size: 1rem;
+                        color: white;
                     }
                 }
             }

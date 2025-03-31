@@ -10,6 +10,9 @@ interface AgeCategory {
     description: string;
     imageCard: string;
     imageBanner: string;
+    content: string;
+    conclusion: string;
+    activityList: string[];
 }
 
 export default function AdminAgeCategoryForm({
@@ -23,6 +26,9 @@ export default function AdminAgeCategoryForm({
         description: "",
         imageCard: "",
         imageBanner: "",
+        content: "",
+        conclusion: "",
+        activityList: [],
     });
 
     const [message, setMessage] = useState("");
@@ -148,6 +154,38 @@ export default function AdminAgeCategoryForm({
                         required
                     />
                 </div>
+                <div className="admin-form__group">
+                    <label htmlFor="content">Phrase d’accroche</label>
+                    <textarea
+                        name="content"
+                        value={form.content}
+                        onChange={handleChange}
+                        className="admin-form__group-input"
+                    />
+                </div>
+
+                <div className="admin-form__group">
+                    <label htmlFor="activityList">Liste d’activités (une par ligne)</label>
+                    <textarea
+                        name="activityList"
+                        value={form.activityList.join("\n")}
+                        onChange={(e) =>
+                            setForm({ ...form, activityList: e.target.value.split("\n") })
+                        }
+                        className="admin-form__group-input"
+                    />
+                </div>
+
+                <div className="admin-form__group">
+                    <label htmlFor="conclusion">Conclusion</label>
+                    <textarea
+                        name="conclusion"
+                        value={form.conclusion}
+                        onChange={handleChange}
+                        className="admin-form__group-input"
+                    />
+                </div>
+
 
                 <div className="admin-form__group">
                     <label htmlFor="imageCard">🖼️ Image de carte</label>

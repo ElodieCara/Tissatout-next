@@ -244,7 +244,6 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                                             height: "100%",
                                             zIndex: -1,
                                             imageRendering: "auto",
-
                                         }}
                                     />
                                 </Link>
