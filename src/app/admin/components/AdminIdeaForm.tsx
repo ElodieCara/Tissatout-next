@@ -93,7 +93,10 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
             const res = await fetch(url, {
                 method,
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(form),
+                body: JSON.stringify({
+                    ...form,
+                    ageCategoryIds: form.ageCategories
+                }),
             });
 
             if (res.ok) {
@@ -174,6 +177,7 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                         <option value="autumn">🍂 Automne</option>
                         <option value="halloween">🎃 Halloween</option>
                         <option value="christmas">🎄 Noël</option>
+                        <option value="easter">🐣 Pâques</option>
                     </select>
                 </div>
                 <button type="submit" className="admin-form__button">

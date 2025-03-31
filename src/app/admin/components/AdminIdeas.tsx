@@ -16,8 +16,11 @@ export default function AdminIdeas() {
     // 🟢 Charger les idées depuis l'API
     useEffect(() => {
         fetch("/api/ideas")
-            .then((res) => res.json())
-            .then((data) => setIdeas(data))
+            .then(async (res) => {
+                if (!res.ok) throw new Error(`Erreur API : ${res.status}`);
+                const data = await res.json();
+                setIdeas(data);
+            })
             .catch((err) => console.error("Erreur lors du chargement des idées :", err));
     }, []);
 

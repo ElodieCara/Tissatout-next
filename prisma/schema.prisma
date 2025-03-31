@@ -27,6 +27,7 @@ model Article {
 model Idea {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
+  slug        String   @unique
   description String
   image       String?
   theme       String

@@ -2,8 +2,11 @@
 import Banner from "@/components/Banner/Banner";
 import Button from "@/components/Button/Button";
 import Image from "next/image";
+import DrawingSlider from "../../../components/DrawingSlide/DrawingSlide";
 import Link from "next/link";
-import { Advice } from "@prisma/client";
+import { Advice, Idea } from "@prisma/client";
+import { drawingDescriptions } from "../../../data/drawingDescription";
+import themeImages from '@/data/themeIdeasImage';
 
 function formatDate(date: string | Date) {
     return new Date(date).toLocaleDateString("fr-FR", {
@@ -15,6 +18,10 @@ function formatDate(date: string | Date) {
 
 
 export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: any, agePageBanner: string }) {
+
+    const ageKey = ageCategory.title.toLowerCase();
+    const description = drawingDescriptions[ageKey];
+
     return (
         <div>
             <header>
@@ -138,38 +145,113 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                 </div>
             </section>
 
-
-
             {/* Dessins à colorier */}
-            <section>
-                <h2>🎨 Coloriages pour {ageCategory.title}</h2>
-                <div className="grid">
-                    {ageCategory.drawings?.length > 0 ? (
-                        ageCategory.drawings.map(({ drawing }: any) => (
-                            <Link key={drawing.id} href={`/coloriages/${drawing.slug}`} className="card">
-                                <h3>{drawing.title}</h3>
-                                <p>{drawing.description}</p>
-                            </Link>
-                        ))
-                    ) : (
-                        <p>Aucun coloriage disponible.</p>
-                    )}
+            <section className="drawings">
+                <div className="drawings__header">
+                    <h2>🎨 Coloriages {ageCategory.title.toLowerCase()}</h2>
+                    <Button className="large"><Link href="/coloriages">Voir tous les coloriages</Link></Button>
                 </div>
+
+                {ageCategory.drawings && ageCategory.drawings.length > 0 ? (
+                    <>
+                        <div className="drawings__content">
+                            {/* 🖼️ Carte de gauche avec le premier dessin */}
+                            <Link
+                                href={`/coloriages/${ageCategory.drawings[0].drawing.slug}`}
+                                className="drawings__highlight"
+                            >
+                                <Image
+                                    src={ageCategory.drawings[0].drawing.imageUrl || "/images/default.jpg"}
+                                    alt={ageCategory.drawings[0].drawing.title}
+                                    width={300}
+                                    height={300}
+                                />
+                                <div className="drawings__content__text">
+                                    <div className="drawings__content__text__separator"></div>
+                                    <div className="drawings__content__text__block">
+                                        <h3>Dès {ageCategory.title}</h3>
+                                        <p>{ageCategory.drawings.length} coloriages</p>
+                                    </div>
+                                </div>
+                            </Link>
+
+                            {/* 🎠 Slider à droite avec les suivants */}
+                            <DrawingSlider
+                                drawings={ageCategory.drawings
+                                    .slice(1) // on enlève le premier car déjà à gauche
+                                    .map((d: any) => d.drawing)}
+                            />
+                        </div>
+
+                        <div className="drawings__description-block">
+                            <h4 className="drawings__description-block__title">
+                                {description?.title || `Coloriages ${ageKey} à imprimer gratuitement`}
+                            </h4>
+                            <p className="drawings__description-block__text">
+                                {description?.text ||
+                                    `Découvrez une sélection de coloriages pensés pour les enfants ${ageKey}, à imprimer pour apprendre, s'amuser et développer la motricité fine.`}
+                            </p>
+                        </div>
+                    </>
+                ) : (
+                    <p className="drawings__empty">Aucun coloriage disponible.</p>
+                )}
             </section>
 
+
+
+
+
             {/* Idées d’activités */}
-            <section>
-                <h2>💡 Idées d'activités pour {ageCategory.title}</h2>
-                <div className="grid">
+            <section className="ideas">
+                <div className="ideas__header">
+                    <h2>💡 Idées d’activités pour {ageCategory.title}</h2>
+                </div>
+
+                <div className="ideas__grid">
                     {ageCategory.ideas?.length > 0 ? (
-                        ageCategory.ideas.map(({ idea }: any) => (
-                            <Link key={idea.id} href={`/idees/${idea.slug}`} className="card">
-                                <h3>{idea.title}</h3>
-                                <p>{idea.description}</p>
-                            </Link>
-                        ))
+                        ageCategory.ideas.map(({ idea }: { idea: Idea }) => {
+                            // Utilisation d'une clé correcte pour accéder au thème et d'une valeur par défaut si l'icône n'existe pas
+                            const themeKey = idea.theme.toLowerCase() as keyof typeof themeImages;
+                            const icon = themeImages[themeKey]?.icon || themeImages.default.icon;
+                            const background = themeImages[themeKey]?.background || themeImages.default.background;
+
+                            return (
+                                <Link key={idea.id} href={`/idees/${idea.id}`} className="ideas__card">
+                                    <div className="ideas__card__icon">
+                                        <Image
+                                            src={icon}
+                                            alt={idea.theme}
+                                            width={140}
+                                            height={140}
+                                        />
+                                    </div>
+                                    <h3 className="ideas__card__title">{idea.title}</h3>
+                                    <p className="ideas__card__description">{idea.description}</p>
+                                    <span className="ideas__card__link">➔</span>
+
+                                    <div
+                                        className="ideas__card__background"
+                                        style={{
+                                            backgroundImage: `url(${themeImages[idea.theme as keyof typeof themeImages]?.background || themeImages.default.background})`,
+                                            backgroundSize: "",  // Couvre toute la surface de la card
+                                            backgroundRepeat: "no-repeat",
+                                            backgroundPosition: "center",
+                                            position: "absolute",
+                                            top: 0,
+                                            left: 0,
+                                            width: "150%",
+                                            height: "100%",
+                                            zIndex: -1,
+                                            imageRendering: "auto",
+
+                                        }}
+                                    />
+                                </Link>
+                            );
+                        })
                     ) : (
-                        <p>Aucune idée disponible.</p>
+                        <p className="ideas__empty">Aucune idée disponible pour cette tranche d’âge.</p>
                     )}
                 </div>
             </section>

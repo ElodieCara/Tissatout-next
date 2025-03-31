@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { generateSlug } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 // 🎨 Correspondance FR → EN
@@ -9,67 +10,70 @@ const themeMapping: Record<string, string> = {
     "Automne": "autumn",
     "Halloween": "halloween",
     "Noël": "christmas",
-    "Pâques": "easter" // Ajout de Pâques si jamais tu l'utilises
+    "Pâques": "easter"
 };
 
-
-// 🟢 Récupérer toutes les idées ou filtrer par thème
-export async function GET(req: Request) {
+export async function GET() {
     try {
-        const { searchParams } = new URL(req.url);
-        const themeFr = searchParams.get("theme")?.trim() || null; // 🔍 Suppression des espaces vides
-
-        // Convertit en EN si trouvé, sinon garde le FR
-        const themeEn = themeFr && themeMapping[themeFr] ? themeMapping[themeFr] : themeFr;
-
-        console.log("🎨 Thème reçu (FR) :", themeFr);
-        console.log("🌎 Thème utilisé en base (EN) :", themeEn || "Tous thèmes");
-
-        // Si aucun thème n'est sélectionné, récupérer TOUTES les idées
-        const whereClause = themeEn ? { theme: themeEn } : undefined;
-
         const ideas = await prisma.idea.findMany({
-            where: whereClause,
             orderBy: { createdAt: "desc" },
-        });
-
-        console.log(`📤 ${ideas.length} idée(s) envoyée(s)`);
-        return NextResponse.json(ideas);
-    } catch (error) {
-        console.error("❌ Erreur API GET /api/ideas :", error);
-        return NextResponse.json({ error: "Erreur serveur", details: (error as Error).message }, { status: 500 });
-    }
-}
-
-// 🟢 Ajouter une nouvelle idée (CREATE)
-export async function POST(req: Request) {
-    try {
-        const body = await req.json();
-        console.log("📥 Requête reçue :", body); // ✅ Vérifie les données reçues
-
-        // ✅ Vérification des champs obligatoires
-        if (!body.title?.trim() || !body.description?.trim() || !body.theme?.trim()) {
-            return NextResponse.json({ error: "❌ Tous les champs (title, description, theme) sont requis." }, { status: 400 });
-        }
-
-        // ✅ Vérifier si le thème est valide (convertir en anglais si besoin)
-        const themeEn = themeMapping[body.theme] || body.theme;
-
-        // ✅ Création de la nouvelle idée
-        const newIdea = await prisma.idea.create({
-            data: {
-                title: body.title.trim(),
-                description: body.description.trim(),
-                image: body.image?.trim() || null, // Image optionnelle
-                theme: themeEn, // Thème obligatoire
+            include: {
+                ageCategories: {
+                    include: { ageCategory: true },
+                },
             },
         });
 
-        console.log("✅ Idée ajoutée avec succès :", newIdea);
-        return NextResponse.json(newIdea, { status: 201 });
-
+        return NextResponse.json(ideas);
     } catch (error) {
-        console.error("❌ Erreur API POST /api/ideas :", error);
-        return NextResponse.json({ error: "Erreur serveur", details: (error as Error).message }, { status: 500 });
+        console.error("❌ Erreur GET /api/ideas :", error);
+        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+    }
+}
+
+
+// ✅ Ajouter une nouvelle idée AVEC liaison à une ou plusieurs catégories d'âge via ID
+export async function POST(req: Request) {
+    try {
+        const body = await req.json();
+        const { title, description, theme, image, ageCategoryIds } = body;
+
+        if (!title?.trim() || !description?.trim() || !theme?.trim() || !Array.isArray(ageCategoryIds) || ageCategoryIds.length === 0) {
+            return NextResponse.json(
+                { error: "Champs requis manquants ou invalides." },
+                { status: 400 }
+            );
+        }
+
+        const themeEn = themeMapping[theme.trim()] || theme.trim();
+        const slug = generateSlug(title);
+
+        const newIdea = await prisma.idea.create({
+            data: {
+                title: title.trim(),
+                slug,
+                description: description.trim(),
+                theme: themeEn,
+                image: image?.trim() || null,
+                ageCategories: {
+                    create: ageCategoryIds.map((ageId: string) => ({
+                        ageCategory: { connect: { id: ageId } }
+                    }))
+                }
+            },
+            include: {
+                ageCategories: {
+                    include: { ageCategory: true }
+                }
+            }
+        });
+
+        return NextResponse.json(newIdea, { status: 201 });
+    } catch (error) {
+        console.error("❌ Erreur POST /api/ideas :", error);
+        return NextResponse.json(
+            { error: "Erreur serveur", details: (error as Error).message },
+            { status: 500 }
+        );
     }
 }

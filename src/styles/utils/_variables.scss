@@ -14,14 +14,21 @@ $icon-d3btn: url("../../assets/d3btn.png");
 $icon-d6btn: url("../../assets/d6btn.png");
 $icon-d8btn: url("../../assets/d8btn.png");
 
+// 🎨 Couleurs principales et identitaires
 $primary-color: #2c3f64;
 $secondary-color: #ecac3e;
-$tertiary-color: #d75500;
-$dark-primary-color: #243351;
-$danger-color: #e74c3c;
-$border-color: #ddd;
-$light-gray: #f9f9f9;
+$tertiary-color: #C07853;
+$accent-green: #768d6d;
+$accent-beige: #fefefe;
+
+// 🧱 Couleurs de structure
+$dark-primary-color: #293347;
+$danger-color: #BF1F17;
+$border-color: #d8d8d8; // Gris doux – lignes de séparation
+$light-gray: #f9f9f9; // Fond léger – sections claires
 $background-color: #ffffff;
+
+// ✨ Ombres et effets
 $shadow-light: 0px 4px 10px rgba(0, 0, 0, 0.1);
 $shadow-hover: 0px 6px 15px rgba(0, 0, 0, 0.15);
 
