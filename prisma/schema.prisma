@@ -48,6 +48,7 @@ model AgeCategory {
   activityList  String[]
   imageCard   String
   imageBanner String
+  tags        AgeCategoryTag[]
 
   activities Activity[] // ✅ Relations avec clé étrangère proprement définies
 
@@ -56,6 +57,25 @@ model AgeCategory {
   drawings AgeCategoryDrawing[]
   advices  AgeCategoryAdvice[]
   ideas    AgeCategoryIdea[]
+}
+
+model Tag {
+   id    String   @id @default(auto()) @map("_id") @db.ObjectId
+  label String
+  color String
+
+  ageCategories AgeCategoryTag[] // ← relation pivot explicite
+
+  @@unique([label, color], name: "label_color")
+}
+
+model AgeCategoryTag {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  ageCategory   AgeCategory  @relation(fields: [ageCategoryId], references: [id])
+  ageCategoryId String
+
+  tag   Tag     @relation(fields: [tagId], references: [id])
+  tagId String
 }
 
 model Activity {

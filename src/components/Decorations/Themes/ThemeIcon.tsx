@@ -10,12 +10,12 @@ const ThemeIcon: React.FC<ThemeIconProps> = ({ theme }) => {
     console.log("ThemeIcon -> theme:", theme);
     // Images dynamiques par thème
     const themeImages: Record<Theme, string> = {
-        "back-to-school-theme": "/assets/bts.png",
-        "easter-theme": "assets/paques.png",
+        "back-to-school-theme": "/assets/Ecole.png",
+        "easter-theme": "/assets/paques.png",
         "default-theme": "/assets/default.png",
         "summer-theme": "/assets/sun.png",
         "winter-theme": "/assets/winter.png",
-        "spring-theme": "/assets/bees.png",
+        "spring-theme": "/assets/spring.png",
         "autumn-theme": "/assets/autumn.png",
         "halloween-theme": "/assets/pumpkin.png",
         "christmas-theme": "/assets/christmas.png",

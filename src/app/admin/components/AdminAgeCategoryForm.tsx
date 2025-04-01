@@ -13,6 +13,7 @@ interface AgeCategory {
     content: string;
     conclusion: string;
     activityList: string[];
+    tags: { label: string; color: string }[];
 }
 
 export default function AdminAgeCategoryForm({
@@ -29,6 +30,7 @@ export default function AdminAgeCategoryForm({
         content: "",
         conclusion: "",
         activityList: [],
+        tags: [],
     });
 
     const [message, setMessage] = useState("");
@@ -84,6 +86,27 @@ export default function AdminAgeCategoryForm({
         }
     };
 
+    const addTag = () => {
+        setForm((prev) => ({
+            ...prev,
+            tags: [...prev.tags, { label: "", color: "" }],
+        }));
+    };
+
+    const updateTag = (index: number, field: "label" | "color", value: string) => {
+        setForm((prev) => {
+            const updatedTags = [...prev.tags];
+            updatedTags[index][field] = value;
+            return { ...prev, tags: updatedTags };
+        });
+    };
+
+    const removeTag = (index: number) => {
+        setForm((prev) => {
+            const updatedTags = prev.tags.filter((_, i) => i !== index);
+            return { ...prev, tags: updatedTags };
+        });
+    };
 
     // ✅ Soumission
     const handleSubmit = async (e: React.FormEvent) => {
@@ -185,6 +208,29 @@ export default function AdminAgeCategoryForm({
                         className="admin-form__group-input"
                     />
                 </div>
+
+                <div className="admin-form__group">
+                    <label>🏷️ Tags (ajoutez plusieurs)</label>
+                    {form.tags.map((tag, index) => (
+                        <div key={index} className="admin-form__group-tag-row">
+                            <input
+                                type="text"
+                                placeholder="Label"
+                                value={tag.label}
+                                onChange={(e) => updateTag(index, "label", e.target.value)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Couleur (ex: blue)"
+                                value={tag.color}
+                                onChange={(e) => updateTag(index, "color", e.target.value)}
+                            />
+                            <button type="button" onClick={() => removeTag(index)}>🗑️</button>
+                        </div>
+                    ))}
+                    <button type="button" onClick={addTag}>➕ Ajouter un tag</button>
+                </div>
+
 
 
                 <div className="admin-form__group">

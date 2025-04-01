@@ -33,7 +33,7 @@
                 width: 80px;
                 height: 4px;
                 margin: 10px 0 10px 10px;
-                background-color: #ecac3e;
+                background-color: vars.$secondary-color;
             }
         }
 
@@ -244,7 +244,7 @@
                 width: 80px;
                 height: 4px;
                 margin: 10px 0 10px 10px;
-                background-color: #ecac3e;
+                background-color: vars.$secondary-color;
                 margin: 0 500px;
             }
         }
@@ -268,7 +268,8 @@
                 width: 80px;
                 height: 4px;
                 margin: 10px 0 10px 10px;
-                background-color: #ecac3e;
+                background-color: vars.$secondary-color;
+                ;
             }
 
         }
