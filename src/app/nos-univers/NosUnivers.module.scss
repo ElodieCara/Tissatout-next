@@ -26,6 +26,8 @@
             font-weight: bold;
             font-size: 30px;
             padding: 30px;
+            position: relative;
+            display: block;
 
             &::after {
                 content: "";
@@ -34,6 +36,17 @@
                 height: 4px;
                 margin: 10px 0 10px 10px;
                 background-color: vars.$secondary-color;
+            }
+
+            &__contenu {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            &__icone {
+                display: inline-block;
+                vertical-align: middle;
             }
         }
 
@@ -227,26 +240,15 @@
         }
     }
 
+    //**************************TRIVIUM**********************
+
     &__trivium {
         text-align: center;
         margin-top: 100px;
+        @include mix.container;
 
-        & h2 {
-            padding-bottom: 70px;
-            color: #2c3f64;
-            font-weight: bold;
-            font-size: 30px;
-            margin: 0 331px;
-
-            &::after {
-                content: "";
-                display: block;
-                width: 80px;
-                height: 4px;
-                margin: 10px 0 10px 10px;
-                background-color: vars.$secondary-color;
-                margin: 0 500px;
-            }
+        &-title {
+            @include mix.titre-avec-icone;
         }
     }
 
@@ -255,23 +257,8 @@
         text-align: center;
         padding: 80px 0;
 
-        h2 {
-            padding-bottom: 70px;
-            color: #2c3f64;
-            font-weight: bold;
-            font-size: 30px;
-            margin: -21px 331px;
-
-            &::after {
-                content: "";
-                display: block;
-                width: 80px;
-                height: 4px;
-                margin: 10px 0 10px 10px;
-                background-color: vars.$secondary-color;
-                ;
-            }
-
+        &-title {
+            @include mix.titre-avec-icone;
         }
 
         /* 🔹 Introduction */
@@ -328,14 +315,16 @@
         }
 
         &__card {
-            //background: vars.$primary-color;
-            background: linear-gradient(250deg,
+            background-image:
+                url('/bg/bg-flare-tissatout.png'),
+                linear-gradient(250deg,
                     vars.$secondary-color 55%,
                     vars.$tertiary-color 80%,
                     vars.$danger-color 100%);
-            background-size: 200% 200%;
-            background-position: 0 50%;
-            transform: translateZ(0);
+            background-size: cover, 200% 200%;
+            background-position: center, 0% 50%;
+            background-repeat: no-repeat;
+            animation: moveGradient 12s ease-in-out infinite;
             color: white;
             border-radius: 15px;
             padding: 20px; // ✅ Espace intérieur plus grand
@@ -393,81 +382,4 @@
             }
         }
     }
-
-
-
-
-    // &__conseils {
-    //     margin-top: 50px;
-    //     display: flex;
-    //     justify-content: center;
-    //     align-items: center;
-    //     text-align: left;
-
-    //     &__container {
-    //         display: flex;
-    //         align-items: center;
-    //         background: #F8F5F1;
-    //         padding: 30px;
-    //         border-radius: 15px;
-    //         max-width: 1000px;
-    //         box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.15);
-    //         gap: 20px;
-
-    //         @media (max-width: 768px) {
-    //             flex-direction: column;
-    //             text-align: center;
-    //         }
-    //     }
-
-    //     &__image {
-    //         flex-shrink: 0;
-    //         width: 300px;
-    //         height: auto;
-    //         border-radius: 10px;
-    //         overflow: hidden;
-
-    //         img {
-    //             width: 100%;
-    //             height: auto;
-    //             object-fit: cover;
-    //             border-radius: 10px;
-    //         }
-
-    //         @media (max-width: 768px) {
-    //             width: 100%;
-    //         }
-    //     }
-
-    //     &__content {
-    //         flex: 1;
-
-    //         h2 {
-    //             font-size: 24px;
-    //             color: #333;
-    //             margin-bottom: 10px;
-    //         }
-
-    //         p {
-    //             font-size: 16px;
-    //             color: #555;
-    //             margin-bottom: 15px;
-    //         }
-
-    //         .btn {
-    //             display: inline-block;
-    //             padding: 10px 15px;
-    //             background: #EF476F;
-    //             color: white;
-    //             font-size: 14px;
-    //             border-radius: 8px;
-    //             text-decoration: none;
-    //             transition: background 0.3s;
-
-    //             &:hover {
-    //                 background: #D43F63;
-    //             }
-    //         }
-    //     }
-    // }
 }

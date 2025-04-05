@@ -53,7 +53,17 @@ export default function NosUnivers({ settings }: { settings: any }) {
                 <FloatingIcons />
                 <BackToTop />
 
-                <h2 className="nos-univers__categories-title">🌱 Les univers par âge</h2>
+                <h2 className="nos-univers__categories-title">
+                    <span className="nos-univers__categories-title__contenu">
+                        <Image src="/icons/titres/fleurTournesol.png"
+                            alt="Icône peluche"
+                            width={36}
+                            height={36}
+                            className="nos-univers__categories-title__icone">
+                        </Image>Les univers par âge
+                    </span>
+                </h2>
+
 
                 <section id="univers" className="nos-univers__categories-wrapper">
                     {ageCategories.map((section, index) => (
@@ -88,13 +98,35 @@ export default function NosUnivers({ settings }: { settings: any }) {
 
                 {/* ACTIVITÉS TRIVIUM */}
                 <section id="trivium" className="nos-univers__trivium">
-                    <h2 className="nos-univers__trivium-title">📖 Des activités selon le Trivium </h2>
+                    <h2 className="nos-univers__trivium-title">
+                        <span className="nos-univers__trivium-title__contenu">
+                            <img
+                                src="/icons/titres/livre.png"
+                                alt="Icône livre"
+                                width="36"
+                                height="36"
+                                className="nos-univers__trivium-title__icone"
+                            />
+                            Des activités selon le Trivium
+                        </span>
+                    </h2>
                     <RubanTrivium />
                 </section>
 
                 {/* ACTIVITÉS THÉMATIQUES */}
                 <section id="interets" className="nos-univers__activites">
-                    <h2>🎯 Des activités par thématique</h2>
+                    <h2 className="nos-univers__activites-title">
+                        <span className="nos-univers__activites-title__contenu">
+                            <img
+                                src="/icons/titres/cible.png"
+                                alt="Icône thématique"
+                                width="36"
+                                height="36"
+                                className="nos-univers__activites-title__icone"
+                            />
+                            Des activités par thématique
+                        </span>
+                    </h2>
                     <p className="nos-univers__activites-intro">
                         Découvrez des activités ludiques et éducatives classées par thématiques pour apprendre, créer et s’amuser à tout âge ! 🚀✨
                     </p>
@@ -127,7 +159,7 @@ export default function NosUnivers({ settings }: { settings: any }) {
                         ))}
                     </div>
                 </section>
-            </div>
+            </div >
         </>
     );
 }

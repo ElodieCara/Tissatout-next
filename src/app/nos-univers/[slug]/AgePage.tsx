@@ -69,23 +69,25 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
 
                 <div className="articles__grid">
                     {ageCategory.articles?.length > 0 ? (
-                        ageCategory.articles.map(({ article }: any, index: number) => (
-                            <Link key={article.id} href={`/articles/${article.slug}`} className={`articles__card ${index % 2 !== 0 ? 'reverse' : ''}`}>
-                                <div className="articles__image">
-                                    <Image src={article.image || "/images/default-article.jpg"} alt={article.title} width={500} height={300} />
-                                </div>
-
-                                <div className={`articles__content ${index % 2 !== 0 ? 'reverse' : ''}`}>
-                                    <div className="articles__separator"></div>
-                                    <div className="articles__content__text">
-                                        <h3 className="articles__title">{article.title}</h3>
-                                        <p className="articles__description">{article.description}</p>
-                                        <button className="articles__button">Lire l'article</button>
+                        ageCategory.articles
+                            .slice(0, 3)
+                            .map(({ article }: any, index: number) => (
+                                <Link key={article.id} href={`/articles/${article.slug}`} className={`articles__card ${index % 2 !== 0 ? 'reverse' : ''}`}>
+                                    <div className="articles__image">
+                                        <Image src={article.image || "/images/default-article.jpg"} alt={article.title} width={500} height={300} />
                                     </div>
-                                </div>
 
-                            </Link>
-                        ))
+                                    <div className={`articles__content ${index % 2 !== 0 ? 'reverse' : ''}`}>
+                                        <div className="articles__separator"></div>
+                                        <div className="articles__content__text">
+                                            <h3 className="articles__title">{article.title}</h3>
+                                            <p className="articles__description">{article.description}</p>
+                                            <button className="articles__button">Lire l'article</button>
+                                        </div>
+                                    </div>
+
+                                </Link>
+                            ))
                     ) : (
                         <p>Aucun article disponible.</p>
                     )}
@@ -206,49 +208,52 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
             <section className="ideas">
                 <div className="ideas__header">
                     <h2>💡 Idées d’activités pour {ageCategory.title}</h2>
+                    <Button className="large"><Link href="/idées">Voir toutes les idées</Link></Button>
                 </div>
 
                 <div className="ideas__grid">
                     {ageCategory.ideas?.length > 0 ? (
-                        ageCategory.ideas.map(({ idea }: { idea: Idea }) => {
-                            // Utilisation d'une clé correcte pour accéder au thème et d'une valeur par défaut si l'icône n'existe pas
-                            const themeKey = idea.theme.toLowerCase() as keyof typeof themeImages;
-                            const icon = themeImages[themeKey]?.icon || themeImages.default.icon;
-                            const background = themeImages[themeKey]?.background || themeImages.default.background;
+                        ageCategory.ideas
+                            .slice(0, 6)
+                            .map(({ idea }: { idea: Idea }) => {
+                                // Utilisation d'une clé correcte pour accéder au thème et d'une valeur par défaut si l'icône n'existe pas
+                                const themeKey = idea.theme.toLowerCase() as keyof typeof themeImages;
+                                const icon = themeImages[themeKey]?.icon || themeImages.default.icon;
+                                const background = themeImages[themeKey]?.background || themeImages.default.background;
 
-                            return (
-                                <Link key={idea.id} href={`/idees/${idea.id}`} className="ideas__card">
-                                    <div className="ideas__card__icon">
-                                        <Image
-                                            src={icon}
-                                            alt={idea.theme}
-                                            width={140}
-                                            height={140}
+                                return (
+                                    <Link key={idea.id} href={`/idees/${idea.id}`} className="ideas__card">
+                                        <div className="ideas__card__icon">
+                                            <Image
+                                                src={icon}
+                                                alt={idea.theme}
+                                                width={140}
+                                                height={140}
+                                            />
+                                        </div>
+                                        <h3 className="ideas__card__title">{idea.title}</h3>
+                                        <p className="ideas__card__description">{idea.description}</p>
+                                        <span className="ideas__card__link">➔</span>
+
+                                        <div
+                                            className="ideas__card__background"
+                                            style={{
+                                                backgroundImage: `url(${themeImages[idea.theme as keyof typeof themeImages]?.background || themeImages.default.background})`,
+                                                backgroundSize: "",  // Couvre toute la surface de la card
+                                                backgroundRepeat: "no-repeat",
+                                                backgroundPosition: "center",
+                                                position: "absolute",
+                                                top: 0,
+                                                left: 0,
+                                                width: "150%",
+                                                height: "100%",
+                                                zIndex: -1,
+                                                imageRendering: "auto",
+                                            }}
                                         />
-                                    </div>
-                                    <h3 className="ideas__card__title">{idea.title}</h3>
-                                    <p className="ideas__card__description">{idea.description}</p>
-                                    <span className="ideas__card__link">➔</span>
-
-                                    <div
-                                        className="ideas__card__background"
-                                        style={{
-                                            backgroundImage: `url(${themeImages[idea.theme as keyof typeof themeImages]?.background || themeImages.default.background})`,
-                                            backgroundSize: "",  // Couvre toute la surface de la card
-                                            backgroundRepeat: "no-repeat",
-                                            backgroundPosition: "center",
-                                            position: "absolute",
-                                            top: 0,
-                                            left: 0,
-                                            width: "150%",
-                                            height: "100%",
-                                            zIndex: -1,
-                                            imageRendering: "auto",
-                                        }}
-                                    />
-                                </Link>
-                            );
-                        })
+                                    </Link>
+                                );
+                            })
                     ) : (
                         <p className="ideas__empty">Aucune idée disponible pour cette tranche d’âge.</p>
                     )}

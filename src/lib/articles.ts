@@ -20,7 +20,7 @@ export async function getArticles() {
 // 🔵 Fonction pour récupérer un article par son slug
 export async function getArticleBySlug(slug: string) {
     return await prisma.article.findUnique({
-        where: { slug }, // 🔥 Recherche par slug au lieu de l'ID
+        where: { slug },
         select: {
             id: true,
             title: true,
@@ -29,9 +29,29 @@ export async function getArticleBySlug(slug: string) {
             image: true,
             description: true,
             date: true,
+            author: true,
+            iconSrc: true,
+            tags: true,
+            ageCategories: {
+                select: {
+                    ageCategory: {
+                        select: {
+                            id: true,
+                            title: true,
+                        },
+                    },
+                },
+            },
+            sections: {
+                select: {
+                    title: true,
+                    content: true,
+                },
+            },
         },
     });
 }
+
 
 // 🔵 Ajouter un article avec un slug automatique
 export async function createArticle(

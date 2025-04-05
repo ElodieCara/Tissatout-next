@@ -20,6 +20,38 @@
     margin: 0 auto;
 }
 
+@mixin titre-avec-icone($trait-color: vars.$secondary-color, $trait-left: 44px) {
+    font-size: 30px;
+    font-weight: bold;
+    color: #2c3f64;
+    padding: 30px;
+    width: 550px;
+    display: block;
+    position: relative;
+    margin: 0 auto;
+
+    &__contenu {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__icone {
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    &::after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 4px;
+        margin-top: 10px;
+        margin-left: $trait-left;
+        background-color: $trait-color;
+    }
+}
+
 @mixin card-hover-animation {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 

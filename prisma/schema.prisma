@@ -19,9 +19,17 @@ model Article {
   author      String?
   description String?
   date        DateTime @default(now()) // Date par défaut à la création
-
+  sections    ArticleSection[]
   // ✅ Relation Many-to-Many gérée par un modèle pivot
   ageCategories AgeCategoryArticle[]
+}
+
+model ArticleSection {
+  id        String   @id @default(cuid()) @map("_id")
+  title     String
+  content   String
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId String
 }
 
 model Idea {

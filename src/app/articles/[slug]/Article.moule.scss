@@ -1,0 +1,113 @@
+.article {
+    background-color: #fffdf8;
+    color: #2c3f64;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 2rem 1rem;
+
+    &__container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    &__badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    &__badge {
+        background: #fde4a3;
+        color: #203e75;
+        padding: 0.3rem 0.7rem;
+        border-radius: 1rem;
+        font-size: 0.9rem;
+    }
+
+    &__icon {
+        margin-bottom: 0.5rem;
+    }
+
+    &__title {
+        font-size: 2rem;
+        color: #203e75;
+        margin-bottom: 0.5rem;
+    }
+
+    &__description {
+        font-style: italic;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    &__meta {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 1.5rem;
+    }
+
+    &__image {
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    &__content {
+        line-height: 1.6;
+
+        h2 {
+            color: #f78e74;
+            font-size: 1.4rem;
+            margin-top: 2rem;
+        }
+
+        .encart {
+            background: #f9f1dc;
+            border-left: 4px solid #fdca57;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+
+        .print-button {
+            background-color: #fdca57;
+            border: none;
+            color: #203e75;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 2rem 0;
+            display: inline-block;
+        }
+
+        .suggestions {
+            background: #e6f0f7;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+    }
+
+    &__tags {
+        margin-top: 2rem;
+    }
+
+    &__tags-title {
+        font-weight: bold;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    &__tag-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    &__tag {
+        font-size: 0.8rem;
+        background: #e6f0f7;
+        color: #203e75;
+        padding: 0.3rem 0.7rem;
+        border-radius: 0.5rem;
+    }
+}

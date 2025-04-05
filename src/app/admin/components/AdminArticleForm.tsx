@@ -13,6 +13,11 @@ const categoryIcons: Record<string, string> = {
     "craft": "/icons/crafts.png"
 };
 
+interface Section {
+    title: string;
+    content: string;
+}
+
 interface Article {
     id?: string;
     slug?: string;
@@ -26,6 +31,7 @@ interface Article {
     description?: string;
     date?: string;
     ageCategories?: string[];
+    sections: Section[];
 }
 
 export default function AdminArticleForm({ articleId }: { articleId?: string }) {
@@ -40,6 +46,9 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         description: "",
         date: "",
         ageCategories: [],
+        sections: [
+            { title: "", content: "" }
+        ],
     });
 
     const [message, setMessage] = useState("");
@@ -50,36 +59,41 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
 
     // 🟢 Charger l'article en modification
     useEffect(() => {
-        if (articleId && articleId !== "new") {
-            fetch(`/api/articles/${articleId}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log("📥 Article reçu :", data);
-                    setForm({
-                        title: data.title || "",
-                        content: data.content || "",
-                        image: data.image || "",
-                        iconSrc: data.iconSrc || categoryIcons[data.category] || "",
-                        category: data.category || "",
-                        tags: data.tags || [],
-                        author: data.author || "",
-                        description: data.description || "",
-                        date: data.date ? data.date.substring(0, 10) : "", // ✅ Formatage de la date
-                        ageCategories: data.ageCategories?.map((ac: any) => ac.ageCategory.id) || [],
-                    });
-                    setSelectedAges(data.ageCategories?.map((ac: any) => ac.ageCategory.id) || []);
-                });
+        async function fetchData() {
+            let fetchedArticle = null;
+
+            if (articleId && articleId !== "new") {
+                const res = await fetch(`/api/articles/${articleId}`);
+                const data = await res.json();
+
+                fetchedArticle = {
+                    title: data.title || "",
+                    content: data.content || "",
+                    image: data.image || "",
+                    iconSrc: data.iconSrc || categoryIcons[data.category] || "",
+                    category: data.category || "",
+                    tags: data.tags || [],
+                    author: data.author || "",
+                    description: data.description || "",
+                    date: data.date ? data.date.substring(0, 10) : "",
+                    ageCategories: data.ageCategories?.map((ac: any) => ac.ageCategory.id) || [],
+                    sections: Array.isArray(data.sections) && data.sections.length > 0
+                        ? data.sections
+                        : [{ title: "", content: "" }],
+                };
+
+                setForm(fetchedArticle);
+                setSelectedAges(fetchedArticle.ageCategories);
+            }
+
+            const resAge = await fetch("/api/ageCategories");
+            const ageData = await resAge.json();
+            setAgeCategories(ageData);
         }
 
-        // 🟢 Charger toutes les catégories d'âge disponibles
-        fetch("/api/ageCategories")
-            .then(res => res.json())
-            .then(data => {
-                console.log("📥 Liste des catégories d'âge disponibles :", data);
-                setAgeCategories(data);
-            });
-
+        fetchData();
     }, [articleId]);
+
 
     // 🟡 Gérer les changements dans le formulaire
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -136,7 +150,10 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         const method = articleId && articleId !== "new" ? "PUT" : "POST";
         const url = articleId && articleId !== "new" ? `/api/articles/${articleId}` : "/api/articles";
 
-        let payload = { ...form, ageCategoryIds: selectedAges };
+        let payload = {
+            ...form, ageCategoryIds: selectedAges,
+            sections: form.sections,
+        };
 
         // 🔥 Si c'est un nouvel article, générer un slug
         if (articleId === "new") {
@@ -155,6 +172,25 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         } else {
             setMessage("❌ Erreur lors de l'enregistrement.");
         }
+    };
+
+    const addSection = () => {
+        setForm({
+            ...form,
+            sections: [...form.sections, { title: "", content: "" }]
+        });
+    };
+
+    const updateSection = (index: number, field: keyof Section, value: string) => {
+        const updated = [...form.sections];
+        updated[index][field] = value;
+        setForm({ ...form, sections: updated });
+    };
+
+    const removeSection = (index: number) => {
+        const updated = [...form.sections];
+        updated.splice(index, 1);
+        setForm({ ...form, sections: updated });
     };
 
     return (
@@ -254,6 +290,27 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                     />
                     {/* <p>{form.description || "".length} / 150 caractères</p> {/* ✅ Affiche le compteur */}
                     {/* <input type="text" id="description" name="description" placeholder="Description" value={form.description} onChange={handleChange} /> */}
+                </div>
+
+                <div className="admin-form__group">
+                    <label htmlFor="sections">Sections de l’article</label>
+                    {form.sections.map((section, index) => (
+                        <div key={index} className="admin-form__section">
+                            <input
+                                type="text"
+                                placeholder={`Titre de la section ${index + 1}`}
+                                value={section.title}
+                                onChange={(e) => updateSection(index, "title", e.target.value)}
+                            />
+                            <textarea
+                                placeholder="Contenu de la section..."
+                                value={section.content}
+                                onChange={(e) => updateSection(index, "content", e.target.value)}
+                            />
+                            <button type="button" onClick={() => removeSection(index)}>🗑️ Supprimer</button>
+                            <button type="button" onClick={addSection}>➕ Ajouter une section</button>
+                        </div>
+                    ))}
                 </div>
 
                 <div className="admin-form__group">

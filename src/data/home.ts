@@ -140,12 +140,12 @@ export const activities: Record<ActivityCategory, Activity[]> = {
         { title: "Musique & Chansons", icon: "/icons/musique.png", link: "/musique-chansons" },
         { title: "Activités Manuelles", icon: "/icons/craft.png", link: "/activites-manuelles" },
         { title: "Peinture et collage", icon: "/icons/peinture.png", link: "/peinture-collage" },
-        { title: "Marionnettes & Jeux sensoriels", icon: "/icons/mobilite.png", link: "/marionnettes-sensoriel" },
+        { title: "Marionnettes & Jeux sensoriels", icon: "/icons/marionnettes.png", link: "/marionnettes-sensoriel" },
     ],
     logique: [
-        { title: "Construction & Lego", icon: "/icons/logique.png", link: "/construction-lego" },
+        { title: "Construction & Lego", icon: "/icons/lego.png", link: "/construction-lego" },
         { title: "Défis éducatifs & Enigmes", icon: "/icons/defis.png", link: "/defis-educatifs" },
-        { title: "Jeux éducatifs", icon: "/icons/jeux.png", link: "/jeux-educatifs" },
+        { title: "Jeux éducatifs", icon: "/icons/des.png", link: "/jeux-educatifs" },
         { title: "Jeux de réflexion & stratégie", icon: "/icons/strategie.png", link: "/jeux-strategie" },
         { title: "Expériences scientifiques", icon: "/icons/science.png", link: "/sciences-enfants" },
         { title: "Mathématiques ludiques", icon: "/icons/chiffre.png", link: "/maths-ludiques" },
@@ -159,11 +159,11 @@ export const activities: Record<ActivityCategory, Activity[]> = {
         { title: "Stop-motion et cinéma", icon: "/icons/cinema.png", link: "/cinema-stopmotion" },
     ],
     motricite: [
-        { title: "Parcours moteur", icon: "/icons/mobilite.png", link: "/parcours-moteur" },
+        { title: "Parcours moteur", icon: "/icons/parcours.png", link: "/parcours-moteur" },
         { title: "Équilibre & Coordination", icon: "/icons/mobilite.png", link: "/equilibre-coordination" },
-        { title: "Jeux de ballon", icon: "/icons/mobilite.png", link: "/jeux-ballon" },
-        { title: "Danse & Mouvement", icon: "/icons/mobilite.png", link: "/danse-mouvement" },
-        { title: "Arts martiaux & Discipline", icon: "/icons/mobilite.png", link: "/arts-martiaux" },
-        { title: "Cirque & Jonglage", icon: "/icons/mobilite.png", link: "/cirque-jonglage" },
+        { title: "Jeux de ballon", icon: "/icons/ballon.png", link: "/jeux-ballon" },
+        { title: "Danse & Mouvement", icon: "/icons/danse.png", link: "/danse-mouvement" },
+        { title: "Concentration & Discipline", icon: "/icons/discipline.png", link: "/arts-martiaux" },
+        { title: "Agilité & Créativité motrice", icon: "/icons/agilite.png", link: "/cirque-jonglage" },
     ]
 };

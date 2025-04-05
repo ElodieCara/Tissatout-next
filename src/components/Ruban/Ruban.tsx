@@ -1,33 +1,44 @@
 "use client";
-import styles from "./Ruban.module.scss";
 
-export default function RubanTrivium() {
+export default function TriviumInfo() {
     return (
-        <div className={styles.ruban}>
-            <p>
-                Le <strong>Trivium</strong> est un modèle d’apprentissage fondamental basé sur trois étapes :
-                <span className={styles.grammaire}> Grammaire</span>,
-                <span className={styles.logique}> Logique</span> et
-                <span className={styles.rhetorique}> Rhétorique</span>.
-                Cette méthode, utilisée depuis l’Antiquité, permet de développer la compréhension, la réflexion et l’expression.
+        <section className="trivium-info">
+            <h3 className="trivium-info__title">
+                Le Trivium, une boussole pour apprendre à penser
+            </h3>
+            <p className="trivium-info__subtitle">
+                Hérité de l’Antiquité, le Trivium repose sur trois piliers — Grammaire, Logique et Rhétorique — pour aider les enfants à comprendre, réfléchir et s’exprimer avec clarté.
             </p>
 
-            <div className={styles.sections}>
-                <div className={styles.section}>
-                    <h3>🎯 Pourquoi ?</h3>
-                    <p>Le Trivium structure la pensée, renforce l’esprit critique et améliore la communication.</p>
+            <div className="trivium-info__cards">
+                <div className="trivium-info__card">
+                    <h3 className="trivium-info__card-title">Pourquoi ?</h3>
+                    <img src="/icons/ampoule.png" alt="Ampoule mignonne" className="trivium-info__icon" />
+                    <p className="trivium-info__card-text">
+                        Parce qu’un esprit bien formé sait organiser ses idées, poser les bonnes questions et communiquer avec justesse.
+                    </p>
                 </div>
-                <div className={styles.section}>
-                    <h3>⏳ Quand ?</h3>
-                    <p>On applique le Trivium dès l’enfance, en adaptant les étapes aux capacités cognitives.</p>
+
+                <div className="trivium-info__card">
+                    <h3 className="trivium-info__card-title">Quand ?</h3>
+                    <img src="/icons/sablier.png" alt="Sablier joyeux" className="trivium-info__icon" />
+                    <p className="trivium-info__card-text">
+                        Dès l’enfance : on adapte chaque étape aux capacités et à la maturité de l’enfant.
+                    </p>
                 </div>
-                <div className={styles.section}>
-                    <h3>📍 Où ?</h3>
-                    <p>Dans l’éducation, les jeux, les lectures, l’art et toutes les formes d’apprentissage.</p>
+
+                <div className="trivium-info__card">
+                    <h3 className="trivium-info__card-title">Où ?</h3>
+                    <img src="/icons/boussole.png" alt="Boussole douce" className="trivium-info__icon" />
+                    <p className="trivium-info__card-text">
+                        Dans les jeux, les lectures, les activités manuelles ou les discussions du quotidien.
+                    </p>
                 </div>
             </div>
-            <br />
-            <p>🎯 Son objectif est de former un esprit autonome et critique, capable d’apprendre efficacement, raisonner logiquement et s’exprimer clairement. Cette approche favorise une éducation complète et équilibrée, adaptée à tous les âges.</p>
-        </div>
+
+            <p className="trivium-info__conclusion">
+                <strong>Son but :</strong> former des esprits libres et critiques, capables d’apprendre, de comprendre et de choisir avec intelligence.
+            </p>
+        </section>
     );
 }
