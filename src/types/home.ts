@@ -39,7 +39,23 @@ export interface Article {
     date?: string;
     category?: string;
     tags?: string[];
+
+    printableSupport?: string; // ✅ Ajout pour le lien à imprimer
+    relatedArticleIds?: string[];
+
+    ageCategories?: {
+        ageCategory: {
+            id: string;
+            title: string;
+        };
+    }[];
+
+    sections?: {
+        title: string;
+        content: string;
+    }[];
 }
+
 
 export interface Idea {
     id: string;

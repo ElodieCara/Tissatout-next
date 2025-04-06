@@ -16,12 +16,25 @@ model Article {
   iconSrc     String? // URL de l'icône de la catégorie
   category    String?
   tags        String[] // Tableau de tags (stocké sous forme de JSON)
+  printableSupport String? // URL vers le fichier imprimable
   author      String?
   description String?
   date        DateTime @default(now()) // Date par défaut à la création
   sections    ArticleSection[]
+
   // ✅ Relation Many-to-Many gérée par un modèle pivot
-  ageCategories AgeCategoryArticle[]
+  ageCategories AgeCategoryArticle[]  
+
+  relatedLinks   RelatedArticle[] @relation("FromArticle")
+  linkedFrom     RelatedArticle[] @relation("ToArticle")
+}
+
+model RelatedArticle {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  fromArticle Article  @relation("FromArticle", fields: [fromArticleId], references: [id])
+  fromArticleId String @db.ObjectId
+  toArticle     Article  @relation("ToArticle", fields: [toArticleId], references: [id])
+  toArticleId   String @db.ObjectId
 }
 
 model ArticleSection {

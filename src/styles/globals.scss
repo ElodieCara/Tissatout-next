@@ -38,6 +38,7 @@
 @import "../app/admin/AdminArticleForm.module.scss";
 @import "../app/admin/AdminAdvice.module.scss";
 @import "../app/admin/AdminSlidesEditor.module.scss";
+@import "../app/admin/ArticleSelector.module.scss";
 @import "../app/admin/articles/Articles.module.scss";
 @import "../app/nos-univers/NosUnivers.module.scss";
 @import "../app/nos-univers/[slug]/AgePage.module.scss";
@@ -48,4 +49,4 @@
 @import "../app/inspiration/components/InspirationIdeas.module.scss";
 @import "../app/coloriages/explorer/Explorer.module.scss";
 @import "../app/coloriages/[id]/DrawingPage.module.scss";
-@import "../app/articles/[slug]/Article.moule.scss";
+@import "../app/articles/[slug]/Article.module.scss";

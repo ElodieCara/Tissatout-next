@@ -1,7 +1,11 @@
 import { getArticleBySlug } from "@/lib/articles";
+import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
+import type { Article } from "@/types/home";
+import PrintButton from "@/components/PrintButton/PrintButton";
+
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const article = await getArticleBySlug(params.slug);
@@ -75,14 +79,48 @@ export default async function ArticlePage({ params }: { params: { slug: string }
                                 {section.title && (
                                     <h2 className="article__section-title">{section.title}</h2>
                                 )}
-                                <div
-                                    className="article__section-content"
-                                    dangerouslySetInnerHTML={{ __html: section.content }}
-                                />
+                                <div className="article__section-content">
+                                    <ReactMarkdown
+                                        components={{
+                                            h2: ({ node, ...props }) => <h2 className="article__section-content__md-h2" {...props} />,
+                                            h3: ({ node, ...props }) => <h3 className="article__section-content__md-h3" {...props} />,
+                                            p: ({ node, ...props }) => <p className="article__section-content__md-p" {...props} />,
+                                            ul: ({ node, ...props }) => <ul className="article__section-content__md-ul" {...props} />,
+                                            li: ({ node, ...props }) => <li className="article__section-content__md-li" {...props} />,
+                                            strong: ({ node, ...props }) => <strong className="article__section-content__md-strong" {...props} />,
+                                            em: ({ node, ...props }) => <em className="article__section-content__md-em" {...props} />,
+                                        }}
+                                    >
+                                        {section.content}
+                                    </ReactMarkdown>
+                                </div>
                             </section>
                         ))}
                     </div>
                 )}
+
+                {/* 🧭 Pour aller plus loin */}
+                {article.relatedArticles?.length > 0 && (
+                    <div className="article__related">
+                        <h2 className="article__related-title">🧭 Pour aller plus loin</h2>
+                        <div className="article__related-list">
+                            {article.relatedArticles.map((related) => (
+                                <a
+                                    key={related.id}
+                                    href={`/articles/${related.slug}`}
+                                    className="article__related-card"
+                                >
+                                    <div className="article__related-icon">📎</div>
+                                    <div className="article__related-title-text">{related.title}</div>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+
+                {/* Bloc "À imprimer" */}
+                <PrintButton supportUrl={article.printableSupport || undefined} />
 
                 {/* Tags */}
                 {article.tags?.length > 0 && (

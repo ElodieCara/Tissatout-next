@@ -17,6 +17,17 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
                 sections: {
                     orderBy: { id: 'asc' }, // pour garder l’ordre d’ajout
                 },
+                relatedLinks: {
+                    include: {
+                        toArticle: {
+                            select: {
+                                id: true,
+                                title: true,
+                                slug: true,
+                            },
+                        },
+                    },
+                },
             },
         });
 
@@ -24,14 +35,17 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
             return NextResponse.json({ message: "Article non trouvé" }, { status: 404 });
         }
 
-        return NextResponse.json(article);
+        // 🔁 Transformer les articles liés pour le front
+        const relatedArticles = article.relatedLinks.map(link => link.toArticle);
+
+        return NextResponse.json({ ...article, relatedArticles });
     } catch (error) {
         console.error("Erreur GET article admin :", error);
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
 
-
+// 🟡 PUT: Mettre à jour un article
 // 🟡 PUT: Mettre à jour un article
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
     try {
@@ -49,6 +63,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
         // 🔄 Supprimer les anciennes sections
         await prisma.articleSection.deleteMany({ where: { articleId: params.id } });
 
+        // 🔄 Supprimer les anciens articles liés
+        await prisma.relatedArticle.deleteMany({ where: { fromArticleId: params.id } });
+
         // ➕ Recréer les sections à partir du body
         if (Array.isArray(body.sections)) {
             await prisma.articleSection.createMany({
@@ -60,7 +77,17 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
             });
         }
 
-        // 🔄 Mettre à jour l'article principal
+        // ➕ Recréer les articles liés à partir du body
+        if (Array.isArray(body.relatedArticleIds)) {
+            await prisma.relatedArticle.createMany({
+                data: body.relatedArticleIds.map((toId: string) => ({
+                    fromArticleId: params.id,
+                    toArticleId: toId,
+                })),
+            });
+        }
+
+        // ✅ Mettre à jour les autres champs de l’article
         const updatedArticle = await prisma.article.update({
             where: { id: params.id },
             data: {
@@ -70,6 +97,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
                 iconSrc: body.iconSrc || null,
                 category: body.category,
                 tags: body.tags || [],
+                printableSupport: body.printableSupport || null,
                 author: body.author,
                 description: body.description || null,
                 date: body.date ? new Date(body.date) : new Date(),
@@ -79,18 +107,12 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
                         ageCategory: { connect: { id: ageCategoryId } },
                     })),
                 },
-                sections: {
-                    deleteMany: {},
-                    create: body.sections.map((section: any) => ({
-                        title: section.title,
-                        content: section.content,
-                    })),
-                },
             },
         });
 
         return NextResponse.json(updatedArticle);
     } catch (error) {
+        console.error("Erreur PUT article admin :", error);
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }

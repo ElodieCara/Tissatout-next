@@ -148,6 +148,51 @@
             }
         }
     }
+
+    // 🧩 Aperçu Markdown dans l'admin
+    &__editor-preview {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        margin-bottom: 1rem;
+
+        textarea {
+            flex: 1;
+            height: 150px;
+        }
+
+        .admin-form__preview {
+            flex: 1;
+            border: 1px solid $border-color;
+            padding: 0.5rem;
+            background: $primary-color;
+            overflow-y: auto;
+            height: 150px;
+            border-radius: 6px;
+        }
+    }
+
+    &__toolbar {
+        display: flex;
+        gap: 0.5rem;
+        margin: 0.5rem 0;
+
+        button {
+            background: $primary-color;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+
+            &:hover {
+                background: darken($primary-color, 10%);
+            }
+        }
+    }
+
 }
 
 @keyframes fadeIn {

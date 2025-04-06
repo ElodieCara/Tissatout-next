@@ -1,0 +1,94 @@
+.article-selector {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: #f9f9f9;
+    font-family: sans-serif;
+
+    h4 {
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: $primary-color;
+    }
+
+    &__filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+
+        input,
+        select {
+            padding: 0.5rem;
+            border: 1px solid #bbb;
+            border-radius: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        input {
+            flex: 2;
+        }
+
+        select {
+            flex: 1;
+        }
+    }
+
+    &__selected {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+
+        .article-selector__card {
+            background-color: #e3f7e3;
+            border: 1px solid #b6e1b6;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+
+            span {
+                font-size: 0.9rem;
+                color: $primary-color;
+            }
+
+            button {
+                background: transparent;
+                border: none;
+                color: #a00;
+                font-size: 1rem;
+                cursor: pointer;
+            }
+        }
+    }
+
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.5rem;
+    }
+
+    &__item {
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        background: white;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        text-align: left;
+        font-size: 0.9rem;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: #eef2ff;
+        }
+
+        &.selected {
+            background-color: #dceeff;
+            border-color: #88c4ff;
+        }
+    }
+}

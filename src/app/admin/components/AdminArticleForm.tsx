@@ -3,6 +3,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Breadcrumb from "./Breadcrumb";
 import { generateSlug } from "@/lib/utils";
+import ReactMarkdown from "react-markdown";
+import ArticleSelector from "./ArticleSelector";
+import type { ArticleOption } from "@/types/articles";
+
 
 // 🎨 Icônes associées aux catégories
 const categoryIcons: Record<string, string> = {
@@ -32,6 +36,8 @@ interface Article {
     date?: string;
     ageCategories?: string[];
     sections: Section[];
+    printableSupport?: string;
+    relatedArticleIds?: string[];
 }
 
 export default function AdminArticleForm({ articleId }: { articleId?: string }) {
@@ -49,24 +55,45 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         sections: [
             { title: "", content: "" }
         ],
+        printableSupport: "",
+        relatedArticleIds: []
     });
 
     const [message, setMessage] = useState("");
     const router = useRouter();
     const [selectedAges, setSelectedAges] = useState<string[]>([]);
     const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
-
+    const [allArticles, setAllArticles] = useState<ArticleOption[]>([]);
 
     // 🟢 Charger l'article en modification
     useEffect(() => {
         async function fetchData() {
-            let fetchedArticle = null;
+            // 🟡 Étape 1 : Charger tous les articles sauf l'actuel
+            const allRes = await fetch("/api/articles");
+            const allData = await allRes.json();
 
+            const otherArticles = allData
+                .filter((a: any) => a.id !== articleId)
+                .map((a: any) => {
+                    const mapped = {
+                        id: a.id,
+                        title: a.title,
+                        category: a.category,
+                        ageCategories: a.ageCategories?.map((ac: any) => ac.ageCategory.id) || [],
+                    };
+                    console.log(`[DEBUG] Article "${a.title}" - Ages:`, mapped.ageCategories);
+                    return mapped;
+                });
+
+            console.log("Articles envoyés à ArticleSelector (ageCategories sous forme d’ID):", otherArticles);
+            setAllArticles(otherArticles);
+
+            // 🟡 Étape 2 : Charger l’article si en modification
             if (articleId && articleId !== "new") {
                 const res = await fetch(`/api/articles/${articleId}`);
                 const data = await res.json();
 
-                fetchedArticle = {
+                const fetchedArticle = {
                     title: data.title || "",
                     content: data.content || "",
                     image: data.image || "",
@@ -75,17 +102,20 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                     tags: data.tags || [],
                     author: data.author || "",
                     description: data.description || "",
+                    printableSupport: data.printableSupport || "",
                     date: data.date ? data.date.substring(0, 10) : "",
                     ageCategories: data.ageCategories?.map((ac: any) => ac.ageCategory.id) || [],
                     sections: Array.isArray(data.sections) && data.sections.length > 0
                         ? data.sections
                         : [{ title: "", content: "" }],
+                    relatedArticleIds: data.relatedArticles?.map((a: any) => a.id) || []
                 };
 
                 setForm(fetchedArticle);
                 setSelectedAges(fetchedArticle.ageCategories);
             }
 
+            // 🟡 Étape 3 : Charger les âges disponibles
             const resAge = await fetch("/api/ageCategories");
             const ageData = await resAge.json();
             setAgeCategories(ageData);
@@ -93,7 +123,6 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
 
         fetchData();
     }, [articleId]);
-
 
     // 🟡 Gérer les changements dans le formulaire
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -151,8 +180,11 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         const url = articleId && articleId !== "new" ? `/api/articles/${articleId}` : "/api/articles";
 
         let payload = {
-            ...form, ageCategoryIds: selectedAges,
+            ...form,
+            printableSupport: form.printableSupport || null,
+            ageCategoryIds: selectedAges,
             sections: form.sections,
+            relatedArticleIds: form.relatedArticleIds || []
         };
 
         // 🔥 Si c'est un nouvel article, générer un slug
@@ -302,15 +334,52 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                                 value={section.title}
                                 onChange={(e) => updateSection(index, "title", e.target.value)}
                             />
-                            <textarea
-                                placeholder="Contenu de la section..."
-                                value={section.content}
-                                onChange={(e) => updateSection(index, "content", e.target.value)}
-                            />
+                            {/* 🔘 Boutons de mise en forme rapide */}
+                            <div className="admin-form__toolbar">
+                                <button type="button" onClick={() => updateSection(index, "content", section.content + "**gras** ")}>Gras</button>
+                                <button type="button" onClick={() => updateSection(index, "content", section.content + "*italique* ")}>Italique</button>
+                                <button type="button" onClick={() => updateSection(index, "content", section.content + "- élément\n")}>Liste</button>
+                                <button type="button" onClick={() => updateSection(index, "content", section.content + "😊 ")}>Emoji</button>
+                            </div>
+
+                            <div className="admin-form__editor-preview">
+                                <textarea
+                                    placeholder="Contenu de la section..."
+                                    value={section.content}
+                                    onChange={(e) => updateSection(index, "content", e.target.value)}
+                                    className="admin-form__textarea"
+                                />
+                                <div className="admin-form__preview">
+                                    <ReactMarkdown>{section.content}</ReactMarkdown>
+                                </div>
+                            </div>
                             <button type="button" onClick={() => removeSection(index)}>🗑️ Supprimer</button>
                             <button type="button" onClick={addSection}>➕ Ajouter une section</button>
                         </div>
                     ))}
+                </div>
+
+                <div className="admin-form__group">
+                    <label htmlFor="printableSupport">Lien vers un support à imprimer (optionnel)</label>
+                    <input
+                        type="text"
+                        id="printableSupport"
+                        name="printableSupport"
+                        value={form.printableSupport || ""}
+                        onChange={(e) => setForm({ ...form, printableSupport: e.target.value })}
+                        placeholder="https://..."
+                    />
+                </div>
+
+                <div className="admin-form__group">
+                    <label>Articles liés :</label>
+                    <ArticleSelector
+                        allArticles={allArticles}
+                        selectedIds={form.relatedArticleIds || []}
+                        onChange={(ids) => setForm({ ...form, relatedArticleIds: ids })}
+                        ageOptions={ageCategories}
+                    />
+
                 </div>
 
                 <div className="admin-form__group">

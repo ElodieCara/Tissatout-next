@@ -19,7 +19,7 @@ export async function getArticles() {
 
 // 🔵 Fonction pour récupérer un article par son slug
 export async function getArticleBySlug(slug: string) {
-    return await prisma.article.findUnique({
+    const article = await prisma.article.findUnique({
         where: { slug },
         select: {
             id: true,
@@ -31,6 +31,7 @@ export async function getArticleBySlug(slug: string) {
             date: true,
             author: true,
             iconSrc: true,
+            printableSupport: true,
             tags: true,
             ageCategories: {
                 select: {
@@ -48,9 +49,33 @@ export async function getArticleBySlug(slug: string) {
                     content: true,
                 },
             },
+            relatedLinks: {
+                select: {
+                    toArticle: {
+                        select: {
+                            id: true,
+                            title: true,
+                            slug: true,
+                            image: true,
+                        },
+                    },
+                },
+            },
         },
     });
+
+    if (!article) return null;
+
+    // On extrait les articles liés
+    const relatedArticles = article.relatedLinks.map((link) => link.toArticle);
+
+    // On retourne l'article avec une nouvelle propriété 'relatedArticles'
+    return {
+        ...article,
+        relatedArticles,
+    };
 }
+
 
 
 // 🔵 Ajouter un article avec un slug automatique

@@ -7,6 +7,11 @@ export async function GET() {
     try {
         const articles = await prisma.article.findMany({
             orderBy: { date: "desc" },
+            include: {
+                ageCategories: {
+                    include: { ageCategory: true },
+                },
+            },
         });
 
         return NextResponse.json(articles);
@@ -15,7 +20,6 @@ export async function GET() {
     }
 }
 
-// 🟢 Ajouter un nouvel article (CREATE)
 // 🟢 Ajouter un nouvel article (CREATE)
 export async function POST(req: Request) {
     try {
