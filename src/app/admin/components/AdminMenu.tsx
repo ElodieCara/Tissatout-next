@@ -9,6 +9,8 @@ import Breadcrumb from "./Breadcrumb";
 import AdminAdvice from "./AdminAdvice";
 import AdminAgeCategory from "./AdminAgeCategory";
 import AdminSiteSettings from "./AdminSiteSettings";
+import AdminCommentsPage from "./AdminComments";
+
 
 
 export default function AdminPage() {
@@ -41,6 +43,12 @@ export default function AdminPage() {
                     className={activeSection === "settings" ? "active" : ""}
                 >
                     🎛️ Bannières
+                </button>
+                <button
+                    onClick={() => handleSectionChange("comments")}
+                    className={activeSection === "comments" ? "active" : ""}
+                >
+                    💬 Commentaires
                 </button>
             </nav>
 
@@ -86,6 +94,7 @@ export default function AdminPage() {
                 {activeSection === "ideas" && <AdminIdeas />}
                 {activeSection === "advice" && <AdminAdvice />}
                 {activeSection === "ageCategory" && <AdminAgeCategory />}
+                {activeSection === "comments" && <AdminCommentsPage />}
             </div>
         </div>
     );

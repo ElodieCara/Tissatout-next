@@ -5,7 +5,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import type { Article } from "@/types/home";
 import PrintButton from "@/components/PrintButton/PrintButton";
-
+import ArticleFeedback from "./ArticleFeedback";
+import CommentList from "./CommentList";
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const article = await getArticleBySlug(params.slug);
@@ -136,6 +137,11 @@ export default async function ArticlePage({ params }: { params: { slug: string }
                     </div>
                 )}
             </div>
+
+            {/* 💬 Section Commentaire */}
+            <ArticleFeedback articleId={article.id} />
+            <CommentList articleId={article.id} />
+
         </main>
     );
 }

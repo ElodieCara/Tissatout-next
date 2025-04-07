@@ -8,41 +8,51 @@ generator client {
 }
 
 model Article {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  slug        String   @unique // 🔥 Slug unique pour le SEO
-  content     String
-  image       String? // URL de l’image
-  iconSrc     String? // URL de l'icône de la catégorie
-  category    String?
-  tags        String[] // Tableau de tags (stocké sous forme de JSON)
+  id               String           @id @default(auto()) @map("_id") @db.ObjectId
+  title            String
+  slug             String           @unique // 🔥 Slug unique pour le SEO
+  content          String
+  image            String? // URL de l’image
+  iconSrc          String? // URL de l'icône de la catégorie
+  category         String?
+  tags             String[] // Tableau de tags (stocké sous forme de JSON)
   printableSupport String? // URL vers le fichier imprimable
-  author      String?
-  description String?
-  date        DateTime @default(now()) // Date par défaut à la création
-  sections    ArticleSection[]
+  author           String?
+  description      String?
+  date             DateTime         @default(now()) // Date par défaut à la création
+  sections         ArticleSection[]
+  comments         Comment[]
 
   // ✅ Relation Many-to-Many gérée par un modèle pivot
-  ageCategories AgeCategoryArticle[]  
+  ageCategories AgeCategoryArticle[]
 
-  relatedLinks   RelatedArticle[] @relation("FromArticle")
-  linkedFrom     RelatedArticle[] @relation("ToArticle")
+  relatedLinks RelatedArticle[] @relation("FromArticle")
+  linkedFrom   RelatedArticle[] @relation("ToArticle")
 }
 
 model RelatedArticle {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  fromArticle Article  @relation("FromArticle", fields: [fromArticleId], references: [id])
-  fromArticleId String @db.ObjectId
-  toArticle     Article  @relation("ToArticle", fields: [toArticleId], references: [id])
-  toArticleId   String @db.ObjectId
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  fromArticle   Article @relation("FromArticle", fields: [fromArticleId], references: [id])
+  fromArticleId String  @db.ObjectId
+  toArticle     Article @relation("ToArticle", fields: [toArticleId], references: [id])
+  toArticleId   String  @db.ObjectId
 }
 
 model ArticleSection {
-  id        String   @id @default(cuid()) @map("_id")
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   content   String
-  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId String
+  article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId String  @db.ObjectId
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  articleId String   @db.ObjectId
+  article   Article  @relation(fields: [articleId], references: [id])
+  createdAt DateTime @default(now())
+  approved  Boolean  @default(false)
 }
 
 model Idea {
@@ -60,16 +70,16 @@ model Idea {
 }
 
 model AgeCategory {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  slug        String @unique
-  description String
-  content     String?  
-  conclusion  String?
-  activityList  String[]
-  imageCard   String
-  imageBanner String
-  tags        AgeCategoryTag[]
+  id           String           @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  slug         String           @unique
+  description  String
+  content      String?
+  conclusion   String?
+  activityList String[]
+  imageCard    String
+  imageBanner  String
+  tags         AgeCategoryTag[]
 
   activities Activity[] // ✅ Relations avec clé étrangère proprement définies
 
@@ -81,7 +91,7 @@ model AgeCategory {
 }
 
 model Tag {
-   id    String   @id @default(auto()) @map("_id") @db.ObjectId
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
   label String
   color String
 
@@ -91,12 +101,12 @@ model Tag {
 }
 
 model AgeCategoryTag {
-  id            String       @id @default(auto()) @map("_id") @db.ObjectId
-  ageCategory   AgeCategory  @relation(fields: [ageCategoryId], references: [id])
-  ageCategoryId String
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  ageCategory   AgeCategory @relation(fields: [ageCategoryId], references: [id])
+  ageCategoryId String      @db.ObjectId
 
-  tag   Tag     @relation(fields: [tagId], references: [id])
-  tagId String
+  tag   Tag    @relation(fields: [tagId], references: [id])
+  tagId String @db.ObjectId
 }
 
 model Activity {
@@ -209,45 +219,45 @@ model AgeCategoryIdea {
 }
 
 model SiteSettings {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   // Accueil
-  homeBanners     String[] // ⬅️ devient un tableau d'URLs
-  homeTitle       String
-  homeDesc        String
+  homeBanners String[] // ⬅️ devient un tableau d'URLs
+  homeTitle   String
+  homeDesc    String
 
   // Univers 
-  universBanner   String?
-  universTitle    String?
-  universDesc     String?
+  universBanner String?
+  universTitle  String?
+  universDesc   String?
 
   // Coloriages
-  coloringBanner  String?
-  coloringTitle   String?
-  coloringDesc    String?
+  coloringBanner String?
+  coloringTitle  String?
+  coloringDesc   String?
 
   // Conseils
-  adviceBanner    String?
-  adviceTitle     String?
-  adviceDesc      String?
+  adviceBanner String?
+  adviceTitle  String?
+  adviceDesc   String?
 
   // Idées
-  ideasBanner     String?
-  ideasTitle      String?
-  ideasDesc       String?
+  ideasBanner String?
+  ideasTitle  String?
+  ideasDesc   String?
 
   // Pages par âge
-  agePageBanner   String?
-  agePageTitle    String?
-  agePageDesc     String?
+  agePageBanner String?
+  agePageTitle  String?
+  agePageDesc   String?
 
   // Actualités
-  newsBanner      String?
-  newsTitle       String?
-  newsDesc        String?
+  newsBanner String?
+  newsTitle  String?
+  newsDesc   String?
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model HomeSlide {
@@ -257,8 +267,7 @@ model HomeSlide {
   description String
   buttonText  String
   buttonLink  String
-  order       Int      // pour l'ordre d'affichage
+  order       Int // pour l'ordre d'affichage
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
-
