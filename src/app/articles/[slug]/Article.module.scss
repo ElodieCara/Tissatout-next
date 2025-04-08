@@ -48,6 +48,42 @@
         margin-bottom: 1rem;
     }
 
+    &__toc {
+        background: #fffbe5;
+        padding: 1rem 1.5rem;
+        border-radius: 1rem;
+        margin: 2rem 0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+
+        &-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #203e75;
+            margin-bottom: 0.5rem;
+        }
+
+        &-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+
+            li {
+                margin-bottom: 0.4rem;
+
+                a {
+                    text-decoration: none;
+                    color: #007080;
+                    font-size: 0.95rem;
+
+                    &:hover {
+                        text-decoration: underline;
+                        color: #004e60;
+                    }
+                }
+            }
+        }
+    }
+
     &__section-title {
         font-size: 1.5rem;
         color: #203e75;
@@ -66,6 +102,25 @@
             flex: 1 1 300px;
         }
     }
+
+    &__section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+
+    &__section-number {
+        background-color: #fde4a3;
+        color: #203e75;
+        font-weight: bold;
+        font-size: 1rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 999px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        flex-shrink: 0;
+    }
+
 
     &__highlight-box {
         background-color: #f9f1dc;
@@ -181,24 +236,103 @@
         }
 
         &-item {
-            background: #fffdf8;
+            background: #fffef9;
             border-left: 4px solid #fdca57;
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             border-radius: 0.75rem;
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: #2c3f64;
-            line-height: 1.4;
+            line-height: 1.5;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            transition: background 0.3s;
 
-            &-date {
-                font-size: 0.8rem;
-                color: #888;
-                margin-top: 0.5rem;
+            &:hover {
+                background: #fff7e0;
             }
         }
 
-        &-empty {
-            font-style: italic;
-            color: #999;
+        &-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        &-avatar {
+            background: #fde4a3;
+            color: #203e75;
+            width: 40px;
+            height: 40px;
+            font-size: 1.4rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 2px #fffdf8;
+        }
+
+        &-author {
+            font-weight: bold;
+            color: #203e75;
+            margin-bottom: 0.2rem;
+            font-size: 0.95rem;
+        }
+
+        &-date {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        &-content {
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+
+    }
+}
+
+.toc {
+    background-color: #fff5e5;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    &__title {
+        font-size: 1.3rem;
+        color: #203e75;
+        margin-bottom: 1rem;
+    }
+
+    &__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    &__item {
+        margin-bottom: 0.5rem;
+    }
+
+    &__link {
+        color: #2c3f64;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1rem;
+        position: relative;
+
+        &::before {
+            content: "• ";
+            color: #fdca57;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        &:hover {
+            text-decoration: underline;
+            color: #f78e74;
         }
     }
 }
