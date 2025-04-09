@@ -23,6 +23,21 @@ export default async function ArticlePage({ params }: Props) {
     const article = await getArticleBySlug(params.slug);
     if (!article) return notFound();
 
+    const sections = (article.sections as { title: string; content: string; style?: string }[]) || [];
+
+    let classiqueIndex = 0;
+    const processedSections = sections.map((section) => {
+        const raw = section.style;
+        const normalizedStyle =
+            typeof raw === "string" && ["highlight", "icon"].includes(raw.toLowerCase())
+                ? raw.toLowerCase()
+                : "classique";
+
+        const index = normalizedStyle === "classique" ? ++classiqueIndex : undefined;
+
+        return { ...section, normalizedStyle, index };
+    });
+
     return (
         <main className="article print-article" >
             <div className="article__container">
@@ -36,19 +51,21 @@ export default async function ArticlePage({ params }: Props) {
                     />
                 </div>
                 <header className="article__header">
-                    <a href="/inspiration" className="article__back-button">
-                        ← Voir tous les articles
-                    </a>
+                    <div className="article__top">
+                        <a href="/inspiration" className="article__back-button">
+                            ← Voir tous les articles
+                        </a>
 
-                    {article.ageCategories?.length > 0 && (
-                        <div className="article__badges">
-                            {article.ageCategories.map((ac: any) => (
-                                <span key={ac.ageCategory.id} className="article__badge">
-                                    {ac.ageCategory.title}
-                                </span>
-                            ))}
-                        </div>
-                    )}
+                        {article.ageCategories?.length > 0 && (
+                            <div className="article__badges">
+                                {article.ageCategories.map((ac: any) => (
+                                    <span key={ac.ageCategory.id} className="article__badge">
+                                        {ac.ageCategory.title}
+                                    </span>
+                                ))}
+                            </div>
+                        )}
+                    </div>
 
                     <div className="article__title-block">
                         {article.iconSrc && (
@@ -93,26 +110,24 @@ export default async function ArticlePage({ params }: Props) {
                 )}
 
                 <section className="article__sections-grid">
-                    {(article.sections as { title: string; content: string; style?: string }[])?.map((section, index) => {
-                        const raw = section.style;
-                        const normalizedStyle =
-                            typeof raw === "string" && ["highlight", "icon"].includes(raw.toLowerCase())
-                                ? raw.toLowerCase()
-                                : "classique";
-
-                        const className = `article__section article__section--${normalizedStyle}`;
+                    {processedSections.map((section, i) => {
+                        const className = `article__section article__section--${section.normalizedStyle}`;
 
                         return (
-                            <article key={index} className={className}>
-                                {/* Icône contextuelle */}
-                                {normalizedStyle === "icon" && <span className="article__section-icon">🎨</span>}
-                                {normalizedStyle === "highlight" && <span className="article__section-icon">🧭</span>}
+                            <article key={i} className={className}>
+                                <div className="article__section-header">
+                                    {section.normalizedStyle === "icon" && (
+                                        <span className="article__section-icon">
+                                            <img src="/icons/loupe.png" alt="Icône section" />
+                                        </span>
+                                    )}
+                                    {section.normalizedStyle === "highlight" && null}
 
-                                {/* Titre avec numérotation uniquement pour "classique" */}
-                                <h2 className="article__section-title">
-                                    {normalizedStyle === "classique" && `${index + 1}. `}
-                                    {section.title}
-                                </h2>
+                                    <h2 className="article__section-title">
+                                        {section.index !== undefined && `${section.index}. `}
+                                        {section.title}
+                                    </h2>
+                                </div>
 
                                 {/* Contenu markdown */}
                                 <div className="article__section-content">
@@ -132,7 +147,7 @@ export default async function ArticlePage({ params }: Props) {
                                 </div>
 
                                 {/* Lien d'impression uniquement pour "highlight" */}
-                                {normalizedStyle === "highlight" && article.printableSupport && (
+                                {section.normalizedStyle === "highlight" && article.printableSupport && (
                                     <a
                                         href={article.printableSupport}
                                         target="_blank"

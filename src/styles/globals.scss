@@ -14,6 +14,7 @@
 @import "../components/Button/Button.module.scss";
 @import "../components/RedBtn/RedBtn.module.scss";
 @import "../components/Decorations/Themes/themes.scss";
+@import "../components/PrintButton/PrintButton.module.scss";
 @import "../app/admin/Breadcrumb.module.scss";
 @import "../components/Breadcrumb/Breadcrumb.module.scss";
 @import "../components/Banner/Banner.module.scss";
@@ -51,3 +52,9 @@
 @import "../app/coloriages/explorer/Explorer.module.scss";
 @import "../app/coloriages/[id]/DrawingPage.module.scss";
 @import "../app/articles/[slug]/Article.module.scss";
+@import "../app/articles/[slug]/TableOfContents.module.scss";
+@import "../app/articles/[slug]/CommentList.module.scss";
+@import "../app/articles/[slug]/ArticleFeeback.module.scss";
+@import "../app/articles/[slug]/Sections.module.scss";
+@import "../app/articles/[slug]/Related.module.scss";
+@import "../app/articles/[slug]/Tags.module.scss";

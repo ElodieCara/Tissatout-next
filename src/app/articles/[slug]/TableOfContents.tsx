@@ -32,6 +32,7 @@ export default function TableOfContents({ sections }: Props) {
                         className="toc__link"
                         onClick={() => isMobile && setIsOpen(false)}
                     >
+
                         {section.title}
                     </Link>
                 </li>
@@ -44,14 +45,19 @@ export default function TableOfContents({ sections }: Props) {
             {isMobile ? (
                 <div className="toc__mobile-header">
                     <button onClick={() => setIsOpen(!isOpen)} className="toc__toggle">
-                        {isOpen ? "❌ Fermer" : "📓 Sommaire"}
+                        {isOpen ? "❌ Fermer" : "Sommaire"}
                     </button>
                     {isOpen && tocList}
                 </div>
             ) : (
                 <div className="toc__desktop">
-                    <h3 className="toc__title">📚 Sommaire
-                    </h3>
+                    <div className="toc__header">
+                        <span className="toc__icon">
+                            <img src="/icons/sommaire.png" alt="" />
+                        </span>
+                        <h3 className="toc__title"> Sommaire
+                        </h3>
+                    </div>
                     {tocList}
                 </div>
             )}

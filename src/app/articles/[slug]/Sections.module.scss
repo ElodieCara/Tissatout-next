@@ -1,0 +1,81 @@
+.article__section {
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    break-inside: avoid;
+    margin-bottom: 2rem;
+
+    &--classique {
+        background: #fff;
+        border-left: 5px solid #fdca57;
+
+        .article__section-title {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
+
+    &--highlight {
+        background: #fffbe5;
+        border-left: 5px solid #f78e74;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; // Réduit l'espacement interne
+        border-radius: 1rem;
+
+        .article__section-title {
+            margin-top: 0;
+        }
+
+        .article__section-icon {
+            font-size: 2rem;
+            color: #f78e74;
+        }
+
+        .article__print-link {
+            background: #f78e74;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            font-weight: bold;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            align-self: flex-start;
+            transition: background 0.2s;
+
+            &:hover {
+                background: #e05e4c;
+            }
+        }
+    }
+
+    &--icon {
+        background: #e0f7f3;
+        border: 2px dashed #a5d6c0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem; // Réduit l'espacement interne
+        border-radius: 1rem;
+
+        .article__section-title {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .article__section-icon {
+            font-size: 2rem;
+            color: #007080;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px; // ou 24px si tu veux plus petit
+            height: 56px;
+            margin-right: 0.75rem;
+
+            img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+        }
+    }
+}

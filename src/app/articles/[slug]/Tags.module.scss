@@ -1,0 +1,25 @@
+.article__tags {
+    margin: 2rem 0;
+
+
+    &__tags-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #203e75;
+        margin-bottom: 0.5rem;
+    }
+}
+
+.article__tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.article__tag {
+    background-color: #e0f7f3;
+    color: #316470;
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+}

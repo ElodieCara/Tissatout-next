@@ -1,0 +1,43 @@
+.article__related {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background: #fffbe5;
+    border-radius: 1rem;
+
+
+    &-title {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: #2c3f64;
+    }
+
+    &-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    &-card {
+        background-color: #fdecc8;
+        padding: 0.8rem 1rem;
+        border-radius: 1rem;
+        text-decoration: none;
+        color: #2c3f64;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        &:hover {
+            background-color: #fdca57;
+        }
+    }
+
+    &_-icon {
+        font-size: 1.2rem;
+    }
+
+    &-title-text {
+        font-size: 1rem;
+    }
+}
