@@ -1,30 +1,38 @@
 "use client";
+import { useState } from "react";
 
-export default function PrintButton({ supportUrl }: { supportUrl?: string | null }) {
-    if (!supportUrl) {
-        // Affiche seulement le bouton principal
-        return (
-            <div className="article__print-block">
-                <button className="article__print-button" onClick={() => window.print()}>
-                    🖨️ Imprimer cet article
-                </button>
-            </div>
-        );
-    }
+export default function PrintButton({ articleImageUrl }: { articleImageUrl?: string }) {
+    const [includeImage, setIncludeImage] = useState(true);
+
+    const handlePrint = () => {
+        const body = document.body;
+
+        if (!includeImage) {
+            body.classList.add("no-image-print");
+        }
+
+        window.print();
+
+        // Nettoyer après impression
+        setTimeout(() => {
+            body.classList.remove("no-image-print");
+        }, 1000);
+    };
 
     return (
         <div className="article__print-block">
-            <button className="article__print-button" onClick={() => window.print()}>
+            <label className="article__print-checkbox">
+                <input
+                    type="checkbox"
+                    checked={includeImage}
+                    onChange={(e) => setIncludeImage(e.target.checked)}
+                />
+                Inclure l’image ?
+            </label>
+
+            <button className="article__print-button" onClick={handlePrint}>
                 🖨️ Imprimer cet article
             </button>
-            <a
-                className="article__print-support"
-                href={supportUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                ➡️ Imprimer la fiche à colorier et découper
-            </a>
         </div>
     );
 }

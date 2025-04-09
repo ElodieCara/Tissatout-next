@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Breadcrumb from "./Breadcrumb";
+import Breadcrumb from "../components/Breadcrumb";
 import Link from "next/link";
 import { generateSlug } from "@/lib/utils";
 

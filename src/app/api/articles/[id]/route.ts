@@ -15,7 +15,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
                     include: { ageCategory: true },
                 },
                 sections: {
-                    orderBy: { id: 'asc' }, // pour garder l’ordre d’ajout
+                    orderBy: { id: 'asc' },
                 },
                 relatedLinks: {
                     include: {
@@ -35,87 +35,131 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
             return NextResponse.json({ message: "Article non trouvé" }, { status: 404 });
         }
 
+        // 🔁 Normaliser les sections pour garantir la structure
+        const sections = article.sections.map(section => ({
+            id: section.id,
+            title: section.title,
+            content: section.content,
+            style: section.style || "classique",
+        }));
+
         // 🔁 Transformer les articles liés pour le front
         const relatedArticles = article.relatedLinks.map(link => link.toArticle);
 
-        return NextResponse.json({ ...article, relatedArticles });
+        // ✅ Réponse complète et propre
+        return NextResponse.json({
+            ...article,
+            sections,
+            relatedArticles,
+        });
+
     } catch (error) {
         console.error("Erreur GET article admin :", error);
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
 
-// 🟡 PUT: Mettre à jour un article
-// 🟡 PUT: Mettre à jour un article
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-    try {
-        const body = await req.json();
 
-        if (!body.title || !body.content || !body.category || !body.author) {
+// 🟡 PUT: Mettre à jour un article
+export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+    try {
+        const { params } = context;
+        const id = params?.id;
+
+        if (!id) {
+            return NextResponse.json({ message: "❌ ID manquant" }, { status: 400 });
+        }
+
+        const body = await req.json();
+        const {
+            title,
+            content,
+            category,
+            author,
+            image,
+            iconSrc,
+            tags,
+            printableSupport,
+            description,
+            date,
+            ageCategories,
+            sections,
+            relatedArticleIds
+        } = body;
+
+        if (!title || !content || !category || !author) {
             return NextResponse.json({ message: "❌ Titre, contenu, catégorie et auteur requis" }, { status: 400 });
         }
 
-        const article = await prisma.article.findUnique({ where: { id: params.id } });
+        const article = await prisma.article.findUnique({ where: { id } });
         if (!article) {
             return NextResponse.json({ message: "❌ Article non trouvé" }, { status: 404 });
         }
 
-        // 🔄 Supprimer les anciennes sections
-        await prisma.articleSection.deleteMany({ where: { articleId: params.id } });
+        // 🧹 Nettoyer les anciennes données
+        await prisma.articleSection.deleteMany({ where: { articleId: id } });
+        await prisma.relatedArticle.deleteMany({ where: { fromArticleId: id } });
 
-        // 🔄 Supprimer les anciens articles liés
-        await prisma.relatedArticle.deleteMany({ where: { fromArticleId: params.id } });
+        // 🧱 Recréer les sections
+        if (Array.isArray(sections)) {
+            for (const section of sections) {
+                const rawStyle = section.style?.toLowerCase();
+                const normalizedStyle = ["highlight", "icon"].includes(rawStyle) ? rawStyle : "classique";
 
-        // ➕ Recréer les sections à partir du body
-        if (Array.isArray(body.sections)) {
-            await prisma.articleSection.createMany({
-                data: body.sections.map((section: any) => ({
-                    title: section.title,
-                    content: section.content,
-                    articleId: params.id,
-                })),
-            });
+                await prisma.articleSection.create({
+                    data: {
+                        title: section.title,
+                        content: section.content,
+                        style: normalizedStyle,
+                        articleId: id,
+                    },
+                });
+            }
         }
 
-        // ➕ Recréer les articles liés à partir du body
-        if (Array.isArray(body.relatedArticleIds)) {
+        // 🔗 Recréer les articles liés
+        if (Array.isArray(relatedArticleIds) && relatedArticleIds.length > 0) {
             await prisma.relatedArticle.createMany({
-                data: body.relatedArticleIds.map((toId: string) => ({
-                    fromArticleId: params.id,
+                data: relatedArticleIds.map((toId: string) => ({
+                    fromArticleId: id,
                     toArticleId: toId,
                 })),
             });
         }
 
-        // ✅ Mettre à jour les autres champs de l’article
+        // ✏️ Mettre à jour l’article
         const updatedArticle = await prisma.article.update({
-            where: { id: params.id },
+            where: { id },
             data: {
-                title: body.title,
-                content: body.content,
-                image: body.image || null,
-                iconSrc: body.iconSrc || null,
-                category: body.category,
-                tags: body.tags || [],
-                printableSupport: body.printableSupport || null,
-                author: body.author,
-                description: body.description || null,
-                date: body.date ? new Date(body.date) : new Date(),
+                title,
+                content,
+                image: image || null,
+                iconSrc: iconSrc || null,
+                category,
+                tags: tags || [],
+                printableSupport: printableSupport || null,
+                author,
+                description: description || null,
+                date: date ? new Date(date) : new Date(),
                 ageCategories: {
                     deleteMany: {},
-                    create: body.ageCategories.map((ageCategoryId: string) => ({
+                    create: (ageCategories || []).map((ageCategoryId: string) => ({
                         ageCategory: { connect: { id: ageCategoryId } },
                     })),
                 },
             },
         });
 
-        return NextResponse.json(updatedArticle);
+        console.log("✅ Article mis à jour :", updatedArticle.id);
+        return NextResponse.json({ message: "Article mis à jour avec succès", updatedArticle });
+
     } catch (error) {
-        console.error("Erreur PUT article admin :", error);
+        console.error("❌ Erreur PUT article admin :", error);
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
+
+
 
 // 🔴 DELETE: Supprimer un article
 export async function DELETE(req: Request, { params }: { params: { id: string } }) {

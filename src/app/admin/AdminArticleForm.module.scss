@@ -194,6 +194,8 @@
             font-family: inherit;
         }
 
+
+
         textarea {
             min-height: 120px;
             resize: vertical;
@@ -212,6 +214,55 @@
 
             &:hover {
                 background: #f26b4f;
+            }
+        }
+    }
+
+    &__field {
+        margin-top: 1rem;
+
+        select {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            font-family: inherit;
+            background: #fffef9;
+            color: #2c3f64;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: bold;
+            font-size: 0.95rem;
+            color: #2c3f64;
+        }
+    }
+
+    &__style-preview {
+        margin-top: 0.4rem;
+
+        .badge {
+            display: inline-block;
+            font-size: 0.85rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.5rem;
+            color: #203e75;
+            background-color: #f0f0f0;
+
+            &--highlight {
+                background-color: #fdecc8;
+            }
+
+            &--icon {
+                background-color: #e0f7f3;
+
+                &::before {
+                    content: "🌟 ";
+                    margin-right: 0.3rem;
+                }
+
             }
         }
     }

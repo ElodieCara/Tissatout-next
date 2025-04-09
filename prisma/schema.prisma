@@ -42,6 +42,7 @@ model ArticleSection {
   id        String  @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   content   String
+  style     String?
   article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId String  @db.ObjectId
 }

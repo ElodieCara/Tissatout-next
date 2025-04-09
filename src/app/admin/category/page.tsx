@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Breadcrumb from "../components/Breadcrumb";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 interface DrawingCategory {
     id: string;

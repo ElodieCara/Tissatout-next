@@ -11,7 +11,7 @@ import ExplorerBanner from "./components/ExplorerBanner";
 import TrendingSection from "./components/TrendingSection";
 import EducationalSection from "./components/EducationalSection";
 import SeasonalHighlights from "./components/SeasonalHightlights";
-import Breadcrumb from "@/app/admin/components/Breadcrumb";
+import Breadcrumb from "../../admin/components/Breadcrumb";
 import { Drawing } from "@/types/drawing";
 import { generateSlug } from "@/lib/utils";
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Breadcrumb from "@/app/admin/components/Breadcrumb";
+import Breadcrumb from "@/components/Breadcrumb";
 
 
 interface Section {

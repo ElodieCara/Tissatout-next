@@ -1,9 +1,11 @@
+/* 🌈 Pour les coloriages */
 @media print {
-    body * {
-        visibility: hidden; // Masque tout sauf l’image
+
+    body.print-coloring * {
+        visibility: hidden !important;
     }
 
-    .printable-image {
+    body.print-coloring .printable-image {
         visibility: visible;
         position: absolute;
         left: 50%;
@@ -11,5 +13,86 @@
         transform: translate(-50%, -50%);
         width: 100%;
         height: auto;
+    }
+}
+
+
+// /* 📄 Pour les articles */
+@media print {
+
+    // Tout masquer par défaut
+    body * {
+        visibility: hidden;
+    }
+
+    // On affiche uniquement la partie article
+    .article,
+    .article * {
+        visibility: visible;
+    }
+
+    .article__section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        /* pour compatibilité étendue */
+        margin-bottom: 2rem;
+        /* pour laisser un peu d’air */
+    }
+
+    .article__image {
+        max-width: 40% !important;
+        height: auto !important;
+        margin: 2rem auto !important;
+        display: block !important;
+    }
+
+    .no-image-print .article__image,
+    .no-image-print .article__grid-image {
+        display: none !important;
+    }
+
+    .no-image-print .article__grid-summary {
+        display: none !important; // on masque aussi le sommaire si tu veux
+    }
+
+    // Masquer les éléments inutiles
+    .no-print,
+    footer,
+    nav,
+    .article__grid-summary,
+    .article__print,
+    .article__back-button,
+    .article__related,
+    .article__tags,
+    .article__feedback,
+    .article__comments,
+    .article__badges,
+    .breadcrumb,
+    .article__meta {
+        display: none !important;
+    }
+
+    // Adapter la mise en page
+    .article {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+
+    .article__image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .article__section-title {
+        font-size: 1.5em;
+        margin-top: 1em;
+    }
+
+    .article__section-content {
+        font-size: 1em;
+        line-height: 1.6;
     }
 }

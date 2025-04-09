@@ -51,13 +51,19 @@ export async function POST(req: Request) {
                     })),
                 },
 
-                // 🔥 Ajouter les sections
+                // ✅ Ajouter les sections avec style normalisé
                 sections: {
                     create: Array.isArray(body.sections)
-                        ? body.sections.map((section: any) => ({
-                            title: section.title,
-                            content: section.content,
-                        }))
+                        ? body.sections.map((section: any) => {
+                            const rawStyle = section.style?.toLowerCase();
+                            const style = ["highlight", "icon"].includes(rawStyle) ? rawStyle : "classique";
+
+                            return {
+                                title: section.title,
+                                content: section.content,
+                                style,
+                            };
+                        })
                         : [],
                 },
             },
@@ -69,4 +75,5 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: "Erreur serveur", error: (error as Error).message }, { status: 500 });
     }
 }
+
 

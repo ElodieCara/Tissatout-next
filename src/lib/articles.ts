@@ -47,6 +47,7 @@ export async function getArticleBySlug(slug: string) {
                 select: {
                     title: true,
                     content: true,
+                    style: true,
                 },
             },
             relatedLinks: {

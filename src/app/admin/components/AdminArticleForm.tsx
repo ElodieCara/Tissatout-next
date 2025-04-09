@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Breadcrumb from "./Breadcrumb";
+import Breadcrumb from "../components/Breadcrumb";
 import { generateSlug } from "@/lib/utils";
 import ReactMarkdown from "react-markdown";
 import ArticleSelector from "./ArticleSelector";
@@ -20,6 +20,7 @@ const categoryIcons: Record<string, string> = {
 interface Section {
     title: string;
     content: string;
+    style?: string;
 }
 
 interface Article {
@@ -53,7 +54,7 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
         date: "",
         ageCategories: [],
         sections: [
-            { title: "", content: "" }
+            { title: "", content: "", style: "" }
         ],
         printableSupport: "",
         relatedArticleIds: []
@@ -183,7 +184,14 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
             ...form,
             printableSupport: form.printableSupport || null,
             ageCategoryIds: selectedAges,
-            sections: form.sections,
+            sections: form.sections.map((s) => {
+                const style = typeof s.style === "string" ? s.style.toLowerCase() : "";
+                return {
+                    title: s.title,
+                    content: s.content,
+                    style: ["highlight", "icon"].includes(style) ? style : "classique"
+                };
+            }),
             relatedArticleIds: form.relatedArticleIds || []
         };
 
@@ -209,7 +217,7 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
     const addSection = () => {
         setForm({
             ...form,
-            sections: [...form.sections, { title: "", content: "" }]
+            sections: [...form.sections, { title: "", content: "", style: "" }]
         });
     };
 
@@ -334,6 +342,30 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                                 value={section.title}
                                 onChange={(e) => updateSection(index, "title", e.target.value)}
                             />
+                            <div className="admin-form__field">
+                                <label htmlFor={`style-${index}`}>Style de la section</label>
+                                <select
+                                    id={`style-${index}`}
+                                    value={section.style || ""}
+                                    onChange={(e) => {
+                                        const value = e.target.value.toLowerCase(); // 🔁 Normalisation
+                                        console.log(`🎨 Style sélectionné pour la section ${index} :`, value);
+                                        updateSection(index, "style", value);
+                                    }}
+                                >
+                                    <option value="">Classique</option>
+                                    <option value="highlight">Encadré coloré</option>
+                                    <option value="icon">Avec icône</option>
+                                </select>
+                                <div className="admin-form__style-preview">
+                                    {section.style === "highlight" && (
+                                        <span className="badge badge--highlight">Ex : fond coloré</span>
+                                    )}
+                                    {section.style === "icon" && (
+                                        <span className="badge badge--icon">Ex : avec icône</span>
+                                    )}
+                                </div>
+                            </div>
                             {/* 🔘 Boutons de mise en forme rapide */}
                             <div className="admin-form__toolbar">
                                 <button type="button" onClick={() => updateSection(index, "content", section.content + "**gras** ")}>Gras</button>

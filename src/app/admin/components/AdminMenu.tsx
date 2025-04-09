@@ -5,7 +5,7 @@ import AdminArticles from "./AdminArticles";
 import AdminColoring from "./AdminColoring";
 import AdminNews from "./AdminNews";
 import AdminIdeas from "./AdminIdeas";
-import Breadcrumb from "./Breadcrumb";
+import Breadcrumb from "../components/Breadcrumb";
 import AdminAdvice from "./AdminAdvice";
 import AdminAgeCategory from "./AdminAgeCategory";
 import AdminSiteSettings from "./AdminSiteSettings";
