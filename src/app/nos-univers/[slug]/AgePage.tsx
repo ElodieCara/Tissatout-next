@@ -25,40 +25,35 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
     return (
         <div>
             <header>
-                <Banner
-                    src={agePageBanner}
-                    title={ageCategory.title}
-                    description={ageCategory.description} />
+                <section className="age">
+                    <div className="age__intro">
+
+                        <div className="age__image">
+                            <Image
+                                src={ageCategory.imageCard || "/images/default-banner.jpg"}
+                                alt={ageCategory.title}
+                                width={800}
+                                height={600}
+                            />
+                        </div>
+
+                        <div className="age__icon">
+                            <Image
+                                src="/assets/rubanJaune.svg"
+                                alt="Ruban jaune"
+                                width={50}
+                                height={50}
+                            />
+                        </div>
+
+                        <div className="age__text">
+                            <h1 className="age__text__title">{ageCategory.title}</h1>
+                            <p className="age__text__description">{ageCategory.description}</p>
+                        </div>
+                    </div>
+                </section>
             </header>
 
-            <section className="age">
-                <div className="age__intro">
-
-                    <div className="age__image">
-                        <Image
-                            src={ageCategory.imageCard || "/images/default-banner.jpg"}
-                            alt={ageCategory.title}
-                            width={800}
-                            height={600}
-                        />
-                    </div>
-
-                    <div className="age__icon">
-                        <Image
-                            src="/assets/rubanJaune.svg"
-                            alt="Ruban jaune"
-                            width={50}
-                            height={50}
-                        />
-                    </div>
-
-                    <div className="age__text">
-                        <h1 className="age__text__title">{ageCategory.title}</h1>
-                        <p className="age__text__description">{ageCategory.description}</p>
-                    </div>
-
-                </div>
-            </section>
 
             {/* Exemple pour les articles */}
             <section className="articles">

@@ -280,8 +280,15 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
 
 
                 <div className="admin-form__group">
-                    <label htmlFor="content">Contenu</label>
-                    <textarea id="content" name="content" placeholder="Contenu" value={form.content} onChange={handleChange} required />
+                    <label htmlFor="content">Texte d’introduction (optionnel)</label>
+                    <textarea
+                        id="content"
+                        name="content"
+                        placeholder="Saisis ici un texte d’intro libre (sera affiché dans la bannière)"
+                        value={form.content}
+                        onChange={(e) => setForm({ ...form, content: e.target.value })}
+                        rows={4} // ✅ plus de hauteur que pour description
+                    />
                 </div>
 
                 {/* 📌 Sélection de la catégorie */}

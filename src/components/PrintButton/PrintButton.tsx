@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Button from "../Button/Button";
 
 export default function PrintButton({ articleImageUrl }: { articleImageUrl?: string }) {
     const [includeImage, setIncludeImage] = useState(true);
@@ -20,19 +21,22 @@ export default function PrintButton({ articleImageUrl }: { articleImageUrl?: str
     };
 
     return (
-        <div className="article__print-block">
-            <label className="article__print-checkbox">
-                <input
-                    type="checkbox"
-                    checked={includeImage}
-                    onChange={(e) => setIncludeImage(e.target.checked)}
-                />
-                Inclure l’image ?
-            </label>
-
-            <button className="article__print-button" onClick={handlePrint}>
+        <div className="article__print">
+            <Button variant="red-button" onClick={handlePrint}>
                 🖨️ Imprimer cet article
-            </button>
+            </Button>
+
+            <div className="article__print-options">
+                <label htmlFor="includeImage" className="article__print-checkbox">
+                    <input
+                        id="includeImage"
+                        type="checkbox"
+                        checked={includeImage}
+                        onChange={(e) => setIncludeImage(e.target.checked)}
+                    />
+                    <span>Inclure l’image ?</span>
+                </label>
+            </div>
         </div>
     );
 }

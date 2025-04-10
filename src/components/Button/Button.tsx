@@ -6,7 +6,7 @@ import Link from "next/link";
 type ButtonBaseProps = {
     children: ReactNode;
     className?: string;
-    variant?: "primary" | "secondary" | "tertiary" | "red-button"; // ✅ Gère les couleurs du bouton
+    variant?: "primary" | "secondary" | "tertiary" | "red-button" | "yellow-button"; // ✅ Gère les couleurs du bouton
 };
 
 // ✅ Type pour un vrai bouton
