@@ -14,6 +14,7 @@ import Slideshow from "@/components/Slideshow/Slideshow";
 
 interface Article {
     id: string;
+    slug: string;
     title: string;
     content: string;
     image?: string;
@@ -174,7 +175,7 @@ export default function HomeContent({
                                             (currentSlide + 1) * articlesPerPage
                                         )
                                         .map((article) => (
-                                            <Link href={`/news/${article.id}`} key={article.id}>
+                                            <Link href={`/articles/${article.slug}`} key={article.id}>
                                                 <Card
                                                     cover={article.image || "/default-image.png"}
                                                     title={article.title}
