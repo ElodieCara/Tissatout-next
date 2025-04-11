@@ -25,6 +25,7 @@
 @import "../components/DrawingCard/DrawingCard.modules.scss";
 @import "../components/DrawingSlide/DrawingSlide.module.scss";
 @import "../components/AdBanner/AdBanner.module.scss";
+@import "../components/MysteryCard/MysteryCard.module.scss";
 @import "../app/coloriages/[id]/components/DrawingBreadcrumb/DrawingBreadcrumb.module.scss";
 @import "../app/coloriages/explorer/components/ExplorerSidebar.module.scss";
 @import "./print.scss";
@@ -45,6 +46,7 @@
 @import "../app/admin/articles/Articles.module.scss";
 @import "../app/nos-univers/NosUnivers.module.scss";
 @import "../app/nos-univers/[slug]/AgePage.module.scss";
+@import "../app/nos-univers/[slug]/Loading.module.scss";
 @import "../app/inspiration/Inspiration.module.scss";
 @import "../app/coloriages/Coloriages.module.scss";
 @import "../app/inspiration/components/InspirationAdvice.module.scss";

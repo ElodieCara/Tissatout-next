@@ -20,7 +20,7 @@ import Toys from "@/assets/news/toys.png";
 import { Slide, Section, News, Idea, Activity } from "@/types/home"; // Types définis
 
 
-export type ActivityCategory = "grammaire" | "logique" | "rhetorique" | "motricite";
+export type ActivityCategory = "trivium" | "quadrivium";
 
 export const slide: Slide[] = [
     { id: 1, image: Slide1 },
@@ -134,36 +134,76 @@ export const sections: Section[] = [
 
 
 export const activities: Record<ActivityCategory, Activity[]> = {
-    grammaire: [
-        { title: "Coloriages & Dessin", icon: "/icons/crafts.png", link: "/coloriages" },
-        { title: "Histoires & Comptines", icon: "/icons/lecture.png", link: "/histoires-comptines" },
-        { title: "Musique & Chansons", icon: "/icons/musique.png", link: "/musique-chansons" },
-        { title: "Activités Manuelles", icon: "/icons/craft.png", link: "/activites-manuelles" },
-        { title: "Peinture et collage", icon: "/icons/peinture.png", link: "/peinture-collage" },
-        { title: "Marionnettes & Jeux sensoriels", icon: "/icons/marionnettes.png", link: "/marionnettes-sensoriel" },
+    trivium: [
+        {
+            title: "Grammaire",
+            icon: "/icons/lecture.png",
+            link: "/grammaire",
+        },
+        {
+            title: "Logique",
+            icon: "/icons/defis.png",
+            link: "/logique",
+        },
+        {
+            title: "Rhétorique",
+            icon: "/icons/debat.png",
+            link: "/rhetorique",
+        },
     ],
-    logique: [
-        { title: "Construction & Lego", icon: "/icons/lego.png", link: "/construction-lego" },
-        { title: "Défis éducatifs & Enigmes", icon: "/icons/defis.png", link: "/defis-educatifs" },
-        { title: "Jeux éducatifs", icon: "/icons/des.png", link: "/jeux-educatifs" },
-        { title: "Jeux de réflexion & stratégie", icon: "/icons/strategie.png", link: "/jeux-strategie" },
-        { title: "Expériences scientifiques", icon: "/icons/science.png", link: "/sciences-enfants" },
-        { title: "Mathématiques ludiques", icon: "/icons/chiffre.png", link: "/maths-ludiques" },
-    ],
-    rhetorique: [
-        { title: "Théâtre & Jeux de rôle", icon: "/icons/theatre.png", link: "/theatre-jeux-role" },
-        { title: "Projets DIY & Création", icon: "/icons/diy.png", link: "/projets-diy" },
-        { title: "Rédaction d’histoires", icon: "/icons/redaction.png", link: "/redaction-histoires" },
-        { title: "Expression orale & Débats", icon: "/icons/debat.png", link: "/expression-orale" },
-        { title: "Création de mini-magazines", icon: "/icons/magazine.png", link: "/mini-magazine" },
-        { title: "Stop-motion et cinéma", icon: "/icons/cinema.png", link: "/cinema-stopmotion" },
-    ],
-    motricite: [
-        { title: "Parcours moteur", icon: "/icons/parcours.png", link: "/parcours-moteur" },
-        { title: "Équilibre & Coordination", icon: "/icons/mobilite.png", link: "/equilibre-coordination" },
-        { title: "Jeux de ballon", icon: "/icons/ballon.png", link: "/jeux-ballon" },
-        { title: "Danse & Mouvement", icon: "/icons/danse.png", link: "/danse-mouvement" },
-        { title: "Concentration & Discipline", icon: "/icons/discipline.png", link: "/arts-martiaux" },
-        { title: "Agilité & Créativité motrice", icon: "/icons/agilite.png", link: "/cirque-jonglage" },
+    quadrivium: [
+        {
+            title: "Arithmétique",
+            icon: "/icons/chiffre.png",
+            link: "/arithmetique",
+        },
+        {
+            title: "Géométrie",
+            icon: "/icons/lego.png",
+            link: "/geometrie",
+        },
+        {
+            title: "Musique",
+            icon: "/icons/musique.png",
+            link: "/musique",
+        },
+        {
+            title: "Astronomie",
+            icon: "/icons/etoile.png",
+            link: "/astronomie",
+        },
     ]
+
+    // grammaire: [
+    //     { title: "Coloriages & Dessin", icon: "/icons/crafts.png", link: "/coloriages" },
+    //     { title: "Histoires & Comptines", icon: "/icons/lecture.png", link: "/histoires-comptines" },
+    //     { title: "Musique & Chansons", icon: "/icons/musique.png", link: "/musique-chansons" },
+    //     { title: "Activités Manuelles", icon: "/icons/craft.png", link: "/activites-manuelles" },
+    //     { title: "Peinture et collage", icon: "/icons/peinture.png", link: "/peinture-collage" },
+    //     { title: "Marionnettes & Jeux sensoriels", icon: "/icons/marionnettes.png", link: "/marionnettes-sensoriel" },
+    // ],
+    // logique: [
+    //     { title: "Construction & Lego", icon: "/icons/lego.png", link: "/construction-lego" },
+    //     { title: "Défis éducatifs & Enigmes", icon: "/icons/defis.png", link: "/defis-educatifs" },
+    //     { title: "Jeux éducatifs", icon: "/icons/des.png", link: "/jeux-educatifs" },
+    //     { title: "Jeux de réflexion & stratégie", icon: "/icons/strategie.png", link: "/jeux-strategie" },
+    //     { title: "Expériences scientifiques", icon: "/icons/science.png", link: "/sciences-enfants" },
+    //     { title: "Mathématiques ludiques", icon: "/icons/chiffre.png", link: "/maths-ludiques" },
+    // ],
+    // rhetorique: [
+    //     { title: "Théâtre & Jeux de rôle", icon: "/icons/theatre.png", link: "/theatre-jeux-role" },
+    //     { title: "Projets DIY & Création", icon: "/icons/diy.png", link: "/projets-diy" },
+    //     { title: "Rédaction d’histoires", icon: "/icons/redaction.png", link: "/redaction-histoires" },
+    //     { title: "Expression orale & Débats", icon: "/icons/debat.png", link: "/expression-orale" },
+    //     { title: "Création de mini-magazines", icon: "/icons/magazine.png", link: "/mini-magazine" },
+    //     { title: "Stop-motion et cinéma", icon: "/icons/cinema.png", link: "/cinema-stopmotion" },
+    // ],
+    // motricite: [
+    //     { title: "Parcours moteur", icon: "/icons/parcours.png", link: "/parcours-moteur" },
+    //     { title: "Équilibre & Coordination", icon: "/icons/mobilite.png", link: "/equilibre-coordination" },
+    //     { title: "Jeux de ballon", icon: "/icons/ballon.png", link: "/jeux-ballon" },
+    //     { title: "Danse & Mouvement", icon: "/icons/danse.png", link: "/danse-mouvement" },
+    //     { title: "Concentration & Discipline", icon: "/icons/discipline.png", link: "/arts-martiaux" },
+    //     { title: "Agilité & Créativité motrice", icon: "/icons/agilite.png", link: "/cirque-jonglage" },
+    // ]
 };

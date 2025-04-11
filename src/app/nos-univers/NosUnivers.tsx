@@ -11,11 +11,14 @@ import { Tag } from "@/types/home";
 import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
 import RubanTrivium from "@/components/Ruban/Ruban";
 import BackToTop from "@/components/BackToTop/BackToTop";
+import { triviumData, quadriviumData } from "@/data/rubanActivity";
+import RubanUnivers from "@/components/Ruban/Ruban";
+import MysteryCard from "@/components/MysteryCard/MysteryCard";
 
-const categories = ["grammaire", "logique", "rhetorique", "motricite"];
+const categories = ["trivium", "quadrivium"];
 
 export default function NosUnivers({ settings }: { settings: any }) {
-    const [selectedCategory, setSelectedCategory] = useState<"grammaire" | "logique" | "rhetorique" | "motricite">("grammaire");
+    const [selectedCategory, setSelectedCategory] = useState<"trivium" | "quadrivium">("trivium");
     const [ageCategories, setAgeCategories] = useState<any[]>([]);
 
     useEffect(() => {
@@ -110,7 +113,8 @@ export default function NosUnivers({ settings }: { settings: any }) {
                             Des activités selon le Trivium
                         </span>
                     </h2>
-                    <RubanTrivium />
+                    <RubanUnivers {...triviumData} />
+                    <RubanUnivers {...quadriviumData} />
                 </section>
 
                 {/* ACTIVITÉS THÉMATIQUES */}
@@ -159,6 +163,17 @@ export default function NosUnivers({ settings }: { settings: any }) {
                         ))}
                     </div>
                 </section>
+
+                <MysteryCard
+                    title="🎁 Une activité mystère chaque semaine !"
+                    description="Une surprise rigolote pour apprendre, réfléchir et t’amuser ! Inscris-toi au courrier des petits curieux pour ne rien manquer ✨"
+                    primaryButtonText="🔍 Voir l’activité mystère"
+                    primaryButtonAction={() => window.location.href = '/activite-mystere'}
+                    secondaryButtonText="📩 S’inscrire"
+                    secondaryButtonAction={() => window.location.href = '/newsletter'}
+                    imageSrc="/images/activite-mystere-floutee.jpg"
+                    alt="Aperçu activité mystère"
+                />
             </div >
         </>
     );
