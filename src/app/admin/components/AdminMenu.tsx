@@ -3,13 +3,14 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import AdminArticles from "./AdminArticles";
 import AdminColoring from "./AdminColoring";
-import AdminNews from "./AdminNews";
+import AdminNews from "./AdminLesson";
 import AdminIdeas from "./AdminIdeas";
 import Breadcrumb from "../components/Breadcrumb";
 import AdminAdvice from "./AdminAdvice";
 import AdminAgeCategory from "./AdminAgeCategory";
 import AdminSiteSettings from "./AdminSiteSettings";
 import AdminCommentsPage from "./AdminComments";
+import AdminLesson from "./AdminLesson";
 
 
 
@@ -66,10 +67,10 @@ export default function AdminPage() {
                     🎨 Coloriages
                 </button>
                 <button
-                    onClick={() => handleSectionChange("news")}
-                    className={activeSection === "news" ? "active" : ""}
+                    onClick={() => handleSectionChange("modules")}
+                    className={activeSection === "modules" ? "active" : ""}
                 >
-                    📰 Actualités
+                    📚 Leçons
                 </button>
                 <button
                     onClick={() => handleSectionChange("ideas")}
@@ -90,7 +91,7 @@ export default function AdminPage() {
                 {activeSection === "settings" && <AdminSiteSettings />}
                 {activeSection === "articles" && <AdminArticles />}
                 {activeSection === "coloring" && <AdminColoring />}
-                {activeSection === "news" && <AdminNews />}
+                {activeSection === "modules" && <AdminLesson />}
                 {activeSection === "ideas" && <AdminIdeas />}
                 {activeSection === "advice" && <AdminAdvice />}
                 {activeSection === "ageCategory" && <AdminAgeCategory />}

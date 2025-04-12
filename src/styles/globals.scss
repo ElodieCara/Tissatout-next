@@ -26,6 +26,7 @@
 @import "../components/DrawingSlide/DrawingSlide.module.scss";
 @import "../components/AdBanner/AdBanner.module.scss";
 @import "../components/MysteryCard/MysteryCard.module.scss";
+@import "../components/LessonPage/LessonPage.module.scss";
 @import "../app/coloriages/[id]/components/DrawingBreadcrumb/DrawingBreadcrumb.module.scss";
 @import "../app/coloriages/explorer/components/ExplorerSidebar.module.scss";
 @import "./print.scss";
@@ -42,6 +43,7 @@
 @import "../app/admin/AdminArticleForm.module.scss";
 @import "../app/admin/AdminAdvice.module.scss";
 @import "../app/admin/AdminSlidesEditor.module.scss";
+@import "../app/admin/AdminLesson.module.scss";
 @import "../app/admin/ArticleSelector.module.scss";
 @import "../app/admin/articles/Articles.module.scss";
 @import "../app/nos-univers/NosUnivers.module.scss";
@@ -61,3 +63,5 @@
 @import "../app/articles/[slug]/Sections.module.scss";
 @import "../app/articles/[slug]/Related.module.scss";
 @import "../app/articles/[slug]/Tags.module.scss";
+@import "../app/trivium/TriviumPage.module.scss";
+@import "../app/trivium/[slug]/TriviumCategory.module.scss";

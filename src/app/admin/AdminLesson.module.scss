@@ -1,0 +1,153 @@
+.markdown-preview {
+    background-color: #ffffff; // ou #f9f9f9 pour un gris léger
+    color: #222; // texte bien lisible
+
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    line-height: 1.6;
+    font-size: 1rem;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: #111;
+        margin-top: 1.2em;
+        margin-bottom: 0.5em;
+    }
+
+    p {
+        margin-bottom: 1em;
+    }
+
+    a {
+        color: #2c3f64;
+        text-decoration: underline;
+
+        &:hover {
+            color: #f9b233;
+        }
+    }
+
+    code {
+        background-color: #eee;
+        padding: 0.2em 0.4em;
+        font-family: monospace;
+        font-size: 0.95em;
+        border-radius: 4px;
+    }
+
+    pre {
+        background-color: #222;
+        color: #f8f8f2;
+        padding: 1em;
+        overflow-x: auto;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 0.95em;
+    }
+
+    ul,
+    ol {
+        padding-left: 1.5em;
+        margin-bottom: 1em;
+    }
+
+    blockquote {
+        margin: 1em 0;
+        padding-left: 1em;
+        border-left: 4px solid #ccc;
+        color: #555;
+        font-style: italic;
+        background-color: #f3f3f3;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 1em 0;
+    }
+}
+
+
+.dark .markdown-preview {
+    background-color: #1e1e1e;
+    color: #ddd;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: #fff;
+    }
+
+    a {
+        color: #89caff;
+
+        &:hover {
+            color: #f9b233;
+        }
+    }
+
+    code {
+        background-color: #333;
+    }
+
+    blockquote {
+        border-left-color: #666;
+        background-color: #2a2a2a;
+        color: #ccc;
+    }
+}
+
+.admin__list-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+
+    &-info {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        flex-grow: 1;
+    }
+
+    &-title {
+        font-weight: bold;
+        font-size: 1rem;
+    }
+
+    &-subcategory {
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    &-badge {
+        display: inline-block;
+        padding: 0.25rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        width: fit-content;
+
+        &--published {
+            background-color: #e1f5e1;
+            color: #2c662d;
+            border: 1px solid #b0deb0;
+        }
+
+        &--unpublished {
+            background-color: #fde0e0;
+            color: #a12c2c;
+            border: 1px solid #e6b0b0;
+        }
+    }
+}

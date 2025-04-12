@@ -1,0 +1,34 @@
+.lesson-card {
+    border-radius: 1rem;
+    overflow: hidden;
+    background-color: #fffefa;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+        transform: translateY(-6px);
+    }
+
+    &__image img {
+        object-fit: cover;
+        width: 100%;
+        height: auto;
+    }
+
+    &__content {
+        padding: 1rem;
+    }
+
+    &__title {
+        color: #2c3f64;
+        font-size: 1.1rem;
+        margin-bottom: 0.4rem;
+    }
+
+    &__summary {
+        color: #555;
+        font-size: 0.95rem;
+    }
+}
