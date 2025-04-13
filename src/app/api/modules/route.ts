@@ -18,7 +18,6 @@ export async function POST(req: Request) {
                 personageName: data.personageName,
                 personageDates: data.personageDates,
                 personageNote: data.personageNote,
-                collectionSlug: data.collectionSlug,
                 category: data.category,
                 subcategory: data.subcategory,
                 summary: data.summary ?? "",
@@ -27,7 +26,10 @@ export async function POST(req: Request) {
                 homework: data.homework ?? "",
                 image: data.image ?? null,
                 published: data.published ?? true,
-                ageTag: data.ageTag ?? null
+                ageTag: data.ageTag ?? null,
+                collection: {
+                    connect: { id: data.collectionId }
+                },
             }
         });
 

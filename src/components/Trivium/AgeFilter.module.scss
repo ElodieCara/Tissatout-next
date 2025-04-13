@@ -1,0 +1,45 @@
+.age-filter {
+    background-color: #fffefa;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+
+    &__title {
+        font-size: 1.2rem;
+        color: #2c3f64;
+        font-weight: bold;
+    }
+
+    &__buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    &__button {
+        padding: 8px 14px;
+        border: 2px solid #ecac3e;
+        border-radius: 20px;
+        background-color: white;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #2c3f64;
+        cursor: pointer;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background-color: #ecac3e;
+            color: white;
+        }
+
+        &--active {
+            background-color: #ecac3e;
+            color: white;
+        }
+    }
+}

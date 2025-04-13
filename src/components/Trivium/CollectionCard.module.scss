@@ -1,0 +1,65 @@
+.collection-card {
+    background-color: #fffefa;
+    border: 1px solid #eee4d3;
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    &__image {
+        border-radius: 10px;
+        background: #f3f3f3;
+    }
+
+    &__infos {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    &__title {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #2c3f64;
+    }
+
+    &__desc {
+        font-size: 0.95rem;
+        color: #555;
+    }
+
+    &__lessons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    &__lesson {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.6rem 1rem;
+        background-color: #f9f7f2;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        color: #2c3f64;
+        text-decoration: none;
+        transition: background 0.2s ease;
+
+        &:hover {
+            background-color: #f0e8d8;
+        }
+    }
+
+    &__age {
+        font-size: 0.85rem;
+        color: #888;
+    }
+}

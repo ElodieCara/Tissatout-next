@@ -274,15 +274,14 @@ model HomeSlide {
 }
 
 model Lesson {
-  id              String   @id @map("_id") @db.ObjectId
+  id              String     @id @map("_id") @db.ObjectId
   order           Int
   title           String
-  slug            String   @unique
+  slug            String     @unique
   chapterTitle    String
   personageName   String
   personageDates  String
   personageNote   String
-  collectionSlug  String
   period          String?
   category        String
   subcategory     String
@@ -292,7 +291,22 @@ model Lesson {
   homework        String?
   content         String
   image           String?
-  published       Boolean  @default(true)
-  createdAt       DateTime @default(now())
+  published       Boolean    @default(true)
+  createdAt       DateTime   @default(now())
+
+  // Nouvelle relation avec la Collection
+  collectionId    String?    @db.ObjectId
+  collection      Collection? @relation(fields: [collectionId], references: [id])
 }
+
+model Collection {
+  id          String   @id @map("_id") @db.ObjectId
+  slug        String   @unique
+  title       String
+  description String?
+  createdAt   DateTime @default(now())
+
+  lessons     Lesson[]
+}
+
 

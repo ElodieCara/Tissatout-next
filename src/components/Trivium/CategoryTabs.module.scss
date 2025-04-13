@@ -1,0 +1,29 @@
+.category-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 2rem auto;
+    flex-wrap: wrap;
+
+    &__tab {
+        padding: 0.7rem 1.5rem;
+        border-radius: 30px;
+        border: 2px solid #ecac3e;
+        background-color: #fffefa;
+        color: #2c3f64;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+
+        &:hover {
+            background-color: #ecac3e;
+            color: white;
+        }
+
+        &--active {
+            background-color: #ecac3e;
+            color: white;
+        }
+    }
+}

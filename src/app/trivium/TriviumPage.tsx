@@ -1,83 +1,82 @@
-// app/trivium/page.tsx
-import { Metadata } from "next";
-import ThemeProvider from "@/components/Decorations/Themes/ThemeProvider";
-import Banner from "@/components/Banner/Banner";
-import Image from "next/image";
-import Link from "next/link";
-import { getTriviumLessons } from "@/lib/lessons";
-import type { Lesson } from "@/types/lessons";
+"use client";
 
-export const metadata: Metadata = {
-    title: "Trivium - Apprendre à penser | Tissatout",
-    description: "Explore la Grammaire, la Logique et la Rhétorique à travers des leçons adaptées aux enfants.",
-};
+import { useState } from "react";
+import type { Lesson } from "@/types/lessons";
+import Banner from "@/components/Banner/Banner";
+import CategoryTabs from "@/components/Trivium/CategoryTabs";
+import AgeFilter from "@/components/Trivium/AgeFilter";
+import TriviumSection from "@/components/Trivium/TriviumSection";
+import TriviumSidebar from "@/components/Trivium/SidebarSommaire";
+import CollectionBanner from "@/components/Trivium/CollectionBanner";
 
 interface TriviumPageProps {
     lessons: Lesson[];
+    collections: {
+        id: string;
+        title: string;
+        slug: string;
+        description?: string | null;
+        lessonsCount: number;
+    }[];
 }
 
-export default function TriviumPage({ lessons }: TriviumPageProps) {
+export default function TriviumPage({ lessons, collections }: TriviumPageProps) {
+    const [selectedCategory, setSelectedCategory] = useState("Grammaire");
+    const [selectedAge, setSelectedAge] = useState<string | null>(null);
+    const [selectedCollection, setSelectedCollection] = useState<string | undefined>(undefined);
 
-    const grammaire = lessons.filter(l => l.category === "Grammaire");
-    const logique = lessons.filter(l => l.category === "Logique");
-    const rhetorique = lessons.filter(l => l.category === "Rhétorique");
+    const filteredByCollection = selectedCollection
+        ? lessons.filter((l) => l.collection?.id === selectedCollection)
+        : lessons;
 
-    return (
-        <ThemeProvider>
-            <main>
-                <Banner
-                    src="/assets/slide-trivium.jpg"
-                    title="🎓 Le Trivium pour les Petits Curieux"
-                    description="Découvre des activités amusantes pour apprendre à bien parler, réfléchir et t’exprimer. Grammaire, Logique, Rhétorique… comme les grands penseurs !"
-                    buttons={[
-                        { label: "📖 Grammaire", targetId: "grammaire" },
-                        { label: "🧠 Logique", targetId: "logique" },
-                        { label: "🗣️ Rhétorique", targetId: "rhetorique" },
-                    ]}
-                />
+    const filteredLessons = filteredByCollection.filter((lesson) => {
+        return (
+            lesson.category === selectedCategory &&
+            (!selectedAge || lesson.ageTag === selectedAge)
+        );
+    });
 
-                <section className="theme-intro">
-                    <h2>Qu’est-ce que le Trivium ?</h2>
-                    <p>Le Trivium est une méthode d'apprentissage ancestrale fondée sur trois piliers : comprendre (Grammaire), raisonner (Logique), et s’exprimer (Rhétorique). C’est l’essence même de la pensée claire et structurée.</p>
-                </section>
-
-                <TriviumSection id="grammaire" title="📖 Grammaire" lessons={grammaire} />
-                <TriviumSection id="logique" title="🧠 Logique" lessons={logique} />
-                <TriviumSection id="rhetorique" title="🗣️ Rhétorique" lessons={rhetorique} />
-            </main>
-        </ThemeProvider>
+    const ages = Array.from(
+        new Set(lessons.map((l) => l.ageTag).filter((a): a is string => !!a))
     );
-}
 
-function TriviumSection({ id, title, lessons }: { id: string; title: string; lessons: Lesson[] }) {
     return (
-        <section id={id} className="lesson-block">
-            <h3>{title}</h3>
-            {lessons.length === 0 ? (
-                <p>Pas encore de leçons disponibles.</p>
-            ) : (
-                <div className="lesson-grid">
-                    {lessons.map((lesson) => (
-                        <LessonCard key={lesson.slug} lesson={lesson} />
-                    ))}
-                </div>
-            )}
-        </section>
-    );
-}
-
-function LessonCard({ lesson }: { lesson: Lesson }) {
-    return (
-        <Link href={`/trivium/${lesson.slug}`} className="lesson-card">
-            <Image
-                src={lesson.image || "/placeholder.jpg"}
-                alt={lesson.title}
-                width={300}
-                height={200}
+        <main className="trivium-page">
+            <Banner
+                src="/assets/slide-trivium.png"
+                title="🎓 Le Trivium pour les Petits Curieux"
+                description="Découvre des activités amusantes pour apprendre à bien parler, réfléchir et t’exprimer. Grammaire, Logique, Rhétorique… comme les grands penseurs !"
+                buttons={[]}
             />
-            <h4>{lesson.title}</h4>
-            {lesson.ageTag && <p className="lesson-card__age">📍 {lesson.ageTag}</p>}
-            <p>{lesson.summary || "Une leçon à découvrir !"}</p>
-        </Link>
+
+            <div className="trivium-page__layout">
+                <div className="trivium-page__main">
+                    <CategoryTabs selected={selectedCategory} onChange={setSelectedCategory} />
+                    <AgeFilter selectedAge={selectedAge} ages={ages} onChange={setSelectedAge} />
+                    {selectedCollection && (
+                        <CollectionBanner
+                            title={
+                                collections.find((col) => col.id === selectedCollection)?.title || ""
+                            }
+                            count={filteredByCollection.length}
+                            onClear={() => setSelectedCollection(undefined)}
+                        />
+                    )}
+                    <TriviumSection
+                        id={selectedCategory.toLowerCase()}
+                        title={selectedCategory}
+                        lessons={filteredLessons}
+                    />
+                </div>
+
+                <div className="trivium-page__right">
+                    <TriviumSidebar
+                        collections={collections}
+                        selectedId={selectedCollection}
+                        onSelect={setSelectedCollection}
+                    />
+                </div>
+            </div>
+        </main>
     );
 }

@@ -20,7 +20,7 @@ export default function AdminLessonForm({ lessonId }: Props) {
         personageName: "",
         personageDates: "",
         personageNote: "",
-        collectionSlug: "",
+        collectionId: "",
         category: "",
         subcategory: "",
         summary: "",
@@ -36,6 +36,32 @@ export default function AdminLessonForm({ lessonId }: Props) {
     const router = useRouter();
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [collections, setCollections] = useState<{ id: string; title: string }[]>([]);
+    const [showAddCollection, setShowAddCollection] = useState(false);
+    const [newCollectionTitle, setNewCollectionTitle] = useState("");
+
+    const handleCreateCollection = async () => {
+        if (!newCollectionTitle.trim()) return;
+
+        const slug = generateSlug(newCollectionTitle);
+
+        const res = await fetch("/api/collections", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: newCollectionTitle, slug }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+            setCollections((prev) => [...prev, data]);
+            setForm((prev) => ({ ...prev, collectionId: data.id }));
+            setNewCollectionTitle("");
+            setShowAddCollection(false);
+        } else {
+            alert("Erreur: " + (data.error || "Inconnue"));
+        }
+    };
 
     // 🔹 Chargement de la leçon si ID présent
     useEffect(() => {
@@ -63,6 +89,14 @@ export default function AdminLessonForm({ lessonId }: Props) {
                 });
         }
     }, [lessonId]);
+
+    // 🔹 Chargement des collections
+    useEffect(() => {
+        fetch("/api/collections")
+            .then((res) => res.json())
+            .then((data) => setCollections(data))
+            .catch((err) => console.error("Erreur de chargement des collections:", err));
+    }, []);
 
     // 🔹 Slug auto uniquement si nouvelle leçon
     useEffect(() => {
@@ -202,10 +236,48 @@ export default function AdminLessonForm({ lessonId }: Props) {
                     <input type="text" id="personageNote" name="personageNote" value={form.personageNote || ""} onChange={handleChange} />
                 </div>
 
-                <div className="admin-form__group">
-                    <label htmlFor="collectionSlug">Collection (slug)</label>
-                    <input type="text" id="collectionSlug" name="collectionSlug" value={form.collectionSlug || ""} onChange={handleChange} required />
+                <div className="admin-form__group admin-form__group--collection">
+                    <label htmlFor="collectionId">Collection</label>
+                    <div className="admin-form__inline">
+                        <select
+                            id="collectionId"
+                            name="collectionId"
+                            value={form.collectionId || ""}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Sélectionner une collection</option>
+                            {collections.map((col) => (
+                                <option key={col.id} value={col.id}>
+                                    {col.title}
+                                </option>
+                            ))}
+                        </select>
+
+                        <button
+                            type="button"
+                            className="admin-form__add-button"
+                            onClick={() => setShowAddCollection(true)}
+                            title="Ajouter une nouvelle collection"
+                        >
+                            ➕
+                        </button>
+                    </div>
                 </div>
+
+                {showAddCollection && (
+                    <div className="admin-form__group admin-form__group--new-collection">
+                        <input
+                            type="text"
+                            placeholder="Nom de la nouvelle collection"
+                            value={newCollectionTitle}
+                            onChange={(e) => setNewCollectionTitle(e.target.value)}
+                        />
+                        <button onClick={handleCreateCollection} type="button">Créer</button>
+                        <button onClick={() => setShowAddCollection(false)} type="button">Annuler</button>
+                    </div>
+                )}
+
 
                 <div className="admin-form__group">
                     <label htmlFor="category">Catégorie</label>

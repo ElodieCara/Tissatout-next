@@ -35,13 +35,15 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
                 personageName: data.personageName,
                 personageDates: data.personageDates,
                 personageNote: data.personageNote,
-                collectionSlug: data.collectionSlug,
                 category: data.category,
                 subcategory: data.subcategory,
                 summary: data.summary ?? "",
                 content: data.content,
                 image: data.image ?? null,
                 published: data.published,
+                collection: {
+                    connect: { id: data.collectionId }
+                },
             },
         });
 
