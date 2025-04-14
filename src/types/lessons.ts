@@ -25,6 +25,25 @@ export interface Lesson {
         id: string;
         slug: string;
         title: string;
+        module: "trivium" | "quadrivium";
         description?: string | null;
     } | null;
+}
+
+export interface Collection {
+    id: string;
+    title: string;
+    slug: string;
+    description?: string | null;
+    createdAt: Date;
+    module: "trivium" | "quadrivium";
+}
+
+export interface CollectionWithLessons extends Collection {
+    id: string;
+    title: string;
+    slug: string;
+    description: string | null;
+    module: "trivium" | "quadrivium";
+    lessons: Lesson[];
 }

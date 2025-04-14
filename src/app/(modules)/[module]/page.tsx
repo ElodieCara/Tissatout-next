@@ -1,13 +1,13 @@
 import { getCollectionsWithLessons } from "@/lib/lessons";
 import LessonModulePage from "@/components/Module/LessonModulePage";
+import type { CollectionWithLessons } from "@/types/lessons";
 
 export default async function ModulePage({ params }: { params: { module: string } }) {
-    const module = params.module === "trivium" || params.module === "quadrivium"
+    const module = (params.module === "trivium" || params.module === "quadrivium"
         ? params.module
-        : "trivium";
+        : "trivium") as "trivium" | "quadrivium";
 
-    const rawCollections = await getCollectionsWithLessons(module);
-
+    const rawCollections: CollectionWithLessons[] = await getCollectionsWithLessons(module);
     // 🔧 Ajout manuel du `lessonsCount` attendu
     const collections = rawCollections.map((collection) => ({
         id: collection.id,
@@ -16,6 +16,7 @@ export default async function ModulePage({ params }: { params: { module: string 
         description: collection.description ?? null,
         lessonsCount: collection.lessons.length,
         lessons: collection.lessons, // On conserve les leçons pour usage interne
+        module: collection.module as "trivium" | "quadrivium",
     }));
 
     // 🔁 Fusion de toutes les leçons

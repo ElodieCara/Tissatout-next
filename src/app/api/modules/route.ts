@@ -1,16 +1,24 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { generateSlug } from "@/lib/utils";
-import { Prisma } from "@prisma/client"; // ← 🟢 indispensable
-import { ObjectId } from "mongodb"; // 👈 à ajouter en haut
+import { ObjectId } from "mongodb"; // 👈 OK
+import type { Lesson } from "@prisma/client"; // optionnel, pour valider
 
 export async function POST(req: Request) {
     try {
         const data = await req.json();
 
+        // 🔐 Validation stricte du module
+        if (!data.module || !["trivium", "quadrivium"].includes(data.module)) {
+            return NextResponse.json(
+                { error: "Module invalide ou manquant." },
+                { status: 400 }
+            );
+        }
+
         const created = await prisma.lesson.create({
             data: {
-                id: new ObjectId().toString(), // 👈 obligatoire avec @db.ObjectId
+                id: new ObjectId().toString(),
                 order: data.order,
                 title: data.title,
                 slug: data.slug,
@@ -27,17 +35,21 @@ export async function POST(req: Request) {
                 image: data.image ?? null,
                 published: data.published ?? true,
                 ageTag: data.ageTag ?? null,
+                module: data.module, // ✅ ← AJOUT OBLIGATOIRE
                 collection: {
-                    connect: { id: data.collectionId }
+                    connect: { id: data.collectionId },
                 },
-            }
+            },
         });
 
         return NextResponse.json(created, { status: 201 });
 
     } catch (error) {
         console.error("🔥 ERREUR CRÉATION LEÇON :", error);
-        return NextResponse.json({ error: "Erreur interne", details: `${error}` }, { status: 500 });
+        return NextResponse.json(
+            { error: "Erreur interne", details: `${error}` },
+            { status: 500 }
+        );
     }
 }
 

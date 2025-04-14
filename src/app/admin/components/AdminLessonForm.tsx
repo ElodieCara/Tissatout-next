@@ -4,15 +4,19 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import { generateSlug } from "@/lib/utils";
-import type { Lesson } from "@/types/lessons";
+import type { Lesson as BaseLesson } from "@/types/lessons";
 import Breadcrumb from "./Breadcrumb";
 
 interface Props {
     lessonId?: string;
 }
 
+type Lesson = BaseLesson & {
+    module: "trivium" | "quadrivium";
+};
+
 export default function AdminLessonForm({ lessonId }: Props) {
-    const [form, setForm] = useState<Partial<Lesson>>({
+    const [form, setForm] = useState<Partial<Lesson> & { module?: "trivium" | "quadrivium" }>({
         order: 1,
         title: "",
         slug: "",
@@ -22,6 +26,7 @@ export default function AdminLessonForm({ lessonId }: Props) {
         personageNote: "",
         collectionId: "",
         category: "",
+        module: "trivium",
         subcategory: "",
         summary: "",
         period: "",
@@ -36,9 +41,12 @@ export default function AdminLessonForm({ lessonId }: Props) {
     const router = useRouter();
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [collections, setCollections] = useState<{ id: string; title: string }[]>([]);
+    const [collections, setCollections] = useState<{ id: string; title: string; module: "trivium" | "quadrivium" }[]>([]);
     const [showAddCollection, setShowAddCollection] = useState(false);
     const [newCollectionTitle, setNewCollectionTitle] = useState("");
+    const categoryOptions = form.module === "quadrivium"
+        ? ["Arithmétique", "Géométrie", "Musique", "Astronomie"]
+        : ["Grammaire", "Logique", "Rhétorique"];
 
     const handleCreateCollection = async () => {
         if (!newCollectionTitle.trim()) return;
@@ -48,7 +56,11 @@ export default function AdminLessonForm({ lessonId }: Props) {
         const res = await fetch("/api/collections", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ title: newCollectionTitle, slug }),
+            body: JSON.stringify({
+                title: newCollectionTitle,
+                slug,
+                module: form.module || "trivium", // par défaut trivium
+            }),
         });
 
         const data = await res.json();
@@ -60,6 +72,33 @@ export default function AdminLessonForm({ lessonId }: Props) {
             setShowAddCollection(false);
         } else {
             alert("Erreur: " + (data.error || "Inconnue"));
+        }
+    };
+
+    const handleDeleteCollection = async () => {
+        if (!form.collectionId) return;
+
+        const confirm = window.confirm("Supprimer cette collection ? Cela supprimera aussi toutes les leçons liées.");
+        if (!confirm) return;
+
+        setIsLoading(true);
+        try {
+            const res = await fetch(`/api/collections/${form.collectionId}`, {
+                method: "DELETE",
+            });
+
+            if (res.ok) {
+                setCollections((prev) => prev.filter(c => c.id !== form.collectionId));
+                setForm((prev) => ({ ...prev, collectionId: "" }));
+                setMessage("✅ Collection supprimée.");
+            } else {
+                const data = await res.json();
+                setMessage(`❌ Erreur : ${data.error || res.statusText}`);
+            }
+        } catch (err) {
+            setMessage("❌ Erreur lors de la suppression.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -252,11 +291,24 @@ export default function AdminLessonForm({ lessonId }: Props) {
                                     {col.title}
                                 </option>
                             ))}
-                        </select>
 
+                        </select>
+                        <p className="admin-form__hint">
+                            Module : <strong>{collections.find(c => c.id === form.collectionId)?.module || "—"}</strong>
+                        </p>
+                        {form.collectionId && (
+                            <button
+                                type="button"
+                                className="admin-form__delete-button"
+                                onClick={handleDeleteCollection}
+                                title="Supprimer cette collection"
+                            >
+                                ➖
+                            </button>
+                        )}
                         <button
                             type="button"
-                            className="admin-form__add-button"
+                            className="admin-form__icon-button"
                             onClick={() => setShowAddCollection(true)}
                             title="Ajouter une nouvelle collection"
                         >
@@ -273,19 +325,40 @@ export default function AdminLessonForm({ lessonId }: Props) {
                             value={newCollectionTitle}
                             onChange={(e) => setNewCollectionTitle(e.target.value)}
                         />
+
                         <button onClick={handleCreateCollection} type="button">Créer</button>
                         <button onClick={() => setShowAddCollection(false)} type="button">Annuler</button>
                     </div>
                 )}
 
+                <div className="admin-form__group">
+                    <label htmlFor="module">Module</label>
+                    <select
+                        id="module"
+                        name="module"
+                        value={form.module || ""}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="">Sélectionner le module</option>
+                        <option value="trivium">Trivium</option>
+                        <option value="quadrivium">Quadrivium</option>
+                    </select>
+                </div>
 
                 <div className="admin-form__group">
                     <label htmlFor="category">Catégorie</label>
-                    <select id="category" name="category" value={form.category || ""} onChange={handleChange} required>
+                    <select
+                        id="category"
+                        name="category"
+                        value={form.category || ""}
+                        onChange={handleChange}
+                        required
+                    >
                         <option value="">Sélectionner une catégorie</option>
-                        <option value="Grammaire">Grammaire</option>
-                        <option value="Logique">Logique</option>
-                        <option value="Rhétorique">Rhétorique</option>
+                        {categoryOptions.map((cat) => (
+                            <option key={cat} value={cat}>{cat}</option>
+                        ))}
                     </select>
                 </div>
 

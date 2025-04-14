@@ -41,8 +41,10 @@ export default function LessonModulePage({ module, lessons, collections }: Lesso
     const [selectedCollection, setSelectedCollection] = useState<string | undefined>(undefined);
 
     const filteredByCollection = selectedCollection
-        ? lessons.filter((l) => l.collection?.id === selectedCollection)
-        : lessons;
+        ? lessons.filter(
+            (l) => l.collection?.id === selectedCollection && l.collection?.module === module
+        )
+        : lessons.filter((l) => l.collection?.module === module);
 
     const filteredLessons = filteredByCollection.filter((lesson) => {
         return (

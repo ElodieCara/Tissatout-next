@@ -18,6 +18,7 @@ interface TriviumPageProps {
         slug: string;
         description?: string | null;
         lessonsCount: number;
+        module: "trivium" | "quadrivium";
     }[];
 }
 
@@ -34,6 +35,7 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
     const [selectedCollection, setSelectedCollection] = useState<string | undefined>(undefined);
     const pathname = usePathname();
     const module = (pathname ?? "").includes("quadrivium") ? "quadrivium" : "trivium";
+    const filteredCollections = collections.filter(c => c.module === module);
 
     const filteredByCollection = selectedCollection
         ? lessons.filter((l) => l.collection?.id === selectedCollection)
@@ -90,7 +92,7 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
 
                 <div className="trivium-page__right">
                     <TriviumSidebar
-                        collections={collections}
+                        collections={filteredCollections}
                         selectedId={selectedCollection}
                         onSelect={setSelectedCollection}
                         module={module}

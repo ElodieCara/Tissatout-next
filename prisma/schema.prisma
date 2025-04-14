@@ -293,7 +293,8 @@ model Lesson {
   image           String?
   published       Boolean    @default(true)
   createdAt       DateTime   @default(now())
-
+  module          String?    @default("trivium")
+  
   // Nouvelle relation avec la Collection
   collectionId    String?    @db.ObjectId
   collection      Collection? @relation(fields: [collectionId], references: [id])
@@ -305,7 +306,7 @@ model Collection {
   title       String
   description String?
   createdAt   DateTime @default(now())
-  module      String   @default("trivium")
+  module      String?  @default("trivium")
   lessons     Lesson[]
 }
 

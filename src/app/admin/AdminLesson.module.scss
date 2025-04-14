@@ -173,3 +173,23 @@
     display: flex;
     gap: 0.5rem;
 }
+
+.admin-form__icon-button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    padding: 0.2rem;
+    color: #333;
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: scale(1.2);
+        color: #000;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}

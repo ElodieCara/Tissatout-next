@@ -6,19 +6,25 @@ import { ObjectId } from "mongodb";
 const prisma = new PrismaClient();
 
 // 👉 GET : toutes les collections
-export async function GET() {
+export async function GET(req: Request) {
+    const { searchParams } = new URL(req.url);
+    const module = searchParams.get("module");
+
     const collections = await prisma.collection.findMany({
+        where: module === "trivium" || module === "quadrivium" ? { module } : undefined,
         orderBy: { createdAt: "asc" },
         select: {
             id: true,
             title: true,
             slug: true,
             description: true,
+            module: true, // ajoute-le pour que le client sache à quoi il a affaire
         },
     });
 
     return NextResponse.json(collections);
 }
+
 
 // 👉 POST : créer une collection
 export async function POST(req: Request) {
@@ -26,9 +32,14 @@ export async function POST(req: Request) {
         const body = await req.json();
         const title = body.title?.trim();
         const slug = body.slug || generateSlug(title);
+        const module = body.module;
 
         if (!title) {
             return NextResponse.json({ error: "Titre requis" }, { status: 400 });
+        }
+
+        if (module !== "trivium" && module !== "quadrivium") {
+            return NextResponse.json({ error: "Module invalide" }, { status: 400 });
         }
 
         const existing = await prisma.collection.findUnique({ where: { slug } });
@@ -42,6 +53,7 @@ export async function POST(req: Request) {
                 title,
                 slug,
                 description: "",
+                module, // 🔥 essentiel pour filtrer correctement après
             },
         });
 
