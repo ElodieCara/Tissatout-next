@@ -44,12 +44,42 @@
             border-color: #ecac3e;
             font-weight: bold;
         }
+
+        button.trivium-sidebar__link {
+            all: unset;
+            cursor: pointer;
+            flex-grow: 1;
+            text-align: left;
+            color: inherit;
+            font-size: inherit;
+            font-family: inherit;
+            padding: 0;
+        }
+
+        &:first-child {
+            justify-content: center;
+
+            button.trivium-sidebar__link {
+                text-align: center;
+                padding: 0.4rem 0.6rem;
+                background-color: #fdca57;
+                border-radius: 999px;
+                font-weight: bold;
+                color: #2c3f64;
+
+                &:hover {
+                    background-color: darken(#fdca57, 10%);
+                }
+            }
+        }
     }
 
     &__link {
         flex-grow: 1;
         text-decoration: none;
         color: inherit;
+
+
     }
 
     &__count {

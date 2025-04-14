@@ -1,0 +1,32 @@
+.lesson-card {
+    position: relative;
+
+    &__status {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        z-index: 2;
+
+        .lesson-status-badge {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            display: inline-block;
+            width: fit-content;
+
+            &--understood {
+                background-color: #d1fae5;
+                color: #065f46;
+                border: 1px solid #10b981;
+            }
+
+            &--toreview {
+                background-color: #fef3c7;
+                color: #92400e;
+                border: 1px solid #fbbf24;
+            }
+        }
+    }
+}

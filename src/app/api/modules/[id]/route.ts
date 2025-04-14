@@ -39,6 +39,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
                 subcategory: data.subcategory,
                 summary: data.summary ?? "",
                 content: data.content,
+                revision: data.revision ?? "",
+                homework: data.homework ?? "",
                 image: data.image ?? null,
                 published: data.published,
                 collection: {

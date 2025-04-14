@@ -305,7 +305,7 @@ model Collection {
   title       String
   description String?
   createdAt   DateTime @default(now())
-
+  module      String   @default("trivium")
   lessons     Lesson[]
 }
 

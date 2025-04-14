@@ -8,9 +8,9 @@ import AgeFilter from "@/components/Trivium/AgeFilter";
 import TriviumSection from "@/components/Trivium/TriviumSection";
 import TriviumSidebar from "@/components/Trivium/SidebarSommaire";
 import CollectionBanner from "@/components/Trivium/CollectionBanner";
-import { usePathname } from "next/navigation";
 
-interface TriviumPageProps {
+interface LessonModulePageProps {
+    module: "trivium" | "quadrivium";
     lessons: Lesson[];
     collections: {
         id: string;
@@ -21,19 +21,24 @@ interface TriviumPageProps {
     }[];
 }
 
-export default function TriviumPage({ lessons, collections }: TriviumPageProps) {
-    const categories = [
-        { key: "Grammaire", label: "📖 Grammaire" },
-        { key: "Logique", label: "🧠 Logique" },
-        { key: "Rhétorique", label: "🗣️ Rhétorique" },
-    ];
+export default function LessonModulePage({ module, lessons, collections }: LessonModulePageProps) {
+    const categories =
+        module === "trivium"
+            ? [
+                { key: "Grammaire", label: "📖 Grammaire" },
+                { key: "Logique", label: "🧠 Logique" },
+                { key: "Rhétorique", label: "🗣️ Rhétorique" },
+            ]
+            : [
+                { key: "Arithmétique", label: "➕ Arithmétique" },
+                { key: "Géométrie", label: "📐 Géométrie" },
+                { key: "Musique", label: "🎵 Musique" },
+                { key: "Astronomie", label: "🌌 Astronomie" },
+            ];
 
-    const categoryKeys = categories.map(c => c.key);
-    const [selectedCategory, setSelectedCategory] = useState(categoryKeys[0]);
+    const [selectedCategory, setSelectedCategory] = useState(categories[0].key);
     const [selectedAge, setSelectedAge] = useState<string | null>(null);
     const [selectedCollection, setSelectedCollection] = useState<string | undefined>(undefined);
-    const pathname = usePathname();
-    const module = (pathname ?? "").includes("quadrivium") ? "quadrivium" : "trivium";
 
     const filteredByCollection = selectedCollection
         ? lessons.filter((l) => l.collection?.id === selectedCollection)
@@ -53,9 +58,13 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
     return (
         <main className="trivium-page">
             <Banner
-                src="/assets/slide-trivium.png"
-                title="🎓 Le Trivium pour les Petits Curieux"
-                description="Découvre des activités amusantes pour apprendre à bien parler, réfléchir et t’exprimer. Grammaire, Logique, Rhétorique… comme les grands penseurs !"
+                src={`/assets/slide-${module}.png`}
+                title={module === "trivium" ? "🎓 Le Trivium pour les Petits Curieux" : "🌌 Le Quadrivium pour les Explorateurs"}
+                description={
+                    module === "trivium"
+                        ? "Découvre des activités amusantes pour apprendre à bien parler, réfléchir et t’exprimer."
+                        : "Explore les mystères des nombres, des formes, des sons et des étoiles avec le Quadrivium."
+                }
                 buttons={[]}
             />
 
@@ -64,7 +73,8 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
                     <CategoryTabs
                         selected={selectedCategory}
                         onChange={setSelectedCategory}
-                        categories={categories} />
+                        categories={categories}
+                    />
 
                     <AgeFilter
                         selectedAge={selectedAge}
@@ -74,13 +84,12 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
 
                     {selectedCollection && (
                         <CollectionBanner
-                            title={
-                                collections.find((col) => col.id === selectedCollection)?.title || ""
-                            }
+                            title={collections.find((c) => c.id === selectedCollection)?.title || ""}
                             count={filteredByCollection.length}
                             onClear={() => setSelectedCollection(undefined)}
                         />
                     )}
+
                     <TriviumSection
                         id={selectedCategory.toLowerCase()}
                         title={selectedCategory}

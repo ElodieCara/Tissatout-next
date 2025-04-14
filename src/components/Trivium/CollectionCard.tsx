@@ -28,6 +28,7 @@ export default function CollectionCard({ title, description, image, slug, lesson
                     <Link href={`/trivium/${lesson.slug}`} key={lesson.slug} className="collection-card__lesson">
                         <span>{lesson.title}</span>
                         {lesson.ageTag && <span className="collection-card__age">📍 {lesson.ageTag}</span>}
+
                     </Link>
                 ))}
             </div>

@@ -47,3 +47,15 @@ export async function getTriviumCollections() {
         lessonsCount: col.lessons.length,
     }));
 }
+
+
+export async function getCollectionsWithLessons(module: "trivium" | "quadrivium") {
+    return await prisma.collection.findMany({
+        where: { slug: { startsWith: module } },
+        include: {
+            lessons: {
+                orderBy: { order: "asc" },
+            },
+        },
+    });
+}

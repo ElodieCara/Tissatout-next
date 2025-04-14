@@ -3,6 +3,7 @@
 interface CategoryTabsProps {
     selected: string;
     onChange: (category: string) => void;
+    categories: { key: string; label: string }[];
 }
 
 const categories = [
@@ -11,7 +12,7 @@ const categories = [
     { key: "Rhétorique", label: "🗣️ Rhétorique" },
 ];
 
-export default function CategoryTabs({ selected, onChange }: CategoryTabsProps) {
+export default function CategoryTabs({ selected, onChange, categories }: CategoryTabsProps) {
     return (
         <div className="category-tabs">
             {categories.map(({ key, label }) => (

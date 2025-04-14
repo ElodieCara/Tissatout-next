@@ -3,10 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Lesson } from "@/types/lessons";
+import LessonStatusBadge from "./LessonsStatusBadge";
 
 export default function LessonCard({ lesson }: { lesson: Lesson }) {
     return (
         <Link href={`/trivium/${lesson.slug}`} className="lesson-card">
+            <div className="lesson-card__status">
+                <LessonStatusBadge slug={lesson.slug} />
+            </div>
             <div className="lesson-card__image">
                 <Image
                     src={lesson.image || "/placeholder.jpg"}

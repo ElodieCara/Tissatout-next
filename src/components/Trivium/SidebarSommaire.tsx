@@ -13,18 +13,27 @@ interface TriviumSidebarProps {
     collections: Collection[];
     selectedId?: string;
     onSelect?: (id?: string) => void;
+    module: "trivium" | "quadrivium";
 }
 
 export default function TriviumSidebar({
     collections,
     selectedId,
     onSelect,
+    module,
 }: TriviumSidebarProps) {
+    const categoryLabels = {
+        trivium: ["Grammaire", "Logique", "Rhétorique"],
+        quadrivium: ["Arithmétique", "Géométrie", "Musique", "Astronomie"],
+    };
+
     return (
         <aside className="trivium-sidebar">
-            <h3 className="trivium-sidebar__title">📚 Collections</h3>
+            <h3 className="trivium-sidebar__title">
+                {module === "trivium" ? "🧠 Trivium" : "🔭 Quadrivium"}
+            </h3>
+
             <ul className="trivium-sidebar__list">
-                {/* ✅ Bouton "Toutes les collections" */}
                 <li
                     className={`trivium-sidebar__item${!selectedId ? " trivium-sidebar__item--active" : ""
                         }`}

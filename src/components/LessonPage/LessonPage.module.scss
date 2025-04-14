@@ -1,5 +1,8 @@
+@use "../../styles/utils/variables" as *;
+@use "../../styles/base/mixins" as mix;
+
 .lesson {
-    padding: 2rem;
+    background-color: #fffefa;
 
     &__header {
         text-align: center;
@@ -29,8 +32,343 @@
         color: #555;
     }
 
+    &__actions {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+
+        a,
+        button {
+            width: 100%;
+            max-width: 200px;
+        }
+    }
+}
+
+// =========================
+// 📦 Blocs markdown
+// =========================
+
+.lesson-block {
+    padding: 2rem 5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem !important;
+    background-color: #fdfdfd;
+    box-shadow: 0 0 0 1px #eee;
+    color: $primary-color;
+    @include mix.container;
+
+    &--info {
+        background-color: #e5f6ff;
+    }
+
+    &--revision {
+        background-color: #fff4e5;
+    }
+
+    &--homework {
+        background-color: #f1f1ff;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    &__icon {
+        margin-right: 0.75rem;
+    }
+
+    &__title {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+
     &__content {
+        font-size: 1.05rem;
         line-height: 1.6;
-        font-size: 1.1rem;
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 1.5rem;
+
+            li {
+                position: relative;
+                padding-left: 1.5rem;
+                margin-bottom: 0.75rem;
+
+                &::before {
+                    content: "•";
+                    position: absolute;
+                    left: 0;
+                    top: 0.1rem;
+                    color: $primary-color;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        strong {
+            font-weight: bold;
+            color: $primary-color;
+        }
+
+        em {
+            font-style: italic;
+            color: #666;
+        }
+
+        blockquote {
+            font-style: italic;
+            background: #f8f8f8;
+            padding: 0.75rem 1rem;
+            border-left: 4px solid #ccc;
+            margin: 1rem 0;
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: 1.5rem 1.25rem;
+    }
+}
+
+// =========================
+// 🧱 Layout principal
+// =========================
+
+.lesson__content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 3rem;
+    @include mix.container;
+    margin-top: 2rem;
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+    }
+}
+
+.lesson__main,
+.lesson__sidebar {
+    width: 100%;
+}
+
+.lesson__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    @media (min-width: 1024px) {
+        position: sticky;
+        top: 2rem;
+        align-self: start;
+    }
+}
+
+// =========================
+// 📚 Header
+// =========================
+
+.lesson-banner {
+    background-color: #fff4dc;
+    border-radius: 1rem;
+    padding: 5rem 5rem 2rem 5rem;
+    margin-bottom: 2rem;
+
+    @media (max-width: 768px) {
+        padding: 2rem 1.5rem;
+    }
+}
+
+.lesson-header {
+    &__breadcrumb {
+        @include mix.container;
+        width: 100%;
+        margin-bottom: 0.5rem;
+
+        .breadcrumb {
+            background: none;
+            box-shadow: none;
+            padding: 0;
+
+            &__list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.4rem;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+            }
+
+            &__item {
+                display: flex;
+                align-items: center;
+                color: #444;
+                font-size: 0.85rem;
+            }
+
+            &__link {
+                text-decoration: none;
+                font-weight: 600;
+                color: #2c3f64;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            &__separator {
+                color: #aaa;
+                margin: 0 0.25rem;
+            }
+
+            &__current {
+                font-style: italic;
+                color: #999;
+            }
+        }
+
+        .breadcrumb__list {
+            display: flex;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+            gap: 0.25rem;
+            color: #666;
+
+            li {
+                display: flex;
+                align-items: center;
+            }
+
+            .breadcrumb__link {
+                text-decoration: none;
+                color: #2c3f64;
+                font-weight: 500;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            .breadcrumb__separator {
+                margin: 0 0.25rem;
+                color: #999;
+            }
+
+            .breadcrumb__current {
+                font-style: italic;
+                color: #aaa;
+            }
+        }
+
+        @media (max-width: 768px) {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    }
+
+    &__content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 2rem;
+        @include mix.container;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+    }
+
+    &__text {
+        flex: 1 1 55ch;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    &__title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3f64;
+    }
+
+    &__tag {
+        background-color: #fdca57;
+        color: #000;
+        padding: 0.3rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        width: fit-content;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    &__chapter {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #316470;
+    }
+
+    &__summary {
+        font-style: italic;
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 1rem;
+    }
+
+    &__image-block {
+        flex: 0 0 280px;
+        text-align: center;
+
+        @media (max-width: 768px) {
+            width: 100%;
+            margin-top: 2rem;
+        }
+    }
+
+    &__img {
+        border-radius: 1rem;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    &__personage {
+        margin-top: 1rem;
+        background-color: #ffffff;
+        padding: 1rem;
+        border-radius: 1rem;
+        font-size: 0.9rem;
+        color: #333;
+        text-align: center;
+        box-shadow: 0 0 0 1px #eee;
+    }
+
+    &__personage-name {
+        font-weight: bold;
+        margin-bottom: 0.25rem;
+        color: #2c3f64;
+    }
+
+    &__personage-note {
+        font-style: italic;
+        color: #666;
     }
 }
