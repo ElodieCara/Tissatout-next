@@ -2,7 +2,6 @@ import { FaFacebook, FaPinterest } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa6";
 import Link from "next/link";
 
-
 const Footer: React.FC = () => {
     return (
         <footer className="container__footer">
@@ -23,9 +22,9 @@ const Footer: React.FC = () => {
             <div className="container__footer__legacy">
                 <p>© 2025 Tissatout. Tous droits réservés.</p>
                 <p>
-                    <Link href="/cookies">Cookie</Link> |{" "}
-                    <Link href="/edit-cookies">Modifier les cookies</Link> |{" "}
-                    <Link href="/user-charter">Charte utilisateur</Link>
+                    <Link href="/cookies">Cookies</Link> |{" "}
+                    <Link href="/charte-utilisateur">Charte utilisateur</Link> |{" "}
+                    <Link href="/mentions-legales">Mentions légales</Link>
                 </p>
             </div>
 
@@ -39,10 +38,10 @@ const Footer: React.FC = () => {
                             <Link href="/contact">Contact</Link>
                         </li>
                         <li>
-                            <Link href="/privacy-policy">Politique de confidentialité</Link>
+                            <Link href="/confidentialite">Politique de confidentialité</Link>
                         </li>
                         <li>
-                            <Link href="/legal-mentions">Mentions légales</Link>
+                            <Link href="/a-propos">Qui sommes-nous ?</Link>
                         </li>
                     </ul>
 
@@ -50,13 +49,13 @@ const Footer: React.FC = () => {
                     <ul className="container__footer__information__navigation--liens">
                         <h3>Informations</h3>
                         <li>
-                            <Link href="/about">Qui suis-je ?</Link>
-                        </li>
-                        <li>
                             <Link href="/blog">Blog</Link>
                         </li>
                         <li>
-                            <Link href="/testimonials">Testimonials</Link>
+                            <Link href="/partenaires">Partenaires</Link>
+                        </li>
+                        <li>
+                            <Link href="/temoignages">Témoignages</Link>
                         </li>
                     </ul>
 
@@ -67,10 +66,7 @@ const Footer: React.FC = () => {
                             <Link href="/feedback">Remarques ?</Link>
                         </li>
                         <li>
-                            <Link href="/ideas">Vos Idées !</Link>
-                        </li>
-                        <li>
-                            <Link href="/partners">Partenaires ?</Link>
+                            <Link href="/ideas">Vos idées !</Link>
                         </li>
                     </ul>
                 </div>
@@ -80,4 +76,3 @@ const Footer: React.FC = () => {
 };
 
 export default Footer;
-

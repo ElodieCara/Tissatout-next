@@ -2,9 +2,16 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
-  /* Autres options de configuration */
   sassOptions: {
     includePaths: [path.join(__dirname, "src/styles")],
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/sitemap.xml",
+        destination: "/sitemap",
+      },
+    ];
   },
 };
 
