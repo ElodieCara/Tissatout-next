@@ -18,7 +18,7 @@ const menuItems = [
     }, { title: "Inspiration & Conseils", path: "/inspiration" },
     { title: "Coloriages à Imprimer", path: "/coloriages" },
     { title: "Jeux Ludiques", path: "/jeux-ludiques" },
-    { title: "Qui sommes-nous ?", path: "/qui-sommes-nous" },
+    { title: "Qui suis-je ?", path: "/a-propos" },
     { title: "Contact", path: "/contact" }
 ];
 

@@ -41,7 +41,7 @@ const Footer: React.FC = () => {
                             <Link href="/confidentialite">Politique de confidentialité</Link>
                         </li>
                         <li>
-                            <Link href="/a-propos">Qui sommes-nous ?</Link>
+                            <Link href="/a-propos">Qui suis-je ?</Link>
                         </li>
                     </ul>
 

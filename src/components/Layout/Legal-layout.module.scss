@@ -1,0 +1,127 @@
+.legal-layout {
+    padding: 3rem 1.5rem;
+    max-width: 920px;
+    margin: 0 auto;
+    background: none;
+    font-family: "Segoe UI", sans-serif;
+    color: #2c3f64;
+
+    &__nav {
+        margin-bottom: 2rem;
+
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding: 0;
+            list-style: none;
+            justify-content: center;
+
+            li {
+                a {
+                    text-decoration: none;
+                    color: white;
+                    padding: 0.4rem 0.6rem;
+                    border-bottom: 2px solid transparent;
+
+                    &:hover {
+                        border-color: #f9b233;
+                    }
+                }
+
+                &.active a {
+                    border-color: #f9b233;
+                }
+            }
+        }
+    }
+
+    &__content {
+        background-color: #fff;
+        padding: 2rem 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #2c3f64;
+            text-align: center;
+        }
+    }
+
+    &__body {
+        font-size: 1.1rem;
+        line-height: 1.75;
+        color: #2c3f64;
+
+        p {
+            margin-bottom: 1.5rem;
+        }
+
+        strong {
+            color: #2c3f64;
+        }
+
+        // Titres internes numérotés
+        p:has(strong:first-child) {
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 0.8rem;
+            color: #f78e74;
+        }
+
+        // Phrase finale en résumé
+        p:last-child {
+            font-style: italic;
+            margin-top: 3rem;
+            text-align: center;
+            color: #2c3f64;
+        }
+
+        a {
+            color: #f78e74;
+            text-decoration: underline;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
+}
+
+.legal-body {
+    &__intro {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+
+        @media (max-width: 600px) {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
+
+    &__image {
+        flex-shrink: 0;
+
+        img {
+            border-radius: 50%;
+            border: 3px solid #f9b233;
+            background: #fff8e7;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    &__text {
+        flex: 1;
+
+        p {
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+    }
+}
