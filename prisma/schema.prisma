@@ -26,8 +26,9 @@ model Article {
   // ✅ Relation Many-to-Many gérée par un modèle pivot
   ageCategories AgeCategoryArticle[]
 
-  relatedLinks RelatedArticle[] @relation("FromArticle")
-  linkedFrom   RelatedArticle[] @relation("ToArticle")
+  relatedLinks  RelatedArticle[] @relation("FromArticle")
+  linkedFrom    RelatedArticle[] @relation("ToArticle")
+  PrintableGame PrintableGame[]
 }
 
 model RelatedArticle {
@@ -274,30 +275,30 @@ model HomeSlide {
 }
 
 model Lesson {
-  id              String     @id @map("_id") @db.ObjectId
-  order           Int
-  title           String
-  slug            String     @unique
-  chapterTitle    String
-  personageName   String
-  personageDates  String
-  personageNote   String
-  period          String?
-  category        String
-  subcategory     String
-  ageTag          String?
-  summary         String?
-  revision        String?
-  homework        String?
-  content         String
-  image           String?
-  published       Boolean    @default(true)
-  createdAt       DateTime   @default(now())
-  module          String?    @default("trivium")
-  
+  id             String   @id @map("_id") @db.ObjectId
+  order          Int
+  title          String
+  slug           String   @unique
+  chapterTitle   String
+  personageName  String
+  personageDates String
+  personageNote  String
+  period         String?
+  category       String
+  subcategory    String
+  ageTag         String?
+  summary        String?
+  revision       String?
+  homework       String?
+  content        String
+  image          String?
+  published      Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  module         String?  @default("trivium")
+
   // Nouvelle relation avec la Collection
-  collectionId    String?    @db.ObjectId
-  collection      Collection? @relation(fields: [collectionId], references: [id])
+  collectionId String?     @db.ObjectId
+  collection   Collection? @relation(fields: [collectionId], references: [id])
 }
 
 model Collection {
@@ -310,4 +311,55 @@ model Collection {
   lessons     Lesson[]
 }
 
+model PrintableGame {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String  @unique
+  description String
+  pdfUrl      String // URL du fichier PDF
+  imageUrl    String // Visuel d’aperçu
+  isPrintable Boolean // Version plastifiée disponible ?
+  printPrice  Float? // Prix optionnel
 
+  ageMin Int
+  ageMax Int
+
+  themes GameTheme[]
+  types  GameType[]
+
+  articleId String?  @db.ObjectId
+  article   Article? @relation(fields: [articleId], references: [id], onDelete: SetNull)
+
+  views      Int     @default(0)
+  isFeatured Boolean @default(false)
+
+  createdAt DateTime @default(now())
+}
+
+model Theme {
+  id    String      @id @default(auto()) @map("_id") @db.ObjectId
+  label String
+  games GameTheme[]
+}
+
+model ActivityType {
+  id    String     @id @default(auto()) @map("_id") @db.ObjectId
+  label String
+  games GameType[]
+}
+
+model GameTheme {
+  id      String        @id @default(auto()) @map("_id") @db.ObjectId
+  gameId  String        @db.ObjectId
+  themeId String        @db.ObjectId
+  game    PrintableGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  theme   Theme         @relation(fields: [themeId], references: [id], onDelete: Cascade)
+}
+
+model GameType {
+  id     String        @id @default(auto()) @map("_id") @db.ObjectId
+  gameId String        @db.ObjectId
+  typeId String        @db.ObjectId
+  game   PrintableGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  type   ActivityType  @relation(fields: [typeId], references: [id], onDelete: Cascade)
+}
