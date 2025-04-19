@@ -12,10 +12,11 @@ export async function GET() {
 // POST dans /api/themes/route.ts
 export async function POST(req: Request) {
     const body = await req.json();
-    const theme = await prisma.theme.create({
+    const type = await prisma.activityType.create({
         data: { label: body.label },
     });
-    return NextResponse.json(theme);
+    return NextResponse.json(type);
 }
+
 
 
