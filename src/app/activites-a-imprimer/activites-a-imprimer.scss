@@ -1,105 +1,202 @@
-.activites {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
+// styles/activites.scss
+@use "../../styles/utils/variables" as *;
+@use "../../styles/base/mixins" as *;
 
-    &__header {
+.activites {
+    padding: 4rem 1.5rem;
+    max-width: 1200px;
+    margin: auto;
+    background-color: $light-gray;
+
+    &__intro {
+        padding: 2rem;
         text-align: center;
         margin-bottom: 3rem;
+
+        h1 {
+            font-size: 2.2rem;
+            font-family: "Fredoka", sans-serif;
+            color: $primary-color;
+            margin-bottom: 0.8rem;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-family: "Fredoka", sans-serif;
+            color: $quinary-color;
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            font-size: 1.25rem;
+            color: darken($primary-color, 10%);
+        }
     }
 
-    &__title {
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
+
+    &__badges {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+
+        .badge {
+            background: $secondary-color;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+
+            i {
+                font-size: 1rem;
+            }
+        }
     }
 
-    &__description {
-        font-size: 1rem;
-        color: #444;
-        margin-bottom: 1.5rem;
+
+    &__features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        margin: 4rem 0;
+        justify-content: center;
+
+        .feature {
+            background: #ffffff;
+            border: 2px solid $light-gray;
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+            h3 {
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+                color: $primary-color;
+            }
+
+            p {
+                font-size: 0.95rem;
+                color: $primary-color;
+            }
+        }
     }
 
-    &__buttons {
+
+    &__nav {
         display: flex;
         justify-content: center;
         gap: 1rem;
-        flex-wrap: wrap;
-    }
+        margin: 2rem 0;
 
-    &__btn {
-        padding: 0.75rem 1.25rem;
-        border: none;
-        border-radius: 6px;
-        font-weight: 600;
-        cursor: pointer;
-
-        &--pdf {
-            background-color: #fdca57;
-        }
-
-        &--plastifiees {
-            background-color: #316470;
+        .activites__btn {
+            background: $quaternary-color;
             color: white;
+            padding: 0.6rem 1.4rem;
+            border-radius: 18px;
+            font-weight: lighter;
+            font-size: 0.95rem;
+            transition: background 0.2s ease-in-out;
+
+            &:hover {
+                background: darken($quaternary-color, 10%);
+            }
         }
     }
 
-    &__filters {
-        margin-bottom: 2rem;
 
-        &-title {
-            font-size: 1.25rem;
+    &__section {
+        margin: 3rem 0;
+
+        h2 {
+            font-size: 1.6rem;
             margin-bottom: 0.5rem;
+            color: $primary-color;
+        }
+
+        p {
+            color: $quinary-color;
+            margin-bottom: 1.5rem;
         }
     }
 
     &__grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 2rem;
     }
 
     &__card {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-        padding: 1rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
         text-align: center;
-    }
 
-    &__image {
-        max-width: 100px;
-        margin: 0 auto 1rem;
-    }
+        &-title {
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+            font-weight: bold;
+            color: $primary-color;
+        }
 
-    &__card-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-bottom: 0.25rem;
-    }
-
-    &__card-age {
-        font-size: 0.9rem;
-        color: #666;
-        margin-bottom: 1rem;
+        &-age {
+            font-size: 0.9rem;
+            color: $secondary-color;
+        }
     }
 
     &__cta {
         display: flex;
-        flex-direction: column;
+        justify-content: center;
         gap: 0.5rem;
+        margin: 1rem 0;
 
         &-btn {
-            background-color: #f3f3f3;
-            border: 1px solid #ccc;
-            padding: 0.5rem;
+            background: $primary-color;
+            color: white;
+            padding: 0.4rem 0.8rem;
             border-radius: 4px;
             font-size: 0.9rem;
             cursor: pointer;
 
             &:hover {
-                background-color: #eee;
+                background: darken($primary-color, 10%);
             }
         }
+    }
+
+    &__seo {
+        margin-top: 4rem;
+        line-height: 1.6;
+        color: $primary-color;
+
+        h2 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .activites__features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .activites__grid {
+        grid-template-columns: 1fr;
     }
 }

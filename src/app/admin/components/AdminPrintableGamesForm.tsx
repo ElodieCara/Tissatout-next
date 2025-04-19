@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { generateSlug } from "@/lib/utils";
 import SelectWithAdd from "./SelectWithAdd";
+import Breadcrumb from "./Breadcrumb";
 
 
 interface Theme {
@@ -105,7 +106,11 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
         const { name, value, type, checked } = target;
         setForm({
             ...form,
-            [name]: type === "checkbox" ? checked : type === "number" ? parseFloat(value) : value,
+            [name]: type === "checkbox"
+                ? checked
+                : type === "number"
+                    ? value === "" ? undefined : parseFloat(value)
+                    : value,
         });
     };
 
@@ -130,7 +135,9 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
 
         const payload = {
             ...form,
-            slug: gameId === "new" ? generateSlug(form.title, crypto.randomUUID()) : form.slug,
+            slug: !form.slug || gameId === "new"
+                ? generateSlug(form.title, crypto.randomUUID())
+                : form.slug,
             themeIds: form.themeIds,
             typeIds: form.typeIds
         };
@@ -151,6 +158,13 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
 
     return (
         <div className="admin-form">
+            <Breadcrumb
+                selectedTheme="Activités imprimables"
+                selectedSubCategory={gameId && gameId !== "new" ? "Modifier" : "Ajouter"}
+                onThemeSelect={() => router.push("/admin?section=printable")}
+                onSubCategorySelect={() => { }}
+            />
+
             <h2>{gameId === "new" ? "Ajouter une activité" : "Modifier l'activité"}</h2>
             {message && <p className="admin-form__message">{message}</p>}
 
@@ -177,13 +191,13 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                 </div>
 
                 <div className="admin-form__group">
-                    <label htmlFor="price">Prix du PDF (€)</label>
+                    <label htmlFor="pdfPrice">Prix du PDF (€)</label>
                     <input
                         type="number"
                         step="0.01"
-                        name="price"
+                        name="pdfPrice"
                         value={form.pdfPrice ?? ""}
-                        onChange={(e) => setForm({ ...form, pdfPrice: parseFloat(e.target.value) })}
+                        onChange={handleChange}
                     />
                 </div>
 
