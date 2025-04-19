@@ -39,6 +39,7 @@ interface Article {
     sections: Section[];
     printableSupport?: string;
     relatedArticleIds?: string[];
+    printableGameId?: string | null;
 }
 
 export default function AdminArticleForm({ articleId }: { articleId?: string }) {
@@ -65,6 +66,7 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
     const [selectedAges, setSelectedAges] = useState<string[]>([]);
     const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
     const [allArticles, setAllArticles] = useState<ArticleOption[]>([]);
+    const [printableGames, setPrintableGames] = useState<{ id: string; title: string }[]>([]);
 
     // 🟢 Charger l'article en modification
     useEffect(() => {
@@ -72,6 +74,9 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
             // 🟡 Étape 1 : Charger tous les articles sauf l'actuel
             const allRes = await fetch("/api/articles");
             const allData = await allRes.json();
+            const gameRes = await fetch("/api/printable");
+            const gameData = await gameRes.json();
+
 
             const otherArticles = allData
                 .filter((a: any) => a.id !== articleId)
@@ -88,6 +93,7 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
 
             console.log("Articles envoyés à ArticleSelector (ageCategories sous forme d’ID):", otherArticles);
             setAllArticles(otherArticles);
+
 
             // 🟡 Étape 2 : Charger l’article si en modification
             if (articleId && articleId !== "new") {
@@ -109,9 +115,16 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                     sections: Array.isArray(data.sections) && data.sections.length > 0
                         ? data.sections
                         : [{ title: "", content: "" }],
-                    relatedArticleIds: data.relatedArticles?.map((a: any) => a.id) || []
+                    relatedArticleIds: data.relatedArticles?.map((a: any) => a.id) || [],
+                    printableGameId: data.printableGameId || null // 🟢 AJOUT ICI
                 };
 
+                if (Array.isArray(gameData)) {
+                    setPrintableGames(gameData.map((g: any) => ({ id: g.id, title: g.title })));
+                } else {
+                    console.warn("❌ gameData n'est pas un tableau :", gameData);
+                    setPrintableGames([]); // On met une liste vide plutôt que de planter
+                }
                 setForm(fetchedArticle);
                 setSelectedAges(fetchedArticle.ageCategories);
             }
@@ -182,6 +195,7 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
 
         let payload = {
             ...form,
+            printableGameId: form.printableGameId || null,
             printableSupport: form.printableSupport || null,
             ageCategoryIds: selectedAges,
             sections: form.sections.map((s) => {
@@ -399,16 +413,22 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                 </div>
 
                 <div className="admin-form__group">
-                    <label htmlFor="printableSupport">Lien vers un support à imprimer (optionnel)</label>
-                    <input
-                        type="text"
-                        id="printableSupport"
-                        name="printableSupport"
-                        value={form.printableSupport || ""}
-                        onChange={(e) => setForm({ ...form, printableSupport: e.target.value })}
-                        placeholder="https://..."
-                    />
+                    <label htmlFor="printableGameId">Jeu imprimable lié (facultatif)</label>
+                    <select
+                        id="printableGameId"
+                        name="printableGameId"
+                        value={form.printableGameId ?? ""}
+                        onChange={(e) => setForm({ ...form, printableGameId: e.target.value || null })}
+                    >
+                        <option value="">Aucun</option>
+                        {printableGames.map((game) => (
+                            <option key={game.id} value={game.id}>
+                                {game.title}
+                            </option>
+                        ))}
+                    </select>
                 </div>
+
 
                 <div className="admin-form__group">
                     <label>Articles liés :</label>

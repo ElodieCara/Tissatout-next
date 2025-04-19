@@ -200,16 +200,27 @@ export default async function ArticlePage({ params }: Props) {
                                     </div>
 
                                     {/* Lien d'impression uniquement pour "highlight" */}
-                                    {section.normalizedStyle === "highlight" && article.printableSupport && (
-                                        <a
-                                            href={article.printableSupport}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="article__print-link no-print"
-                                        >
-                                            📄 Imprimer les supports
-                                        </a>
+                                    {section.normalizedStyle === "highlight" && article.printableGame && (
+                                        <div className="article__print-link-wrapper no-print">
+                                            <a
+                                                href={article.printableGame.pdfUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="article__print-link"
+                                            >
+                                                📄 Imprimer les supports ({article.printableGame.pdfPrice ?? "gratuit"} €)
+                                            </a>
+
+                                            {article.printableGame.imageUrl && (
+                                                <img
+                                                    src={article.printableGame.imageUrl}
+                                                    alt={`Aperçu de ${article.printableGame.title}`}
+                                                    className="article__print-preview"
+                                                />
+                                            )}
+                                        </div>
                                     )}
+
                                 </article>
                             );
                         })}

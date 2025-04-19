@@ -28,12 +28,38 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
                         },
                     },
                 },
+                printableGame: {
+                    select: {
+                        id: true,
+                        title: true,
+                        slug: true,
+                        pdfUrl: true,
+                        pdfPrice: true,
+                        imageUrl: true,
+                        isPrintable: true,
+                        printPrice: true,
+                    },
+                },
             },
         });
 
         if (!article) {
             return NextResponse.json({ message: "Article non trouvé" }, { status: 404 });
         }
+
+        const printableGame = await prisma.printableGame.findFirst({
+            where: { articleId: article.id },
+            select: {
+                id: true,
+                title: true,
+                slug: true,
+                pdfUrl: true,
+                pdfPrice: true,
+                imageUrl: true,
+                isPrintable: true,
+                printPrice: true,
+            },
+        });
 
         // 🔁 Normaliser les sections pour garantir la structure
         const sections = article.sections.map(section => ({
@@ -51,6 +77,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
             ...article,
             sections,
             relatedArticles,
+            printableGame: article.printableGame,
         });
 
     } catch (error) {

@@ -11,6 +11,7 @@ import AdminAgeCategory from "./AdminAgeCategory";
 import AdminSiteSettings from "./AdminSiteSettings";
 import AdminCommentsPage from "./AdminComments";
 import AdminLesson from "./AdminLesson";
+import AdminPrintableGames from "./AdminPrintableGames";
 
 
 
@@ -73,6 +74,12 @@ export default function AdminPage() {
                     📚 Leçons
                 </button>
                 <button
+                    onClick={() => handleSectionChange("printable")}
+                    className={activeSection === "printable" ? "active" : ""}
+                >
+                    🧾 Activités à imprimer
+                </button>
+                <button
                     onClick={() => handleSectionChange("ideas")}
                     className={activeSection === "ideas" ? "active" : ""}
                 >
@@ -94,6 +101,7 @@ export default function AdminPage() {
                 {activeSection === "modules" && <AdminLesson />}
                 {activeSection === "ideas" && <AdminIdeas />}
                 {activeSection === "advice" && <AdminAdvice />}
+                {activeSection === "printable" && <AdminPrintableGames />}
                 {activeSection === "ageCategory" && <AdminAgeCategory />}
                 {activeSection === "comments" && <AdminCommentsPage />}
             </div>

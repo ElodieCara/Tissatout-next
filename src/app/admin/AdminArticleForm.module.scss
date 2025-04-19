@@ -21,6 +21,14 @@
         margin-bottom: 1rem;
     }
 
+    &__info {
+        padding: 0.75rem;
+        background: #f1f1f1;
+        border-left: 4px solid #f9b233;
+        font-style: italic;
+        color: #333;
+    }
+
     &__group {
         display: flex;
         flex-direction: column;
@@ -34,7 +42,7 @@
         input,
         textarea,
         select {
-            width: 100%;
+            //width: 100%;
             padding: 0.75rem;
             border: 1px solid $border-color;
             border-radius: 8px;

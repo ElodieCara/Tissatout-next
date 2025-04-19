@@ -62,6 +62,7 @@ export async function getArticleBySlug(slug: string) {
                     },
                 },
             },
+            printableGame: true,
         },
     });
 
@@ -74,6 +75,11 @@ export async function getArticleBySlug(slug: string) {
     return {
         ...article,
         relatedArticles,
+        sections: article.sections.map((s) => ({
+            title: s.title,
+            content: s.content,
+            style: s.style || "classique",
+        })),
     };
 }
 
