@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Banner from "@/components/Banner/Banner";
 import ActivityCard from "./ActivityCard";
 import ActivityFilter from "./ActivityFilters";
+import BackToTop from "@/components/BackToTop/BackToTop";
+import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 
 interface PrintableGame {
     id: string;
@@ -60,8 +62,8 @@ export default function ActivityPrintPage() {
         <>
             <Banner
                 className="banner--printable"
-                src="/images/banners/printable.jpg"
-                title="Activités à imprimer – Trivium & Quadrivium"
+                src="/bg/halo-jeux.png"
+                title="Activités à imprimer"
                 description="Téléchargez des fiches éducatives ou recevez-les plastifiées. Des outils concrets pour apprendre avec méthode, dès 3 ans."
                 buttons={[
                     { label: "📄 Fiches PDF", targetId: "section-pdf" },
@@ -70,6 +72,12 @@ export default function ActivityPrintPage() {
             />
 
             <main className="activites">
+                <Breadcrumb
+                    crumbs={[
+                        { label: "Accueil", href: "/" },
+                        { label: "Activités à imprimer" } // Pas de href = page actuelle
+                    ]}
+                />
                 <section className="activites__intro">
                     <h1>Fiches pédagogiques à imprimer</h1>
                     <h2 className="highlighted">Trivium & Quadrivium</h2>
@@ -118,9 +126,6 @@ export default function ActivityPrintPage() {
                         </nav>
                     </div>
                 </section>
-
-
-
 
                 <section className="activites__layout">
                     <div className="activites__list">
@@ -258,6 +263,7 @@ export default function ActivityPrintPage() {
                         rigueur et douceur.
                     </p>
                 </section>
+                <BackToTop />
             </main>
         </>
     );

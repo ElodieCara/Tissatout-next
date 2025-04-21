@@ -7,7 +7,7 @@ interface Crumb {
 
 export default function Breadcrumb({ crumbs }: { crumbs: Crumb[] }) {
     return (
-        <nav aria-label="Fil d’Ariane" className="breadcrumb">
+        <nav aria-label="Fil d’Ariane" className="breadcrumb-page">
             <ol className="breadcrumb__list">
                 {crumbs.map((crumb, index) => (
                     <li key={index} className="breadcrumb__item">

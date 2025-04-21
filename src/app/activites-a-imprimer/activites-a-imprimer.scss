@@ -59,6 +59,19 @@
         flex: 1;
     }
 
+    &__header {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 20px;
+
+        &-texte {
+            display: flex;
+            flex-direction: column;
+            width: 55%;
+        }
+    }
+
     &__header-plast {
         display: flex;
         flex-direction: row;
@@ -82,8 +95,6 @@
             flex-direction: column;
         }
     }
-
-
 
     &__separator {
         margin: 4rem auto 2rem;
