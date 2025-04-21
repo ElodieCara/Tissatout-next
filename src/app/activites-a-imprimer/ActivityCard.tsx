@@ -32,10 +32,12 @@ export default function ActivityCard({
     showPDFButton = true,
     showPrintButton = false,
 }: Props) {
-    const price = showPrintButton && printPrice !== undefined
+    const price = showPrintButton && typeof printPrice === "number"
         ? `${printPrice.toFixed(2)} €`
-        : pdfPrice !== undefined
-            ? (pdfPrice === 0 ? "Gratuit" : `${pdfPrice.toFixed(2)} €`)
+        : typeof pdfPrice === "number"
+            ? pdfPrice === 0
+                ? "Gratuit"
+                : `${pdfPrice.toFixed(2)} €`
             : null;
 
     return (

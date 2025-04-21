@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Banner from "@/components/Banner/Banner";
 import ActivityCard from "./ActivityCard";
+import ActivityFilter from "./ActivityFilters";
 
 interface PrintableGame {
     id: string;
@@ -20,6 +21,15 @@ interface PrintableGame {
 
 export default function ActivityPrintPage() {
     const [activities, setActivities] = useState<PrintableGame[]>([]);
+    const [filteredPdf, setFilteredPdf] = useState<PrintableGame[]>([]);
+    const [filteredPrintable, setFilteredPrintable] = useState<PrintableGame[]>([]);
+    const [allThemes, setAllThemes] = useState<string[]>([]);
+    const [allTypes, setAllTypes] = useState<string[]>([]);
+    const [currentPriceFilter, setCurrentPriceFilter] = useState<"all" | "free" | "asc" | "desc">("all");
+
+    const pdfActivities = activities.filter((a) => a.pdfUrl);
+    const printableActivities = activities.filter((a) => a.isPrintable);
+    const shouldShowPlastifiedSection = currentPriceFilter !== "free";
 
     useEffect(() => {
         const fetchData = async () => {
@@ -30,12 +40,26 @@ export default function ActivityPrintPage() {
         fetchData();
     }, []);
 
-    const pdfActivities = activities.filter((a) => a.pdfUrl);
-    const printableActivities = activities.filter((a) => a.isPrintable);
+    useEffect(() => {
+        setFilteredPdf(pdfActivities);
+        setFilteredPrintable(printableActivities);
+
+        const themes = new Set<string>();
+        const types = new Set<string>();
+
+        activities.forEach((a) => {
+            a.themes?.forEach((t) => themes.add(t.theme.label));
+            a.types?.forEach((t) => types.add(t.type.label));
+        });
+
+        setAllThemes([...themes]);
+        setAllTypes([...types]);
+    }, [activities]);
 
     return (
         <>
             <Banner
+                className="banner--printable"
                 src="/images/banners/printable.jpg"
                 title="Activités à imprimer – Trivium & Quadrivium"
                 description="Téléchargez des fiches éducatives ou recevez-les plastifiées. Des outils concrets pour apprendre avec méthode, dès 3 ans."
@@ -46,16 +70,13 @@ export default function ActivityPrintPage() {
             />
 
             <main className="activites">
-                {/* INTRODUCTION */}
                 <section className="activites__intro">
                     <h1>Fiches pédagogiques à imprimer</h1>
                     <h2 className="highlighted">Trivium & Quadrivium</h2>
                     <p>
-                        Toutes les fiches Tissatout sont conçues avec soin pour favoriser une
-                        pédagogie claire, progressive et sans surcharge. Disponibles en PDF à imprimer
-                        ou en version plastifiée.
+                        Toutes les fiches Tissatout sont conçues avec soin pour favoriser une pédagogie claire,
+                        progressive et sans surcharge. Disponibles en PDF à imprimer ou en version plastifiée.
                     </p>
-
                     <div className="activites__badges">
                         <span className="badge">📅 {activities.length} fiches</span>
                         <span className="badge">📦 Rapide</span>
@@ -63,7 +84,6 @@ export default function ActivityPrintPage() {
                     </div>
                 </section>
 
-                {/* AVANTAGES */}
                 <section className="activites__features">
                     <div className="feature">
                         <i>📄</i>
@@ -82,63 +102,147 @@ export default function ActivityPrintPage() {
                     </div>
                 </section>
 
-                {/* NAVIGATION */}
-                <nav className="activites__nav">
-                    <a href="#section-pdf" className="activites__btn">📅 Activités en PDF</a>
-                    <a href="#section-plastifiees" className="activites__btn">📦 Activités plastifiées</a>
-                </nav>
+                <section className="activites__summary">
+                    <div className="activites__summary-content">
+                        <div className="activites__summary-text">
+                            <h3>Deux formats selon vos besoins :</h3>
+                            <p>
+                                <strong>PDF à imprimer</strong> pour une utilisation immédiate ou
+                                <strong> fiches plastifiées</strong> pour un usage durable à l’école ou à la maison.
+                            </p>
+                        </div>
 
-                {/* SECTION PDF */}
-                <section id="section-pdf" className="activites__section">
-                    <h2>📄 Activités à imprimer en PDF</h2>
-                    <p>Idéal pour les familles en IEF ou les enseignants qui veulent imprimer à la demande.</p>
-
-                    <div className="activites__grid">
-                        {pdfActivities.map((a) => (
-                            <ActivityCard
-                                key={a.id}
-                                id={a.id}
-                                title={a.title}
-                                ageRange={`${a.ageMin}–${a.ageMax} ans`}
-                                imageUrl={a.imageUrl}
-                                pdfUrl={a.pdfUrl}
-                                pdfPrice={a.pdfPrice}
-                                showPDFButton={true}
-                                showPrintButton={false}
-                                themes={a.themes?.map((t) => t.theme.label) || []}
-                                types={a.types?.map((t) => t.type.label) || []}
-                            />
-                        ))}
+                        <nav className="activites__summary-nav">
+                            <a href="#section-pdf" className="activites__btn">➕ Voir les PDF</a>
+                            <a href="#section-plastifiees" className="activites__btn">➕ Voir les plastifiées</a>
+                        </nav>
                     </div>
                 </section>
 
-                {/* SECTION PLASTIFIÉES */}
-                <section id="section-plastifiees" className="activites__section">
-                    <h2>📦 Activités plastifiées</h2>
-                    <p>Pour un usage durable, en classe ou à la maison. Lavables et solides.</p>
 
-                    <div className="activites__grid">
-                        {printableActivities.map((a) => (
-                            <ActivityCard
-                                key={a.id}
-                                id={a.id}
-                                title={a.title}
-                                ageRange={`${a.ageMin}–${a.ageMax} ans`}
-                                imageUrl={a.imageUrl}
-                                pdfUrl={a.pdfUrl}
-                                pdfPrice={a.pdfPrice}
-                                printPrice={a.printPrice}
-                                isPrintable={a.isPrintable}
-                                showPDFButton={false}
-                                showPrintButton={true}
-                                themes={a.themes?.map((t) => t.theme.label) || []}
-                                types={a.types?.map((t) => t.type.label) || []}
-                            />
-                        ))}
+
+
+                <section className="activites__layout">
+                    <div className="activites__list">
+                        <section className="activites__section">
+
+                            <section id="section-pdf" className="activites__section activites__filters-bar">
+                                <div className="activites__header">
+                                    <div className="activites__header-texte">
+                                        <h2>📄 Activités à imprimer en PDF</h2>
+                                        <p>Parfait pour un usage immédiat. Téléchargez, imprimez, utilisez !</p>
+                                    </div>
+                                    <ActivityFilter
+                                        themes={allThemes}
+                                        types={allTypes}
+                                        onFilterChange={({ age, selectedThemes, selectedTypes, priceFilter }) => {
+                                            setCurrentPriceFilter(priceFilter);
+                                            const [minAge, maxAge] = age === "all" ? [0, 99] : age.split("–").map(Number);
+
+                                            const matches = (a: PrintableGame) => {
+                                                const matchAge = a.ageMax >= minAge && a.ageMin <= maxAge;
+                                                const matchThemes = selectedThemes.length === 0 || a.themes?.some((t) => selectedThemes.includes(t.theme.label));
+                                                const matchTypes = selectedTypes.length === 0 || a.types?.some((t) => selectedTypes.includes(t.type.label));
+                                                const matchPrice = priceFilter === "free" ? a.pdfUrl && (a.pdfPrice ?? 0) === 0 : true;
+                                                return matchAge && matchThemes && matchTypes && matchPrice;
+                                            };
+
+                                            const filteredPDF = pdfActivities.filter(matches);
+                                            const filteredPRINT = printableActivities.filter(matches);
+
+                                            if (priceFilter === "asc") filteredPDF.sort((a, b) => (a.pdfPrice ?? 0) - (b.pdfPrice ?? 0));
+                                            if (priceFilter === "desc") filteredPDF.sort((a, b) => (b.pdfPrice ?? 0) - (a.pdfPrice ?? 0));
+
+                                            setFilteredPdf(filteredPDF);
+                                            setFilteredPrintable(filteredPRINT);
+                                        }}
+                                    />
+                                </div>
+                            </section>
+                            <div className="activites__grid">
+                                {filteredPdf.map((a) => (
+                                    <ActivityCard
+                                        key={a.id}
+                                        id={a.id}
+                                        title={a.title}
+                                        ageRange={`${a.ageMin}–${a.ageMax} ans`}
+                                        imageUrl={a.imageUrl}
+                                        pdfUrl={a.pdfUrl}
+                                        pdfPrice={a.pdfPrice}
+                                        showPDFButton={true}
+                                        showPrintButton={false}
+                                        themes={a.themes?.map((t) => t.theme.label) || []}
+                                        types={a.types?.map((t) => t.type.label) || []}
+                                    />
+                                ))}
+                            </div>
+                        </section>
+
+                        {shouldShowPlastifiedSection && (
+                            <>
+                                <div className="activites__separator">
+                                    <span>Ou bien, optez pour la version plastifiée 👇</span>
+                                </div>
+
+                                <section id="section-plastifiees" className="activites__filters-bar">
+                                    <div className="activites__header-plast">
+                                        <div className="activites__header-texte">
+                                            <h2>📦 Activités plastifiées</h2>
+                                            <p>Plus solides, idéales pour durer dans le temps.</p>
+                                        </div>
+                                        <ActivityFilter
+                                            themes={allThemes}
+                                            types={allTypes}
+                                            onFilterChange={({ age, selectedThemes, selectedTypes, priceFilter }) => {
+                                                setCurrentPriceFilter(priceFilter);
+                                                const [minAge, maxAge] = age === "all" ? [0, 99] : age.split("–").map(Number);
+
+                                                const matches = (a: PrintableGame) => {
+                                                    const matchAge = a.ageMax >= minAge && a.ageMin <= maxAge;
+                                                    const matchThemes = selectedThemes.length === 0 || a.themes?.some((t) => selectedThemes.includes(t.theme.label));
+                                                    const matchTypes = selectedTypes.length === 0 || a.types?.some((t) => selectedTypes.includes(t.type.label));
+                                                    const matchPrice = priceFilter === "free" ? a.pdfUrl && (a.pdfPrice ?? 0) === 0 : true;
+                                                    return matchAge && matchThemes && matchTypes && matchPrice;
+                                                };
+
+                                                const filteredPDF = pdfActivities.filter(matches);
+                                                const filteredPRINT = printableActivities.filter(matches);
+
+                                                if (priceFilter === "asc") filteredPDF.sort((a, b) => (a.pdfPrice ?? 0) - (b.pdfPrice ?? 0));
+                                                if (priceFilter === "desc") filteredPDF.sort((a, b) => (b.pdfPrice ?? 0) - (a.pdfPrice ?? 0));
+
+                                                setFilteredPdf(filteredPDF);
+                                                setFilteredPrintable(filteredPRINT);
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div className="activites__grid">
+                                        {filteredPrintable.map((a) => (
+                                            <ActivityCard
+                                                key={a.id}
+                                                id={a.id}
+                                                title={a.title}
+                                                ageRange={`${a.ageMin}–${a.ageMax} ans`}
+                                                imageUrl={a.imageUrl}
+                                                pdfUrl={a.pdfUrl}
+                                                pdfPrice={a.pdfPrice}
+                                                printPrice={a.printPrice}
+                                                isPrintable={a.isPrintable}
+                                                showPDFButton={false}
+                                                showPrintButton={true}
+                                                themes={a.themes?.map((t) => t.theme.label) || []}
+                                                types={a.types?.map((t) => t.type.label) || []}
+                                            />
+                                        ))}
+                                    </div>
+                                </section>
+
+                            </>
+                        )}
                     </div>
                 </section>
 
-                {/* SEO TEXT */}
                 <section className="activites__seo">
                     <h2>Pourquoi choisir les fiches Tissatout ?</h2>
                     <p>

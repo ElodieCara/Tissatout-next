@@ -16,9 +16,10 @@ interface BannerProps {
     title: string;
     description: string;
     buttons?: ButtonProps[]; // Permet de passer une liste de boutons dynamiques
+    className?: string;
 }
 
-export default function Banner({ src, title, description, buttons = [] }: BannerProps) {
+export default function Banner({ src, title, description, buttons = [], className }: BannerProps) {
     const [isClient, setIsClient] = useState(false);
 
     useEffect(() => {
@@ -35,7 +36,7 @@ export default function Banner({ src, title, description, buttons = [] }: Banner
     };
 
     return (
-        <div className="nos-univers__banner">
+        <div className={`nos-univers__banner ${className ?? ""}`}>
             <div className="nos-univers__banner-image">
                 <Image
                     src={src}

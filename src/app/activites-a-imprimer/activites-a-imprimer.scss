@@ -4,7 +4,7 @@
 
 .activites {
     padding: 4rem 1.5rem;
-    max-width: 1200px;
+    max-width: 1180px;
     margin: auto;
     background-color: $light-gray;
 
@@ -13,23 +13,164 @@
         text-align: center;
         margin-bottom: 3rem;
 
-        h1 {
-            font-size: 2.2rem;
-            font-family: "Fredoka", sans-serif;
-            color: $primary-color;
-            margin-bottom: 0.8rem;
-        }
-
+        h1,
         h2 {
             font-size: 2.2rem;
             font-family: "Fredoka", sans-serif;
-            color: $quinary-color;
             margin-bottom: 0.8rem;
+        }
+
+        h1 {
+            color: $primary-color;
+        }
+
+        h2 {
+            color: $quinary-color;
         }
 
         p {
             font-size: 1.25rem;
             color: darken($primary-color, 10%);
+        }
+    }
+
+    &__layout {
+        width: 100%;
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    &__filters {
+        flex: 0 0 260px;
+        background: #fdfaf5;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        position: sticky;
+        top: 2rem;
+        height: fit-content;
+    }
+
+    &__list {
+        flex: 1;
+    }
+
+    &__header-plast {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 20px;
+
+        & h2 {
+            flex: 0 0 30%;
+            margin: 0;
+            font-size: 1.6rem;
+            color: $primary-color;
+            white-space: nowrap;
+        }
+
+        & p {
+            color: rgb(118, 165, 151);
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+        }
+    }
+
+
+
+    &__separator {
+        margin: 4rem auto 2rem;
+        text-align: center;
+        position: relative;
+        font-size: 1.1rem;
+        color: $primary-color;
+        font-weight: bold;
+        text-transform: uppercase;
+
+        span {
+            background-color: $light-gray;
+            padding: 0.5rem 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        &::before {
+            content: "";
+            height: 2px;
+            background: $secondary-color;
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            z-index: 1;
+        }
+    }
+
+    &__summary {
+        background-color: $quaternary-color;
+        color: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin: 2rem 0;
+
+        &-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        &-text {
+            flex: 1;
+            min-width: 240px;
+
+            h3 {
+                font-size: 1.25rem;
+                font-weight: bold;
+                margin-bottom: 0.5rem;
+            }
+
+            p {
+                font-size: 1rem;
+                color: white;
+
+                strong {
+                    color: $secondary-color;
+                }
+            }
+        }
+
+        &-nav {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+
+            .activites__btn {
+                background: $secondary-color;
+                color: white;
+                padding: 0.6rem 1.4rem;
+                border-radius: 12px;
+                font-weight: bold;
+                font-size: 0.95rem;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.5rem;
+                text-decoration: none;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+                transition: background 0.2s ease-in-out;
+
+                &:hover {
+                    background: darken($secondary-color, 10%);
+                }
+            }
         }
     }
 
@@ -58,7 +199,6 @@
             }
         }
     }
-
 
     &__features {
         display: flex;
@@ -112,9 +252,8 @@
         }
     }
 
-
     &__section {
-        margin: 3rem 0;
+        margin: 1rem 0;
 
         h2 {
             font-size: 1.6rem;
@@ -124,7 +263,7 @@
 
         p {
             color: $quinary-color;
-            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
         }
     }
 
@@ -190,13 +329,85 @@
     }
 }
 
-@media (max-width: 768px) {
-    .activites__features {
+// Responsive tablette
+@media (max-width: 1024px) {
+    .activites__layout {
         flex-direction: column;
-        align-items: center;
+    }
+
+    .activites__filters {
+        width: 100%;
+        position: static;
     }
 
     .activites__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .activity-filter--bar {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        align-items: end;
+
+        .filter-group select {
+            width: 100%;
+        }
+
+        .reset-btn {
+            grid-column: span 2;
+            justify-self: end;
+        }
+    }
+}
+
+// Responsive mobile
+@media (max-width: 768px) {
+    .activites__grid {
         grid-template-columns: 1fr;
     }
+
+    .activity-filter--bar {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 !important;
+        gap: 0 !important;
+
+        .reset-btn {
+            grid-column: span 2;
+            justify-self: center;
+        }
+    }
+
+    .activites__header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+
+        &-texte {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .5rem;
+            text-align: center;
+        }
+    }
+
+    .activites__header-plast {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 2rem 1.5rem;
+
+        &-texte {
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+    }
+
+
 }
