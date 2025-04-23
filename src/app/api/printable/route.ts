@@ -44,6 +44,7 @@ export async function POST(req: Request) {
             pdfUrl: body.pdfUrl,
             pdfPrice: body.pdfPrice ?? null,
             imageUrl: body.imageUrl,
+            previewImageUrl: body.previewImageUrl ?? null,
             isPrintable: body.isPrintable,
             printPrice: body.printPrice,
             ageMin: body.ageMin,
@@ -68,6 +69,16 @@ export async function POST(req: Request) {
             data: body.typeIds.map((typeId: string) => ({
                 gameId: game.id,
                 typeId,
+            })),
+        });
+    }
+
+    // Créer les extraImages
+    if (body.extraImages?.length) {
+        await prisma.extraImage.createMany({
+            data: body.extraImages.map((url: string) => ({
+                gameId: game.id,
+                imageUrl: url,
             })),
         });
     }

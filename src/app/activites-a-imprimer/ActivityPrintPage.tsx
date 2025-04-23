@@ -9,6 +9,7 @@ import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 
 interface PrintableGame {
     id: string;
+    slug: string;
     title: string;
     imageUrl: string;
     pdfUrl: string;
@@ -169,13 +170,12 @@ export default function ActivityPrintPage() {
                                     <ActivityCard
                                         key={a.id}
                                         id={a.id}
+                                        slug={a.slug}
                                         title={a.title}
                                         ageRange={`${a.ageMin}–${a.ageMax} ans`}
                                         imageUrl={a.imageUrl}
                                         pdfUrl={a.pdfUrl}
                                         pdfPrice={a.pdfPrice}
-                                        showPDFButton={true}
-                                        showPrintButton={false}
                                         themes={a.themes?.map((t) => t.theme.label) || []}
                                         types={a.types?.map((t) => t.type.label) || []}
                                     />
@@ -183,7 +183,7 @@ export default function ActivityPrintPage() {
                             </div>
                         </section>
 
-                        {shouldShowPlastifiedSection && (
+                        {/* {shouldShowPlastifiedSection && (
                             <>
                                 <div className="activites__separator">
                                     <span>Ou bien, optez pour la version plastifiée 👇</span>
@@ -227,15 +227,13 @@ export default function ActivityPrintPage() {
                                             <ActivityCard
                                                 key={a.id}
                                                 id={a.id}
+                                                slug={a.slug}
                                                 title={a.title}
                                                 ageRange={`${a.ageMin}–${a.ageMax} ans`}
                                                 imageUrl={a.imageUrl}
                                                 pdfUrl={a.pdfUrl}
                                                 pdfPrice={a.pdfPrice}
                                                 printPrice={a.printPrice}
-                                                isPrintable={a.isPrintable}
-                                                showPDFButton={false}
-                                                showPrintButton={true}
                                                 themes={a.themes?.map((t) => t.theme.label) || []}
                                                 types={a.types?.map((t) => t.type.label) || []}
                                             />
@@ -244,7 +242,7 @@ export default function ActivityPrintPage() {
                                 </section>
 
                             </>
-                        )}
+                        )} */}
                     </div>
                 </section>
 

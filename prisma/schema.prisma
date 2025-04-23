@@ -29,7 +29,7 @@ model Article {
   relatedLinks RelatedArticle[] @relation("FromArticle")
   linkedFrom   RelatedArticle[] @relation("ToArticle")
 
-  printableGameId String?        @db.ObjectId
+  printableGameId String?         @db.ObjectId
   printableGame   PrintableGame[] @relation("ArticleToGame")
 }
 
@@ -314,30 +314,41 @@ model Collection {
 }
 
 model PrintableGame {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  slug        String  @unique
-  description String
-  pdfUrl      String // URL du fichier PDF
-  pdfPrice    Float?
-  imageUrl    String // Visuel d’aperçu
-  isPrintable Boolean // Version plastifiée disponible ?
-  printPrice  Float? // Prix optionnel
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  slug            String  @unique
+  description     String
+  pdfUrl          String // URL du fichier PDF
+  pdfPrice        Float?
+  imageUrl        String // Visuel d’aperçu
+  previewImageUrl String?
+  isPrintable     Boolean // Version plastifiée disponible ?
+  printPrice      Float? // Prix optionnel
+  printUrl        String? // URL vers la version plastifiée (ex: lien Etsy)
+
 
   ageMin Int
   ageMax Int
 
-  themes GameTheme[]
-  types  GameType[]
+  themes      GameTheme[]
+  types       GameType[]
+  extraImages ExtraImage[]
 
-  articleId  String?   @db.ObjectId
-  article    Article?  @relation("ArticleToGame", fields: [articleId], references: [id])
+  articleId String?  @db.ObjectId
+  article   Article? @relation("ArticleToGame", fields: [articleId], references: [id])
 
   views      Int     @default(0)
   isFeatured Boolean @default(false)
 
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   updatedAt DateTime? @default(now()) @updatedAt
+}
+
+model ExtraImage {
+  id       String        @id @default(auto()) @map("_id") @db.ObjectId
+  imageUrl String
+  game     PrintableGame @relation(fields: [gameId], references: [id])
+  gameId   String        @db.ObjectId
 }
 
 model Theme {
@@ -353,18 +364,17 @@ model ActivityType {
 }
 
 model GameTheme {
-  id      String     @id @default(auto()) @map("_id") @db.ObjectId
-  gameId  String     @db.ObjectId
-  themeId String?    @db.ObjectId
+  id      String        @id @default(auto()) @map("_id") @db.ObjectId
+  gameId  String        @db.ObjectId
+  themeId String?       @db.ObjectId
   game    PrintableGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  theme   Theme?     @relation(fields: [themeId], references: [id], onDelete: Cascade)
+  theme   Theme?        @relation(fields: [themeId], references: [id], onDelete: Cascade)
 }
 
 model GameType {
-  id     String         @id @default(auto()) @map("_id") @db.ObjectId
-  gameId String         @db.ObjectId
-  typeId String?        @db.ObjectId
-  game   PrintableGame  @relation(fields: [gameId], references: [id], onDelete: Cascade)
-  type   ActivityType?  @relation(fields: [typeId], references: [id], onDelete: Cascade)
+  id     String        @id @default(auto()) @map("_id") @db.ObjectId
+  gameId String        @db.ObjectId
+  typeId String?       @db.ObjectId
+  game   PrintableGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  type   ActivityType? @relation(fields: [typeId], references: [id], onDelete: Cascade)
 }
-

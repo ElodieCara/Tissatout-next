@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import styles from "./BackToTop.module.scss"; // ✅ Fichier SCSS pour le style
-import { ArrowUp } from "lucide-react"; // Icône flèche vers le haut
+import styles from "./BackToTop.module.scss";
+import { ArrowUp } from "lucide-react";
 
 export default function BackToTop() {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
         const toggleVisibility = () => {
-            setVisible(window.scrollY > 300); // Affiche si l'utilisateur descend de 300px
+            setVisible(window.scrollY > 300);
         };
 
         window.addEventListener("scroll", toggleVisibility);

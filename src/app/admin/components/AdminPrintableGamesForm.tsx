@@ -6,7 +6,6 @@ import { generateSlug } from "@/lib/utils";
 import SelectWithAdd from "./SelectWithAdd";
 import Breadcrumb from "./Breadcrumb";
 
-
 interface Theme {
     id: string;
     label: string;
@@ -23,11 +22,14 @@ interface PrintableGameForm {
     description: string;
     pdfUrl: string;
     pdfPrice?: number;
+    printUrl?: string;
     imageUrl: string;
+    previewImageUrl?: string;
     isPrintable: boolean;
     printPrice?: number;
     ageMin: number;
     ageMax: number;
+    extraImages?: string[];
     themeIds: string[];
     typeIds: string[];
     articleId?: string | null;
@@ -40,6 +42,7 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
         description: "",
         pdfUrl: "",
         pdfPrice: 0,
+        printUrl: "",
         imageUrl: "",
         isPrintable: false,
         printPrice: undefined,
@@ -86,7 +89,9 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                     description: data.description,
                     pdfUrl: data.pdfUrl,
                     pdfPrice: data.pdfPrice,
+                    printUrl: data.printUrl?.trim() === "" ? undefined : data.printUrl?.trim(),
                     imageUrl: data.imageUrl,
+                    previewImageUrl: data.previewImageUrl,
                     isPrintable: data.isPrintable,
                     printPrice: data.printPrice,
                     ageMin: data.ageMin,
@@ -139,7 +144,9 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                 ? generateSlug(form.title, crypto.randomUUID())
                 : form.slug,
             themeIds: form.themeIds,
-            typeIds: form.typeIds
+            typeIds: form.typeIds,
+            printUrl: form.printUrl?.trim() || undefined,
+            printPrice: form.printPrice,
         };
 
         const res = await fetch(url, {
@@ -155,6 +162,22 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
             setMessage("❌ Erreur lors de l'enregistrement");
         }
     };
+
+    const handleExtraImagesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files ?? []);
+        const uploadedUrls: string[] = [];
+
+        for (const file of files) {
+            const formData = new FormData();
+            formData.append("file", file);
+            const res = await fetch("/api/upload", { method: "POST", body: formData });
+            const data = await res.json();
+            if (res.ok) uploadedUrls.push(data.imageUrl);
+        }
+
+        setForm({ ...form, extraImages: [...(form.extraImages ?? []), ...uploadedUrls] });
+    };
+
 
     return (
         <div className="admin-form">
@@ -186,6 +209,37 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                 </div>
 
                 <div className="admin-form__group">
+                    <label htmlFor="previewImageUrl">Image d’aperçu (facultative)</label>
+                    <input
+                        type="text"
+                        id="previewImageUrl"
+                        name="previewImageUrl"
+                        value={form.previewImageUrl || ""}
+                        onChange={handleChange}
+                    />
+                </div>
+                {form.previewImageUrl && (
+                    <div className="admin-form__preview">
+                        <img
+                            src={form.previewImageUrl}
+                            alt="Aperçu fiche"
+                            style={{ maxWidth: "200px", borderRadius: "0.5rem", marginTop: "0.5rem" }}
+                        />
+                    </div>
+                )}
+
+                <div className="admin-form__upload">
+                    <label>Images supplémentaires (optionnel)</label>
+                    <input type="file" accept="image/*" multiple onChange={handleExtraImagesUpload} />
+                    <div className="preview-thumbs">
+                        {form.extraImages?.map((url, index) => (
+                            <img key={index} src={url} alt={`Image ${index + 1}`} className="thumb" />
+                        ))}
+                    </div>
+                </div>
+
+
+                <div className="admin-form__group">
                     <label htmlFor="pdfUrl">Lien vers le PDF</label>
                     <input type="text" name="pdfUrl" value={form.pdfUrl} onChange={handleChange} required />
                 </div>
@@ -209,17 +263,29 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                 </div>
 
                 {form.isPrintable && (
-                    <div className="admin-form__group">
-                        <label htmlFor="printPrice">Prix version plastifiée (€)</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            name="printPrice"
-                            value={form.printPrice ?? ""}
-                            onChange={handleChange}
-                        />
-                    </div>
+                    <>
+                        <div className="admin-form__group">
+                            <label htmlFor="printPrice">Prix version plastifiée (€)</label>
+                            <input
+                                type="number"
+                                step="0.01"
+                                name="printPrice"
+                                value={form.printPrice ?? ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="admin-form__group">
+                            <label htmlFor="printUrl">Lien vers Etsy (version plastifiée)</label>
+                            <input
+                                type="text"
+                                name="printUrl"
+                                value={form.printUrl ?? ""}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </>
                 )}
+
 
                 <div className="admin-form__group">
                     <label>

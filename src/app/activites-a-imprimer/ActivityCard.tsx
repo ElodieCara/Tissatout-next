@@ -5,67 +5,58 @@ import Link from "next/link";
 
 interface Props {
     id: string;
+    slug: string;
     title: string;
     ageRange: string;
     imageUrl: string;
     pdfUrl: string;
     pdfPrice?: number;
-    printPrice?: number;
-    isPrintable?: boolean;
-    showPDFButton?: boolean;
-    showPrintButton?: boolean;
     themes?: string[];
     types?: string[];
 }
 
 export default function ActivityCard({
-    id,
+    slug,
     title,
     ageRange,
     imageUrl,
     pdfUrl,
     pdfPrice,
-    printPrice,
     themes,
     types,
-    isPrintable = false,
-    showPDFButton = true,
-    showPrintButton = false,
 }: Props) {
-    const price = showPrintButton && typeof printPrice === "number"
-        ? `${printPrice.toFixed(2)} €`
-        : typeof pdfPrice === "number"
+    const priceLabel =
+        typeof pdfPrice === "number"
             ? pdfPrice === 0
                 ? "Gratuit"
                 : `${pdfPrice.toFixed(2)} €`
-            : null;
+            : "Prix non défini";
 
     return (
         <article className="activity-card">
-            <div className="activity-card__image-wrapper">
-                <Image
-                    src={imageUrl}
-                    alt={title}
-                    width={400}
-                    height={300}
-                    className="activity-card__image"
-                />
-            </div>
+            <Link href={`/activites-a-imprimer/${slug}`} className="activity-card__link">
+                <div className="activity-card__image-wrapper">
+                    <Image
+                        src={imageUrl}
+                        alt={title}
+                        width={400}
+                        height={300}
+                        className="activity-card__image"
+                    />
+                </div>
+            </Link>
 
             <div className="activity-card__content">
-
-                {/* Tag âge tout en haut */}
                 <div className="activity-card__tags activity-card__tags--top">
                     <span className="activity-card__tag activity-card__tag--age">{ageRange}</span>
                 </div>
 
-                <h3 className="activity-card__title">{title}</h3>
+                <Link href={`/activites-a-imprimer/${slug}`}>
+                    <h3 className="activity-card__title">{title}</h3>
+                </Link>
 
-                {price && (
-                    <p className="activity-card__price">{price}</p>
-                )}
+                <p className="activity-card__price">{priceLabel}</p>
 
-                {/* Tags thèmes et types */}
                 {(types?.length || themes?.length) && (
                     <div className="activity-card__tags">
                         {types?.map((type) => (
@@ -77,27 +68,13 @@ export default function ActivityCard({
                     </div>
                 )}
 
-                {/* Boutons CTA */}
                 <div className="activity-card__cta">
-                    {showPDFButton && (
-                        <Link
-                            href={pdfUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="activity-card__btn"
-                        >
-                            {pdfPrice === 0 ? "📄 Télécharger PDF" : "🛒 Acheter sur Etsy"}
-                        </Link>
-                    )}
-
-                    {showPrintButton && isPrintable && (
-                        <Link
-                            href={`/commande/${id}`}
-                            className="activity-card__btn activity-card__btn--alt"
-                        >
-                            📦 Commander plastifiée
-                        </Link>
-                    )}
+                    <Link
+                        href={`/activites-a-imprimer/${slug}`}
+                        className="activity-card__btn"
+                    >
+                        📂 Voir l’activité
+                    </Link>
                 </div>
             </div>
         </article>

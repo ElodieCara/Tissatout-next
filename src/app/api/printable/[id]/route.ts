@@ -8,6 +8,7 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
             include: {
                 themes: { include: { theme: true } },
                 types: { include: { type: true } },
+                extraImages: true,
             },
         });
 
@@ -19,6 +20,7 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
             ...game,
             themeIds: game.themes.map((t) => t.theme?.id).filter(Boolean),
             typeIds: game.types.map((t) => t.type?.id).filter(Boolean),
+            extraImages: game.extraImages.map((img) => img.imageUrl),
         });
     } catch (error) {
         console.error("❌ Erreur dans GET /api/printable/[id] :", error);
@@ -52,6 +54,18 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     // Nettoyer et recréer les relations
     await prisma.gameTheme.deleteMany({ where: { gameId: params.id } });
     await prisma.gameType.deleteMany({ where: { gameId: params.id } });
+    // Supprimer les anciennes images liées
+    await prisma.extraImage.deleteMany({ where: { gameId: params.id } });
+
+    // Recréer les nouvelles
+    if (body.extraImages?.length) {
+        await prisma.extraImage.createMany({
+            data: body.extraImages.map((url: string) => ({
+                gameId: params.id,
+                imageUrl: url,
+            })),
+        });
+    }
 
     if (body.themeIds?.length) {
         await prisma.gameTheme.createMany({

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Drawing } from "@/types/drawing";
 import Banner from "@/components/Banner/Banner";
 import Button from "@/components/Button/Button";
-import Breadcrumb from "@/components/Breadcrumb";
+import Breadcrumb from "../../../components/Breadcrumb/Breadcrumb";
 import DrawingBreadcrumb from "./components/DrawingBreadcrumb/DrawingBreadcrumb";
 
 export default function DrawingPage({ drawing }: { drawing: Drawing }) {
