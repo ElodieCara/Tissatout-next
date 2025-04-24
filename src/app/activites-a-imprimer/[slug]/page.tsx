@@ -94,7 +94,9 @@ export default async function PrintablePage({ params }: Props) {
                                 <>
                                     <div className="product__price">
                                         {printable.pdfPrice === 0 ? (
-                                            <span className="product__price-free">Gratuit <span className="product__price-note">(PDF)</span></span>
+                                            <span className="product__price-free">
+                                                Gratuit <span className="product__price-note">(PDF)</span>
+                                            </span>
                                         ) : (
                                             <>
                                                 <span className="product__price-main">
@@ -103,12 +105,10 @@ export default async function PrintablePage({ params }: Props) {
                                                 <span className="product__price-cents">
                                                     ,{(printable.pdfPrice % 1).toFixed(2).split(".")[1]} €
                                                 </span>
-                                                {/* <span className="product__price-note"> (PDF)</span> */}
+                                                <small className="product__price__tax-note">Prix TTC</small>
                                             </>
                                         )}
                                     </div>
-                                    <small className="product__price__tax-note">Prix TTC</small>
-
 
                                     <div className="product__actions">
                                         <a
@@ -123,6 +123,7 @@ export default async function PrintablePage({ params }: Props) {
                                     </div>
                                 </>
                             )}
+
 
                             {/* Bloc Plastifié */}
                             {typeof printable.printPrice === "number" && printable.printUrl ? (

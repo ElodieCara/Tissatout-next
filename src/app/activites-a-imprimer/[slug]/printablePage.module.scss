@@ -268,7 +268,7 @@
         }
 
         .like-count {
-            margin-left: 0.4rem;
+
             font-size: 1rem;
             font-weight: bold;
             color: #e63946;
@@ -310,6 +310,11 @@
         align-items: flex-start;
         gap: 0.2rem;
 
+        &-free {
+            color: $primary-color;
+            font-size: 1.5rem;
+        }
+
         &-main {
             font-size: 2.2rem;
             line-height: 1;
@@ -330,7 +335,8 @@
         &__tax-note {
             font-size: 0.75rem;
             color: #777;
-            margin-top: -0.2rem;
+            margin-left: 0.2rem;
+            vertical-align: super;
         }
     }
 

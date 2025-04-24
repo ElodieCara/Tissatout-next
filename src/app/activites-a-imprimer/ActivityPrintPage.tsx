@@ -183,6 +183,24 @@ export default function ActivityPrintPage() {
                             </div>
                         </section>
 
+                        <div className="activites__separator">
+                            <span>Ou bien, optez pour la version plastifiée 👇</span>
+                        </div>
+
+                        <section id="section-plastifiees" className="activites__filters-bar">
+                            <div className="activites__header-plast">
+                                <div className="activites__header-texte">
+                                    <h2>📦 Activités plastifiées</h2>
+                                    <p>Plus solides, idéales pour durer dans le temps.</p>
+                                </div>
+                            </div>
+                            <div className="activites__coming-soon">
+                                <p>🟡 Les fiches plastifiées arrivent bientôt !</p>
+                                <p className="activites__note">Encore un peu de patience… elles sont en préparation pour vous garantir la meilleure qualité possible ✨</p>
+                            </div>
+
+                        </section>
+
                         {/* {shouldShowPlastifiedSection && (
                             <>
                                 <div className="activites__separator">

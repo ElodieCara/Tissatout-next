@@ -96,6 +96,19 @@
         }
     }
 
+    &__coming-soon {
+        text-align: center;
+        font-size: 1rem;
+        margin-top: 2rem;
+        color: #2c3f64;
+
+        .activites__note {
+            font-style: italic;
+            color: #888;
+            margin-top: 0.5rem;
+        }
+    }
+
     &__separator {
         margin: 4rem auto 2rem;
         text-align: center;
