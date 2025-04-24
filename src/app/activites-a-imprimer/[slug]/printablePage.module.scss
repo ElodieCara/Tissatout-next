@@ -88,6 +88,7 @@
 
     &__similar {
         margin-top: 4rem;
+        @include container;
 
         h3 {
             font-size: 1.6rem;
@@ -101,6 +102,13 @@
             flex-wrap: wrap;
             list-style: none;
             padding: 0;
+        }
+
+        &-intro {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #444;
+            font-style: italic;
         }
 
         &-card {

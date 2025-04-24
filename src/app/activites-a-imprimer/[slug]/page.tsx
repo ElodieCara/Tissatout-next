@@ -210,6 +210,10 @@ export default async function PrintablePage({ params }: Props) {
 
                 {similar.length > 0 && (
                     <section className="printable__similar">
+                        <p className="printable__similar-intro">
+                            Ces activités pourraient aussi plaire à votre enfant :
+                        </p>
+
                         <h3>🎒 Activités similaires</h3>
                         <ul className="printable__similar-list">
                             {similar.map((s) => (
