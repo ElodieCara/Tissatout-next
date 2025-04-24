@@ -62,10 +62,12 @@
 
     &__tags {
         margin: 2rem 0;
+        color: $primary-color;
 
         h3 {
             font-size: 1.4rem;
             margin-bottom: 0.5rem;
+            margin-top: 2rem;
         }
 
         ul {
@@ -87,7 +89,7 @@
     }
 
     &__similar {
-        margin-top: 4rem;
+        margin-top: 2rem;
         @include container;
 
         h3 {

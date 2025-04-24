@@ -41,7 +41,7 @@ export default async function PrintablePage({ params }: Props) {
 
     return (
         <>
-            <header className="printable-banner">
+            {/* <header className="printable-banner">
                 <div className="printable-banner__container">
                     <div className="printable-banner__image">
                         <Image
@@ -62,7 +62,7 @@ export default async function PrintablePage({ params }: Props) {
                         )}
                     </div>
                 </div>
-            </header>
+            </header> */}
 
             <main className="printable">
                 <div className="printable__container">
@@ -207,13 +207,14 @@ export default async function PrintablePage({ params }: Props) {
                         </section>
                     )}
                 </div>
-
+                <div className="activites__separator">
+                    <span> Et si on prolongeait l’aventure ? 👇</span>
+                </div>
                 {similar.length > 0 && (
                     <section className="printable__similar">
                         <p className="printable__similar-intro">
                             Ces activités pourraient aussi plaire à votre enfant :
                         </p>
-
                         <h3>🎒 Activités similaires</h3>
                         <ul className="printable__similar-list">
                             {similar.map((s) => (
