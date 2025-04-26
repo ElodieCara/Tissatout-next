@@ -9,6 +9,7 @@ import CommentList from "./CommentList";
 import TableOfContents from "./TableOfContents";
 import Breadcrumb from "../../../components/Breadcrumb/Breadcrumb";
 import Button from "@/components/Button/Button";
+import BackToTop from "@/components/BackToTop/BackToTop";
 
 
 type Props = {
@@ -269,6 +270,7 @@ export default async function ArticlePage({ params }: Props) {
                         <CommentList articleId={article.id} />
                     </div>
                 </div>
+                <BackToTop />
             </main >
         </>
     );

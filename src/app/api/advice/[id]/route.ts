@@ -41,7 +41,7 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
         if (!id) return NextResponse.json({ error: "❌ ID manquant." }, { status: 400 });
 
         const body = await req.json();
-        const { title, content, category, description, imageUrl, ageCategories = [] } = body;
+        const { title, content, category, description, imageUrl, ageCategories = [], sections } = body;
 
         if (!title || !content || !category) {
             return NextResponse.json({ error: "❌ Champs obligatoires manquants." }, { status: 400 });
@@ -67,6 +67,14 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
                         ageCategoryId: ageId,
                     })),
                 },
+                sections: {
+                    deleteMany: {},
+                    create: sections.map((section: any) => ({
+                        title: section.title,
+                        content: section.content,
+                        style: section.style || null,
+                    })),
+                }
             },
             include: {
                 ageCategories: {

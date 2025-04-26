@@ -5,8 +5,9 @@ import TableOfContents from "@/components/TableOfContents/TableOfContents";
 import PrintButton from "@/components/PrintButton/PrintButton";
 import CommentList from "@/components/CommentList/CommentList";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
-import Button from "@/components/Button/Button";
+import ReactMarkdown from "react-markdown";
 import ArticleFeedback from "@/app/articles/[slug]/ArticleFeedback";
+import BackToTop from "@/components/BackToTop/BackToTop";
 
 type Props = {
     params: { slug: string };
@@ -15,7 +16,10 @@ type Props = {
 export default async function AdvicePage({ params }: Props) {
     const advice = await prisma.advice.findUnique({
         where: { slug: params.slug },
-        include: { ageCategories: { include: { ageCategory: true } } },
+        include: {
+            ageCategories: { include: { ageCategory: true } },
+            sections: true,
+        },
     });
 
     if (!advice) {
@@ -88,11 +92,25 @@ export default async function AdvicePage({ params }: Props) {
                         <div className="advice__main">
                             <h1 className="advice__title">{advice.title}</h1>
 
-                            <section id="content" className="advice__content">
-                                {advice.content && (
-                                    <div dangerouslySetInnerHTML={{ __html: advice.content }} />
-                                )}
-                            </section>
+                            {/* Intro éventuelle */}
+                            {advice.content && (
+                                <section id="intro" className="advice__content">
+                                    <ReactMarkdown>{advice.content}</ReactMarkdown>
+                                </section>
+                            )}
+
+                            {/* ➡️ Boucle sur toutes les sections */}
+                            {advice.sections?.map((section) => (
+                                <section
+                                    key={section.id}
+                                    id={section.title.replace(/\s+/g, "-").toLowerCase()}
+                                    className={`advice__section ${section.style || "classique"}`}
+                                >
+                                    <h2>{section.title}</h2>
+                                    <ReactMarkdown>{section.content}</ReactMarkdown>
+                                </section>
+                            ))}
+
                         </div>
 
                         {/* 📚 Colonne droite = Sommaire + Pour aller plus loin */}
@@ -120,6 +138,7 @@ export default async function AdvicePage({ params }: Props) {
                     </section>
 
                 </div>
+                <BackToTop />
             </main>
 
         </>

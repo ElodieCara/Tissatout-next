@@ -29,7 +29,7 @@ export async function GET() {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { title, content, category, description, imageUrl, ageCategories } = body;
+        const { title, content, category, description, imageUrl, ageCategories, sections } = body;
 
         if (!title || !content || !category) {
             return NextResponse.json({ error: "❌ Champs obligatoires manquants" }, { status: 400 });
@@ -51,6 +51,13 @@ export async function POST(req: Request) {
                 description,
                 imageUrl: imageUrl || "",
                 slug,
+                sections: {
+                    create: (sections || []).map((section: any) => ({
+                        title: section.title,
+                        content: section.content,
+                        style: section.style || null,
+                    }))
+                },
                 ageCategories: {
                     create: ageCategories?.map((id: string) => ({
                         ageCategoryId: id
