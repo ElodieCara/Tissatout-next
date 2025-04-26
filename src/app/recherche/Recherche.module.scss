@@ -1,0 +1,86 @@
+// src/styles/pages/_search.scss
+
+@use "../../styles/utils/variables" as vars;
+@use "../../styles/base/mixins" as mix;
+
+.search-page {
+    padding: 2rem;
+    @include mix.container;
+    height: 100vh;
+
+    &__title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: vars.$dark-primary-color;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    &__subtitle {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 3rem;
+        text-align: center;
+    }
+
+    &__results {
+        margin-top: 3rem;
+    }
+
+    &__section {
+        margin-bottom: 3rem;
+
+        &-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: vars.$tertiary-color;
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            text-align: left;
+        }
+    }
+
+    &__list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    &__list-item {
+        display: inline-block;
+        color: #293347;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: color .3s;
+
+
+        a,
+        span {
+            display: inline-block;
+            color: vars.$dark-primary-color;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: color 0.3s ease;
+
+            &:hover {
+                color: vars.$secondary-color;
+            }
+        }
+    }
+
+    &__empty {
+        margin-top: 4rem;
+        text-align: center;
+
+        p {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: #666;
+        }
+    }
+}

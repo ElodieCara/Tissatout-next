@@ -67,6 +67,7 @@
 @import "../app/inspiration/components/InspirationAdvice.module.scss";
 @import "../app/inspiration/components/InspirationArticles.module.scss";
 @import "../app/inspiration/components/InspirationIdeas.module.scss";
+@import "../app/conseils/[slug]/Advice.module.scss";
 @import "../app/coloriages/explorer/Explorer.module.scss";
 @import "../app/coloriages/[id]/DrawingPage.module.scss";
 @import "../app/articles/[slug]/Article.module.scss";
@@ -79,3 +80,4 @@
 @import "../app/trivium/TriviumPage.module.scss";
 @import "../app/trivium/[slug]/TriviumCategory.module.scss";
 @import "../app/activites-a-imprimer/[slug]/printablePage.module.scss";
+@import "../app/recherche/Recherche.module.scss";

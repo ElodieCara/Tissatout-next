@@ -9,6 +9,23 @@
     padding: 50px;
     position: relative;
     z-index: 99;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+
+    // Responsive footer mobile
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        padding: 2rem 1rem;
+        text-align: center;
+
+        &__information__navigation {
+            flex-direction: column;
+            gap: 2rem;
+        }
+    }
 
     &__social {
         flex: 1;
@@ -16,7 +33,7 @@
         align-items: center;
         padding: 0;
         margin: 0;
-        gap: 50px;
+        gap: 8%;
     }
 
     &__legacy {
@@ -35,8 +52,9 @@
         &__navigation {
             display: flex;
             flex-direction: row;
-            align-items: center;
+            align-items: stretch;
             justify-content: space-evenly;
+            gap: 5%;
 
             &--liens {
                 list-style-type: none;

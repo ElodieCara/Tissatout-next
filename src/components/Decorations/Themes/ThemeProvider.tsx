@@ -103,7 +103,7 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
 
     return (
         <ThemeContext.Provider value={{ theme: themeToApply, setForceTheme }}>
-            <div style={{ position: "fixed", top: "10px", right: "200px", zIndex: 999 }}>
+            <div style={{ position: "fixed", top: "10px", right: "5px", zIndex: 999 }}>
                 <label htmlFor="theme-selector" style={{ marginRight: "10px", color: "white" }}>
                     Tester les thèmes :
                 </label>

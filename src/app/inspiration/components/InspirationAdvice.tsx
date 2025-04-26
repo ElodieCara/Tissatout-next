@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Advice {
     id: string;
     title: string;
+    slug: string;
     description: string;
     category: string;
     imageUrl?: string;
@@ -16,11 +18,12 @@ const medievalCategories = [
     { key: "eloquence", icon: "🏰", title: "Rhétorique & Expression", description: "Maîtriser l’art du discours et du récit." }
 ];
 
-// ✅ Image par défaut (à mettre dans `public/`)
+// ✅ Image par défaut 
 const defaultImage = "/default.jpg";
 
 export default function InspirationAdvice({ advices }: { advices: Advice[] }) {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
     return (
         <section className="container__advice">
             <h2>📜 Conseils d’Éducation Médiévale</h2>
@@ -53,7 +56,11 @@ export default function InspirationAdvice({ advices }: { advices: Advice[] }) {
                                 const imageUrl = advice.imageUrl && advice.imageUrl.trim() !== "" ? advice.imageUrl : defaultImage;
 
                                 return (
-                                    <div key={advice.id} className="medieval__advice__item">
+                                    <Link
+                                        key={advice.id}
+                                        href={`/conseils/${advice.slug}`}
+                                        className="medieval__advice__item"
+                                    >
                                         <div className="medieval__advice__item-image" style={{ position: "relative", width: "20%", height: "100%" }}>
                                             {imageUrl ? (
                                                 <Image
@@ -74,7 +81,7 @@ export default function InspirationAdvice({ advices }: { advices: Advice[] }) {
                                             <h4>{advice.title}</h4>
                                             <p>{advice.description?.substring(0, 120) || "Description non disponible"}...</p>
                                         </div>
-                                    </div>
+                                    </Link>
                                 );
                             })}
                     </div>

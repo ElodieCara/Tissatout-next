@@ -9,7 +9,7 @@ import CommentList from "./CommentList";
 import TableOfContents from "./TableOfContents";
 import Breadcrumb from "../../../components/Breadcrumb/Breadcrumb";
 import Button from "@/components/Button/Button";
-import AdBanner from "@/components/AdBanner/AdBanner";
+
 
 type Props = {
     params: { slug: string };
@@ -57,7 +57,8 @@ export default async function ArticlePage({ params }: Props) {
 
                     <div className="article-banner__image">
                         <Image
-                            src={article.image || "/images/banniere-generique.jpg"} alt={article.title}
+                            src={article.image || "/images/banniere-generique.jpg"}
+                            alt={article.title}
                             width={400}
                             height={400}
                         />
@@ -154,8 +155,6 @@ export default async function ArticlePage({ params }: Props) {
 
                             <aside className="article__grid-summary">
                                 <TableOfContents sections={article.sections} />
-                                {/* 🔸 Pub AdSense en-dessous du sommaire, mais hors du bloc article__grid */}
-                                <AdBanner className="adsense--top no-print" />
                             </aside>
 
                         </div>

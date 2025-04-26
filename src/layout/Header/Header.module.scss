@@ -6,32 +6,89 @@
     //background-color: vars.$primary-color;
     @include mix.container;
 
+    &__mobile-menu {
+        width: 100%;
+        background-color: #2c3f64;
+        padding: 1.5rem 1rem;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        z-index: 1000;
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            li {
+                text-align: center;
+                border-radius: 0.5rem;
+                padding: 0.8rem;
+                color: white;
+                font-weight: 600;
+                font-size: 1rem;
+
+                // On reprend la même logique cyclique des couleurs :
+                &:nth-child(6n+1) {
+                    background-color: #f9b233;
+                }
+
+                &:nth-child(6n+2) {
+                    background-color: #f27d72;
+                }
+
+                &:nth-child(6n+3) {
+                    background-color: #67c9c4;
+                }
+
+                &:nth-child(6n+4) {
+                    background-color: #5ba585;
+                }
+
+                &:nth-child(6n+5) {
+                    background-color: #c7a269;
+                }
+
+                &:nth-child(6n+6) {
+                    background-color: #f4c048;
+                }
+
+                a {
+                    text-decoration: none;
+                    color: white;
+                    display: block;
+                }
+
+                &:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                }
+            }
+        }
+    }
+
     //  masthead
     &__masthead {
         display: flex;
         flex-direction: column;
-        // background-color: vars.$primary-color;
+        justify-content: center;
         margin-bottom: 30px;
         @include mix.container;
-        height: 80px;
-
-        &__social {
-            display: flex;
-            justify-content: flex-end;
-            gap: 0.5rem;
-            padding: 2px 8px;
-
-            & a {
-                color: white;
-            }
-        }
+        height: 100px;
 
         &__nav-main {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             text-transform: uppercase;
             color: white;
-            height: 45px;
+            height: 50px;
             margin: 0 155px;
             border-radius: 60px;
             background-color: vars.$dark-primary-color;
@@ -39,7 +96,7 @@
 
             &__logo {
                 display: flex;
-                align-items: center;
+                align-items: flex-end;
                 justify-content: center;
                 height: 100px;
                 width: 150px;
@@ -53,40 +110,48 @@
 
             &__input {
                 display: flex;
+                align-items: center;
                 justify-content: flex-end;
-                flex-wrap: wrap;
-                align-items: stretch;
-                //padding-right: 30px;
+                background-color: white;
+                border-radius: 30px;
+                height: 36px;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+                margin-left: auto;
+                margin-right: 10px;
+                gap: 4px;
+                max-width: 280px;
                 width: 100%;
 
-                & input {
-                    display: none;
-
-                    @media (min-width: 1024px) {
-                        display: flex;
-                        border-radius: 5px 0 0 5px;
-                        border: 1px solid #343536;
-                        padding: 5px 10px;
-                        appearance: none;
-                        background-clip: padding-box;
-                        transition: border-color 0.15s ease-in-out,
-                            box-shadow 0.15s ease-in-out;
-                    }
+                input {
+                    border: none;
+                    outline: none;
+                    padding: 8px 12px;
+                    font-size: 0.95rem;
+                    flex: 1;
+                    border-radius: 30px 0 0 30px;
+                    color: #333;
+                    background: transparent;
                 }
 
-                & button {
-                    border: 1px solid #343536;
-                    border-radius: 0 5px 5px 0;
-                    cursor: pointer;
-                    padding: 0.375rem 0.75rem;
+                button {
                     background-color: vars.$tertiary-color;
+                    border: none;
+                    border-radius: 0 30px 30px 0;
+                    padding: 0.5rem 1em;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     color: white;
+                    cursor: pointer;
+                    transition: background-color 0.2s ease;
+
+                    &:hover {
+                        background-color: color.scale(vars.$tertiary-color, $lightness: -10%);
+                    }
                 }
             }
         }
     }
-
-
 
     // Responsiveness
     @media (max-width: 768px) {
@@ -100,4 +165,56 @@
     }
 
 
+}
+
+.header__masthead__nav-main__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 15px;
+}
+
+.header__masthead__nav-main__hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .header__masthead__nav-main__input {
+        background-color: vars.$tertiary-color;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        overflow: hidden;
+        padding: 0;
+
+        input {
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: none;
+            color: white;
+        }
+    }
+
+    .header__masthead__nav-main__hamburger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .header__sub-masthead {
+        display: none;
+
+        &.open {
+            display: block;
+        }
+    }
 }
