@@ -2,10 +2,14 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { slugify } from "@/lib/slugify";
+
+interface Section {
+    title: string;
+    id: string;
+}
 
 interface Props {
-    sections: { title: string }[];
+    sections: Section[];
 }
 
 export default function TableOfContents({ sections }: Props) {
@@ -26,13 +30,12 @@ export default function TableOfContents({ sections }: Props) {
     const tocList = (
         <ul className="toc__list">
             {sections.map((section) => (
-                <li key={section.title} className="toc__item">
+                <li key={section.id} className="toc__item">
                     <Link
-                        href={`#${slugify(section.title)}`}
+                        href={`#${section.id}`}
                         className="toc__link"
                         onClick={() => isMobile && setIsOpen(false)}
                     >
-
                         {section.title}
                     </Link>
                 </li>
@@ -53,10 +56,9 @@ export default function TableOfContents({ sections }: Props) {
                 <div className="toc__desktop">
                     <div className="toc__header">
                         <span className="toc__icon">
-                            <img src="/icons/sommaire.png" alt="" />
+                            <img src="/icons/sommaire.png" alt="Sommaire" />
                         </span>
-                        <h3 className="toc__title"> Sommaire
-                        </h3>
+                        <h3 className="toc__title">Sommaire</h3>
                     </div>
                     {tocList}
                 </div>

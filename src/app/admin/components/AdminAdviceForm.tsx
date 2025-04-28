@@ -11,15 +11,18 @@ interface Section {
     title: string;
     content: string;
     style?: string;
+    imageUrl?: string;
 }
 
 interface Advice {
     id?: string;
     title: string;
     content?: string;
+    author?: string;
     description?: string;
     imageUrl?: string;
     category: string;
+    relatedAdvices?: string[];
     ageCategories?: string[];
     slug?: string;
     sections: Section[];
@@ -32,6 +35,7 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
         description: "",
         category: "",
         imageUrl: "",
+        author: "",
         ageCategories: [],
         sections: [{ title: "", content: "", style: "" }],
     });
@@ -39,6 +43,7 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
     const [message, setMessage] = useState("");
     const router = useRouter();
     const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
+    const [allAdvices, setAllAdvices] = useState<{ id: string; title: string }[]>([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -57,6 +62,24 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
         }
         fetchData();
     }, [adviceId]);
+
+    useEffect(() => {
+        async function fetchAllAdvices() {
+            const res = await fetch("/api/advice");
+            const data = await res.json();
+            setAllAdvices(data);
+        }
+        fetchAllAdvices();
+    }, []);
+
+    const handleRelatedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
+        setForm(prev => ({
+            ...prev,
+            relatedAdvices: selectedOptions,
+        }));
+    };
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -104,6 +127,7 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
                     title: s.title,
                     content: s.content,
                     style: s.style || "classique",
+                    imageUrl: s.imageUrl || "",
                 })),
             }),
         });
@@ -182,10 +206,26 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
                     </div>
                 </div>
 
+                <div className="admin-form__group">
+                    <label>Conseils liés :</label>
+                    <select multiple value={form.relatedAdvices || []} onChange={handleRelatedChange}>
+                        {allAdvices.map(advice => (
+                            <option key={advice.id} value={advice.id}>
+                                {advice.title}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
                 <div className="admin-form__upload">
                     <label>📸 Image</label>
                     <input type="file" accept="image/*" onChange={handleImageUpload} />
                     {form.imageUrl && <img src={form.imageUrl} alt="Aperçu" />}
+                </div>
+
+                <div className="admin-form__group">
+                    <label>Auteur</label>
+                    <input name="author" value={form.author || ""} onChange={handleChange} />
                 </div>
 
                 {/* Gestion des sections */}
@@ -195,11 +235,50 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
                         <div key={index} className="admin-form__section">
                             <input placeholder="Titre de section" value={section.title} onChange={e => updateSection(index, "title", e.target.value)} />
                             <textarea placeholder="Contenu" value={section.content} onChange={e => updateSection(index, "content", e.target.value)} />
+
+                            <div className="admin-form__section-upload">
+                                <label htmlFor={`imageUpload-${index}`}>📸 Ajouter une image pour cette section</label>
+                                <input
+                                    id={`imageUpload-${index}`}
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+
+                                        const formData = new FormData();
+                                        formData.append("file", file);
+
+                                        const res = await fetch("/api/upload", { method: "POST", body: formData });
+                                        const data = await res.json();
+
+                                        if (res.ok) {
+                                            const updated = [...form.sections];
+                                            updated[index].imageUrl = data.imageUrl;
+                                            setForm({ ...form, sections: updated });
+                                        } else {
+                                            alert("❌ Erreur lors de l'upload d'image pour la section.");
+                                        }
+                                    }}
+                                />
+                                {form.sections[index].imageUrl && (
+                                    <div className="admin-form__section-upload-preview">
+                                        <img src={form.sections[index].imageUrl} alt="Aperçu" />
+                                    </div>
+                                )}
+                            </div>
+
                             <select value={section.style || ""} onChange={e => updateSection(index, "style", e.target.value)}>
                                 <option value="">Classique</option>
                                 <option value="highlight">Fond coloré</option>
                                 <option value="icon">Avec icône</option>
                             </select>
+
+
+                            {/* Affichage aperçu image si uploadée */}
+                            {section.imageUrl && (
+                                <img src={section.imageUrl} alt="Aperçu section" className="section-upload-preview" />
+                            )}
                             <button type="button" onClick={() => removeSection(index)}>🗑️ Supprimer</button>
                         </div>
                     ))}

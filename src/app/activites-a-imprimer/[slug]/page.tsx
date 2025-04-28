@@ -6,7 +6,7 @@ import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import PrintableGallery from "./PrintableGallery";
 import LikeButton from "./LikeButton";
-import ShareActions from "./ShareActions";
+import ShareActions from "../../../components/ShareActions/ShareActions";
 
 type Props = {
     params: { slug: string };

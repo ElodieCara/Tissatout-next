@@ -16,6 +16,12 @@ export async function GET(req: Request, context: { params: Promise<{ id: string 
                 ageCategories: {
                     include: { ageCategory: true },
                 },
+                sections: true,
+                relatedFrom: { // ← Ajouter ça
+                    include: {
+                        toAdvice: true,
+                    },
+                },
             },
         });
 
@@ -41,7 +47,7 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
         if (!id) return NextResponse.json({ error: "❌ ID manquant." }, { status: 400 });
 
         const body = await req.json();
-        const { title, content, category, description, imageUrl, ageCategories = [], sections } = body;
+        const { title, content, category, description, imageUrl, ageCategories = [], sections, author } = body;
 
         if (!title || !content || !category) {
             return NextResponse.json({ error: "❌ Champs obligatoires manquants." }, { status: 400 });
@@ -61,8 +67,9 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
                 category,
                 description: description || null,
                 imageUrl: imageUrl || null,
+                author: author || "",
                 ageCategories: {
-                    deleteMany: {}, // 🔄 Réinitialiser les relations
+                    deleteMany: {},
                     create: ageCategoryIds.map((ageId: string) => ({
                         ageCategoryId: ageId,
                     })),
@@ -72,16 +79,24 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
                     create: sections.map((section: any) => ({
                         title: section.title,
                         content: section.content,
-                        style: section.style || null,
+                        style: section.style || "classique",
+                        imageUrl: section.imageUrl || "",
                     })),
-                }
-            },
-            include: {
-                ageCategories: {
-                    include: { ageCategory: true },
+                },
+                relatedFrom: { // 🔥 AJOUTÉ ICI
+                    deleteMany: {},
+                    create: (body.relatedAdvices || []).map((id: string) => ({
+                        toAdviceId: id,
+                    })),
                 },
             },
+            include: {
+                ageCategories: { include: { ageCategory: true } },
+                sections: true,
+                relatedFrom: { include: { toAdvice: true } },
+            },
         });
+
 
         return NextResponse.json({
             ...updatedAdvice,

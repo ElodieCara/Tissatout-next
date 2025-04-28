@@ -10,18 +10,41 @@ import TableOfContents from "./TableOfContents";
 import Breadcrumb from "../../../components/Breadcrumb/Breadcrumb";
 import Button from "@/components/Button/Button";
 import BackToTop from "@/components/BackToTop/BackToTop";
+import ShareActions from "@/components/ShareActions/ShareActions";
 
 
 type Props = {
     params: { slug: string };
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
     const article = await getArticleBySlug(params.slug);
-    if (!article) return { title: "Article introuvable" };
-    return { title: article.title };
-}
 
+    if (!article) {
+        return { title: "Article introuvable", description: "Cet article n'existe pas ou a été supprimé." };
+    }
+
+    const url = `https://www.tonsite.com/articles/${article.slug}`; // 🔥 Ton URL absolue
+    const image = article.image || "https://www.tonsite.com/images/banniere-generique.jpg"; // 🔥 Image par défaut
+
+    return {
+        title: article.title,
+        description: article.description || "Découvre un article inspirant sur Tissatout !",
+        openGraph: {
+            title: article.title,
+            description: article.description || "Découvre un article inspirant sur Tissatout !",
+            url,
+            images: [{ url: image }],
+            type: "article",
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: article.title,
+            description: article.description || "Découvre un article inspirant sur Tissatout !",
+            images: [image],
+        },
+    };
+}
 export default async function ArticlePage({ params }: Props) {
     const article = await getArticleBySlug(params.slug);
     if (!article) return notFound();
@@ -103,9 +126,10 @@ export default async function ArticlePage({ params }: Props) {
                     </div>
                     <header className="article__header">
                         <div className="article__top">
-                            <a href="/inspiration" className="article__back-button">
-                                ← Voir tous les articles
-                            </a>
+
+                            <div className="advice__share">
+                                <ShareActions imageUrl={article.image || ""} title={article.title} />
+                            </div>
 
                             {article.ageCategories?.length > 0 && (
                                 <div className="article__badges">
@@ -200,21 +224,21 @@ export default async function ArticlePage({ params }: Props) {
                                     </div>
 
                                     {/* Lien d'impression uniquement pour "highlight" */}
-                                    {section.normalizedStyle === "highlight" && article.printableGame && (
+                                    {section.normalizedStyle === "highlight" && article.printableGame.length > 0 && (
                                         <div className="article__print-link-wrapper no-print">
                                             <a
-                                                href={article.printableGame.pdfUrl}
+                                                href={article.printableGame[0].pdfUrl}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="article__print-link"
                                             >
-                                                📄 Imprimer les supports ({article.printableGame.pdfPrice ?? "gratuit"} €)
+                                                📄 Imprimer les supports ({article.printableGame[0].pdfPrice ?? "gratuit"} €)
                                             </a>
 
-                                            {article.printableGame.imageUrl && (
+                                            {article.printableGame[0].imageUrl && (
                                                 <img
-                                                    src={article.printableGame.imageUrl}
-                                                    alt={`Aperçu de ${article.printableGame.title}`}
+                                                    src={article.printableGame[0].imageUrl}
+                                                    alt={`Aperçu de ${article.printableGame[0].title}`}
                                                     className="article__print-preview"
                                                 />
                                             )}

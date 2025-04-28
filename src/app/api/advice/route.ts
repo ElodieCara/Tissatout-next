@@ -6,17 +6,14 @@ import { generateSlug } from "@/lib/utils";
 export async function GET() {
     try {
         const advices = await prisma.advice.findMany({
-            select: {
-                id: true,
-                title: true,
-                content: true,
-                description: true,
-                category: true,
-                createdAt: true,
-                imageUrl: true,
-                slug: true,
-            },
             orderBy: { createdAt: "desc" },
+            include: {
+                relatedFrom: {
+                    include: {
+                        toAdvice: true,
+                    },
+                },
+            },
         });
 
         return NextResponse.json(advices);
@@ -29,7 +26,7 @@ export async function GET() {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { title, content, category, description, imageUrl, ageCategories, sections } = body;
+        const { title, content, category, description, imageUrl, ageCategories, sections, author, relatedAdvices } = body; // 🛠 lié ajouté ici
 
         if (!title || !content || !category) {
             return NextResponse.json({ error: "❌ Champs obligatoires manquants" }, { status: 400 });
@@ -49,23 +46,29 @@ export async function POST(req: Request) {
                 content,
                 category,
                 description,
+                author: author || "",
                 imageUrl: imageUrl || "",
                 slug,
                 sections: {
-                    create: (sections || []).map((section: any) => ({
+                    create: sections?.map((section: any) => ({
                         title: section.title,
                         content: section.content,
-                        style: section.style || null,
-                    }))
+                        style: section.style || "classique",
+                        imageUrl: section.imageUrl || "",
+                    })) || [],
                 },
                 ageCategories: {
                     create: ageCategories?.map((id: string) => ({
                         ageCategoryId: id
                     })) || [],
+                },
+                relatedFrom: { // 🛠 lié ajouté ici
+                    create: relatedAdvices?.map((id: string) => ({
+                        toAdviceId: id,
+                    })) || [],
                 }
             },
         });
-
 
         return NextResponse.json(newAdvice, { status: 201 });
     } catch (error) {

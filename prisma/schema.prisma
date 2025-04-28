@@ -142,8 +142,17 @@ model AdviceSection {
   title    String
   content  String
   style    String?
+  imageUrl String?
   advice   Advice  @relation(fields: [adviceId], references: [id], onDelete: Cascade)
   adviceId String  @db.ObjectId
+}
+
+model RelatedAdvice {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  fromAdvice   Advice @relation("FromAdvice", fields: [fromAdviceId], references: [id])
+  fromAdviceId String @db.ObjectId
+  toAdvice     Advice @relation("ToAdvice", fields: [toAdviceId], references: [id])
+  toAdviceId   String @db.ObjectId
 }
 
 model Advice {
@@ -154,6 +163,7 @@ model Advice {
   content     String?
   category    String
   imageUrl    String?
+  author      String?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
   sections    AdviceSection[]
@@ -161,6 +171,8 @@ model Advice {
 
   // ✅ Relation Many-to-Many gérée par un modèle pivot
   ageCategories AgeCategoryAdvice[]
+  relatedFrom   RelatedAdvice[]     @relation("FromAdvice")
+  relatedTo     RelatedAdvice[]     @relation("ToAdvice")
 }
 
 model User {

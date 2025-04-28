@@ -44,7 +44,7 @@ export default function PrivacyPolicyPage() {
                 <li>🗑️ Droit à l'effacement</li>
             </ul>
             <p>
-                Pour exercer vos droits, vous pouvez nous contacter à cette adresse : <strong>contact@tissatout.com</strong>
+                Pour exercer vos droits, vous pouvez nous contacter à cette adresse : <strong>contact@tissatout.fr</strong>
             </p>
 
             <h2>5. Aucune utilisation commerciale</h2>
