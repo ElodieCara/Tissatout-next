@@ -7,7 +7,11 @@ import Link from "next/link";
 import { FaMagnifyingGlass, FaBars } from "react-icons/fa6";
 import Navbar from "@/components/Navbar/Navbar";
 
-const Header: React.FC = () => {
+type HeaderProps = {
+    onSidebarToggle?: () => void;
+};
+
+const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
     const [search, setSearch] = useState("");
     const [menuOpen, setMenuOpen] = useState(false);
     const router = useRouter();
@@ -62,7 +66,7 @@ const Header: React.FC = () => {
                         {/* Bouton Hamburger */}
                         <button
                             className="header__masthead__nav-main__hamburger"
-                            onClick={toggleMenu}
+                            onClick={onSidebarToggle || toggleMenu} // ✅ Ici on utilise la prop si dispo
                             aria-label="Ouvrir/fermer le menu"
                         >
                             <FaBars size={24} />

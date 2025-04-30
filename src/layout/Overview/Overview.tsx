@@ -5,9 +5,13 @@ import ThemeIcon from "@/components/Decorations/Themes/ThemeIcon";
 import { useTheme } from "@/components/Decorations/Themes/ThemeProvider";
 import Image from "next/image";
 import Button from "@/components/Button/Button";
+import { Link } from "lucide-react";
+import SidebarAgeMobile from "@/components/SidebarAgeMobile/SidebarAgeMobile";
+import AgeOverviewPanel from "./AgeOverviewPanel";
 
 interface AgeCategory {
     id: string;
+    slug: string;
     title: string;
     description: string;
     imageCard: string;
@@ -21,7 +25,9 @@ interface AgeCategory {
 const Overview: React.FC = () => {
     const [ageCategories, setAgeCategories] = useState<AgeCategory[]>([]);
     const [activeCategory, setActiveCategory] = useState<AgeCategory | null>(null);
+    const [mobileOpen, setMobileOpen] = useState(false);
     const { theme } = useTheme();
+    const [isAgeSidebarOpen, setIsAgeSidebarOpen] = useState(false);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -30,18 +36,60 @@ const Overview: React.FC = () => {
             setAgeCategories(data);
             setActiveCategory(data[0]);
         };
-
         fetchCategories();
     }, []);
 
     const handleSidebarClick = (category: AgeCategory) => {
         setActiveCategory(category);
+        setMobileOpen(false);
     };
 
     if (!activeCategory) return null;
 
     return (
         <div className="container__section" style={{ position: "relative" }} key={theme}>
+            {/* Sidebar Mobile Button */}
+            {/* <div className="mobile-topbar">
+                <button className="mobile-topbar__button" onClick={() => setMobileOpen(true)}>
+                    Ouvrir les catégories
+                </button>
+                <SidebarAgeMobile isOpen={isAgeSidebarOpen} onClose={() => setIsAgeSidebarOpen(false)} />
+            </div> */}
+
+            {/* Mobile Sidebar Overlay */}
+            {/* {mobileOpen && (
+                <div className="mobile-sidebar__overlay" onClick={() => setMobileOpen(false)}>
+                    <div className="mobile-sidebar" onClick={(e) => e.stopPropagation()}>
+                        <button className="close-button" onClick={() => setMobileOpen(false)}>✖️</button>
+                        <h2>Catégories d'âge</h2>
+                        {ageCategories.map((category) => (
+                            <div key={category.id} className="mobile-sidebar__link" onClick={() => handleSidebarClick(category)}>
+                                {category.title}
+                            </div>
+                        ))}
+                        <h2>Inspiration</h2>
+                        <Link className="mobile-sidebar__link" href="/conseils">Conseils</Link>
+                        <Link className="mobile-sidebar__link" href="/idees">Idées</Link>
+                        <Link className="mobile-sidebar__link" href="/articles">Articles</Link>
+                    </div>
+                </div>
+            )} */}
+
+            {/* Sidebar Mobile Button */}
+            <div className="mobile-topbar">
+                <button className="mobile-topbar__button" onClick={() => setIsAgeSidebarOpen(true)}>
+                    Ouvrir les catégories
+                </button>
+            </div>
+
+            {/* SidebarAgeMobile Slide-in */}
+            <SidebarAgeMobile
+                isOpen={isAgeSidebarOpen}
+                onClose={() => setIsAgeSidebarOpen(false)}
+            />
+
+
+            {/* Desktop Sidebar */}
             <div className="container__section__card-1">
                 <ul className="container__section__card-1__sidebar">
                     {ageCategories.map((category, index) => (
@@ -67,24 +115,28 @@ const Overview: React.FC = () => {
                 </ul>
             </div>
 
+            {/* Content Panel */}
             <div className="container__section__card-2">
                 <ThemeIcon theme={theme} />
+
+
                 <div className="container__section__card-2__content-panel">
                     <div className="container__section__card-2__content-panel__tag"></div>
 
                     <div className="container__section__card-2__content-panel__text">
                         <h3>{activeCategory?.title ?? "Titre indisponible"}</h3>
 
-                        <Button
+                        {/* <Button
                             className="activities-button yellow-button"
                             href={`/nos-univers/${encodeURIComponent(activeCategory?.title || "")}`}
                         >
                             Explorer
-                        </Button>
+                        </Button> */}
 
                         <p className="description">{activeCategory?.description ?? "Description non disponible."}</p>
-
-                        {Array.isArray(activeCategory?.activities) && activeCategory.activities.length > 0 ? (
+                        <p className="content">{activeCategory?.content ?? "Description non disponible."}</p>
+                        <AgeOverviewPanel category={activeCategory} />
+                        {/* {Array.isArray(activeCategory?.activities) && activeCategory.activities.length > 0 ? (
                             <ul className="activities-list">
                                 {activeCategory.activities.map((activity, index) => (
                                     <li key={index} className="activities-list__item">
@@ -100,7 +152,7 @@ const Overview: React.FC = () => {
                                     </li>
                                 ))}
                             </ul>
-                        ) : null}
+                        ) : null} */}
                         {activeCategory?.conclusion && (
                             <p className="conclusion">{activeCategory.conclusion}</p>
                         )}

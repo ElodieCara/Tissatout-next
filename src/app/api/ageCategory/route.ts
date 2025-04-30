@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
+import { ObjectId } from "mongodb";
 
 export async function GET() {
     try {
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
 
+        // 1. Création de la catégorie sans les tags (d’abord)
         const newCategory = await prisma.ageCategory.create({
             data: {
                 title: body.title,
@@ -39,19 +41,49 @@ export async function POST(req: NextRequest) {
                 content: body.content ?? "",
                 conclusion: body.conclusion ?? "",
                 activityList: body.activityList ?? [],
-                tags: {
-                    connectOrCreate: body.tags?.map((tag: any) => ({
+            },
+        });
+
+        const ageCategoryId = new ObjectId(newCategory.id);
+
+        // 2. Gestion des tags s’il y en a
+        const rawTags = body.tags ?? [];
+
+        const tagOperations = await Promise.all(
+            rawTags
+                .filter((tag: any) => tag.label && tag.color)
+                .map(async (tag: any) => {
+                    const upserted = await prisma.tag.upsert({
                         where: {
-                            label: tag.label,
-                            color: tag.color,
+                            label_color: {
+                                label: tag.label,
+                                color: tag.color,
+                            },
                         },
+                        update: {},
                         create: {
                             label: tag.label,
                             color: tag.color,
                         },
-                    })) ?? [],
-                },
-            },
+                    });
+
+                    return {
+                        tagId: new ObjectId(upserted.id),
+                        ageCategoryId,
+                    };
+                })
+        );
+
+        if (tagOperations.length > 0) {
+            await prisma.ageCategoryTag.createMany({
+                data: tagOperations,
+                skipDuplicates: true,
+            } as any);
+        }
+
+        // 3. Récupération finale avec les tags
+        const withTags = await prisma.ageCategory.findUnique({
+            where: { id: newCategory.id },
             include: {
                 tags: {
                     include: {
@@ -62,8 +94,8 @@ export async function POST(req: NextRequest) {
         });
 
         const formatted = {
-            ...newCategory,
-            tags: newCategory.tags.map((pivot: any) => pivot.tag),
+            ...withTags,
+            tags: withTags?.tags.map((pivot: any) => pivot.tag) ?? [],
         };
 
         return NextResponse.json(formatted, { status: 201 });

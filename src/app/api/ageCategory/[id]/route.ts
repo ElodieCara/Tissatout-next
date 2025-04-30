@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { ObjectId } from "mongodb";
 
 // 🟢 GET : récupérer une catégorie par ID
 export async function GET(
@@ -48,7 +49,7 @@ export async function PUT(
     try {
         const body = await req.json();
 
-        // 1. Supprimer les anciens pivots (clean total)
+        // 1. Supprimer les anciens pivots
         await prisma.ageCategoryTag.deleteMany({
             where: { ageCategoryId: id },
         });
@@ -73,16 +74,19 @@ export async function PUT(
                     });
 
                     return {
-                        tagId: upserted.id,
-                        ageCategoryId: id,
+                        tagId: new ObjectId(upserted.id),
+                        ageCategoryId: new ObjectId(id),
                     };
                 })
         );
 
-        // 3. Réinsertion dans le pivot
-        await prisma.ageCategoryTag.createMany({
-            data: tagOperations,
-        });
+        // 3. Réinsertion dans le pivot uniquement si nécessaire
+        if (tagOperations.length > 0) {
+            await prisma.ageCategoryTag.createMany({
+                data: tagOperations,
+                skipDuplicates: true,
+            } as any);
+        }
 
         // 4. Mise à jour de la catégorie
         const updated = await prisma.ageCategory.update({
@@ -100,7 +104,7 @@ export async function PUT(
             include: {
                 tags: {
                     include: {
-                        tag: true,
+                        tag: true as const,
                     },
                 },
             },
@@ -115,7 +119,6 @@ export async function PUT(
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
-
 
 
 // 🔴 DELETE : supprimer une catégorie
