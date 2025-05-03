@@ -44,6 +44,7 @@ export default function AdminLessonForm({ lessonId }: Props) {
     const [collections, setCollections] = useState<{ id: string; title: string; module: "trivium" | "quadrivium" }[]>([]);
     const [showAddCollection, setShowAddCollection] = useState(false);
     const [newCollectionTitle, setNewCollectionTitle] = useState("");
+    const [ageSlugs, setAgeSlugs] = useState<{ slug: string; title: string }[]>([]);
     const categoryOptions = form.module === "quadrivium"
         ? ["Arithmétique", "Géométrie", "Musique", "Astronomie"]
         : ["Grammaire", "Logique", "Rhétorique"];
@@ -135,6 +136,20 @@ export default function AdminLessonForm({ lessonId }: Props) {
             .then((res) => res.json())
             .then((data) => setCollections(data))
             .catch((err) => console.error("Erreur de chargement des collections:", err));
+    }, []);
+
+    useEffect(() => {
+        fetch("/api/ageCategory")
+            .then((res) => res.json())
+            .then((data) => {
+                // Tu peux filtrer ou mapper ici si tu veux uniquement les champs utiles
+                const mapped = data.map((cat: any) => ({
+                    slug: cat.slug,
+                    title: cat.title
+                }));
+                setAgeSlugs(mapped);
+            })
+            .catch((err) => console.error("Erreur de chargement des tranches d'âge :", err));
     }, []);
 
     // 🔹 Slug auto uniquement si nouvelle leçon
@@ -366,13 +381,9 @@ export default function AdminLessonForm({ lessonId }: Props) {
                     <label htmlFor="ageTag">Tranche d’âge</label>
                     <select id="ageTag" name="ageTag" value={form.ageTag || ""} onChange={handleChange}>
                         <option value="">—</option>
-                        <option value="3 ans et +">3 ans et +</option>
-                        <option value="5 ans et +">5 ans et +</option>
-                        <option value="6 ans et +">6 ans et +</option>
-                        <option value="7 ans et +">7 ans et +</option>
-                        <option value="8 ans et +">8 ans et +</option>
-                        <option value="9 ans et +">9 ans et +</option>
-                        <option value="10 ans et +">10 ans et +</option>
+                        {ageSlugs.map(({ slug, title }) => (
+                            <option key={slug} value={slug}>{title}</option>
+                        ))}
                     </select>
                 </div>
 

@@ -35,6 +35,10 @@ const AgeOverviewPanel: React.FC<AgeOverviewPanelProps> = ({ category }) => {
                     📰 Articles
                 </a>
 
+                <a href={`/contenus/${slug}/conseils`} className="age-panel__link age-panel__link--conseils">
+                    🧸 Conseils
+                </a>
+
                 <a href={`/contenus/${slug}/idees`} className="age-panel__link age-panel__link--idees">
                     🎨 Idées créatives
                 </a>

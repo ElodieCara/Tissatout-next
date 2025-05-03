@@ -25,7 +25,7 @@ export default function ContentList({ items, type, title }: ContentListProps) {
 
     const titleMap: Record<string, string> = {
         articles: "📚 Articles",
-        conseils: "🧸 Conseils pour les parents",
+        conseils: "🧸 Conseils",
         idees: "💡 Idées créatives",
         trivium: "📘 Activités Trivium",
         quadrivium: "📗 Activités Quadrivium",

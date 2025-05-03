@@ -13,6 +13,7 @@ interface PageProps {
 
 const bannerImages: Record<string, string> = {
     articles: "/banners/banner-articles.png",
+    conseils: "/banners/banner-conseils.png",
     idees: "/banners/banner-idees.png",
     trivium: "/banners/banner-trivium.png",
     quadrivium: "/banners/banner-quadrivium.png",
@@ -20,6 +21,7 @@ const bannerImages: Record<string, string> = {
 
 const titleMap: Record<string, string> = {
     articles: "📚 Articles pour les petits curieux",
+    conseils: "🧸 Conseils pour les aider à rêver",
     idees: "🎨 Activités et idées créatives",
     trivium: "📘 Activités Trivium",
     quadrivium: "📗 Activités Quadrivium",
@@ -41,6 +43,7 @@ export default async function ContentByAgePage(props: PageProps) {
 
     const descriptionMap: Record<string, string> = {
         articles: `Des articles adaptés à l'âge de ${ageCategory.title} pour nourrir la curiosité.`,
+        conseils: "Des pistes tendres et concrètes pour soutenir les enfants de ${ageCategory.title} dans leur monde en construction.",
         idees: `Des idées ludiques et éducatives pour éveiller la créativité des enfants de ${ageCategory.title}.`,
         trivium: `Grammaire, logique et rhétorique dès ${ageCategory.title} ? C’est possible avec des activités amusantes.`,
         quadrivium: `Mathématiques, musique, astronomie et géométrie adaptées aux ${ageCategory.title}.`,
