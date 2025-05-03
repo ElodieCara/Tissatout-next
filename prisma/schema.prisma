@@ -296,7 +296,7 @@ model SiteSettings {
   // Actualités
   newsBanner String?
   newsTitle  String?
-  newsDesc   String?
+  newsDesc   String? 
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

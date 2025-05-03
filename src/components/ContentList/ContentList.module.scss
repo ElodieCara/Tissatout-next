@@ -1,0 +1,70 @@
+.content-list {
+    padding: 2rem;
+    @include container;
+
+    &__header {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: $primary-color;
+    }
+
+    &__title {
+        font-size: 2.2rem;
+        font-weight: bold;
+        margin-bottom: 2rem;
+        text-align: center;
+        color: $primary-color;
+    }
+
+    &__grid {
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    &__card {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+        }
+    }
+
+    &__image-wrapper {
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+
+        img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    }
+
+    &__info {
+        padding: 1.2rem 1.5rem;
+    }
+
+    &__card-title {
+        font-size: 1.4rem;
+        margin-bottom: 0.8rem;
+        color: #2c3f64; // ta couleur bleu secondaire
+    }
+
+    &__description {
+        font-size: 1rem;
+        color: #444;
+        line-height: 1.4;
+    }
+}

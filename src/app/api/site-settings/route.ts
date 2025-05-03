@@ -43,6 +43,9 @@ export async function GET() {
                     newsBanner: "",
                     newsTitle: "",
                     newsDesc: "",
+                    contenusBanner: "",
+                    contenusTitle: "",
+                    contenusDesc: "",
                 },
             });
         }

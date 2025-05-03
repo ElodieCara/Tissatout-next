@@ -2,7 +2,8 @@ import AgePage from "./AgePage";
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
-export default async function Page({ params: { slug } }: { params: { slug: string } }) {
+export default async function Page({ params }: { params: { slug: string } }) {
+    const slug = params.slug;
     const ageCategory = await prisma.ageCategory.findUnique({
         where: { slug },
         include: {

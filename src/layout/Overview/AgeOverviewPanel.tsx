@@ -24,22 +24,26 @@ const AgeOverviewPanel: React.FC<AgeOverviewPanelProps> = ({ category }) => {
             <p className="age-panel__description">{description}</p> */}
 
             <div className="age-panel__links">
-                <a href={`/trivium/${slug}`} className="age-panel__link age-panel__link--trivium">
-                    📘 Activités Trivium
+                <a
+                    href={`/contenus/${slug}/${title.includes("10") ? "quadrivium" : "trivium"}`}
+                    className="age-panel__link age-panel__link--trivium"
+                >
+                    📘 Activités {title.includes("10") ? "Quadrivium" : "Trivium"}
                 </a>
-                <a href={`/articles?age=${slug}`} className="age-panel__link age-panel__link--articles">
+
+                <a href={`/contenus/${slug}/articles`} className="age-panel__link age-panel__link--articles">
                     📰 Articles
                 </a>
-                {/* <a href={`/conseils?age=${slug}`} className="age-panel__link age-panel__link--conseils">
-                    💡 Conseils
-                </a> */}
-                <a href={`/idees?age=${slug}`} className="age-panel__link age-panel__link--idees">
+
+                <a href={`/contenus/${slug}/idees`} className="age-panel__link age-panel__link--idees">
                     🎨 Idées créatives
                 </a>
-                <a href={`/coloriages?age=${slug}`} className="age-panel__link age-panel__link--coloriages">
+
+                <a href={`/contenus/${slug}/coloriages`} className="age-panel__link age-panel__link--coloriages">
                     🖍️ Coloriages
                 </a>
             </div>
+
 
             {/* {imageCard && (
                 <div className="age-panel__image">

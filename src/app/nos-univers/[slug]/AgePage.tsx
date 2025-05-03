@@ -18,9 +18,11 @@ function formatDate(date: string | Date) {
 
 
 export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: any, agePageBanner: string }) {
-
     const ageKey = ageCategory.title.toLowerCase();
     const description = drawingDescriptions[ageKey];
+    console.log("Advices:", ageCategory.advices);
+    console.log("Ideas:", ageCategory.ideas);
+
 
     return (
         <div>
@@ -59,7 +61,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
             <section className="articles">
                 <div className="articles__header">
                     <h2>📚 Articles pour {ageCategory.title}</h2>
-                    <Button className="large"><Link href="/articles" className="articles__link-button">Voir tous les articles</Link></Button>
+                    <Button className="large"><Link href={`/contenus/${ageCategory.slug}/articles`} className="articles__link-button">Voir tous les articles</Link></Button>
                 </div>
 
                 <div className="articles__grid">
@@ -93,7 +95,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
             <section className="advices">
                 <div className="advices__header">
                     <h2>🧸 Conseils pour {ageCategory.title.toLowerCase()}</h2>
-                    <Button className="large"><Link href="/conseils" className="advices__link-button">Voir tous les conseils</Link></Button>
+                    <Button className="large"><Link href={`/contenus/${ageCategory.slug}/conseils`} className="advices__link-button">Voir tous les conseils</Link></Button>
                 </div>
 
                 <div className="advices__grid">
@@ -118,21 +120,24 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
 
                             {/* Les 3 suivants à droite */}
                             <div className="advices__side-list">
-                                {ageCategory.advices.slice(1, 5).map(({ advice }: { advice: Advice }) => (
-                                    <Link key={advice.id} href={`/conseils/${advice.slug}`} className="advices__mini-card">
-                                        <Image
-                                            src={advice.imageUrl || "/images/default-advice.jpg"}
-                                            alt={advice.title}
-                                            width={100}
-                                            height={100}
-                                        />
-                                        <div className="advices__mini-card__info">
-                                            <p>By Tissatout</p>
-                                            <h4>{advice.title}</h4>
-                                            <span className="advices__date">{formatDate(advice.createdAt)}</span>
-                                        </div>
-                                    </Link>
-                                ))}
+                                {ageCategory.advices
+                                    .filter((a: any) => a?.advice) // sécurité
+                                    .slice(1, 5)
+                                    .map(({ advice }: { advice: Advice }) => (
+                                        <Link key={advice.id} href={`/conseils/${advice.slug}`} className="advices__mini-card">
+                                            <Image
+                                                src={advice.imageUrl || "/images/default-advice.jpg"}
+                                                alt={advice.title}
+                                                width={100}
+                                                height={100}
+                                            />
+                                            <div className="advices__mini-card__info">
+                                                <p>By Tissatout</p>
+                                                <h4>{advice.title}</h4>
+                                                <span className="advices__date">{formatDate(advice.createdAt)}</span>
+                                            </div>
+                                        </Link>
+                                    ))}
                             </div>
                         </>
                     ) : (
@@ -203,12 +208,13 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
             <section className="ideas">
                 <div className="ideas__header">
                     <h2>💡 Idées d’activités pour {ageCategory.title}</h2>
-                    <Button className="large"><Link href="/idées">Voir toutes les idées</Link></Button>
+                    <Button className="large"><Link href={`/contenus/${ageCategory.slug}/idees`}>Voir toutes les idées</Link></Button>
                 </div>
 
                 <div className="ideas__grid">
                     {ageCategory.ideas?.length > 0 ? (
                         ageCategory.ideas
+                            .filter((i: any) => i?.idea)
                             .slice(0, 6)
                             .map(({ idea }: { idea: Idea }) => {
                                 // Utilisation d'une clé correcte pour accéder au thème et d'une valeur par défaut si l'icône n'existe pas
@@ -254,8 +260,6 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                     )}
                 </div>
             </section>
-
-
         </div>
     );
 }

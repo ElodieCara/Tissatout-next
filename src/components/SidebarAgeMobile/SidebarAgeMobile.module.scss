@@ -134,6 +134,7 @@
 
         &:hover {
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); // 🟡 plus marqué au survol
+            transform: translateY(-2px);
         }
 
         &--0 {
@@ -225,7 +226,7 @@
 
             &__links {
                 bottom: -41px !important;
-                padding: 0 !important;
+                padding: 10px !important;
             }
 
             &__link {
