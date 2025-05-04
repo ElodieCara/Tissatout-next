@@ -224,13 +224,13 @@
 }
 
 .mobile-topbar__button {
-    background-color: #f9b233;
+    background-color: vars.$secondary-color;
     color: #2c3f64;
     font-weight: bold;
     font-size: 1rem;
     padding: 0.6rem 1.5rem;
     border: none;
-    border-radius: 999px;
+    border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: all 0.3s ease;
@@ -240,6 +240,10 @@
         background-color: darken(#f9b233, 5%);
         transform: translateY(-2px);
         box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    & span {
+        padding-left: 15px;
     }
 }
 

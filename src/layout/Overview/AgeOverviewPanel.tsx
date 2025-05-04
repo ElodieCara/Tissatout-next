@@ -19,10 +19,6 @@ const AgeOverviewPanel: React.FC<AgeOverviewPanelProps> = ({ category }) => {
 
     return (
         <div className="age-panel">
-            {/* <h3 className="age-panel__title">{title}</h3>
-
-            <p className="age-panel__description">{description}</p> */}
-
             <div className="age-panel__links">
                 <a
                     href={`/contenus/${slug}/${title.includes("10") ? "quadrivium" : "trivium"}`}
@@ -47,19 +43,6 @@ const AgeOverviewPanel: React.FC<AgeOverviewPanelProps> = ({ category }) => {
                     🖍️ Coloriages
                 </a>
             </div>
-
-
-            {/* {imageCard && (
-                <div className="age-panel__image">
-                    <Image
-                        src={imageCard}
-                        alt={`Image de ${title}`}
-                        fill
-                        quality={100}
-                        style={{ objectFit: "contain" }}
-                    />
-                </div>
-            )} */}
         </div>
     );
 };

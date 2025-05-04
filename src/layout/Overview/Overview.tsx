@@ -49,36 +49,10 @@ const Overview: React.FC = () => {
     return (
         <div className="container__section" style={{ position: "relative" }} key={theme}>
             {/* Sidebar Mobile Button */}
-            {/* <div className="mobile-topbar">
-                <button className="mobile-topbar__button" onClick={() => setMobileOpen(true)}>
-                    Ouvrir les catégories
-                </button>
-                <SidebarAgeMobile isOpen={isAgeSidebarOpen} onClose={() => setIsAgeSidebarOpen(false)} />
-            </div> */}
-
-            {/* Mobile Sidebar Overlay */}
-            {/* {mobileOpen && (
-                <div className="mobile-sidebar__overlay" onClick={() => setMobileOpen(false)}>
-                    <div className="mobile-sidebar" onClick={(e) => e.stopPropagation()}>
-                        <button className="close-button" onClick={() => setMobileOpen(false)}>✖️</button>
-                        <h2>Catégories d'âge</h2>
-                        {ageCategories.map((category) => (
-                            <div key={category.id} className="mobile-sidebar__link" onClick={() => handleSidebarClick(category)}>
-                                {category.title}
-                            </div>
-                        ))}
-                        <h2>Inspiration</h2>
-                        <Link className="mobile-sidebar__link" href="/conseils">Conseils</Link>
-                        <Link className="mobile-sidebar__link" href="/idees">Idées</Link>
-                        <Link className="mobile-sidebar__link" href="/articles">Articles</Link>
-                    </div>
-                </div>
-            )} */}
-
-            {/* Sidebar Mobile Button */}
             <div className="mobile-topbar">
                 <button className="mobile-topbar__button" onClick={() => setIsAgeSidebarOpen(true)}>
-                    Ouvrir les catégories
+                    Ouvrir les catégories<span className="icon">⋮</span>
+
                 </button>
             </div>
 
@@ -125,34 +99,9 @@ const Overview: React.FC = () => {
 
                     <div className="container__section__card-2__content-panel__text">
                         <h3>{activeCategory?.title ?? "Titre indisponible"}</h3>
-
-                        {/* <Button
-                            className="activities-button yellow-button"
-                            href={`/nos-univers/${encodeURIComponent(activeCategory?.title || "")}`}
-                        >
-                            Explorer
-                        </Button> */}
-
                         <p className="description">{activeCategory?.description ?? "Description non disponible."}</p>
                         <p className="content">{activeCategory?.content ?? "Description non disponible."}</p>
                         <AgeOverviewPanel category={activeCategory} />
-                        {/* {Array.isArray(activeCategory?.activities) && activeCategory.activities.length > 0 ? (
-                            <ul className="activities-list">
-                                {activeCategory.activities.map((activity, index) => (
-                                    <li key={index} className="activities-list__item">
-                                        <span>{activity}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : Array.isArray(activeCategory?.activityList) && activeCategory.activityList.length > 0 ? (
-                            <ul className="activities-list">
-                                {activeCategory.activityList.map((activity: string, index: number) => (
-                                    <li key={index} className="activities-list__item">
-                                        <span>{activity}</span>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : null} */}
                         {activeCategory?.conclusion && (
                             <p className="conclusion">{activeCategory.conclusion}</p>
                         )}

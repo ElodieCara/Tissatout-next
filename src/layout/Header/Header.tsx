@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import Navbar from "@/components/Navbar/Navbar";
 
 type HeaderProps = {
     onSidebarToggle?: () => void;
+    setMenuOpen: (open: boolean) => void;
 };
 
 const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
@@ -27,6 +28,18 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
             setSearch("");
         }
     };
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 768) {
+                setMenuOpen(false); // ferme le menu mobile automatiquement
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
 
     return (
         <header>
@@ -76,7 +89,7 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
             </div>
 
             {/* Nav */}
-            <Navbar menuOpen={menuOpen} />
+            <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
         </header>
     );
 };

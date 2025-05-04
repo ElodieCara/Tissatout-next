@@ -1,0 +1,23 @@
+.sidebar-age__section {
+    background-color: #f7f9fc;
+    /* blanc très doux */
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.sidebar-age__button {
+    background-color: #f9b233;
+    color: #2c3f64;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background-color 0.3s ease;
+}

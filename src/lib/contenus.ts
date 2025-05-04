@@ -80,6 +80,26 @@ export async function getContenusParAgeEtType(ageSlug: string, type: string) {
                 }))
             );
 
+        case "coloriages":
+            return prisma.drawing.findMany({
+                where: {
+                    ageCategories: {
+                        some: { ageCategoryId: ageCategory.id },
+                    },
+                },
+                select: {
+                    id: true,
+                    title: true,
+                    slug: true,
+                    imageUrl: true,
+                },
+            }).then(drawings =>
+                drawings.map(({ imageUrl, ...rest }) => ({
+                    ...rest,
+                    image: imageUrl, // important pour ContentList
+                }))
+            );
+
         default:
             return [];
     }

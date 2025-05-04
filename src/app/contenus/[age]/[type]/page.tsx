@@ -3,6 +3,7 @@ import ContentList from "@/components/ContentList/ContentList";
 import { getContenusParAgeEtType } from "@/lib/contenus";
 import Banner from "@/components/Banner/Banner";
 import { prisma } from "@/lib/prisma";
+import OpenAgeSidebarButton from "@/components/OpenAgeSidebarButton/OpenAgeSidebarButton";
 
 interface PageProps {
     params: {
@@ -17,6 +18,8 @@ const bannerImages: Record<string, string> = {
     idees: "/banners/banner-idees.png",
     trivium: "/banners/banner-trivium.png",
     quadrivium: "/banners/banner-quadrivium.png",
+    coloriages: "/banners/banner-coloriages.png",
+
 };
 
 const titleMap: Record<string, string> = {
@@ -25,6 +28,7 @@ const titleMap: Record<string, string> = {
     idees: "🎨 Activités et idées créatives",
     trivium: "📘 Activités Trivium",
     quadrivium: "📗 Activités Quadrivium",
+    coloriages: "🖍️ Coloriages à imprimer",
 };
 
 
@@ -32,7 +36,7 @@ export default async function ContentByAgePage(props: PageProps) {
     const { age, type } = props.params;
     const settings = await prisma.siteSettings.findFirst();
 
-    const validTypes = ["articles", "conseils", "idees", "trivium", "quadrivium"];
+    const validTypes = ["articles", "conseils", "idees", "trivium", "quadrivium", "coloriages"];
     if (!validTypes.includes(type)) return notFound();
 
     const ageCategory = await prisma.ageCategory.findUnique({
@@ -47,6 +51,7 @@ export default async function ContentByAgePage(props: PageProps) {
         idees: `Des idées ludiques et éducatives pour éveiller la créativité des enfants de ${ageCategory.title}.`,
         trivium: `Grammaire, logique et rhétorique dès ${ageCategory.title} ? C’est possible avec des activités amusantes.`,
         quadrivium: `Mathématiques, musique, astronomie et géométrie adaptées aux ${ageCategory.title}.`,
+        coloriages: `Des dessins simples à imprimer pour les enfants de ${ageCategory.title} : amusants, éducatifs, ou inspirés des saisons.`,
     };
 
     const data = await getContenusParAgeEtType(age, type);
@@ -62,14 +67,16 @@ export default async function ContentByAgePage(props: PageProps) {
 
     return (
         <main className="content-age-page">
+            <OpenAgeSidebarButton />
+
             <Banner
                 src={bannerImages[type]}
                 title={titleMap[type]}
                 description={descriptionMap[type]}
             />
-
             {/* <h1>Contenus {type} pour {age}</h1> */}
             <ContentList items={data} type={type} />
+
         </main>
     );
 }

@@ -30,6 +30,17 @@ export default function SidebarAgeMobile({ isOpen, onClose }: SidebarMobileProps
             .catch((err) => console.error("Erreur chargement catégories:", err));
     }, []);
 
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 768 && isOpen) {
+                onClose(); // Ferme la sidebar automatiquement
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [isOpen, onClose]);
+
     if (!isOpen) return null;
 
     return (
@@ -66,9 +77,7 @@ export default function SidebarAgeMobile({ isOpen, onClose }: SidebarMobileProps
                     )}
                 </div>
                 <div className="age-sidebar__content">
-
                     <div className="age-sidebar__column">
-
                         {categories.map((cat, index) => (
                             <button
                                 key={cat.id}

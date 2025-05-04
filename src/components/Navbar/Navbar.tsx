@@ -4,6 +4,7 @@ import Link from "next/link";
 
 interface NavbarProps {
     menuOpen: boolean;
+    setMenuOpen: (open: boolean) => void;
 }
 
 const menuItems = [
@@ -29,7 +30,7 @@ const menuItems = [
     { title: "Contact", path: "/contact" },
 ];
 
-const Navbar = ({ menuOpen }: NavbarProps) => {
+const Navbar = ({ menuOpen, setMenuOpen }: NavbarProps) => {
     return (
         <>
             {/* Desktop Navigation */}
@@ -85,12 +86,15 @@ const Navbar = ({ menuOpen }: NavbarProps) => {
                     <ul>
                         {menuItems.map((item, index) => (
                             <li key={index}>
-                                <Link href={item.path}>{item.title}</Link>
+                                <Link href={item.path} onClick={() => setMenuOpen(false)}>
+                                    {item.title}
+                                </Link>
                             </li>
                         ))}
                     </ul>
                 </div>
             )}
+
         </>
     );
 };
