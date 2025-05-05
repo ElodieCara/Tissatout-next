@@ -213,7 +213,7 @@
     top: 70px; // ou adapte selon ton header
     width: 100%;
     background-color: transparent;
-    padding: 0.75rem 1rem;
+    padding: 1.75rem 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -230,22 +230,26 @@
     font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s, transform 0.2s ease, box-shadow 0.2s ease;
     display: inline-flex;
+    justify-content: space-between;
     align-items: center;
     gap: 8px;
     transition: background-color 0.3s ease;
-    max-width: 90%;
+    max-width: 1024px;
+    width: 100%;
 
     &:hover {
         background-color: darken(#f78e74, 5%);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        transform: translateY(2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
     }
 
     & span {
         padding-left: 15px;
     }
+
 }
 
 /* -------------- MEDIA QUERY -------------- */
@@ -273,5 +277,17 @@
 @media (min-width: 1225px) {
     .mobile-topbar {
         display: none !important;
+    }
+}
+
+
+@media (min-width: 768px) {
+    .mobile-topbar__button {
+        background-color: #527e91;
+        color: #fffefa;
+
+        &:hover {
+            background-color: darken(#527e91, 2%); // Un peu plus foncé au hover
+        }
     }
 }
