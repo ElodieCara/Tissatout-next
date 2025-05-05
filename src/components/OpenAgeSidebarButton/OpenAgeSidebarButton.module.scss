@@ -1,23 +1,44 @@
+@use "sass:color";
+@use "../../styles/utils/variables" as vars;
+@use "../../styles/base/mixins" as mix;
+
+// SECTION contenant le bouton "Ouvrir les catégories"
 .sidebar-age__section {
     background-color: #f7f9fc;
-    /* blanc très doux */
     padding: 20px 0;
     display: flex;
     justify-content: center;
+
+    @media (max-width: 1024px) {
+        background-color: vars.$primary-color;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (min-width: 1025px) {
+        display: none;
+    }
 }
 
+// STYLE du bouton mobile "Ouvrir les catégories"
 .sidebar-age__button {
-    background-color: #f9b233;
-    color: #2c3f64;
+    background-color: #f78e74;
+    color: #fffefa;
     border: none;
     border-radius: 12px;
-    padding: 10px 16px;
-    font-size: 1rem;
+    padding: 10px 24px;
+    font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     transition: background-color 0.3s ease;
+    max-width: 90%;
+
+    &:hover {
+        background-color: darken(#f78e74, 5%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    }
 }

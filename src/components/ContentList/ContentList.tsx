@@ -34,9 +34,9 @@ export default function ContentList({ items, type, title }: ContentListProps) {
     return (
         <section className="content-list">
             <div className="content-list__header">
-                <h2 className="content-list__title">
+                {/* <h2 className="content-list__title">
                     {title || titleMap[type] || "Contenus"}
-                </h2>
+                </h2> */}
             </div>
 
             <div className="content-list__grid">

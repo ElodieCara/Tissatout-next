@@ -1,230 +1,294 @@
-@use '../../styles/utils/variables' as vars;
-@use '../../styles/base/mixins' as mix;
-@use '../../styles/base/typography' as typ;
+ @use '../../styles/utils/variables' as vars;
+ @use '../../styles/base/mixins' as mix;
+ @use '../../styles/base/typography' as typ;
 
-.nos-univers__banner {
-    position: relative;
-    width: 100%;
-    height: 320px;
-    overflow: hidden;
-    z-index: 1;
+ .nos-univers__banner {
+     position: relative;
+     width: 100%;
+     height: 320px;
+     overflow: hidden;
+     z-index: 1;
 
-    &-image {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
+     &-image {
+         position: absolute;
+         top: 0;
+         left: 0;
+         width: 100%;
+         height: 100%;
 
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: right center;
-        }
+         img {
+             width: 100%;
+             height: 100%;
+             object-fit: contain;
+             object-position: right center;
+         }
 
-        &::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0.658) 0%, rgba(255, 255, 255, 0.1) 60%, rgba(255, 255, 255, 0) 100%);
-            z-index: 2;
-        }
-    }
+         &::before {
+             content: "";
+             position: absolute;
+             inset: 0;
+             z-index: 2;
+             // background: linear-gradient(...);
+         }
+     }
 
-    &-content {
-        position: absolute;
-        bottom: 6%;
-        left: 5%;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 40%;
-        padding: 1.5rem;
-        border-radius: 1rem;
-        z-index: 3;
+     &-content {
+         position: absolute;
+         bottom: 6%;
+         left: 5%;
+         display: flex;
+         flex-direction: column;
+         gap: 10px;
+         width: 40%;
+         padding: 1.5rem;
+         border-radius: 1rem;
+         z-index: 3;
 
-        h1 {
-            font-weight: bold;
-            text-shadow: none;
-        }
+         h1 {
+             font-weight: bold;
+             text-shadow: none;
+         }
 
-        p {
-            font-size: 18px;
-            font-weight: 500;
-            color: vars.$primary-color;
-            text-shadow: none;
-        }
+         p {
+             font-size: 18px;
+             font-weight: 500;
+             color: vars.$primary-color;
+             text-shadow: none;
+         }
 
-        &-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
+         &-buttons {
+             display: flex;
+             flex-wrap: wrap;
+             gap: 12px;
 
-            button {
-                margin-top: 10px;
-                padding: 10px 20px;
-                background: #ecac3e;
-                border: none;
-                border-radius: 30px;
-                color: #2c3f64;
-                cursor: pointer;
-                transition: background 0.3s;
+             button {
+                 margin-top: 10px;
+                 padding: 10px 20px;
+                 background: #ecac3e;
+                 border: none;
+                 border-radius: 30px;
+                 color: #2c3f64;
+                 cursor: pointer;
+                 transition: background 0.3s;
 
-                &:hover {
-                    background: darken(#ecac3e, 10%);
-                }
-            }
-        }
-    }
+                 &:hover {
+                     background: darken(#ecac3e, 10%);
+                 }
+             }
+         }
+     }
 
-    // 🟠 Variante printable
-    &.banner--printable {
-        background: linear-gradient(135deg, #fdecc8, #ffd5ae);
+     &.banner--printable {
+         background: linear-gradient(135deg, #fdecc8, #ffd5ae);
 
-        &::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: center / cover no-repeat;
-            opacity: 0.25;
-            z-index: 1;
-            pointer-events: none;
-        }
+         &::before {
+             content: "";
+             position: absolute;
+             inset: 0;
+             background: center / cover no-repeat;
+             opacity: 0.25;
+             z-index: 1;
+             pointer-events: none;
+         }
 
-        .nos-univers__banner-content h1 {
-            color: #2c3f64;
-            padding: 0.3rem 1rem;
-            border-radius: 0.5rem;
-            display: inline-block;
-        }
+         .nos-univers__banner-content {
+             h1 {
+                 color: #2c3f64;
+                 padding: 0.3rem 1rem;
+                 border-radius: 0.5rem;
+                 display: inline-block;
+             }
 
-        .nos-univers__banner-content p {
-            color: #2c3f64;
-        }
+             p {
+                 color: #2c3f64;
+             }
 
-        .nos-univers__banner-content-buttons button {
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
-        }
-    }
-}
+             &-buttons button {
+                 font-size: 0.9rem;
+                 padding: 0.5rem 1rem;
+             }
+         }
+     }
+ }
 
-@media (max-width: 480px) {
-    .nos-univers__banner {
-        height: auto;
+ // Responsive
+ @media (max-width: 480px) {
+     .nos-univers__banner {
+         height: auto;
 
-        &-image {
-            img {
-                object-position: center top;
-                z-index: -1;
+         &-image {
+             img {
+                 object-position: center top;
+                 z-index: -1;
+             }
 
-            }
+             &::before {
+                 z-index: -1;
+             }
+         }
 
-            &::before {
-                background: linear-gradient(to bottom, rgba(255, 255, 255, 0.425), rgba(255, 255, 255, 0));
-                z-index: -1;
-            }
-        }
+         &-content {
+             position: static;
+             width: 100%;
+             padding: 2rem;
+             border-radius: 0;
 
-        &-content {
-            position: static;
-            padding: 2rem;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            border-radius: 0;
+             h1 {
+                 font-size: 1.4rem;
+                 font-weight: unset !important;
+                 padding: 1rem 0 0 0 !important;
+             }
 
-            h1 {
-                font-size: 1.4rem;
-                font-weight: unset !important;
-                padding: 1rem 0 0 0 !important;
-            }
+             p {
+                 font-size: 0.95rem;
+             }
 
-            p {
-                font-size: 0.95rem;
-            }
+             &-buttons {
+                 flex-direction: column;
+                 gap: 0.75rem;
 
-            &-buttons {
-                flex-direction: column;
-                gap: 0.75rem;
+                 button {
+                     width: 100%;
+                     font-size: 0.95rem;
+                 }
+             }
+         }
+     }
+ }
 
-                button {
-                    width: 100%;
-                    font-size: 0.95rem;
-                }
-            }
-        }
-    }
-}
+ @media (min-width: 481px) and (max-width: 768px) {
+     .nos-univers__banner {
+         height: auto;
 
-@media (min-width: 481px) and (max-width: 768px) {
-    .nos-univers__banner {
-        height: auto;
+         &-image {
+             img {
+                 object-position: center;
+                 z-index: -1;
+             }
 
-        &-image {
-            img {
-                object-position: center;
-                z-index: -1;
-            }
+             &::before {
+                 z-index: -1;
+             }
+         }
 
-            &::before {
-                background: linear-gradient(to bottom, rgba(255, 255, 255, 0.185), rgba(255, 255, 255, 0));
-                z-index: -1;
-            }
-        }
-
-        &-content {
-            position: static;
-            padding: 1.5rem 2rem;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 0;
-
-            h1 {
-                font-size: 1.6rem;
-            }
-
-            p {
-                font-size: 1.05rem;
-            }
-
-            &-buttons {
-                flex-wrap: wrap;
-                gap: 1rem;
-
-                button {
-                    font-size: 1rem;
-                    padding: 0.6rem 1.2rem;
-                }
-            }
-        }
-    }
-}
-
-@media (min-width: 769px) and (max-width: 1200px) {
-    .nos-univers__banner {
-        &-content {
-            width: 50%; // ou 90%, selon l’effet voulu
-            padding: 2rem;
-            z-index: 2;
+         &-content {
+             position: absolute;
+             padding: 1.5rem 2rem;
+             width: 100%;
+             flex-direction: column;
+             align-items: flex-start;
+             text-align: left;
+             border-radius: 0;
 
 
-            h1 {
-                font-size: 1.5rem;
-            }
+             h1 {
+                 font-size: 1.6rem;
+             }
 
-            &-buttons {
-                flex-direction: row;
-                justify-content: flex-start;
-                flex-wrap: nowrap; // 👈 évite qu'ils passent en dessous
-                gap: 1rem;
+             p {
+                 font-size: 1.05rem;
+             }
 
-                button {
-                    font-size: 1rem;
-                    padding: 0.6rem 1.2rem;
-                    white-space: nowrap; // 👈 garde le texte sur une ligne
-                }
-            }
-        }
-    }
-}
+             &-buttons {
+                 flex-wrap: wrap;
+                 gap: 1rem;
+
+                 button {
+                     font-size: 1rem;
+                     padding: 0.6rem 1.2rem;
+                 }
+             }
+         }
+     }
+ }
+
+ @media (min-width: 769px) and (max-width: 1200px) {
+     .nos-univers__banner {
+         height: auto;
+     }
+
+     .nos-univers__banner-content {
+         width: 70%;
+         padding: 2rem;
+         z-index: 2;
+         height: 100%;
+
+         h1 {
+             font-size: 2rem;
+         }
+
+         &-buttons {
+             flex-direction: row;
+             justify-content: flex-start;
+             flex-wrap: nowrap;
+             gap: 1rem;
+
+             button {
+                 font-size: 1rem;
+                 padding: 0.6rem 1.2rem;
+                 white-space: nowrap;
+             }
+         }
+     }
+ }
+
+ @media (max-width: 1024px) {
+     .nos-univers__banner {
+         height: 215px;
+     }
+
+     .nos-univers__banner-image img {
+         background-color: vars.$primary-color;
+     }
+
+     .nos-univers__banner-content {
+         bottom: 0%;
+         width: 50%;
+         padding: 1rem;
+         height: 100%;
+     }
+
+     .content-age-page h1,
+     p {
+         color: white !important;
+     }
+ }
+
+ //  .nos-univers__banner {
+ //      display: flex;
+ //      align-items: center;
+ //      justify-content: center;
+ //      padding: 2rem;
+ //      gap: 2rem;
+ //      background-color: vars.$primary-color;
+
+
+ //      &-content {
+ //          text-align: left;
+
+ //          h1 {
+ //              font-size: 2rem;
+ //              color: white !important;
+ //              margin-bottom: 1rem;
+ //          }
+
+ //          p {
+ //              font-size: 1.1rem;
+ //              color: white;
+ //              line-height: 1.5;
+ //          }
+ //      }
+
+ //      &-image {
+ //          flex-shrink: 0;
+ //          display: flex;
+ //          justify-content: flex-start; // 👈 tire vers la gauche
+ //          align-items: center;
+ //          padding-left: 1rem;
+
+ //          img {
+ //              width: 80px;
+ //              height: auto;
+ //          }
+ //      }
+ //  }

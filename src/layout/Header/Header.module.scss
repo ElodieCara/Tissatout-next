@@ -182,7 +182,12 @@
     cursor: pointer;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+
+    .header__masthead {
+        padding: 15px;
+    }
+
     .header__masthead__nav-main__input {
         background-color: vars.$tertiary-color;
         border-radius: 50%;

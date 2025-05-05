@@ -37,16 +37,6 @@ export default function Banner({ src, title, description, buttons = [], classNam
 
     return (
         <div className={`nos-univers__banner ${className ?? ""}`}>
-            <div className="nos-univers__banner-image">
-                <Image
-                    src={src}
-                    alt={title}
-                    fill
-                    priority
-                    sizes="100vw"
-                    style={{ objectFit: "cover" }}
-                />
-            </div>
             <div className="nos-univers__banner-content">
                 <h1>{title}</h1>
                 <p>{description}</p>
@@ -67,6 +57,16 @@ export default function Banner({ src, title, description, buttons = [], classNam
                         )}
                     </div>
                 )}
+            </div>
+            <div className="nos-univers__banner-image">
+                <Image
+                    src={src}
+                    alt={title}
+                    fill
+                    priority
+                    sizes="100vw"
+                    style={{ objectFit: "cover" }}
+                />
             </div>
         </div>
     );

@@ -83,6 +83,7 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
                             onClear={() => setSelectedCollection(undefined)}
                         />
                     )}
+
                     <TriviumSection
                         id={selectedCategory.toLowerCase()}
                         title={selectedCategory}

@@ -9,7 +9,6 @@ import Navbar from "@/components/Navbar/Navbar";
 
 type HeaderProps = {
     onSidebarToggle?: () => void;
-    setMenuOpen: (open: boolean) => void;
 };
 
 const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {

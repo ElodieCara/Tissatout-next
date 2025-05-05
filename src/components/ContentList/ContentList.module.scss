@@ -1,11 +1,15 @@
+@use "sass:color";
+@use "../../styles/utils/variables" as vars;
+@use "../../styles/base/mixins" as mix;
+
 .content-list {
     padding: 2rem;
-    @include container;
+    @include mix.container;
 
     &__header {
         text-align: center;
         margin-bottom: 2rem;
-        color: $primary-color;
+        color: vars.$primary-color;
     }
 
     &__title {
@@ -13,7 +17,7 @@
         font-weight: bold;
         margin-bottom: 2rem;
         text-align: center;
-        color: $primary-color;
+        color: vars.$primary-color;
     }
 
     &__grid {
@@ -66,5 +70,46 @@
         font-size: 1rem;
         color: #444;
         line-height: 1.4;
+    }
+
+    &__footer {
+        display: flex;
+        justify-content: center;
+        margin-top: 16px;
+        margin-bottom: 32px;
+
+        & button {
+            background-color: #f9b233;
+            /* jaune pastel */
+            color: #2c3f64;
+            /* bleu foncé */
+            font-weight: bold;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+
+            &:hover {
+                background-color: #f6a822;
+            }
+        }
+    }
+}
+
+
+@media (max-width: 1024px) {
+    .content-list {
+        background-color: vars.$primary-color;
+
+        &__grid {
+            padding: 15px;
+            background-color: white;
+            border-radius: 10px;
+        }
     }
 }
