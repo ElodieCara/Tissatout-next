@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import { ReactNode } from "react";
+import Button from "../Button/Button";
 
 interface SectionIntroProps {
     title: string;
@@ -8,6 +9,7 @@ interface SectionIntroProps {
     imageSrc: string;
     iconSrc?: string;
     backgroundColor?: string;
+    type?: string;
     children?: ReactNode;
 }
 
@@ -17,8 +19,18 @@ export default function SectionIntro({
     imageSrc,
     iconSrc,
     backgroundColor = "#2c3f64", // par défaut bleu sombre
+    type,
     children,
 }: SectionIntroProps) {
+    const redirectionMap: Record<string, string> = {
+        trivium: "/trivium",
+        quadrivium: "/quadrivium",
+        conseils: "/inspiration",
+        idees: "/inspiration",
+        coloriages: "/coloriages",
+        articles: "/inspiration",
+    };
+
     return (
         <section className="section-intro"
             style={{ backgroundColor }}>
@@ -30,6 +42,11 @@ export default function SectionIntro({
                     </div>
                     <p>{description}</p>
                     {children}
+                    {type && redirectionMap[type] && (
+                        <Button href={redirectionMap[type]} className="large">
+                            Voir plus
+                        </Button>
+                    )}
                 </div>
                 <div className="section-intro__image">
                     <Image

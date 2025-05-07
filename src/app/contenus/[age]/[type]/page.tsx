@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 import ContentList from "@/components/ContentList/ContentList";
 import { getContenusParAgeEtType } from "@/lib/contenus";
-import Banner from "@/components/Banner/Banner";
 import { prisma } from "@/lib/prisma";
 import OpenAgeSidebarButton from "@/components/OpenAgeSidebarButton/OpenAgeSidebarButton";
 import SectionIntro from "@/components/SectionIntro/SectionIntro";
 import BackToTop from "@/components/BackToTop/BackToTop";
+import Button from "@/components/Button/Button";
+import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 
 interface PageProps {
     params: {
@@ -85,10 +86,16 @@ export default async function ContentByAgePage(props: PageProps) {
                 description={descriptionMap[type]}
                 imageSrc={bannerImages[type]}
                 backgroundColor="#2c3f64"
+                type={type}
             />
+
             <BackToTop />
 
-            <ContentList items={data} type={type} />
+            <ContentList
+                items={data}
+                type={type}
+                age={ageCategory.title}
+            />
 
         </main>
     );

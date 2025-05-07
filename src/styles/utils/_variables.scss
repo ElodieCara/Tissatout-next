@@ -104,3 +104,25 @@ $themes: (
         icon-filter: brightness(0) saturate(100%) invert(50%) sepia(50%) saturate(800%) hue-rotate(0deg) brightness(100%) contrast(100%), // GRIS PAR DÉFAUT ⚫
         decorations: ())
 );
+
+//***********************************************
+
+$tag-colors: (
+    lecture: $quinary-color,
+    "jeux-de-mobilite": $secondary-color,
+    "loisirs-creatifs": $tertiary-color,
+    chiffre: #8ea3c0,
+    motricite: #c98da3,
+    grammaire: $quaternary-color,
+    logique: $primary-color,
+    musique: #e4bfa2,
+    geometrie: #c7a269,
+    astronomie: $dark-primary-color,
+    christmas: #db4d4d,
+    halloween: #ef9e4d,
+    spring: #97d89a,
+    summer: #f7ca70,
+    autumn: #c78c6c,
+    winter: #7f9bc1,
+    easter: #e8c3e4
+);

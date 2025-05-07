@@ -4,22 +4,31 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
+import { reverseThemeMapping } from "@/lib/themeMapping";
+import NewsletterBanner from "../NewsletterBanner/NewsletterBanner";
 
 export interface ContentItem {
     id: string;
     title: string;
     slug: string;
+    age?: string;
+    date?: string;
+    iconSrc?: string | null;
+    imageUrl?: string | null;
     image?: string | null;
     description?: string | null;
+    tagLabel: string | null;
 }
 
 interface ContentListProps {
     items: ContentItem[];
     type: string;
     title?: string;
+    age?: string;
 }
 
-export default function ContentList({ items, type, title }: ContentListProps) {
+export default function ContentList({ items, type, title, age }: ContentListProps) {
     const [visibleCount, setVisibleCount] = useState(6);
     const displayed = items.slice(0, visibleCount);
 
@@ -31,12 +40,38 @@ export default function ContentList({ items, type, title }: ContentListProps) {
         quadrivium: "📗 Activités Quadrivium",
     };
 
+    const subtitleMap: Record<string, string> = {
+        articles: "Des lectures pour éveiller la réflexion, nourrir la curiosité et grandir avec douceur.",
+        conseils: "Des pistes concrètes pour accompagner les enfants dans leurs émotions, leurs besoins et leurs découvertes.",
+        idees: "Des idées créatives, simples et enrichissantes pour partager des moments joyeux et constructifs.",
+        trivium: "Une première approche de la grammaire, de la logique et de l’expression, adaptée à leur monde.",
+        quadrivium: "Musique, mathématiques, astronomie et géométrie pour petits explorateurs de la beauté du monde.",
+    };
+
+    const seoTextMap: Record<string, string> = {
+        articles: `Retrouvez ici nos meilleurs articles pour les enfants de {age}. Pensés pour éveiller, rassurer et faire grandir, chaque article vous propose des pistes éducatives douces et adaptées.`,
+        conseils: `Des conseils bienveillants et concrets pour accompagner les enfants de {age} dans leur quotidien, leurs émotions, leurs découvertes.`,
+        idees: `Des idées d’activités simples, jolies et éducatives à faire avec les enfants de {age}. De quoi semer l’imaginaire et la joie.`,
+        trivium: `Initiez les enfants de {age} à la grammaire, à la logique et à la parole vraie avec des activités inspirées du Trivium.`,
+        quadrivium: `Le Quadrivium à portée d’enfant : maths, musique, astronomie, géométrie… pour les curieux de {age} qui aiment comprendre le monde.`,
+    };
+
+    const crumbs = [
+        { label: "Accueil", href: "/" },
+        { label: "Âges", href: "/nos-univers" },
+        { label: titleMap[type] || "Contenus" }
+    ];
+
+
     return (
         <section className="content-list">
+            <Breadcrumb crumbs={crumbs} />
+
             <div className="content-list__header">
-                {/* <h2 className="content-list__title">
-                    {title || titleMap[type] || "Contenus"}
-                </h2> */}
+                <h2 className="content-list__title">
+                    {(title || titleMap[type] || "Contenus") + (age ? ` pour les ${age}` : "")}
+                </h2>
+                <p className="content-list__subtitle">{subtitleMap[type]}</p>
             </div>
 
             <div className="content-list__grid">
@@ -46,6 +81,7 @@ export default function ContentList({ items, type, title }: ContentListProps) {
                         key={item.id}
                         className="content-list__card"
                     >
+
                         {item.image && (
                             <div className="content-list__image-wrapper">
                                 <Image
@@ -58,10 +94,30 @@ export default function ContentList({ items, type, title }: ContentListProps) {
                             </div>
                         )}
                         <div className="content-list__info">
+                            {item.date && new Date(item.date).getTime() > Date.now() - 10 * 24 * 60 * 60 * 1000 && (
+                                <span className="content-list__badge">Nouveau</span>
+                            )}
+                            {item.tagLabel && reverseThemeMapping[item.tagLabel] && (
+                                <span className={`content-list__tag content-list__tag--${item.tagLabel}`}>
+                                    #{reverseThemeMapping[item.tagLabel]}
+                                </span>
+                            )}
                             <h3 className="content-list__card-title">{item.title}</h3>
+                            {item.date && (
+                                <p className="content-list__date">
+                                    {new Date(item.date).toLocaleDateString("fr-FR", {
+                                        day: "2-digit",
+                                        month: "long",
+                                        year: "numeric",
+                                    })}
+                                </p>
+                            )}
                             <p className="content-list__description">
                                 {item.description ?? "Pas de description disponible."}
                             </p>
+                        </div>
+                        <div className="content-list__arrow">
+                            <span className="arrow-icon">➔</span>
                         </div>
                     </Link>
                 ))}
@@ -77,6 +133,22 @@ export default function ContentList({ items, type, title }: ContentListProps) {
                     </button>
                 </div>
             )}
+
+            {seoTextMap[type] && age && (
+                <div className="content-list__bottom-seo">
+                    <Image
+                        src="/icons/soleil.png"
+                        alt="icone soleil"
+                        width={32}
+                        height={32}
+                        className="content-list__image" />
+
+                    <p>{seoTextMap[type].replace("{age}", age.toLowerCase())}</p>
+                </div>
+            )}
+
+            <NewsletterBanner />
+
         </section>
     );
 }
