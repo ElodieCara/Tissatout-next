@@ -1,12 +1,14 @@
 // ContentList.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 import { reverseThemeMapping } from "@/lib/themeMapping";
 import NewsletterBanner from "../NewsletterBanner/NewsletterBanner";
+import { getRandomSuggestions } from "@/lib/suggestions";
+import SuggestionsForParents from "../SuggestionsForParents/SuggestionsForParents";
 
 export interface ContentItem {
     id: string;
@@ -16,9 +18,9 @@ export interface ContentItem {
     date?: string;
     iconSrc?: string | null;
     imageUrl?: string | null;
-    image?: string | null;
+    image: string | null;
     description?: string | null;
-    tagLabel: string | null;
+    tagLabel?: string | null;
 }
 
 interface ContentListProps {
@@ -31,6 +33,26 @@ interface ContentListProps {
 export default function ContentList({ items, type, title, age }: ContentListProps) {
     const [visibleCount, setVisibleCount] = useState(6);
     const displayed = items.slice(0, visibleCount);
+    const [suggestions, setSuggestions] = useState<ContentItem[]>([]);
+
+    useEffect(() => {
+        const fetchSuggestions = async () => {
+            try {
+                const response = await fetch(`/api/suggestions?type=${type}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setSuggestions(data);
+                } else {
+                    console.error("Erreur lors de la récupération des suggestions");
+                }
+            } catch (error) {
+                console.error("Erreur réseau :", error);
+            }
+        };
+
+        fetchSuggestions();
+    }, [type]);
+
 
     const titleMap: Record<string, string> = {
         articles: "📚 Articles",
@@ -74,53 +96,55 @@ export default function ContentList({ items, type, title, age }: ContentListProp
                 <p className="content-list__subtitle">{subtitleMap[type]}</p>
             </div>
 
-            <div className="content-list__grid">
-                {displayed.map((item) => (
-                    <Link
-                        href={`/${type}/${item.slug}`}
-                        key={item.id}
-                        className="content-list__card"
-                    >
+            <div className="content-list__main">
+                <div className="content-list__grid">
+                    {displayed.map((item) => (
+                        <Link
+                            href={`/${type}/${item.slug}`}
+                            key={item.id}
+                            className="content-list__card"
+                        >
 
-                        {item.image && (
-                            <div className="content-list__image-wrapper">
-                                <Image
-                                    src={item.image}
-                                    alt={item.title}
-                                    width={300}
-                                    height={200}
-                                    className="content-list__image"
-                                />
-                            </div>
-                        )}
-                        <div className="content-list__info">
-                            {item.date && new Date(item.date).getTime() > Date.now() - 10 * 24 * 60 * 60 * 1000 && (
-                                <span className="content-list__badge">Nouveau</span>
+                            {item.image && (
+                                <div className="content-list__image-wrapper">
+                                    <Image
+                                        src={item.image}
+                                        alt={item.title}
+                                        width={300}
+                                        height={200}
+                                        className="content-list__image"
+                                    />
+                                </div>
                             )}
-                            {item.tagLabel && reverseThemeMapping[item.tagLabel] && (
-                                <span className={`content-list__tag content-list__tag--${item.tagLabel}`}>
-                                    #{reverseThemeMapping[item.tagLabel]}
-                                </span>
-                            )}
-                            <h3 className="content-list__card-title">{item.title}</h3>
-                            {item.date && (
-                                <p className="content-list__date">
-                                    {new Date(item.date).toLocaleDateString("fr-FR", {
-                                        day: "2-digit",
-                                        month: "long",
-                                        year: "numeric",
-                                    })}
+                            <div className="content-list__info">
+                                {item.date && new Date(item.date).getTime() > Date.now() - 10 * 24 * 60 * 60 * 1000 && (
+                                    <span className="content-list__badge">Nouveau</span>
+                                )}
+                                {item.tagLabel && reverseThemeMapping[item.tagLabel] && (
+                                    <span className={`content-list__tag content-list__tag--${item.tagLabel}`}>
+                                        #{reverseThemeMapping[item.tagLabel]}
+                                    </span>
+                                )}
+                                <h3 className="content-list__card-title">{item.title}</h3>
+                                {item.date && (
+                                    <p className="content-list__date">
+                                        {new Date(item.date).toLocaleDateString("fr-FR", {
+                                            day: "2-digit",
+                                            month: "long",
+                                            year: "numeric",
+                                        })}
+                                    </p>
+                                )}
+                                <p className="content-list__description">
+                                    {item.description ?? "Pas de description disponible."}
                                 </p>
-                            )}
-                            <p className="content-list__description">
-                                {item.description ?? "Pas de description disponible."}
-                            </p>
-                        </div>
-                        <div className="content-list__arrow">
-                            <span className="arrow-icon">➔</span>
-                        </div>
-                    </Link>
-                ))}
+                            </div>
+                            <div className="content-list__arrow">
+                                <span className="arrow-icon">➔</span>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
             </div>
 
             {items.length > visibleCount && (
@@ -146,7 +170,9 @@ export default function ContentList({ items, type, title, age }: ContentListProp
                     <p>{seoTextMap[type].replace("{age}", age.toLowerCase())}</p>
                 </div>
             )}
-
+            <div className="suggestions">
+                <SuggestionsForParents items={suggestions} />
+            </div>
             <NewsletterBanner />
 
         </section>

@@ -5,8 +5,6 @@ import { prisma } from "@/lib/prisma";
 import OpenAgeSidebarButton from "@/components/OpenAgeSidebarButton/OpenAgeSidebarButton";
 import SectionIntro from "@/components/SectionIntro/SectionIntro";
 import BackToTop from "@/components/BackToTop/BackToTop";
-import Button from "@/components/Button/Button";
-import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 
 interface PageProps {
     params: {
@@ -67,6 +65,7 @@ export default async function ContentByAgePage(props: PageProps) {
 
     const data = await getContenusParAgeEtType(age, type);
 
+
     if (!data || data.length === 0) {
         return (
             <main className="content-age-page">
@@ -96,7 +95,6 @@ export default async function ContentByAgePage(props: PageProps) {
                 type={type}
                 age={ageCategory.title}
             />
-
         </main>
     );
 }

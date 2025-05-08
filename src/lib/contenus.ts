@@ -246,7 +246,6 @@ export async function getContenusParAgeEtType(ageSlug: string, type: string) {
     }
 }
 
-
 // lib/contenus.ts
 // import { prisma } from "./prisma";
 
