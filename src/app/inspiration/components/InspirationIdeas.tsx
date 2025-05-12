@@ -1,9 +1,12 @@
 "use client";
 import { useState } from "react";
 import Button from "@/components/Button/Button";
+import Link from "next/link";
+
 
 interface Idea {
     id: string;
+    slug: string;
     title: string;
     description: string;
     theme: string;
@@ -73,7 +76,8 @@ export default function InspirationIdeas({ ideas }: { ideas: Idea[] }) {
             <div className="container__inspiration--ideas-content">
                 {filteredIdeas.length > 0 ? (
                     filteredIdeas.slice(0, visibleIdeas).map((idea) => (
-                        <div key={idea.id} className="inspiration__card">
+
+                        <Link key={idea.id} href={`/idees/${idea.slug}`} className="inspiration__card">
                             <div className="inspiration__card__image">
                                 <img src={idea.image || "/default-idea.png"} alt={idea.title} />
                             </div>
@@ -84,7 +88,8 @@ export default function InspirationIdeas({ ideas }: { ideas: Idea[] }) {
                                 </span>
                                 <p className="inspiration__card__description">{idea.description}</p>
                             </div>
-                        </div>
+                        </Link>
+
                     ))
                 ) : (
                     <p>Aucune idée disponible.</p>

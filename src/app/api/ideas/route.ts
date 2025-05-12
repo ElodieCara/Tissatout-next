@@ -21,6 +21,7 @@ export async function GET() {
                 ageCategories: {
                     include: { ageCategory: true },
                 },
+                sections: true,
             },
         });
 
@@ -36,7 +37,7 @@ export async function GET() {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { title, description, theme, image, ageCategoryIds } = body;
+        const { title, description, theme, image, ageCategoryIds, sections, relatedArticleIds } = body;
 
         if (!title?.trim() || !description?.trim() || !theme?.trim() || !Array.isArray(ageCategoryIds) || ageCategoryIds.length === 0) {
             return NextResponse.json(
@@ -59,14 +60,33 @@ export async function POST(req: Request) {
                     create: ageCategoryIds.map((ageId: string) => ({
                         ageCategory: { connect: { id: ageId } }
                     }))
+                },
+                sections: {
+                    create: sections.map((section: any) => ({
+                        title: section.title,
+                        content: section.content,
+                        style: section.style || "classique",
+                        imageUrl: section.imageUrl || null,
+                    }))
                 }
             },
             include: {
                 ageCategories: {
                     include: { ageCategory: true }
-                }
+                },
+                sections: true
             }
         });
+
+        // 🔄 Ajout des articles liés
+        if (relatedArticleIds && relatedArticleIds.length > 0) {
+            await prisma.relatedIdeaArticle.createMany({
+                data: relatedArticleIds.map((articleId: string) => ({
+                    fromIdeaId: newIdea.id,
+                    toArticleId: articleId,
+                }))
+            });
+        }
 
         return NextResponse.json(newIdea, { status: 201 });
     } catch (error) {
@@ -77,3 +97,4 @@ export async function POST(req: Request) {
         );
     }
 }
+

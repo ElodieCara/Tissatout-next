@@ -9,6 +9,14 @@ interface AdminIdeaFormProps {
     slug?: string; // Optionnel : utilisé pour modifier une idée
 }
 
+interface Section {
+    title: string;
+    content: string;
+    style?: string;
+    imageUrl?: string;
+}
+
+
 export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
     const [form, setForm] = useState({
         title: "",
@@ -16,9 +24,13 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
         image: "",
         theme: "",
         ageCategories: [] as string[],
+        sections: [{ title: "", content: "", style: "", imageUrl: "" }],
+        relatedArticles: [] as string[],
     });
     const [message, setMessage] = useState("");
     const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
+    const [allArticles, setAllArticles] = useState<{ id: string; title: string }[]>([]);
+    const [selectedArticles, setSelectedArticles] = useState<string[]>([]);
     const router = useRouter();
 
     // Charger les données de l'idée si un `ideaId` est passé
@@ -27,10 +39,17 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
             fetch(`/api/ideas/${ideaId}`)
                 .then((res) => res.json())
                 .then((data) => {
+                    console.log("📝 Idée récupérée :", data);
+
                     setForm({
                         ...data,
                         ageCategories: Array.isArray(data.ageCategories) ? data.ageCategories : [],
+                        sections: data.sections || [{ title: "", content: "", style: "" }],
+                        relatedArticles: data.relatedArticles.map((relation: any) => relation.id) || [],
                     });
+
+                    // ✅ Mettre à jour le select multiple
+                    setSelectedArticles(data.relatedArticles.map((relation: any) => relation.id));
                 })
                 .catch(() => setMessage("❌ Erreur lors du chargement de l'idée."));
         }
@@ -42,6 +61,15 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                 console.log("📥 Catégories d'âge reçues :", data);
                 setAgeCategories(data);
             });
+
+        // Charger tous les articles disponibles
+        fetch("/api/articles")
+            .then(res => res.json())
+            .then(data => {
+                console.log("📥 Articles reçus :", data);
+                setAllArticles(data);
+            });
+
     }, [ideaId]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -89,13 +117,20 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
         const method = ideaId ? "PUT" : "POST";
         const url = ideaId ? `/api/ideas/${ideaId}` : "/api/ideas";
 
+        console.log("🔎 Envoi de l'idée :", {
+            ...form,
+            ageCategoryIds: form.ageCategories,
+            relatedArticleIds: selectedArticles,
+        });
+
         try {
             const res = await fetch(url, {
                 method,
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     ...form,
-                    ageCategoryIds: form.ageCategories
+                    ageCategoryIds: form.ageCategories,
+                    relatedArticleIds: selectedArticles,
                 }),
             });
 
@@ -109,6 +144,51 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
             setMessage("❌ Erreur de connexion avec le serveur.");
         }
     };
+
+    // ✅ Gestion des sections
+    const addSection = () => {
+        setForm((prev) => ({
+            ...prev,
+            sections: [...prev.sections, { title: "", content: "", style: "", imageUrl: "" }],
+        }));
+    };
+
+    useEffect(() => {
+        fetch("/api/articles")
+            .then(res => res.json())
+            .then(data => {
+                setAllArticles(data);
+            });
+    }, []);
+
+    // ✅ Gérer le changement de sélection
+    const handleRelatedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
+        console.log("📝 Articles sélectionnés :", selectedOptions);
+
+        // ✅ Mettre à jour les articles sélectionnés dans le state
+        setSelectedArticles(selectedOptions);
+
+        // ✅ Synchroniser avec le formulaire
+        setForm(prev => ({
+            ...prev,
+            relatedArticles: selectedOptions,
+        }));
+    };
+
+
+    const updateSection = (index: number, field: keyof Section, value: string) => {
+        const updatedSections = [...form.sections];
+        updatedSections[index][field] = value;
+        setForm({ ...form, sections: updatedSections });
+    };
+
+    const removeSection = (index: number) => {
+        const updatedSections = [...form.sections];
+        updatedSections.splice(index, 1);
+        setForm({ ...form, sections: updatedSections });
+    };
+
 
     return (
         <div className="admin-form">
@@ -162,6 +242,27 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                     </div>
                 </div>
 
+                <div className="admin-form">
+                    <div className="admin-form__group">
+                        <label>Articles liés :</label>
+                        <select
+                            multiple
+                            value={selectedArticles} // 🔄 Utilise le state pour la sélection multiple
+                            onChange={handleRelatedChange}
+                        >
+                            {allArticles.map(article => (
+                                <option
+                                    key={article.id}
+                                    value={article.id}
+                                >
+                                    {article.title}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+
+
                 <div className="admin-form__upload">
                     <label htmlFor="imageUpload">📸 Image</label>
                     <input type="file" id="imageUpload" accept="image/*" onChange={handleImageUpload} />
@@ -180,6 +281,82 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                         <option value="easter">🐣 Pâques</option>
                     </select>
                 </div>
+
+                {/* ✅ Gestion des sections */}
+                <div className="admin-form__group">
+                    <label>Sections</label>
+                    {form.sections.map((section, index) => (
+                        <div key={index} className="admin-form__section">
+
+                            {/* 🔹 Titre de la section */}
+                            <input
+                                placeholder="Titre de section"
+                                value={section.title}
+                                onChange={e => updateSection(index, "title", e.target.value)}
+                            />
+
+                            {/* 🔹 Contenu de la section */}
+                            <textarea
+                                placeholder="Contenu"
+                                value={section.content}
+                                onChange={e => updateSection(index, "content", e.target.value)}
+                            />
+
+                            {/* 🔹 Gestion de l'upload de l'image */}
+                            <div className="admin-form__section-upload">
+                                <label htmlFor={`imageUpload-${index}`}>📸 Ajouter une image pour cette section</label>
+                                <input
+                                    id={`imageUpload-${index}`}
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={async (e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+
+                                        const formData = new FormData();
+                                        formData.append("file", file);
+
+                                        const res = await fetch("/api/upload", { method: "POST", body: formData });
+                                        const data = await res.json();
+
+                                        if (res.ok) {
+                                            const updated = [...form.sections];
+                                            updated[index].imageUrl = data.imageUrl;
+                                            setForm({ ...form, sections: updated });
+                                        } else {
+                                            alert("❌ Erreur lors de l'upload d'image pour la section.");
+                                        }
+                                    }}
+                                />
+
+                                {/* 🔹 Affichage de l'aperçu de l'image */}
+                                {form.sections[index].imageUrl && (
+                                    <div className="admin-form__section-upload-preview">
+                                        <img src={form.sections[index].imageUrl} alt="Aperçu" />
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* 🔹 Sélecteur de style */}
+                            <select
+                                value={section.style || ""}
+                                onChange={e => updateSection(index, "style", e.target.value)}
+                            >
+                                <option value="">Classique</option>
+                                <option value="highlight">Fond coloré</option>
+                                <option value="icon">Avec icône</option>
+                            </select>
+
+                            {/* 🔹 Bouton de suppression */}
+                            <button type="button" onClick={() => removeSection(index)}>🗑️ Supprimer</button>
+                        </div>
+                    ))}
+
+                    {/* 🔹 Ajouter une nouvelle section */}
+                    <button type="button" onClick={addSection}>➕ Ajouter une section</button>
+                </div>
+
+
                 <button type="submit" className="admin-form__button">
                     {ideaId ? "Mettre à jour" : "Ajouter"}
                 </button>

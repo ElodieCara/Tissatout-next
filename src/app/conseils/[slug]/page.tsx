@@ -164,23 +164,27 @@ export default async function AdvicePage({ params }: Props) {
                                 <div className="advice__related-list">
                                     {advice.relatedFrom && advice.relatedFrom.length > 0 ? (
                                         advice.relatedFrom.map((relation) => (
-                                            relation.toAdvice && (
+                                            relation.toAdvice ? (
                                                 <a
                                                     key={relation.toAdvice.id}
                                                     href={`/conseils/${relation.toAdvice.slug}`}
                                                     className="advice__related-item"
                                                 >
                                                     <div className="advice__related-card">
-                                                        {relation.toAdvice.imageUrl && (
+                                                        {relation.toAdvice.imageUrl ? (
                                                             <img
                                                                 src={relation.toAdvice.imageUrl}
                                                                 alt={relation.toAdvice.title}
                                                                 className="advice__related-image"
                                                             />
+                                                        ) : (
+                                                            <div className="advice__related-placeholder">Image non disponible</div>
                                                         )}
                                                         <h3 className="advice__related-name">{relation.toAdvice.title}</h3>
                                                     </div>
                                                 </a>
+                                            ) : (
+                                                <p>Conseil non trouvé.</p>
                                             )
                                         ))
                                     ) : (
@@ -195,7 +199,6 @@ export default async function AdvicePage({ params }: Props) {
 
                     {/* 💬 Et toi, qu'en as-tu pensé ? */}
                     <section className="advice__comments no-print">
-                        <h2 className="advice__comments-title">Et toi, qu'en as-tu pensé ?</h2>
                         <ArticleFeedback articleId={advice.id} />
                         <CommentList articleId={advice.id} />
                     </section>

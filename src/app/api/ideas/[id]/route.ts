@@ -16,6 +16,17 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
                 ageCategories: {
                     include: { ageCategory: true },
                 },
+                sections: true,
+                relatedLinks: {
+                    include: {
+                        toIdea: true,
+                    },
+                },
+                relatedArticles: {
+                    include: {
+                        toArticle: true,
+                    },
+                },
             },
         });
 
@@ -26,6 +37,8 @@ export async function GET(req: NextRequest, context: { params: Promise<{ id: str
         return NextResponse.json({
             ...idea,
             ageCategories: idea.ageCategories.map((ac) => ac.ageCategoryId),
+            sections: idea.sections || [],
+            relatedArticles: idea.relatedArticles.map((ra) => ra.toArticle),
         });
     } catch (error) {
         console.error("❌ Erreur GET idea :", error);
@@ -38,7 +51,9 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
     try {
         const { id } = await context.params;
         const body = await req.json();
-        const { title, description, image, theme, ageCategories } = body;
+        const { title, description, image, theme, ageCategories, sections, relatedArticleIds } = body;
+
+        console.log("📝 Articles liés reçus pour mise à jour :", relatedArticleIds);
 
         if (!title || !theme) {
             return NextResponse.json({ error: "❌ Champs obligatoires manquants." }, { status: 400 });
@@ -50,6 +65,25 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
             ).filter(Boolean)
             : [];
 
+        // 🔄 Vérification : Y a-t-il des articles liés à mettre à jour ?
+        if (Array.isArray(relatedArticleIds) && relatedArticleIds.length > 0) {
+            // ✅ Supprimer les anciennes relations
+            await prisma.relatedIdeaArticle.deleteMany({
+                where: {
+                    fromIdeaId: id
+                }
+            });
+
+            // ✅ Créer les nouvelles relations
+            await prisma.relatedIdeaArticle.createMany({
+                data: relatedArticleIds.map((articleId: string) => ({
+                    fromIdeaId: id,
+                    toArticleId: articleId,
+                }))
+            });
+        }
+
+        // ✅ Mettre à jour l'idée
         const updatedIdea = await prisma.idea.update({
             where: { id },
             data: {
@@ -63,23 +97,39 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ id: str
                         ageCategoryId: ageId,
                     })),
                 },
+                sections: {
+                    deleteMany: {}, // On supprime les anciennes sections
+                    create: sections.map((section: any) => ({
+                        title: section.title,
+                        content: section.content,
+                        style: section.style || "classique",
+                        imageUrl: section.imageUrl || null,
+                    }))
+                }
             },
             include: {
                 ageCategories: {
                     include: { ageCategory: true },
                 },
+                sections: true,
+                relatedArticles: {
+                    include: { toArticle: true }
+                }
             },
         });
 
         return NextResponse.json({
             ...updatedIdea,
             ageCategories: updatedIdea.ageCategories.map((ac) => ac.ageCategoryId),
+            sections: updatedIdea.sections,
+            relatedArticles: updatedIdea.relatedArticles.map((ra) => ra.toArticle),
         });
     } catch (error) {
         console.error("❌ Erreur PUT idea :", error);
         return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
     }
 }
+
 
 // 🔴 DELETE : Supprimer une idée
 export async function DELETE(req: NextRequest, context: { params: Promise<{ id: string }> }) {

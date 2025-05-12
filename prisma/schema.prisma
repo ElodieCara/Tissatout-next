@@ -26,11 +26,11 @@ model Article {
   // ✅ Relation Many-to-Many gérée par un modèle pivot
   ageCategories AgeCategoryArticle[]
 
-  relatedLinks RelatedArticle[] @relation("FromArticle")
-  linkedFrom   RelatedArticle[] @relation("ToArticle")
-
-  printableGameId String?         @db.ObjectId
-  printableGame   PrintableGame[] @relation("ArticleToGame")
+  relatedLinks    RelatedArticle[]     @relation("FromArticle")
+  linkedFrom      RelatedArticle[]     @relation("ToArticle")
+  relatedToIdeas  RelatedIdeaArticle[] @relation("ToIdeaArticle")
+  printableGameId String?              @db.ObjectId
+  printableGame   PrintableGame[]      @relation("ArticleToGame")
 }
 
 model RelatedArticle {
@@ -63,6 +63,14 @@ model Comment {
   approved  Boolean  @default(false)
 }
 
+model RelatedIdeaArticle {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  fromIdea    Idea    @relation("FromIdeaArticle", fields: [fromIdeaId], references: [id])
+  fromIdeaId  String  @db.ObjectId
+  toArticle   Article @relation("ToIdeaArticle", fields: [toArticleId], references: [id])
+  toArticleId String  @db.ObjectId
+}
+
 model Idea {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
   title       String
@@ -76,16 +84,28 @@ model Idea {
   comments    Comment[]
 
   // ✅ Relation Many-to-Many gérée par un modèle pivot
-  ageCategories AgeCategoryIdea[]
+  ageCategories   AgeCategoryIdea[]
+  relatedArticles RelatedIdeaArticle[] @relation("FromIdeaArticle")
+  relatedLinks    RelatedIdea[]        @relation("FromIdea")
+  linkedFrom      RelatedIdea[]        @relation("ToIdea")
+}
+
+model RelatedIdea {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  fromIdeaId String @db.ObjectId
+  toIdeaId   String @db.ObjectId
+  fromIdea   Idea   @relation("FromIdea", fields: [fromIdeaId], references: [id])
+  toIdea     Idea   @relation("ToIdea", fields: [toIdeaId], references: [id])
 }
 
 model IdeaSection {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  title   String
-  content String
-  style   String?
-  idea    Idea    @relation(fields: [ideaId], references: [id], onDelete: Cascade)
-  ideaId  String  @db.ObjectId
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  content  String
+  style    String?
+  imageUrl String?
+  idea     Idea    @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  ideaId   String  @db.ObjectId
 }
 
 model AgeCategory {
@@ -296,7 +316,7 @@ model SiteSettings {
   // Actualités
   newsBanner String?
   newsTitle  String?
-  newsDesc   String? 
+  newsDesc   String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -48,20 +48,36 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
     useEffect(() => {
         async function fetchData() {
             if (adviceId && adviceId !== "new") {
-                const res = await fetch(`/api/advice/${adviceId}`);
-                const data = await res.json();
-                setForm({
-                    ...data,
-                    ageCategories: Array.isArray(data.ageCategories) ? data.ageCategories : [],
-                    sections: Array.isArray(data.sections) && data.sections.length > 0 ? data.sections : [{ title: "", content: "", style: "" }],
-                });
+                try {
+                    const res = await fetch(`/api/advice/${adviceId}`);
+                    const data = await res.json();
+
+                    // ✅ Ajout du mapping pour les `relatedAdvices`
+                    setForm({
+                        ...data,
+                        ageCategories: Array.isArray(data.ageCategories) ? data.ageCategories : [],
+                        sections: Array.isArray(data.sections) && data.sections.length > 0
+                            ? data.sections
+                            : [{ title: "", content: "", style: "" }],
+                        relatedAdvices: data.relatedFrom?.map((relation: any) => relation.toAdvice.id) || []
+                    });
+
+                } catch (error) {
+                    console.error("❌ Erreur lors du fetch de l'advice :", error);
+                }
             }
-            const resAge = await fetch("/api/ageCategories");
-            const ageData = await resAge.json();
-            setAgeCategories(ageData);
+
+            try {
+                const resAge = await fetch("/api/ageCategories");
+                const ageData = await resAge.json();
+                setAgeCategories(ageData);
+            } catch (error) {
+                console.error("❌ Erreur lors du fetch des catégories d'âge :", error);
+            }
         }
         fetchData();
     }, [adviceId]);
+
 
     useEffect(() => {
         async function fetchAllAdvices() {
@@ -72,14 +88,16 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
         fetchAllAdvices();
     }, []);
 
+    // ✅ Gérer le changement de sélection
     const handleRelatedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const selectedOptions = Array.from(e.target.selectedOptions, (option) => option.value);
+        console.log("📝 Conseils sélectionnés :", selectedOptions);
+
         setForm(prev => ({
             ...prev,
             relatedAdvices: selectedOptions,
         }));
     };
-
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -114,30 +132,34 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
         const method = adviceId && adviceId !== "new" ? "PUT" : "POST";
         const url = adviceId && adviceId !== "new" ? `/api/advice/${adviceId}` : "/api/advice";
 
+        console.log("🔎 Envoi du conseil :", {
+            ...form,
+            ageCategoryIds: form.ageCategories,
+            relatedAdvices: form.relatedAdvices,
+        });
+
         const safeId = crypto.randomUUID().slice(0, 6);
         const slug = generateSlug(form.title, safeId);
 
-        const res = await fetch(url, {
-            method,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                ...form,
-                slug,
-                sections: form.sections.map(s => ({
-                    title: s.title,
-                    content: s.content,
-                    style: s.style || "classique",
-                    imageUrl: s.imageUrl || "",
-                })),
-            }),
-        });
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    ...form,
+                    ageCategoryIds: form.ageCategories,
+                    relatedAdvices: form.relatedAdvices, // ✅ On passe les conseils liés
+                }),
+            });
 
-        if (res.ok) {
-            setMessage("✅ Conseil enregistré !");
-            setTimeout(() => router.push("/admin?section=advice"), 1000);
-        } else {
-            const data = await res.json();
-            setMessage(`❌ Erreur : ${data.error || "Erreur inconnue"}`);
+            if (res.ok) {
+                setMessage(`✅ Conseil ${adviceId ? "mis à jour" : "ajouté"} avec succès !`);
+                setTimeout(() => router.push("/admin?section=advice"), 1000);
+            } else {
+                setMessage("❌ Erreur lors de l'enregistrement du conseil.");
+            }
+        } catch {
+            setMessage("❌ Erreur de connexion avec le serveur.");
         }
     };
 

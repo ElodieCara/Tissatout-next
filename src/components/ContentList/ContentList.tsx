@@ -7,7 +7,6 @@ import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 import { reverseThemeMapping } from "@/lib/themeMapping";
 import NewsletterBanner from "../NewsletterBanner/NewsletterBanner";
-import { getRandomSuggestions } from "@/lib/suggestions";
 import SuggestionsForParents from "../SuggestionsForParents/SuggestionsForParents";
 
 export interface ContentItem {
