@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image, { StaticImageData } from "next/image";
 import Button from "../Button/Button";
 
@@ -15,28 +15,72 @@ type SlideshowProps = {
     subtitle?: string;
     description?: string;
     buttonLabel?: string;
+    interval?: number;
 };
 
 
-const Slideshow: React.FC<SlideshowProps> = ({ images }) => {
+const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [loaded, setLoaded] = useState(false);
+    const [previousSlide, setPreviousSlide] = useState<number | null>(null);
+    const [direction, setDirection] = useState<"left" | "right">("left");
+    const [isPaused, setIsPaused] = useState(false);
+    const [fade, setFade] = useState(true);
+
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     // 🛡️ Sécurité : si aucune image, on ne rend rien
     if (images.length === 0) return null;
 
+    // ⏳ Effet pour l'auto-défilement
+    useEffect(() => {
+        if (!isPaused) {
+            intervalRef.current = setInterval(() => {
+                setFade(false);
+                setTimeout(() => {
+                    setCurrentSlide((prev) => (prev + 1) % images.length);
+                    setFade(true);
+                }, 300); // ⏳ Le temps de l'animation (0.3s)
+            }, interval);
+        }
+
+        return () => {
+            if (intervalRef.current) clearInterval(intervalRef.current);
+        };
+    }, [images.length, interval, isPaused]);
+
+
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % images.length);
+        setFade(false);
+        setTimeout(() => {
+            setCurrentSlide((prev) => (prev + 1) % images.length);
+            setFade(true);
+        }, 300);
     };
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
+        setFade(false);
+        setTimeout(() => {
+            setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
+            setFade(true);
+        }, 300);
     };
 
     const goToSlide = (index: number) => {
-        setCurrentSlide(index);
+        setFade(false);
+        setTimeout(() => {
+            setCurrentSlide(index);
+            setFade(true);
+        }, 300);
     };
 
+    const handleMouseEnter = () => {
+        setIsPaused(true);
+        if (intervalRef.current) clearInterval(intervalRef.current);
+    };
+
+    const handleMouseLeave = () => {
+        setIsPaused(false);
+    };
     const ballons = [
         { plein: "/assets/ballon-jaune-plein.png", vide: "/assets/ballon-jaune-vide.png" },
         { plein: "/assets/ballon-rouge-plein.png", vide: "/assets/ballon-rouge-vide.png" },
@@ -48,23 +92,30 @@ const Slideshow: React.FC<SlideshowProps> = ({ images }) => {
     const current = images[currentSlide];
 
     return (
-        <div className="container__slide">
-            {!loaded && (
-                <div className="skeleton-loader">
-                    <p>Chargement en cours...</p>
-                </div>
-            )}
-            <div className="container__slide__image">
-                <Image
-                    src={images[currentSlide].imageUrl}
-                    alt={`Slide ${currentSlide + 1}`}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    loading={currentSlide === 0 ? "eager" : "lazy"}
-                    quality={75}
-                    sizes="100vw"
-                />
-
+        <div className="container__slide"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
+            <div className="container__slide__image-wrapper">
+                {images.map((image, index) => (
+                    <Image
+                        key={index}
+                        src={image.imageUrl}
+                        alt={`Slide ${index + 1}`}
+                        fill
+                        className={`container__slide__image ${index === currentSlide ? "active" : ""
+                            } ${previousSlide !== null && index === previousSlide
+                                ? direction === "left"
+                                    ? "slide-left"
+                                    : "slide-right"
+                                : ""
+                            }`}
+                        style={{ objectFit: "cover" }}
+                        loading={index === 0 ? "eager" : "lazy"}
+                        quality={75}
+                        sizes="100vw"
+                    />
+                ))}
             </div>
 
             <div className="container__slide__buttons">
