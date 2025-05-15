@@ -72,13 +72,21 @@ export async function POST(req: Request) {
             }
         }
 
+        // 🔍 Génération d'un slug unique avec UUID
+        let slug = generateSlug(title, crypto.randomUUID());
+        let exists = await prisma.drawing.findUnique({ where: { slug } });
+
+        while (exists) {
+            slug = generateSlug(title, crypto.randomUUID());
+            exists = await prisma.drawing.findUnique({ where: { slug } });
+        }
         // Création du coloriage
         const newDrawing = await prisma.drawing.create({
             data: {
                 title,
                 imageUrl,
                 categoryId,
-                slug: generateSlug(title),
+                slug,
                 ageCategories: {
                     create: ageCategories.map((ageId: string) => ({
                         ageCategory: { connect: { id: ageId } }
@@ -138,7 +146,7 @@ export async function PUT(req: Request) {
                 title,
                 imageUrl,
                 categoryId,
-                slug: generateSlug(title),
+                slug: title !== existingDrawing.title ? generateSlug(title, crypto.randomUUID()) : existingDrawing.slug,
                 ageCategories: {
                     deleteMany: {}, // 🔥 Supprime les relations existantes
                     create: ageCategories.map((ageId: string) => ({

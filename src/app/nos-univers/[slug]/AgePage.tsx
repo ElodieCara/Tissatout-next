@@ -154,17 +154,18 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                     <Button className="large"><Link href="/coloriages">Voir tous les coloriages</Link></Button>
                 </div>
 
+
                 {ageCategory.drawings && ageCategory.drawings.length > 0 ? (
                     <>
                         <div className="drawings__content">
                             {/* 🖼️ Carte de gauche avec le premier dessin */}
                             <Link
-                                href={`/coloriages/${ageCategory.drawings[0].drawing.slug}`}
+                                href={`/coloriages/${encodeURIComponent(ageCategory.drawings[0]?.drawing?.slug)}`}
                                 className="drawings__highlight"
                             >
                                 <Image
                                     src={ageCategory.drawings[0].drawing.imageUrl || "/images/default.jpg"}
-                                    alt={ageCategory.drawings[0].drawing.title}
+                                    alt={ageCategory.drawings[0]?.drawing.title ?? "Coloriage non trouvé"}
                                     width={300}
                                     height={300}
                                 />
@@ -223,7 +224,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                                 const background = themeImages[themeKey]?.background || themeImages.default.background;
 
                                 return (
-                                    <Link key={idea.id} href={`/idees/${idea.id}`} className="ideas__card">
+                                    <Link key={idea.id} href={`/idees/${idea.slug}`} className="ideas__card">
                                         <div className="ideas__card__icon">
                                             <Image
                                                 src={icon}

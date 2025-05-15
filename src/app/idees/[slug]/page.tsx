@@ -101,7 +101,7 @@ export default async function IdeaPage({ params }: Props) {
                         <Breadcrumb
                             crumbs={[
                                 { label: "Accueil", href: "/" },
-                                { label: "Idées", href: "/idees" },
+                                { label: "Idées", href: "/inspiration" },
                                 { label: idea.title },
                             ]}
                         />

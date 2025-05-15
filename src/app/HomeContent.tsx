@@ -31,6 +31,7 @@ interface Idea {
     description: string;
     image?: string;
     theme: string;
+    slug: string;
 }
 
 interface HomeContentProps {
@@ -237,7 +238,7 @@ export default function HomeContent({
                                     : "Date inconnue";
 
                                 return (
-                                    <Link href={`/news/${article.id}`} key={article.id} className="news-content__articles-card">
+                                    <Link href={`/articles/${article.slug}`} key={article.id} className="news-content__articles-card">
                                         <ArticleCard
                                             iconSrc={article.iconSrc || ""}
                                             title={article.title}
@@ -268,7 +269,7 @@ export default function HomeContent({
                     <div className="ideas-content__card">
                         {Array.isArray(ideas) && ideas.slice(0, 4).map((idea, index) => (
                             <Link
-                                href={`/ideas/${idea.id}`}
+                                href={`/idees/${idea.slug}`}
                                 key={idea.id}
                                 className={`ideas-content__card__link ${index === 0 || index === 3 ? "large" : "small"}`}
                             >

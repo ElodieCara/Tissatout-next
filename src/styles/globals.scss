@@ -68,6 +68,7 @@
 @import "../app/nos-univers/[slug]/Loading.module.scss";
 @import "../app/inspiration/Inspiration.module.scss";
 @import "../app/coloriages/Coloriages.module.scss";
+@import "../app/coloriages/[id]/components/DrawingSidebar/DrawingSidebar.module.scss";
 @import "../app/activites-a-imprimer/activites-a-imprimer.scss";
 @import "../app/activites-a-imprimer/activityCard.module.scss";
 @import "../app/activites-a-imprimer/activityFilter.scss";
@@ -90,3 +91,4 @@
 @import "../app/activites-a-imprimer/[slug]/printablePage.module.scss";
 @import "../app/idees/[slug]/Idees.module.scss";
 @import "../app/recherche/Recherche.module.scss";
+@import "../app/subscribe/subscribe.module.scss";

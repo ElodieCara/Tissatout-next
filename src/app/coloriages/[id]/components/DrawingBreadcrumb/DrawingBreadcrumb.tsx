@@ -9,25 +9,25 @@ interface DrawingBreadcrumbProps {
 
 export default function DrawingBreadcrumb({ category, drawingTitle }: DrawingBreadcrumbProps) {
     return (
-        <nav className="breadcrumb">
-            <ul>
+        <nav className="breadcrumb-page">
+            <ul className="breadcrumb__list">
                 {/* Accueil */}
-                <li>
-                    <Link href="/"> Accueil</Link>
+                <li className="breadcrumb__item">
+                    <Link className="breadcrumb__link" href="/"> Accueil</Link>
                 </li>
                 <span className="breadcrumb__separator"> &gt; </span>
 
                 {/* Explorer */}
-                <li>
-                    <Link href="/coloriages"> Explorer</Link>
+                <li className="breadcrumb__item">
+                    <Link className="breadcrumb__link" href="/coloriages"> Explorer</Link>
                 </li>
 
                 {/* Catégorie */}
                 {category && (
                     <>
                         <span className="breadcrumb__separator"> &gt; </span>
-                        <li>
-                            <Link href={`/coloriages?categorie=${encodeURIComponent(category)}`}>
+                        <li className="breadcrumb__item">
+                            <Link className="breadcrumb__link" href={`/coloriages?categorie=${encodeURIComponent(category)}`}>
                                 {category}
                             </Link>
                         </li>
@@ -38,7 +38,7 @@ export default function DrawingBreadcrumb({ category, drawingTitle }: DrawingBre
                 {drawingTitle && (
                     <>
                         <span className="breadcrumb__separator"> &gt; </span>
-                        <li className="active"> {drawingTitle}</li>
+                        <li className="breadcrumb__current active"> {drawingTitle}</li>
                     </>
                 )}
             </ul>

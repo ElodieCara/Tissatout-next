@@ -435,3 +435,10 @@ model GameType {
   game   PrintableGame @relation(fields: [gameId], references: [id], onDelete: Cascade)
   type   ActivityType? @relation(fields: [typeId], references: [id], onDelete: Cascade)
 }
+
+model Subscriber {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+

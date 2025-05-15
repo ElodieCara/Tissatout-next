@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 
 export default async function Page({ params }: { params: { slug: string } }) {
     const slug = params.slug;
+
+    console.log("📌 Slug reçu :", slug);
     const ageCategory = await prisma.ageCategory.findUnique({
         where: { slug },
         include: {
