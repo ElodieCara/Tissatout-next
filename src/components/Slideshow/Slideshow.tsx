@@ -20,6 +20,7 @@ type SlideshowProps = {
 
 const Slideshow: React.FC<SlideshowProps> = ({ images }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [loaded, setLoaded] = useState(false);
 
     // 🛡️ Sécurité : si aucune image, on ne rend rien
     if (images.length === 0) return null;
@@ -48,14 +49,19 @@ const Slideshow: React.FC<SlideshowProps> = ({ images }) => {
 
     return (
         <div className="container__slide">
+            {!loaded && (
+                <div className="skeleton-loader">
+                    <p>Chargement en cours...</p>
+                </div>
+            )}
             <div className="container__slide__image">
                 <Image
                     src={images[currentSlide].imageUrl}
                     alt={`Slide ${currentSlide + 1}`}
                     fill
                     style={{ objectFit: "cover" }}
-                    priority
-                    quality={100}
+                    loading={currentSlide === 0 ? "eager" : "lazy"}
+                    quality={75}
                     sizes="100vw"
                 />
 

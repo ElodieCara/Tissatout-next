@@ -11,6 +11,9 @@ import Subscribe from "@/layout/Subscribe/Subscribe";
 import arrowPrev from "@/assets/arrow-circle-right.png";
 import arrowNext from "@/assets/arrow-circle-left.png";
 import Slideshow from "@/components/Slideshow/Slideshow";
+import { Suspense } from "react";
+import Loading from "@/app/nos-univers/[slug]/loading";
+import SlideLoader from "@/components/SlideLoader/SlideLoader";
 
 interface Article {
     id: string;
@@ -125,11 +128,15 @@ export default function HomeContent({
     const prevSlide = () => setCurrentSlide((prev) => (prev > 0 ? prev - 1 : totalSlides - 1));
 
     const [slides, setSlides] = useState<HomeSlide[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("/api/home-slides")
-            .then((res) => res.json())
-            .then((data) => {
+        const fetchSlides = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch("/api/home-slides");
+                const data = await response.json();
+
                 const cleaned = data
                     .filter((s: any) =>
                         s &&
@@ -138,25 +145,31 @@ export default function HomeContent({
                         typeof s.title === "string" &&
                         typeof s.description === "string"
                     )
-                    .sort((a: any, b: any) => a.order - b.order); // Tri par ordre si nécessaire
-                console.table(cleaned);
+                    .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0)); // Tri par ordre si nécessaire
 
-                // Optionnel : suppression des doublons par ID
-                const unique = cleaned.filter((s: any, index: number, self: any[]) =>
-                    index === self.findIndex(t => t.id === s.id)
-                );
+                setSlides(cleaned);
+            } catch (err) {
+                console.error("❌ Erreur lors du chargement des slides :", err);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-                setSlides(unique);
-            })
-            .catch(() => console.error("❌ Erreur lors du chargement des slides"));
+        fetchSlides();
     }, []);
-
-
 
     return (
         <>
-            <Slideshow images={slides} />
-            <Overview />
+            {loading ? (
+                <div className="slideshow__loader">
+                    <SlideLoader />
+                </div>
+            ) : (
+                <Slideshow images={slides} />
+            )}
+            <Suspense fallback={<Loading />}>
+                <Overview />
+            </Suspense>
 
             {/* 🟢 Section des actualités */}
             <section className="container__news">
