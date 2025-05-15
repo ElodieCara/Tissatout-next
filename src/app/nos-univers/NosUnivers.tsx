@@ -148,20 +148,40 @@ export default function NosUnivers({ settings }: { settings: any }) {
                     </div>
 
                     <div className="nos-univers__activites-grid">
-                        {activities[selectedCategory].map((activity) => (
-                            <Link key={activity.title} href={activity.link} className="nos-univers__activites__card">
-                                <Image
-                                    src={activity.icon}
-                                    alt={activity.title}
-                                    width={150}
-                                    height={150}
-                                    className="activity-icon"
-                                    loading="lazy"
-                                />
-                                <p>{activity.title}</p>
-                            </Link>
-                        ))}
+                        {activities[selectedCategory].map((activity) => {
+                            // Génération du lien correct
+                            const link =
+                                activity.title === "Grammaire"
+                                    ? "/trivium?category=Grammaire"
+                                    : activity.title === "Logique"
+                                        ? "/trivium?category=Logique"
+                                        : activity.title === "Rhétorique"
+                                            ? "/trivium?category=Rhétorique"
+                                            : activity.title === "Arithmétique"
+                                                ? "/quadrivium?category=Arithmétique"
+                                                : activity.title === "Géométrie"
+                                                    ? "/quadrivium?category=Géométrie"
+                                                    : activity.title === "Musique"
+                                                        ? "/quadrivium?category=Musique"
+                                                        : activity.title === "Astronomie"
+                                                            ? "/quadrivium?category=Astronomie"
+                                                            : activity.link;
+                            return (
+                                <Link key={activity.title} href={link} className="nos-univers__activites__card">
+                                    <Image
+                                        src={activity.icon}
+                                        alt={activity.title}
+                                        width={150}
+                                        height={150}
+                                        className="activity-icon"
+                                        loading="lazy"
+                                    />
+                                    <p>{activity.title}</p>
+                                </Link>
+                            );
+                        })}
                     </div>
+
                 </section>
 
                 <MysteryCard

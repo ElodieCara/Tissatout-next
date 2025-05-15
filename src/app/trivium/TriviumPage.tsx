@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import type { Lesson } from "@/types/lessons";
 import Banner from "@/components/Banner/Banner";
 import CategoryTabs from "@/components/Trivium/CategoryTabs";
@@ -23,19 +24,23 @@ interface TriviumPageProps {
 }
 
 export default function TriviumPage({ lessons, collections }: TriviumPageProps) {
-    const categories = [
-        { key: "Grammaire", label: "📖 Grammaire" },
-        { key: "Logique", label: "🧠 Logique" },
-        { key: "Rhétorique", label: "🗣️ Rhétorique" },
-    ];
-
-    const categoryKeys = categories.map(c => c.key);
-    const [selectedCategory, setSelectedCategory] = useState(categoryKeys[0]);
+    const searchParams = useSearchParams();
+    const [selectedCategory, setSelectedCategory] = useState("Grammaire");
     const [selectedAge, setSelectedAge] = useState<string | null>(null);
     const [selectedCollection, setSelectedCollection] = useState<string | undefined>(undefined);
+
     const pathname = usePathname();
     const module = (pathname ?? "").includes("quadrivium") ? "quadrivium" : "trivium";
     const filteredCollections = collections.filter(c => c.module === module);
+
+    // 🔄 Écouteur pour le changement de l'URL
+    useEffect(() => {
+        const categoryFromQuery = searchParams ? searchParams.get("category") : null;
+        if (categoryFromQuery) {
+            console.log("🔍 Nouvelle catégorie détectée :", categoryFromQuery);
+            setSelectedCategory(categoryFromQuery);
+        }
+    }, [searchParams]);
 
     const filteredByCollection = selectedCollection
         ? lessons.filter((l) => l.collection?.id === selectedCollection)
@@ -66,7 +71,13 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
                     <CategoryTabs
                         selected={selectedCategory}
                         onChange={setSelectedCategory}
-                        categories={categories} />
+                        categories={[
+                            { key: "Grammaire", label: "📖 Grammaire" },
+                            { key: "Logique", label: "🧠 Logique" },
+                            { key: "Rhétorique", label: "🗣️ Rhétorique" },
+                        ]}
+                        module={module}
+                    />
 
                     <AgeFilter
                         selectedAge={selectedAge}

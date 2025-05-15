@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import type { Lesson } from "@/types/lessons";
 import Banner from "@/components/Banner/Banner";
 import CategoryTabs from "@/components/Trivium/CategoryTabs";
@@ -22,6 +23,7 @@ interface LessonModulePageProps {
 }
 
 export default function LessonModulePage({ module, lessons, collections }: LessonModulePageProps) {
+    const searchParams = useSearchParams();
     const categories =
         module === "trivium"
             ? [
@@ -36,9 +38,20 @@ export default function LessonModulePage({ module, lessons, collections }: Lesso
                 { key: "Astronomie", label: "🌌 Astronomie" },
             ];
 
+
     const [selectedCategory, setSelectedCategory] = useState(categories[0].key);
     const [selectedAge, setSelectedAge] = useState<string | null>(null);
     const [selectedCollection, setSelectedCollection] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        if (!searchParams) return;
+
+        const categoryFromQuery = searchParams.get("category");
+        if (categoryFromQuery) {
+            console.log("🔎 Catégorie trouvée dans l'URL :", categoryFromQuery);
+            setSelectedCategory(categoryFromQuery);
+        }
+    }, [searchParams]);
 
     const filteredByCollection = selectedCollection
         ? lessons.filter(
@@ -76,6 +89,7 @@ export default function LessonModulePage({ module, lessons, collections }: Lesso
                         selected={selectedCategory}
                         onChange={setSelectedCategory}
                         categories={categories}
+                        module={module}
                     />
 
                     <AgeFilter
