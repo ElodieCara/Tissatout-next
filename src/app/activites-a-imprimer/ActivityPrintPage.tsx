@@ -61,17 +61,18 @@ export default function ActivityPrintPage() {
 
     return (
         <>
-            <Banner
-                className="banner--printable"
-                src="/bg/halo-jeux.png"
-                title="Activités à imprimer"
-                description="Téléchargez des fiches éducatives ou recevez-les plastifiées. Des outils concrets pour apprendre avec méthode, dès 3 ans."
-                buttons={[
-                    { label: "📄 Fiches PDF", targetId: "section-pdf" },
-                    { label: "🧵 Activités plastifiées", targetId: "section-plastifiees" },
-                ]}
-            />
-
+            <header className="banner--bg">
+                <Banner
+                    className="banner--printable"
+                    src="/bg/halo-jeux.png"
+                    title="Activités à imprimer"
+                    description="Accédez à une collection d'activités ludiques et pédagogiques, prêtes à être imprimées ! Développez les compétences de vos enfants avec des fiches éducatives, des jeux logiques et des supports plastifiés pour un apprentissage durable."
+                    buttons={[
+                        { label: "📄 Fiches PDF", targetId: "section-pdf" },
+                        { label: "🧵 Activités plastifiées", targetId: "section-plastifiees" },
+                    ]}
+                />
+            </header>
             <main className="activites">
                 <Breadcrumb
                     crumbs={[

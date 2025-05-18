@@ -32,7 +32,7 @@ const SuggestionsForParents: React.FC<SuggestionsForParentsProps> = ({ items }) 
 
                     return (
                         <Link
-                            href={`/${item.slug}`}
+                            href={`/coloriages/${item.slug}`}
                             key={item.id}
                             className="suggestions-parents__card"
                         >

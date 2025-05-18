@@ -4,9 +4,10 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
+    gap: 50px;
 
     &__layout {
         display: flex;
@@ -44,7 +45,7 @@
     &__title {
         font-size: 22px;
         font-weight: bold;
-        color: #333;
+        color: $primary-color !important;
     }
 
     &__views {
@@ -56,7 +57,6 @@
     &__main {
         display: flex;
         gap: 30px;
-        align-items: center;
     }
 
     &__image-container {
@@ -92,7 +92,7 @@
         transition: all 0.3s ease-in-out;
 
         &:hover {
-            transform: scale(1.1);
+            transform: scale(1.005);
         }
 
         &:disabled {
@@ -125,19 +125,16 @@
         flex-direction: column;
         justify-content: space-around;
         gap: 10px;
+        width: 70%;
     }
 
     &__button {
-        background: #0070f3;
-        color: white;
-        padding: 10px 15px;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
-
-        &:hover {
-            background: #005bb5;
-        }
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 100%;
+        gap: 15px;
     }
 
     &__share {
@@ -155,11 +152,115 @@
     &__description {
         margin-top: 20px;
         padding: 15px;
-        background: #f9f9f9;
-        border-radius: 8px;
-        font-size: 16px;
+        font-size: 21px !important;
         text-align: justify;
-        color: #333;
+        color: $primary-color;
         width: 100%;
+    }
+
+    .product__share {
+        justify-content: flex-end;
+    }
+
+    &-container {
+        .nos-univers__banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem 3rem;
+            background: linear-gradient(120deg, #2c3f64, #345a89); // ✅ Dégradé léger
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+
+            // 💡 Pour un effet de lumière douce
+            &::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+                opacity: 0.15;
+                z-index: 1;
+            }
+
+            &-content {
+                flex: 1;
+                position: relative;
+                z-index: 2; // Devant le dégradé
+                color: white;
+
+                h1 {
+                    font-size: 2.8rem;
+                    margin-bottom: 1rem;
+                    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4); // ✅ Plus de lisibilité
+                }
+
+                p {
+                    font-size: 1.2rem;
+                    margin-bottom: 1.5rem;
+                    line-height: 1.5;
+                }
+
+                // &-buttons {
+                //     display: flex;
+                //     gap: 1rem;
+
+                //     button {
+                //         font-size: 1rem;
+                //         padding: 0.8rem 1.5rem;
+                //         border-radius: 8px;
+                //         background-color: #ecac3e;
+                //         color: #2c3f64;
+                //         transition: background 0.3s;
+
+                //         &:hover {
+                //             background-color: darken(#ecac3e, 10%);
+                //         }
+                //     }
+                // }
+            }
+
+            &-image {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                position: relative;
+                z-index: 2;
+
+                img {
+                    border-radius: 50%; // ✅ Cercle autour de l'image
+                    border: 5px solid rgba(255, 255, 255, 0.6); // ✅ Bordure blanche légère
+                    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); // ✅ Effet de profondeur
+                    object-fit: contain;
+                    width: 400px;
+                    height: 400px;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .nos-univers__banner {
+                    flex-direction: column;
+                    text-align: center;
+
+                    &-image {
+                        margin-top: 1.5rem;
+                    }
+                }
+            }
+
+            @media (max-width: 480px) {
+                .nos-univers__banner-content {
+                    h1 {
+                        font-size: 2rem;
+                    }
+
+                    p {
+                        font-size: 1rem;
+                    }
+                }
+            }
+
+        }
+
     }
 }

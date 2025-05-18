@@ -68,8 +68,8 @@ export default function ColoriagePage({
                     title={coloringTitle}
                     description={coloringDesc}
                     buttons={[
-                        { label: "📅 Explorer les coloriages", href: "/coloriages/explorer" },
-                        { label: "🔍 Rechercher un thème", targetId: "themes" },
+                        { label: "Explorer les coloriages", href: "/coloriages/explorer" },
+                        { label: "Rechercher un thème", targetId: "themes" },
                     ]}
                 />
             </header>
@@ -81,7 +81,11 @@ export default function ColoriagePage({
 
                 {/* 1️⃣ Coloriages de saison */}
                 <section id="saisons" className="coloriages__theme-section">
-                    <h2>📅 Coloriages de {currentSeason}</h2>
+                    <div className="coloriages__theme-section-title" >
+                        <img src="/icons/titres/crayons.png" alt="" />
+                        <h2>Coloriages de {currentSeason}</h2>
+                    </div>
+
                     <p>Retrouvez les coloriages liés à la saison actuelle et aux fêtes du moment.</p>
                     <div className="coloriages__theme-grid">
                         {drawings
@@ -102,7 +106,10 @@ export default function ColoriagePage({
 
                 {/* 2️⃣ Coloriages par thème */}
                 <section id="themes" className="coloriages__theme-section">
-                    <h2>🎨 Coloriages par thème</h2>
+                    <div className="coloriages__theme-section-title" >
+                        <img src="/icons/titres/coloriages.png" alt="" />
+                        <h2>Coloriages par thème</h2>
+                    </div>
                     {categoriesData.Thèmes.map((theme) => (
                         <div key={theme}>
                             <h3>🖍 {theme}</h3>
@@ -120,7 +127,10 @@ export default function ColoriagePage({
 
                 {/* 3️⃣ Coloriages par âge */}
                 <section id="ages" className="coloriages__theme-section">
-                    <h2>👶 Coloriages par âge</h2>
+                    <div className="coloriages__theme-section-title" >
+                        <img src="/icons/titres/nounours.png" alt="" />
+                        <h2> Coloriages par âge</h2>
+                    </div>
                     {Object.entries(categoriesData["Âge"]).map(([label, category]) => (
                         <div key={category}>
                             <h3>🖍 {label}</h3>
@@ -138,8 +148,10 @@ export default function ColoriagePage({
 
                 {/* 4️⃣ Coloriages éducatifs (Trivium) 📚 */}
                 <section id="educatif" className="coloriages__theme-section">
-                    <h2>📚 Coloriages éducatifs (Trivium)</h2>
-
+                    <div className="coloriages__theme-section-title" >
+                        <img src="/icons/titres/livre.png" alt="" />
+                        <h2>Coloriages éducatifs (Trivium)</h2>
+                    </div>
                     {categoriesData["Éducatif & Trivium"].map(sub => {
                         const subDrawings = drawings.filter(d => d.category?.name === sub).slice(0, 4);
                         console.log(`🖍 ${sub} ->`, subDrawings); // 🔍 Vérifie si les coloriages sont bien récupérés
@@ -168,9 +180,6 @@ export default function ColoriagePage({
                         );
                     })}
                 </section>
-
-
-
             </main>
         </>
     );

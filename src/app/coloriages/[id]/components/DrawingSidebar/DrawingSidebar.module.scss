@@ -2,28 +2,28 @@
 @use '../../../../../styles/base/mixins' as mix;
 
 .drawing-sidebar {
-    background-color: #f8f9fa;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 20px;
-    border: 1px solid #eaeaea;
     @include mix.container;
+    padding: 50px;
 
     &__title {
-        font-size: 1.3rem;
+        font-size: 1.5rem !important;
         font-weight: bold;
-        margin-bottom: 12px;
+        margin-bottom: 20px !important;
         color: #2c3f64;
     }
 
     &__list {
-        display: flex;
-        flex-direction: row;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); // Colonne auto-adaptative
         gap: 14px;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 100%;
     }
 
     &__item {
-        list-style: none;
+        display: block;
     }
 
     &__link {
@@ -33,13 +33,14 @@
 
     &__card {
         display: flex;
-        align-items: center;
         flex-direction: column;
+        justify-content: space-between;
         background-color: #ffffff;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        min-height: 300px; // ✅ Assure une hauteur minimale identique pour toutes les cards
+        height: 100%;
 
         &:hover {
             transform: translateY(-2px);
@@ -48,10 +49,13 @@
     }
 
     &__image-wrapper {
+        width: 100px;
+        height: 100px;
         flex-shrink: 0;
         background-color: #f9b233;
         border-radius: 10px 0 0 10px;
         overflow: hidden;
+        margin: 0 auto;
     }
 
     &__image {
@@ -63,12 +67,19 @@
     &__content {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: space-between;
         padding: 10px 16px;
         flex-grow: 1;
     }
 
-    &__title {
+    &__text {
+        font-size: 1.3rem !important;
+        margin-bottom: 20px !important;
+        color: #2c3f64;
+        text-align: center !important;
+    }
+
+    &__name {
         font-size: 1.1rem;
         font-weight: 600;
         margin-bottom: 8px;

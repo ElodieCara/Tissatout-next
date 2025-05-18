@@ -31,7 +31,7 @@ export default async function DrawingSidebar({ category, currentDrawingId }: Dra
                                     />
                                 </div>
                                 <div className="drawing-sidebar__content">
-                                    <h4 className="drawing-sidebar__title">{drawing.title}</h4>
+                                    <h4 className="drawing-sidebar__text">{drawing.title}</h4>
                                     <button className="drawing-sidebar__button">Voir le coloriage</button>
                                 </div>
                             </div>

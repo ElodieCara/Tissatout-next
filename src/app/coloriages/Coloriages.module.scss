@@ -62,7 +62,6 @@
         font-size: 28px;
         font-weight: 700;
         text-align: center;
-        margin-bottom: 20px;
         color: $primary-color;
         text-transform: uppercase;
         letter-spacing: 1px;
@@ -75,7 +74,7 @@
             width: 80px;
             height: 4px;
             background: $secondary-color;
-            margin: 10px auto 0;
+            //margin: 10px auto 0;
             border-radius: 2px;
         }
     }
@@ -120,6 +119,17 @@
     &:hover {
         box-shadow: $shadow-hover;
         transform: translateY(-3px);
+    }
+
+    &-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 80px;
+
+        img {
+            width: 5%;
+            height: 5%;
+        }
     }
 }
 

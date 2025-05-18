@@ -2,6 +2,11 @@
 @use "../../styles/utils/variables" as *;
 @use "../../styles/base/mixins" as *;
 
+.banner--printable,
+.banner--bg {
+    background-color: $primary-color;
+}
+
 .activites {
     padding: 4rem 1.5rem;
     max-width: 1180px;

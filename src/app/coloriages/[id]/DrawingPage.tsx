@@ -8,11 +8,27 @@ import Banner from "@/components/Banner/Banner";
 import Button from "@/components/Button/Button";
 import Breadcrumb from "../../../components/Breadcrumb/Breadcrumb";
 import DrawingBreadcrumb from "./components/DrawingBreadcrumb/DrawingBreadcrumb";
+import ShareActions from "@/components/ShareActions/ShareActions";
+
+interface SiteSettings {
+    coloringBanner: string;
+    coloringTitle: string;
+    coloringDesc: string;
+}
 
 export default function DrawingPage({ drawing }: { drawing: Drawing }) {
     const [localLikes, setLocalLikes] = useState<number>(drawing.likes ?? 0);
     const [liked, setLiked] = useState(false);
     const [pageUrl, setPageUrl] = useState<string | null>(null);
+    const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+    useEffect(() => {
+        // Récupération des settings depuis l'API
+        fetch("/api/site-settings")
+            .then((res) => res.json())
+            .then((data) => setSettings(data))
+            .catch((err) => console.error("Erreur lors de la récupération des settings :", err));
+    }, []);
 
     // ✅ Vérification si on est côté client avant d'utiliser window
     useEffect(() => {
@@ -100,10 +116,14 @@ export default function DrawingPage({ drawing }: { drawing: Drawing }) {
 
     return (
         <>
-            <Banner src="/assets/slide3.png"
-                title="💡 Inspiration & Conseils"
-                description="Trouvez des idées d'activités et des conseils adaptés à chaque saison et moment clé du développement !" />
-
+            <Banner
+                src={settings?.coloringBanner || "/assets/default-coloring-banner.png"}
+                title={settings?.coloringTitle || "Coloriages à imprimer : libère ta créativité !"}
+                description={
+                    settings?.coloringDesc ||
+                    "Des centaines de dessins à imprimer gratuitement, pour tous les âges et tous les goûts !"
+                }
+            />
             <div className="drawing-page">
                 <DrawingBreadcrumb category={drawing.category?.name} drawingTitle={drawing.title} />
 
@@ -114,7 +134,7 @@ export default function DrawingPage({ drawing }: { drawing: Drawing }) {
 
                 <div className="drawing-page__main">
                     <div className="drawing-page__image-container">
-                        <Image src={drawing.imageUrl} alt={drawing.title} width={400} height={400} className="drawing-page__image" priority />
+                        <Image src={drawing.imageUrl} alt={drawing.title} width={600} height={600} className="drawing-page__image" priority />
                     </div>
 
                     <div className="drawing-page__actions">
@@ -129,22 +149,11 @@ export default function DrawingPage({ drawing }: { drawing: Drawing }) {
                             <p>Découvrez ce magnifique coloriage **{drawing.title}**, idéal pour les enfants et les amateurs d’illustrations créatives.</p>
                         </div>
 
-                        <Button className="large" variant="primary" onClick={handlePrint}>🖨️ Imprimer</Button>
-                        <Button className="large" variant="secondary" onClick={handleDownload}>⬇️ Télécharger</Button>
-
-                        <div className="drawing-page__share">
-                            <Link href={`https://www.pinterest.com/pin/create/button/?url=${pageUrl ? encodeURIComponent(pageUrl) : ''}`} target="_blank">
-                                <Image src="/icons/sociale.png" alt="Pinterest" width={32} height={32} />
-                            </Link>
-
-                            <Link href={`https://www.facebook.com/sharer/sharer.php?u=${pageUrl ? encodeURIComponent(pageUrl) : ''}`} target="_blank">
-                                <Image src="/icons/facebook.png" alt="Facebook" width={32} height={32} />
-                            </Link>
-
-                            <Link href={`mailto:?subject=Regarde ce coloriage !&body=${pageUrl ? encodeURIComponent(pageUrl) : ''}`}>
-                                <Image src="/icons/email.png" alt="Email" width={32} height={32} />
-                            </Link>
+                        <div className="drawing-page__button">
+                            <Button className="large" variant="primary" onClick={handlePrint}>Imprimer</Button>
+                            <Button className="small" variant="secondary" onClick={handleDownload}>Télécharger</Button>
                         </div>
+                        <ShareActions imageUrl={drawing.imageUrl} title={drawing.title} />
                     </div>
                 </div>
             </div>

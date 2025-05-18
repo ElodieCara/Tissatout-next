@@ -59,13 +59,24 @@ export default function Banner({ src, title, description, buttons = [], classNam
                 )}
             </div>
             <div className="nos-univers__banner-image">
+                <div className="background-flare">
+                    <img src="/bg/bg-flare-tissatout.png" alt="Background Flare" />
+                    {/* ✨ Étoiles scintillantes */}
+                    <div className="twinkle star-1"></div>
+                    <div className="twinkle star-2"></div>
+                    <div className="twinkle star-3"></div>
+                    <div className="twinkle star-4"></div>
+                    <div className="twinkle star-5"></div>
+                </div>
                 <Image
                     src={src}
                     alt={title}
-                    fill
+                    layout="responsive"
+                    width={800}
+                    height={400}
                     priority
                     sizes="100vw"
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: "contain" }}
                 />
             </div>
         </div>
