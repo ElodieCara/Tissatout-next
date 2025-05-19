@@ -10,6 +10,7 @@ import TriviumSection from "@/components/Trivium/TriviumSection";
 import TriviumSidebar from "@/components/Trivium/SidebarSommaire";
 import CollectionBanner from "@/components/Trivium/CollectionBanner";
 import { usePathname } from "next/navigation";
+import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 
 interface TriviumPageProps {
     lessons: Lesson[];
@@ -58,59 +59,70 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
     );
 
     return (
-        <main className="trivium-page">
-            <Banner
-                src="/assets/slide-trivium.png"
-                title="🎓 Le Trivium pour les Petits Curieux"
-                description="Découvre des activités amusantes pour apprendre à bien parler, réfléchir et t’exprimer. Grammaire, Logique, Rhétorique… comme les grands penseurs !"
-                buttons={[]}
-            />
+        <>
+            <header className="trivium-banner">
+                <Banner
+                    src="/assets/slide-trivium.png"
+                    title="🎓 Le Trivium pour les Petits Curieux"
+                    description="Découvre des activités amusantes pour apprendre à bien parler, réfléchir et t’exprimer. Grammaire, Logique, Rhétorique… comme les grands penseurs !"
+                    buttons={[]}
+                />
+            </header>
 
-            <div className="trivium-page__layout">
-                <div className="trivium-page__main">
-                    <CategoryTabs
-                        selected={selectedCategory}
-                        onChange={setSelectedCategory}
-                        categories={[
-                            { key: "Grammaire", label: "📖 Grammaire" },
-                            { key: "Logique", label: "🧠 Logique" },
-                            { key: "Rhétorique", label: "🗣️ Rhétorique" },
-                        ]}
-                        module={module}
-                    />
-
-                    <AgeFilter
-                        selectedAge={selectedAge}
-                        ages={ages}
-                        onChange={setSelectedAge}
-                    />
-
-                    {selectedCollection && (
-                        <CollectionBanner
-                            title={
-                                collections.find((col) => col.id === selectedCollection)?.title || ""
-                            }
-                            count={filteredByCollection.length}
-                            onClear={() => setSelectedCollection(undefined)}
+            <main className="trivium-page">
+                <Breadcrumb crumbs={[
+                    { label: "Accueil", href: "/" },
+                    { label: "Trivium", href: "/trivium" },
+                    { label: selectedCategory }
+                ]} />
+                <h1>Trivium</h1>
+                <p>Apprendre à raisonner, s'exprimer et comprendre dès le plus jeune âge.</p>
+                <div className="trivium-page__layout">
+                    <div className="trivium-page__main">
+                        <CategoryTabs
+                            selected={selectedCategory}
+                            onChange={setSelectedCategory}
+                            categories={[
+                                { key: "Grammaire", label: "📖 Grammaire" },
+                                { key: "Logique", label: "🧠 Logique" },
+                                { key: "Rhétorique", label: "🗣️ Rhétorique" },
+                            ]}
+                            module={module}
                         />
-                    )}
 
-                    <TriviumSection
-                        id={selectedCategory.toLowerCase()}
-                        title={selectedCategory}
-                        lessons={filteredLessons}
-                    />
-                </div>
+                        <AgeFilter
+                            selectedAge={selectedAge}
+                            ages={ages}
+                            onChange={setSelectedAge}
+                        />
 
-                <div className="trivium-page__right">
-                    <TriviumSidebar
-                        collections={filteredCollections}
-                        selectedId={selectedCollection}
-                        onSelect={setSelectedCollection}
-                        module={module}
-                    />
+                        {selectedCollection && (
+                            <CollectionBanner
+                                title={
+                                    collections.find((col) => col.id === selectedCollection)?.title || ""
+                                }
+                                count={filteredByCollection.length}
+                                onClear={() => setSelectedCollection(undefined)}
+                            />
+                        )}
+
+                        <TriviumSection
+                            id={selectedCategory.toLowerCase()}
+                            title={selectedCategory}
+                            lessons={filteredLessons}
+                        />
+                    </div>
+
+                    <div className="trivium-page__right">
+                        <TriviumSidebar
+                            collections={filteredCollections}
+                            selectedId={selectedCollection}
+                            onSelect={setSelectedCollection}
+                            module={module}
+                        />
+                    </div>
                 </div>
-            </div>
-        </main>
+            </main>
+        </>
     );
 }

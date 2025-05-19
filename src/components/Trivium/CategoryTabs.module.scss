@@ -6,15 +6,19 @@
     flex-wrap: wrap;
 
     &__tab {
+        max-width: 150px; // ✅ Limite la taille maximale des boutons
+        flex-grow: 1; // ✅ Permet de prendre l'espace restant de manière équitable
         padding: 0.7rem 1.5rem;
         border-radius: 30px;
         border: 2px solid #ecac3e;
         background-color: #fffefa;
         color: #2c3f64;
         font-weight: bold;
-        font-size: 1rem;
+        font-size: 0.95rem;
         cursor: pointer;
         transition: background-color 0.3s ease, color 0.3s ease;
+        white-space: nowrap;
+        text-align: center;
 
         &:hover {
             background-color: #ecac3e;
@@ -24,6 +28,46 @@
         &--active {
             background-color: #ecac3e;
             color: white;
+        }
+    }
+
+    /* 🖥️ Large écran (Desktop) */
+    @media (min-width: 1024px) {
+        .category-tabs {
+            flex-wrap: nowrap;
+            justify-content: center;
+        }
+    }
+
+    /* 📱 Moyen écran (Tablette paysage et petit laptop) */
+    @media (max-width: 1024px) and (min-width: 600px) {
+        .category-tabs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); // ✅ Grille plus compacte
+            gap: 0.5rem;
+        }
+    }
+
+    /* 📱 Mobile (Smartphone) */
+    @media (max-width: 600px) {
+        .category-tabs {
+            grid-template-columns: 1fr 1fr; // ✅ Deux colonnes pour optimiser l'espace
+            gap: 0.5rem;
+        }
+
+        .category-tabs__tab {
+            width: 100%;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.85rem;
+        }
+    }
+
+    /* 📱 Petit Mobile (Smartphone étroit) */
+    @media (max-width: 480px) {
+        .category-tabs {
+            grid-template-columns: 1fr; // ✅ Une colonne en mode compact
+            gap: 0.3rem;
         }
     }
 }
