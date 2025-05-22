@@ -28,3 +28,25 @@
         padding: 1rem;
     }
 }
+
+.voir-plus-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.voir-plus-btn {
+    background-color: #ecac3e;
+    color: #fffefa;
+    border: none;
+    border-radius: 20px;
+    padding: 0.6rem 1.2rem;
+    font-weight: bold;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+
+    &:hover {
+        background-color: darken(#ecac3e, 8%);
+    }
+}

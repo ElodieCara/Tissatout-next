@@ -24,8 +24,10 @@
 
 
         & nav {
-            width: 1000px;
+            max-width: 1000px;
+            width: 100%;
             margin: 0 auto;
+            padding: 0 1rem;
 
             & ol {
                 padding: 20px 0 0 20px !important;
@@ -65,6 +67,11 @@
         &__selection {
             display: flex;
             gap: 1rem;
+
+            @media (max-width: 768px) {
+                flex-direction: column;
+            }
+
         }
 
         &__right {
@@ -103,13 +110,17 @@
     padding-bottom: 0.5rem;
 }
 
+.breadcrumb::-webkit-scrollbar {
+    display: none;
+}
+
 /* 🌐 Responsive */
 @media (max-width: 768px) {
     .trivium-banner {
         display: none;
 
         &__layout {
-            margin: none;
+            margin: 0 auto;
         }
     }
 
