@@ -36,9 +36,11 @@ export async function POST(req: Request) {
                 published: data.published ?? true,
                 ageTag: data.ageTag ?? null,
                 module: data.module, // ✅ ← AJOUT OBLIGATOIRE
-                collection: {
-                    connect: { id: data.collectionId },
-                },
+                ...(data.collectionId && {
+                    collection: {
+                        connect: { id: data.collectionId },
+                    },
+                }),
             },
         });
 

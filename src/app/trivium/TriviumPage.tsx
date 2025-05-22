@@ -29,19 +29,38 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
     const [selectedCategory, setSelectedCategory] = useState("Grammaire");
     const [selectedAge, setSelectedAge] = useState<string | null>(null);
     const [selectedCollection, setSelectedCollection] = useState<string | undefined>(undefined);
-
+    const activeCollection = collections.find((col) => col.id === selectedCollection);
+    const sectionTitle =
+        activeCollection
+            ? activeCollection.title
+            : selectedCategory === "Toutes"
+                ? "Toutes les catégories"
+                : selectedCategory;
     const pathname = usePathname();
     const module = (pathname ?? "").includes("quadrivium") ? "quadrivium" : "trivium";
-    const filteredCollections = collections.filter(c => c.module === module);
+    const filteredCollections = collections.filter(c => (c.module ?? "trivium") === module);
 
     // 🔄 Écouteur pour le changement de l'URL
     useEffect(() => {
-        const categoryFromQuery = searchParams ? searchParams.get("category") : null;
+        const categoryFromQuery = searchParams?.get("category");
+
         if (categoryFromQuery) {
-            console.log("🔍 Nouvelle catégorie détectée :", categoryFromQuery);
-            setSelectedCategory(categoryFromQuery);
+            const validCategories = [
+                "Toutes", "Grammaire", "Logique", "Rhétorique",
+                "Arithmétique", "Géométrie", "Musique", "Astronomie"
+            ];
+
+            if (validCategories.includes(categoryFromQuery)) {
+                setSelectedCategory(categoryFromQuery);
+            } else {
+                console.warn("🚫 Catégorie inconnue dans l'URL :", categoryFromQuery);
+            }
+        } else {
+            // 🧺 Si aucune catégorie, on remet "Toutes" par défaut
+            setSelectedCategory("Toutes");
         }
     }, [searchParams]);
+
 
     const filteredByCollection = selectedCollection
         ? lessons.filter((l) => l.collection?.id === selectedCollection)
@@ -49,10 +68,11 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
 
     const filteredLessons = filteredByCollection.filter((lesson) => {
         return (
-            lesson.category === selectedCategory &&
+            (selectedCategory === "Toutes" || lesson.category === selectedCategory) &&
             (!selectedAge || lesson.ageTag === selectedAge)
         );
     });
+
 
     const ages = Array.from(
         new Set(lessons.map((l) => l.ageTag).filter((a): a is string => !!a))
@@ -83,9 +103,10 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
                             selected={selectedCategory}
                             onChange={setSelectedCategory}
                             categories={[
-                                { key: "Grammaire", label: "📖 Grammaire" },
-                                { key: "Logique", label: "🧠 Logique" },
-                                { key: "Rhétorique", label: "🗣️ Rhétorique" },
+                                { key: "Toutes", label: "Toutes" },
+                                { key: "Grammaire", label: "Grammaire" },
+                                { key: "Logique", label: "Logique" },
+                                { key: "Rhétorique", label: "Rhétorique" },
                             ]}
                             module={module}
                         />
@@ -96,30 +117,33 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
                             onChange={setSelectedAge}
                         />
 
-                        {selectedCollection && (
-                            <CollectionBanner
-                                title={
-                                    collections.find((col) => col.id === selectedCollection)?.title || ""
-                                }
-                                count={filteredByCollection.length}
-                                onClear={() => setSelectedCollection(undefined)}
-                            />
-                        )}
+                        <div className="trivium-page__selection">
+                            <div className="trivium-page__group">
+                                {selectedCollection && (
+                                    <CollectionBanner
+                                        title={
+                                            collections.find((col) => col.id === selectedCollection)?.title || ""
+                                        }
+                                        count={filteredByCollection.length}
+                                        onClear={() => setSelectedCollection(undefined)}
+                                    />
+                                )}
+                                <TriviumSection
+                                    id={selectedCategory.toLowerCase()}
+                                    title={sectionTitle}
+                                    lessons={filteredLessons}
+                                />
+                            </div>
+                            <div className="trivium-page__right">
+                                <TriviumSidebar
+                                    collections={filteredCollections}
+                                    selectedId={selectedCollection}
+                                    onSelect={setSelectedCollection}
+                                    module={module}
+                                />
 
-                        <TriviumSection
-                            id={selectedCategory.toLowerCase()}
-                            title={selectedCategory}
-                            lessons={filteredLessons}
-                        />
-                    </div>
-
-                    <div className="trivium-page__right">
-                        <TriviumSidebar
-                            collections={filteredCollections}
-                            selectedId={selectedCollection}
-                            onSelect={setSelectedCollection}
-                            module={module}
-                        />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>

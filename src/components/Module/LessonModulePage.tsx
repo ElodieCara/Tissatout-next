@@ -29,11 +29,13 @@ export default function LessonModulePage({ module, lessons, collections }: Lesso
     const categories =
         module === "trivium"
             ? [
+                { key: "Toutes", label: "Toutes" },
                 { key: "Grammaire", label: "Grammaire" },
                 { key: "Logique", label: "Logique" },
                 { key: "Rhétorique", label: "Rhétorique" },
             ]
             : [
+                { key: "Toutes", label: "Toutes" },
                 { key: "Arithmétique", label: "Arithmétique" },
                 { key: "Géométrie", label: "Géométrie" },
                 { key: "Musique", label: "Musique" },
@@ -63,7 +65,7 @@ export default function LessonModulePage({ module, lessons, collections }: Lesso
 
     const filteredLessons = filteredByCollection.filter((lesson) => {
         return (
-            lesson.category === selectedCategory &&
+            (selectedCategory === "Toutes" || lesson.category === selectedCategory) &&
             (!selectedAge || lesson.ageTag === selectedAge)
         );
     });
@@ -91,8 +93,8 @@ export default function LessonModulePage({ module, lessons, collections }: Lesso
                 <BackToTop />
                 <Breadcrumb crumbs={[
                     { label: "Accueil", href: "/" },
-                    { label: "Quadrivium", href: "/quadrivium" },
-                    { label: selectedCategory }
+                    { label: module === "trivium" ? "Trivium" : "Quadrivium", href: `/${module}` },
+                    { label: selectedCategory === "Toutes" ? "Toutes les catégories" : selectedCategory }
                 ]} />
 
                 <div className="trivium-page__layout">
@@ -119,10 +121,11 @@ export default function LessonModulePage({ module, lessons, collections }: Lesso
                         )}
 
                         <TriviumSection
-                            id={selectedCategory.toLowerCase()}
+                            id={selectedCategory === "Toutes" ? "toutes-categories" : selectedCategory.toLowerCase()}
                             title={selectedCategory}
                             lessons={filteredLessons}
                         />
+
                     </div>
 
                     <div className="trivium-page__right">

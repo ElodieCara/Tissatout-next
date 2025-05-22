@@ -20,8 +20,10 @@ export default function CategoryTabs({ selected, onChange, categories, module }:
         const currentParams = new URLSearchParams(searchParams as any);
         currentParams.set("category", key);
 
-        router.push(`/${module}?${currentParams.toString()}`);
+        // ✅ Empêcher le scroll vers le haut
+        router.push(`/${module}?${currentParams.toString()}`, { scroll: false });
     };
+
 
     return (
         <div className="category-tabs">

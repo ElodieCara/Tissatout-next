@@ -27,6 +27,18 @@ export default function TriviumSidebar({
         quadrivium: ["Arithmétique", "Géométrie", "Musique", "Astronomie"],
     };
 
+    // ✅ Fonction de scroll programmatique
+    const handleScroll = (id: string) => {
+        onSelect?.(id);
+        const target = document.getElementById(id);
+        if (target) {
+            target.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }
+    };
+
     return (
         <aside className="trivium-sidebar">
             <h3 className="trivium-sidebar__title">
@@ -50,13 +62,23 @@ export default function TriviumSidebar({
                     <li
                         key={collection.id}
                         className={`trivium-sidebar__item${selectedId === collection.id
-                                ? " trivium-sidebar__item--active"
-                                : ""
+                            ? " trivium-sidebar__item--active"
+                            : ""
                             }`}
                     >
                         <Link
                             href={`#${collection.slug}`}
-                            onClick={() => onSelect?.(collection.id)}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                onSelect?.(collection.id);
+
+                                const target = document.getElementById(collection.slug);
+                                if (target) {
+                                    target.scrollIntoView({ behavior: "smooth", block: "start" });
+                                }
+
+                                window.history.pushState(null, "", `#${collection.slug}`);
+                            }}
                             className="trivium-sidebar__link"
                         >
                             <span>{collection.title}</span>

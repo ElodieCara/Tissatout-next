@@ -62,6 +62,11 @@
             }
         }
 
+        &__selection {
+            display: flex;
+            gap: 1rem;
+        }
+
         &__right {
             flex: 0 0 240px;
             position: sticky;

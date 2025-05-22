@@ -3,8 +3,8 @@ import TriviumCategory from "./TriviumCategoryPage";
 import LessonPage from "@/components/LessonPage/LessonPage"; // à créer si pas fait
 import { notFound } from "next/navigation";
 
-export default async function Page({ params }: { params: { slug: string } }) {
-    const { slug } = params;
+export default async function Page(props: { params: { slug: string } }) {
+    const slug = props.params.slug;
 
     if (["grammaire", "logique", "rhetorique"].includes(slug)) {
         const lessons = await getTriviumLessons();
