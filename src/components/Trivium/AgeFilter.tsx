@@ -9,7 +9,7 @@ interface AgeFilterProps {
 export default function AgeFilter({ selectedAge, ages, onChange }: AgeFilterProps) {
     return (
         <div className="age-filter">
-            <h4 className="age-filter__title">Filtrer par âge 🎯</h4>
+            <h4 className="age-filter__title">Filtrer par âge</h4>
             <div className="age-filter__buttons">
                 <button
                     className={`age-filter__button ${selectedAge === null ? "age-filter__button--active" : ""}`}
