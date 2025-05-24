@@ -96,6 +96,12 @@ export default function LessonModulePage({ module, lessons, collections }: Lesso
                     { label: module === "trivium" ? "Trivium" : "Quadrivium", href: `/${module}` },
                     { label: selectedCategory === "Toutes" ? "Toutes les catégories" : selectedCategory }
                 ]} />
+                <h1>{module === "trivium" ? "Trivium" : "Quadrivium"}</h1>
+                <p>
+                    {module === "trivium"
+                        ? "Apprendre à raisonner, s'exprimer et comprendre dès le plus jeune âge."
+                        : "Explorer les secrets des mathématiques, de la musique, de la géométrie et des étoiles."}
+                </p>
 
                 <div className="trivium-page__layout">
                     <div className="trivium-page__main">
