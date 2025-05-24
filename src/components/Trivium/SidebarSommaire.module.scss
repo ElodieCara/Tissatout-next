@@ -1,14 +1,14 @@
 .trivium-sidebar {
-    background-color: #fffefa;
-    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     padding: 1.5rem;
+    border-radius: 12px;
+    background-color: #fffefa;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
     width: 100%;
     max-width: 250px;
     font-family: "Comic Sans MS", sans-serif;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
 
     &__title {
         font-size: 1.3rem;
@@ -78,8 +78,6 @@
         flex-grow: 1;
         text-decoration: none;
         color: inherit;
-
-
     }
 
     &__count {
@@ -89,50 +87,26 @@
         padding: 0.1rem 0.5rem;
         border-radius: 999px;
     }
-}
 
-@media (max-width: 768px) {
-    .trivium-sidebar {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        overflow-x: auto;
-        padding: 1rem 0.5rem;
-        background-color: #fffefa;
-        border-radius: 8px;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    // 🧩 MOBILE & TABLETTE
+    @media (max-width: 1224px) {
         width: 100%;
         max-width: unset;
+        padding: 1rem;
+        border-radius: 1rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        overflow-x: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
 
-        /* Masquer les scrollbars mais permettre le scroll */
         &::-webkit-scrollbar {
             display: none;
         }
 
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-
         &__item {
             min-width: 150px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            background-color: #f9f9f6;
-            padding: 0.6rem 0.8rem;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            color: #2c3f64;
             white-space: nowrap;
-
-            &:hover {
-                background-color: #f1ece5;
-            }
-
-            &--active {
-                background-color: rgba(236, 172, 62, 0.1);
-                border-color: #ecac3e;
-                font-weight: bold;
-            }
         }
     }
 }

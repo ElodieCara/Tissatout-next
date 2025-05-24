@@ -13,9 +13,10 @@ export default function LessonCard({ lesson }: { lesson: Lesson }) {
                 <Image
                     src={lesson.image || "/placeholder.jpg"}
                     alt={lesson.title}
-                    width={400}
-                    height={250}
+                    fill
                     className="lesson-card__image"
+                    style={{ objectFit: "cover" }}
+                    sizes="(max-width: 768px) 100vw, 400px"
                 />
                 <div className="lesson-card__tags">
                     {lesson.ageTag && <span className="tag tag--age">{lesson.ageTag}</span>}

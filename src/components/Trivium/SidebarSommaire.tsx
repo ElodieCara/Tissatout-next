@@ -42,7 +42,7 @@ export default function TriviumSidebar({
     return (
         <aside className="trivium-sidebar">
             <h3 className="trivium-sidebar__title">
-                {module === "trivium" ? "Trivium" : "Quadrivium"}
+                {module === "trivium" ? "Filtrer le Trivium" : "Filtrer le Quadrivium"}
             </h3>
 
             <ul className="trivium-sidebar__list">

@@ -1,127 +1,189 @@
 @use '../../styles/utils/variables' as vars;
 @use '../../styles/base/mixins' as mix;
 
-.trivium {
-    &-banner {
-        .nos-univers__banner {
-            justify-items: center;
+/* =======================
+   🎓 TRIVIUM BANNER
+========================== */
+.trivium-banner {
+    .nos-univers__banner {
+        justify-items: center;
 
-            &-image {
-                // overflow: hidden;
-                max-width: 250px;
+        &-image {
+            max-width: 250px;
 
-                .background-flare {
-                    width: 200%;
-                    height: 200%;
-                }
+            .background-flare {
+                width: 200%;
+                height: 200%;
             }
         }
     }
 
-    &-page {
+    @media (max-width: 768px) {
+        display: none;
+    }
+
+    @media (max-width: 1024px) {
+        display: none;
+    }
+}
+
+/* =======================
+   📘 PAGE TRIVIUM
+========================== */
+.trivium-page {
+    display: flex;
+    flex-direction: column;
+
+    nav {
+        max-width: 1000px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 1rem;
+
+        ol {
+            padding: 20px 0 0 20px !important;
+        }
+    }
+
+    h1 {
+        margin: 0 auto;
+        padding-top: 40px;
+        color: vars.$primary-color;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    p {
+        font-size: 1rem;
+        color: vars.$primary-color;
+        margin: 0 auto 1.5rem;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    &__layout {
+        display: flex;
+        gap: 2rem;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            padding: 1rem;
+            margin: 0;
+        }
+
+        @media (min-width: 769px) and (max-width: 1224px) {
+            flex-direction: column;
+            padding: 2rem 1.5rem;
+            gap: 2rem;
+            margin: 0;
+        }
+    }
+
+    &__selection {
+        display: flex;
+        gap: 1rem;
+
+        @media (max-width: 1224px) {
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+    }
+
+    &__main {
+        flex: 1;
         display: flex;
         flex-direction: column;
+        gap: 2rem;
 
+        @media (max-width: 768px) {
+            order: 1;
+        }
+    }
 
-        & nav {
-            max-width: 1000px;
+    &__right {
+        flex: 0 0 240px;
+        position: sticky;
+        top: 100px;
+        align-self: flex-start;
+        z-index: 10;
+
+        @media (max-width: 768px) {
+            position: relative;
+            top: auto;
+            order: 2;
             width: 100%;
-            margin: 0 auto;
-            padding: 0 1rem;
-
-            & ol {
-                padding: 20px 0 0 20px !important;
-            }
         }
 
-        & h1 {
-            margin: 0 auto;
-            padding-top: 40px;
-            color: vars.$primary-color;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        & p {
-            font-size: 1rem;
-            color: vars.$primary-color;
-            margin-bottom: 1.5rem;
-            margin: 0 auto;
-            text-align: center;
-            padding: 1rem;
-        }
-
-        &__layout {
-            display: flex;
-            gap: 2rem;
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-
-            @media (max-width: 768px) {
-                flex-direction: column;
-                padding: 1rem;
-                margin: 0;
-            }
-        }
-
-        &__selection {
-            display: flex;
-            gap: 1rem;
-
-            @media (max-width: 768px) {
-                flex-direction: column;
-            }
-
-        }
-
-        &__right {
-            flex: 0 0 240px;
-            position: sticky;
-            top: 100px;
-            align-self: flex-start;
-            z-index: 10;
-
-            @media (max-width: 768px) {
-                position: relative;
-                top: auto;
-                order: 2;
-                width: 100%;
-            }
-        }
-
-        &__main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-
-            @media (max-width: 768px) {
-                order: 1;
-            }
+        @media (min-width: 769px) and (max-width: 1224px) {
+            order: 2;
+            position: relative;
+            width: 100%;
+            top: auto;
+            padding: 0;
+            z-index: 1;
         }
     }
 }
 
-// Optionnel : pour le breadcrumb si tu veux éviter les débordements mobiles
+/* =======================
+   🧭 SIDEBAR & GRILLE
+========================== */
+.trivium-sidebar {
+    @media (min-width: 769px) and (max-width: 1224px) {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 1rem;
+        background-color: #fffefa;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+}
+
+.trivium-section__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    width: 100%;
+    max-width: 1100px;
+
+    @media (min-width: 769px) and (max-width: 1224px) {
+        max-width: 100%;
+    }
+}
+
+/* =======================
+   🔖 TABS & FILTERS
+========================== */
+.category-tabs,
+.filters-container {
+    @media (min-width: 769px) and (max-width: 1224px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+}
+
+.category-tabs__tab,
+.filters-container button {
+    @media (min-width: 769px) and (max-width: 1224px) {
+        flex: 1 1 calc(33% - 1rem);
+        min-width: 140px;
+        max-width: 200px;
+    }
+}
+
+/* =======================
+   🔎 BREADCRUMB
+========================== */
 .breadcrumb {
     overflow-x: auto;
     white-space: nowrap;
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
-}
 
-.breadcrumb::-webkit-scrollbar {
-    display: none;
-}
-
-/* 🌐 Responsive */
-@media (max-width: 768px) {
-    .trivium-banner {
+    &::-webkit-scrollbar {
         display: none;
-
-        &__layout {
-            margin: 0 auto;
-        }
     }
-
 }

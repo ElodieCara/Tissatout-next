@@ -83,7 +83,7 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
             <header className="trivium-banner">
                 <Banner
                     src="/assets/slide-trivium.png"
-                    title="🎓 Le Trivium pour les Petits Curieux"
+                    title="Le Trivium pour les Petits Curieux"
                     description="Découvre des activités amusantes pour apprendre à bien parler, réfléchir et t’exprimer. Grammaire, Logique, Rhétorique… comme les grands penseurs !"
                     buttons={[]}
                 />
