@@ -29,7 +29,7 @@
             background-position: right .8rem center;
             background-size: .8rem;
             min-width: 130px;
-            max-width: 160px;
+            //x-width: 160px;
             font-weight: bold;
             font-size: .9rem;
         }
@@ -111,7 +111,7 @@
             }
 
             &:hover {
-                transform: rotate(10deg);
+                transform: none;
             }
         }
     }

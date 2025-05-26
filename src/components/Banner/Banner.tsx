@@ -6,7 +6,7 @@ import Link from "next/link";
 import Button from "@/components/Button/Button";
 
 interface ButtonProps {
-    label: string;
+    label: React.ReactNode;
     targetId?: string; // Optionnel pour les ancres internes
     href?: string; // Optionnel pour la redirection externe
 }

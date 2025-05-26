@@ -107,6 +107,12 @@
             &:hover {
                 background-color: darken(#f9b233, 5%);
             }
+
+            & img {
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 6px;
+            }
         }
     }
 

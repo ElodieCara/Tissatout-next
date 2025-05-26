@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Banner from "@/components/Banner/Banner";
 import ActivityCard from "./ActivityCard";
 import ActivityFilter from "./ActivityFilters";
@@ -29,6 +30,7 @@ export default function ActivityPrintPage() {
     const [allThemes, setAllThemes] = useState<string[]>([]);
     const [allTypes, setAllTypes] = useState<string[]>([]);
     const [currentPriceFilter, setCurrentPriceFilter] = useState<"all" | "free" | "asc" | "desc">("all");
+    const [visibleCount, setVisibleCount] = useState(8); // nombre initial
 
     const pdfActivities = activities.filter((a) => a.pdfUrl);
     const printableActivities = activities.filter((a) => a.isPrintable);
@@ -68,9 +70,38 @@ export default function ActivityPrintPage() {
                     title="Activités à imprimer"
                     description="Accédez à une collection d'activités ludiques et pédagogiques, prêtes à être imprimées ! Développez les compétences de vos enfants avec des fiches éducatives, des jeux logiques et des supports plastifiés pour un apprentissage durable."
                     buttons={[
-                        { label: "📄 Fiches PDF", targetId: "section-pdf" },
-                        { label: "🧵 Activités plastifiées", targetId: "section-plastifiees" },
+                        {
+                            label: (
+                                <>
+                                    <Image
+                                        src="/icons/activites/activitefiche.png"
+                                        alt="Fiche PDF"
+                                        width={20}
+                                        height={20}
+                                        style={{ marginRight: "8px", verticalAlign: "middle" }}
+                                    />
+                                    Fiches PDF
+                                </>
+                            ),
+                            targetId: "section-pdf",
+                        },
+                        {
+                            label: (
+                                <>
+                                    <Image
+                                        src="/icons/activites/ficheplastifiee.png"
+                                        alt="Activités plastifiées"
+                                        width={20}
+                                        height={20}
+                                        style={{ marginRight: "8px", verticalAlign: "middle" }}
+                                    />
+                                    Activités plastifiées
+                                </>
+                            ),
+                            targetId: "section-plastifiees",
+                        },
                     ]}
+
                 />
             </header>
             <main className="activites">
@@ -88,28 +119,79 @@ export default function ActivityPrintPage() {
                         progressive et sans surcharge. Disponibles en PDF à imprimer ou en version plastifiée.
                     </p>
                     <div className="activites__badges">
-                        <span className="badge">📅 {activities.length} fiches</span>
-                        <span className="badge">📦 Rapide</span>
-                        <span className="badge">🎓 Dès 3 ans</span>
+                        <span className="badge">
+                            <Image
+                                src="/icons/activites/activitefiche.png"
+                                alt="Nombre de fiches"
+                                width={16}
+                                height={16}
+                                style={{ marginRight: "6px", verticalAlign: "middle" }}
+                            />
+                            {activities.length} fiches
+                        </span>
+
+                        <span className="badge">
+                            <Image
+                                src="/icons/activites/rapide.png"
+                                alt="Rapide"
+                                width={16}
+                                height={16}
+                                style={{ marginRight: "6px", verticalAlign: "middle" }}
+                            />
+                            Rapide
+                        </span>
+
+                        <span className="badge">
+                            <Image
+                                src="/icons/activites/activiteage.png"
+                                alt="À partir de 3 ans"
+                                width={16}
+                                height={16}
+                                style={{ marginRight: "6px", verticalAlign: "middle" }}
+                            />
+                            Dès 3 ans
+                        </span>
+
                     </div>
                 </section>
 
                 <section className="activites__features">
                     <div className="feature">
-                        <i>📄</i>
+                        <Image
+                            src="/icons/activites/activiteaimprimer.png"
+                            alt="Icône Prêtes à imprimer"
+                            width={32}
+                            height={32}
+                            style={{ marginBottom: "8px" }}
+                        />
                         <h3>Prêtes à imprimer</h3>
                         <p>Des fiches claires, lisibles, testées par des enseignants.</p>
                     </div>
+
                     <div className="feature">
-                        <i>📦</i>
+                        <Image
+                            src="/icons/activites/ficheplastifiee.png"
+                            alt="Icône Version plastifiée"
+                            width={32}
+                            height={32}
+                            style={{ marginBottom: "8px" }}
+                        />
                         <h3>Version plastifiée</h3>
                         <p>Réutilisables à volonté, idéales pour les petites mains.</p>
                     </div>
+
                     <div className="feature">
-                        <i>📚</i>
+                        <Image
+                            src="/icons/activites/activitetradi.png"
+                            alt="Icône Méthode classique"
+                            width={32}
+                            height={32}
+                            style={{ marginBottom: "8px" }}
+                        />
                         <h3>Méthode classique</h3>
                         <p>Inspirées du Trivium et du Quadrivium, pour structurer l’apprentissage.</p>
                     </div>
+
                 </section>
 
                 <section className="activites__summary">
@@ -136,9 +218,19 @@ export default function ActivityPrintPage() {
                             <section id="section-pdf" className="activites__section activites__filters-bar">
                                 <div className="activites__header">
                                     <div className="activites__header-texte">
-                                        <h2>📄 Activités à imprimer en PDF</h2>
+                                        <div className="title-with-icon">
+                                            <Image
+                                                src="/icons/activites/activitefiche.png"
+                                                alt="Icône PDF"
+                                                width={32}
+                                                height={32}
+                                                className="section-icon"
+                                            />
+                                            <h2>Activités à imprimer en PDF</h2>
+                                        </div>
                                         <p>Parfait pour un usage immédiat. Téléchargez, imprimez, utilisez !</p>
                                     </div>
+
                                     <ActivityFilter
                                         themes={allThemes}
                                         types={allTypes}
@@ -167,7 +259,7 @@ export default function ActivityPrintPage() {
                                 </div>
                             </section>
                             <div className="activites__grid">
-                                {filteredPdf.map((a) => (
+                                {filteredPdf.slice(0, visibleCount).map((a) => (
                                     <ActivityCard
                                         key={a.id}
                                         id={a.id}
@@ -182,6 +274,16 @@ export default function ActivityPrintPage() {
                                     />
                                 ))}
                             </div>
+                            {visibleCount < filteredPdf.length && (
+                                <div style={{ textAlign: "center", marginTop: "2rem" }}>
+                                    <button
+                                        onClick={() => setVisibleCount((prev) => prev + 8)}
+                                        className="activites__btn"
+                                    >
+                                        ➕ Voir plus de fiches
+                                    </button>
+                                </div>
+                            )}
                         </section>
 
                         <div className="activites__separator">
@@ -191,7 +293,16 @@ export default function ActivityPrintPage() {
                         <section id="section-plastifiees" className="activites__filters-bar">
                             <div className="activites__header-plast">
                                 <div className="activites__header-texte">
-                                    <h2>📦 Activités plastifiées</h2>
+                                    <div className="title-with-icon">
+                                        <Image
+                                            src="/icons/activites/ficheplastifiee.png"
+                                            alt="Icône Version plastifiée"
+                                            width={28}
+                                            height={28}
+                                            className="title-icon"
+                                        />
+                                        <h2>Activités plastifiées</h2>
+                                    </div>
                                     <p>Plus solides, idéales pour durer dans le temps.</p>
                                 </div>
                             </div>

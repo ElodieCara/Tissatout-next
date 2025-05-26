@@ -73,7 +73,14 @@ export default function ActivityCard({
                         href={`/activites-a-imprimer/${slug}`}
                         className="activity-card__btn"
                     >
-                        📂 Voir l’activité
+                        <Image
+                            src="/icons/activites/voiractivite.png" // mets ici le nom exact de ton fichier
+                            alt="Voir l’activité"
+                            width={18}
+                            height={18}
+                            style={{ verticalAlign: "middle", marginRight: "6px" }}
+                        />
+                        Voir l’activité
                     </Link>
                 </div>
             </div>
