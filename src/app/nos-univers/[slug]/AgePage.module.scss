@@ -2,87 +2,189 @@
 @use '../../../styles/utils/variables' as vars;
 
 .age {
-    background-color: vars.$primary-color;
+    background-color: vars.$light-gray;
     padding: 2rem 1rem;
 
+    // Centrage du contenu (container mixin si tu en as un)
     &>* {
         @include mix.container;
     }
 
-    &__intro {
-        display: flex;
-        width: 100%;
-        height: 400px;
-        align-items: center;
-        gap: 2rem;
+    &__main {
+        @include mix.container;
 
-
-        @media (max-width: 768px) {
-            flex-direction: column;
-            height: auto;
-            padding: 1.5rem;
-            gap: 1.5rem;
+        .breadcrumb__list {
+            background: #f0f0f0;
+            padding: 1rem
         }
     }
 
-    &__image {
-        flex: 0 0 35%;
-        height: 100%;
-        padding: 2rem;
+    // ───────────────────────────────
+    // BLOC INTRO (image + texte + icône)
+    // ───────────────────────────────
+    &__intro {
+        display: flex;
+        align-items: center;
+        gap: 3rem;
+        padding: 2rem 0;
 
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
+        @media (max-width: 1024px) {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
-        @media (max-width: 768px) {
-            height: 200px;
-            width: 100%;
+    }
+
+    &__image {
+        flex: 0 0 30%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        img {
+            max-height: 350px;
+            width: auto;
+        }
+
+        @media (max-width: 1024px) {
+            max-height: 350px;
+        }
+
+        &-cta {
+            background-color: vars.$tertiary-color;
+            font-size: 1.2rem !important;
+
+            &-text,
+            span {
+                color: white;
+            }
         }
     }
 
     &__icon {
         flex: 0 0 auto;
         display: flex;
-        align-items: flex-start;
-        justify-content: center;
-
-        height: 100%;
+        align-items: flex-end;
+        justify-content: space-between;
+        flex-direction: row-reverse;
 
         img {
-            width: 150%;
+            width: clamp(48px, 10vw, 80px);
             height: auto;
+            align-self: flex-start;
         }
 
         @media (max-width: 768px) {
-            order: -1; // Si tu veux l'icône au-dessus sur mobile
+            order: -1; // Icône au-dessus du bloc texte si besoin
+            justify-content: space-between;
+            width: 100%;
+            align-items: flex-start;
         }
     }
 
     &__text {
         flex: 1;
-        color: white;
+        color: vars.$primary-color;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        padding-left: 2rem;
+        gap: 1rem;
 
-        &__title {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+        @media (max-width: 1024px) {
+            align-items: center;
+            text-align: center;
         }
 
         &__description {
-            font-size: 1.2rem;
-            line-height: 1.6;
+            font-size: 1.5rem;
+            color: vars.$primary-color;
         }
 
-        @media (max-width: 768px) {
-            padding-left: 0;
+        &__content p {
+            font-size: 1.5rem;
+            color: vars.$primary-color;
+        }
+
+        &__title {
+            display: inline-flex;
             align-items: center;
-            text-align: center;
+            background-color: #f78e74;
+            color: #112244;
+            padding: 0.6rem 1.2rem;
+            border-radius: 1.5rem 0 1.5rem 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            font-family: 'Fredoka', sans-serif;
+            /* ou une police arrondie si tu veux */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    &__content {
+        p {
+            margin: 0.5rem 0;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: vars.$primary-color;
+        }
+    }
+
+    // ───────────────────────────────
+    // LISTE D’ACTIVITÉS
+    // ───────────────────────────────
+    &__activity-list {
+        list-style: none;
+        padding: 0;
+        font-size: 1.2rem;
+        margin: 1rem;
+
+        li {
+            position: relative;
+            padding-left: 1.5rem;
+
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0.5em;
+                width: 0.6rem;
+                height: 0.6rem;
+                background-color: #f78e74; // 🎯 ta couleur saumon
+                border-radius: 50%;
+            }
+        }
+    }
+
+    // ───────────────────────────────
+    // CONCLUSION
+    // ───────────────────────────────
+    &__conclusion {
+
+        blockquote {
+            position: relative;
+            margin: 2em auto;
+            padding-top: 1.5em;
+            font-style: italic;
+            border-left: none;
+            font-size: 1.2rem;
+            color: vars.$primary-color;
+
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100%;
+                /* ou ce que tu veux */
+                height: 2px;
+                background-color: #f78e74;
+                /* couleur du trait */
+                border-radius: 2px;
+            }
         }
     }
 }
@@ -119,10 +221,23 @@
         }
     }
 
+    &__text {
+        &-intro {
+            color: vars.$primary-color !important;
+        }
+    }
+
     &__grid {
         display: flex;
         flex-direction: column;
         gap: 2.5rem;
+    }
+
+    &__footer-text {
+        margin-top: 2rem;
+        font-size: 1.2rem;
+        color: vars.$primary-color;
+
     }
 
     &__card {
@@ -340,6 +455,10 @@
         }
     }
 
+    &__footer-text {
+        padding-top: 30px !important;
+    }
+
     &__grid {
         display: flex;
         gap: 2rem;
@@ -518,6 +637,11 @@
         @include mix.container;
     }
 
+
+    &__text-intro {
+        color: vars.$primary-color !important;
+    }
+
     &__header {
         display: flex;
         justify-content: space-between;
@@ -527,7 +651,7 @@
         h2 {
             font-size: 2rem;
             font-weight: bold;
-            color: #001244;
+            color: vars.$dark-primary-color;
         }
 
         // & .drawings__button {
@@ -617,7 +741,7 @@
     &__description {
         margin-top: 1.5rem;
         font-size: 0.95rem;
-        color: #333;
+        color: vars.$primary-color;
     }
 
     &__empty {
@@ -631,13 +755,13 @@
         &__title {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #1f1f1f;
+            color: vars.$primary-color;
             margin-bottom: 0.5rem;
         }
 
         &__text {
             font-size: 0.95rem;
-            color: #555;
+            color: vars.$primary-color;
             line-height: 1.5;
         }
     }
@@ -646,7 +770,7 @@
 //*********************Idées par âge********************
 
 .ideas {
-    padding: 7rem;
+    padding: 2rem;
     background-color: #e2e5eb;
 
     &>* {
@@ -657,7 +781,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 5rem;
+        margin-bottom: 2rem;
 
         h2 {
             font-size: 2rem;
@@ -673,6 +797,10 @@
             font-weight: bold;
             text-decoration: none;
         }
+    }
+
+    &__text-intro {
+        color: vars.$primary-color !important;
     }
 
     &__grid {
@@ -719,10 +847,10 @@
             z-index: -1;
             transition: filter 0.3s ease-in-out;
 
-            &:hover {
-                // //filter: blur(5px);
-                // /* Appliquer le flou uniquement à l'image de fond lors du hover */
-            }
+            // &:hover {
+            // //filter: blur(5px);
+            // /* Appliquer le flou uniquement à l'image de fond lors du hover */
+            // }
         }
 
         &__icon {
@@ -759,6 +887,184 @@
         &__empty {
             color: #999;
             font-style: italic;
+        }
+    }
+
+    &__footer-text {
+        margin-top: 2rem;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: vars.$primary-color;
+    }
+}
+
+
+.advices__header,
+.articles__header,
+.drawings__header,
+.ideas__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+// Ajoute ce bloc pour régler le problème de respiration :
+.advices__text,
+.articles__text,
+.drawings__text,
+.ideas__text {
+    max-width: 720px;
+    margin: 15px;
+
+    h2 {
+        margin: 0;
+        margin-bottom: 0.5rem; // 👈 Respiration entre le titre et l’intro
+    }
+
+    p {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.85); // pour fond sombre (ajuste pour fond clair)
+    }
+}
+
+
+@media (max-width: 768px) {
+    .age__intro {
+        flex-direction: column-reverse;
+        align-items: center;
+        text-align: center;
+        padding: 2rem 1rem;
+        gap: 0rem;
+    }
+
+    .age__image {
+        width: 100%;
+        align-items: center;
+
+        img {
+            display: none;
+        }
+
+        &-cta {
+            font-size: 1rem !important;
+            padding: 0.8rem 1.6rem;
+            border-radius: 50px;
+            margin-top: 1rem;
+
+            &-text {
+                font-size: 1rem;
+            }
+        }
+    }
+
+    .age__text {
+        width: 100%;
+        gap: 1.5rem;
+
+        &__title {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem 0 1rem 0;
+        }
+
+        &__description {
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        &__content p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .drawings {
+        padding: 1.5rem 1rem;
+
+        &__header {
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+
+            h2 {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+
+            .button.large {
+                font-size: 1rem;
+                padding: 0.5rem 1.2rem;
+            }
+        }
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+
+            &__text {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+
+                &__separator {
+                    height: 3px;
+                    width: 50%;
+                }
+
+                &__block {
+                    text-align: center;
+
+                    h3 {
+                        font-size: 1rem;
+                    }
+
+                    p {
+                        font-size: 0.9rem;
+                    }
+                }
+            }
+        }
+
+        &__highlight {
+            width: 100%;
+            max-width: 320px;
+
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            h3 {
+                font-size: 1.2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+
+        &__description-block {
+            margin-top: 2rem;
+            padding: 0 1rem;
+            text-align: center;
+
+            &__title {
+                font-size: 1.2rem;
+            }
+
+            &__text {
+                font-size: 0.95rem;
+            }
         }
     }
 }

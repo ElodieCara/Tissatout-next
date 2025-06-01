@@ -16,6 +16,9 @@
 }
 
 .drawings__card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background: white;
     border-radius: 0.75rem;
     padding: 0.5rem;

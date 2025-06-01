@@ -13,6 +13,7 @@ const menuItems = [
         path: "/nos-univers",
         submenu: {
             age: [
+                { title: "Tout-petits", path: "/nos-univers/tout-petits" },
                 { title: "3 ans", path: "/nos-univers/3-ans" },
                 { title: "6 ans", path: "/nos-univers/6-ans" },
                 { title: "10 ans", path: "/nos-univers/10-ans" },
