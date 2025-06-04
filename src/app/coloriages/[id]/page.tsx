@@ -3,7 +3,7 @@ import { getDrawingBySlug } from "@/lib/server";
 import DrawingPage from "./DrawingPage";
 import DrawingSidebar from "@/app/coloriages/[id]/components/DrawingSidebar/DrawingSidebar";
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+export default async function Page({ params }: { params: { id: string } }) {
     // Il faut attendre les paramètres avant de les utiliser
     const resolvedParams = await params;
 

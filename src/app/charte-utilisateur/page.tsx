@@ -4,6 +4,15 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
     title: "Charte utilisateur | Tissatout",
     description: "Règles d’utilisation du site Tissatout dans un cadre respectueux, familial et éducatif.",
+    keywords: [
+        "charte utilisateur",
+        "conditions d'utilisation",
+        "site éducatif",
+        "Tissatout",
+        "règles de comportement",
+        "respect sur internet",
+        "site pour enfants"
+    ]
 };
 
 export default function CharteUtilisateurPage() {

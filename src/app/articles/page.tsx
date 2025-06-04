@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { getArticles } from "@/lib/articles";
@@ -12,6 +10,11 @@ interface Article {
     description?: string;
     date?: string;
 }
+
+export const metadata = {
+    title: "Articles - Tissatout",
+    description: "Découvrez les derniers articles publiés sur Tissatout : pédagogie, activités et coloriages.",
+};
 
 export default async function ArticlesPage() {
     const articles = await getArticles(); // 🔥 Chargement côté serveur

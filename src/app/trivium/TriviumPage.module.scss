@@ -33,11 +33,11 @@
 .trivium-page {
     display: flex;
     flex-direction: column;
+    @include mix.container;
 
     nav {
         max-width: 1000px;
         width: 100%;
-        margin: 0 auto;
         padding: 0 1rem;
 
         ol {
@@ -124,6 +124,10 @@
             padding: 0;
             z-index: 1;
         }
+    }
+
+    &__footer {
+        color: vars.$primary-color;
     }
 }
 

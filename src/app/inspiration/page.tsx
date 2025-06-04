@@ -1,6 +1,24 @@
 import { getInspirationData } from "@/lib/server";
 import prisma from "@/lib/prisma";
 import InspirationPage from "./InspirationPage"; // 👈 Client Component
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Inspiration & Conseils | Tissatout",
+    description: "Idées créatives, activités éducatives et conseils pratiques pour accompagner les enfants au fil des saisons.",
+    openGraph: {
+        title: "Inspiration & Conseils | Tissatout",
+        description: "Trouvez des idées et des conseils pour occuper les enfants intelligemment avec des activités adaptées !",
+        images: [
+            {
+                url: "/assets/slide3.png",
+                width: 1200,
+                height: 630,
+                alt: "Inspiration & Conseils",
+            },
+        ],
+    },
+};
 
 export default async function Page() {
     const { articles, ideas, advices } = await getInspirationData();

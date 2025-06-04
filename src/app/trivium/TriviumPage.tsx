@@ -95,8 +95,9 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
                     { label: "Trivium", href: "/trivium" },
                     { label: selectedCategory }
                 ]} />
-                <h1>Trivium</h1>
-                <p>Apprendre à raisonner, s'exprimer et comprendre dès le plus jeune âge.</p>
+                <h1>Le Trivium : Apprendre à penser avec clarté, logique et justesse</h1>
+                <p>Découvrez la méthode du Trivium — Grammaire, Logique, Rhétorique — pour apprendre à structurer sa pensée, à raisonner avec rigueur et à s’exprimer avec force.
+                    Un socle intemporel pour développer l’intelligence critique et la maîtrise du langage.</p>
                 <div className="trivium-page__layout">
                     <div className="trivium-page__main">
                         <CategoryTabs
@@ -144,9 +145,42 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
 
                             </div>
                         </div>
+                        <div className="trivium-page__footer">
+                            <h2>Pourquoi le Trivium ?</h2>
+                            <p> Parce qu’il ne suffit pas de savoir. Il faut comprendre, discerner et transmettre.
+                                Le Trivium — Grammaire, Logique, Rhétorique — n’est pas une méthode scolaire parmi d’autres.
+                                C’est un chemin. Celui qui mène de la simple réception à la pensée articulée.
+                                Apprendre selon le Trivium, c’est retrouver un ordre naturel : d’abord nommer le monde avec justesse (grammaire),
+                                puis apprendre à y voir clair, à trier, à relier (logique),
+                                enfin oser dire, défendre, convaincre (rhétorique).
+                                Dans un monde saturé d’images et d’opinions, cette structure donne des racines.
+                                Elle apprend à penser avant de parler, à écouter avant de répondre, à formuler sans manipuler.
+                                C’est une école de liberté intérieure — exigeante, patiente, mais profondément libératrice.</p>
+                        </div>
                     </div>
                 </div>
             </main>
+            <script
+                type="application/ld+json"
+                suppressHydrationWarning
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "EducationalOccupationalProgram",
+                        name: "Trivium",
+                        description:
+                            "Explore le Trivium pour enfants : Grammaire, Logique et Rhétorique à travers des leçons claires, illustrées et inspirantes.",
+                        educationalLevel: "Primary",
+                        provider: {
+                            "@type": "Organization",
+                            name: "Tissatout",
+                            url: "https://tissatout.fr",
+                        },
+                        image: "https://tissatout.fr/trivium-og.jpg",
+                        url: "https://tissatout.fr/trivium",
+                    }),
+                }}
+            />
         </>
     );
 }

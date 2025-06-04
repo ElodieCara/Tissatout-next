@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Head from "next/head";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import ExplorerSidebar from "./components/ExplorerSidebar";
 import DrawingCard from "@/components/DrawingCard/DrawingCard";
@@ -73,9 +72,6 @@ export default function ExplorerPage({
 
     return (
         <>
-            <Head>
-                <title>Explorer les coloriages - Tissatout</title>
-            </Head>
             <Banner
                 src={coloringBanner}
                 title={coloringTitle}

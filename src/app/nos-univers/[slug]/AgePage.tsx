@@ -6,7 +6,6 @@ import { Advice, Idea } from "@prisma/client";
 import { drawingDescriptions } from "../../../data/drawingDescription";
 import { getAllAgeCategories } from "../../../lib/ages";
 import themeImages from '@/data/themeIdeasImage';
-import AgeCarouselWrapper from "@/components/AgeCarousel/AgeCarouselwrapper";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 

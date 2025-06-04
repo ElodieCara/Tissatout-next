@@ -17,6 +17,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     return {
         title: advice.title,
         description: advice.description || "Découvre un conseil malin pour progresser avec Tissatout !",
+        alternates: {
+            canonical: url,
+        },
         openGraph: {
             title: advice.title,
             description: advice.description || "Découvre un conseil malin pour progresser avec Tissatout !",
@@ -30,5 +33,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
             description: advice.description || "Découvre un conseil malin pour progresser avec Tissatout !",
             images: [image],
         },
+        robots: {
+            index: true,
+            follow: true,
+        },
+        keywords: advice.title.split(" "),
     };
 }

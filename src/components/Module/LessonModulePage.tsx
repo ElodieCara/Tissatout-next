@@ -143,6 +143,14 @@ export default function LessonModulePage({ module, lessons, collections }: Lesso
                         />
                     </div>
                 </div>
+                <div className="trivium-page__footer">
+                    <h2>Quadrivium : Comprendre l’univers par les nombres, les formes, la musique et les astres</h2>
+                    <p>
+                        Le Quadrivium réunit Arithmétique, Géométrie, Musique et Astronomie pour explorer le monde à travers les lois qui l’ordonnent.
+                        Cette méthode ancestrale, au cœur de l’éducation classique, éveille l’esprit à la beauté cachée dans le rythme, l’harmonie et la structure.
+                        Une porte d’entrée vers les sciences, la logique et la contemplation du réel.
+                    </p>
+                </div>
             </main>
         </>
     );

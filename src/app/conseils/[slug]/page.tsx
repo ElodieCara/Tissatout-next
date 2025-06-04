@@ -59,7 +59,7 @@ export default async function AdvicePage({ params }: Props) {
                         </div>
                     )}
                     <div className="advice-banner__content">
-                        <h1 className="advice-banner__title">{advice.title}</h1>
+                        <h2 className="advice-banner__title">{advice.title}</h2>
                         {advice.category && (
                             <p className="advice-banner__category">🎯 {advice.category}</p>
                         )}

@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { activities } from "@/data/home";
 import { useEffect, useState } from "react";
-import Head from "next/head";
 import Banner from "@/components/Banner/Banner";
 import Button from "@/components/Button/Button";
 import { Tag } from "@/types/home";
@@ -31,11 +30,6 @@ export default function NosUnivers({ settings }: { settings: any }) {
 
     return (
         <>
-            <Head>
-                <title>Nos Univers ✨</title>
-                <meta name="description" content="Découvrez des activités adaptées à chaque âge !" />
-            </Head>
-
             <header className="nos-univers">
                 <Banner
                     src={settings?.universBanner || "/assets/slide3.png"}
@@ -195,6 +189,16 @@ export default function NosUnivers({ settings }: { settings: any }) {
                     alt="Aperçu activité mystère"
                 />
             </div >
+            <script type="application/ld+json" suppressHydrationWarning dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "WebPage",
+                    name: "Nos Univers",
+                    description: "Explorez les activités du Trivium et Quadrivium, classées par âge et centres d’intérêt.",
+                    url: "https://www.tissatout.fr/nos-univers",
+                    image: "https://www.tissatout.fr/assets/univers-banner.jpg"
+                }),
+            }} />
         </>
     );
 }

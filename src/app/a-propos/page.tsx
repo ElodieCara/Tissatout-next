@@ -2,10 +2,35 @@ import LegalPageLayout from "@/components/Layout/LegalPageLayout";
 import Image from "next/image";
 import type { Metadata } from "next";
 
+const baseUrl = "https://tissatout.fr";
+
 export const metadata: Metadata = {
     title: "À propos | Tissatout",
     description: "Découvrez qui est derrière Tissatout et pourquoi ce site a été créé.",
+    alternates: {
+        canonical: `${baseUrl}/a-propos`,
+    },
+    openGraph: {
+        title: "À propos | Tissatout",
+        description: "Découvrez la créatrice derrière Tissatout, un site libre et artisanal.",
+        url: `${baseUrl}/a-propos`,
+        images: [
+            {
+                url: `${baseUrl}/assets/avatar-tissatout.png`,
+                width: 800,
+                height: 800,
+                alt: "Portrait de la créatrice de Tissatout",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary",
+        title: "À propos | Tissatout",
+        description: "Qui est derrière Tissatout ? Découvrez l'histoire du site.",
+        images: [`${baseUrl}/assets/avatar-tissatout.png`],
+    },
 };
+
 
 export default function AboutPage() {
     return (

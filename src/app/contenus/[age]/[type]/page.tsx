@@ -5,6 +5,19 @@ import { prisma } from "@/lib/prisma";
 import OpenAgeSidebarButton from "@/components/OpenAgeSidebarButton/OpenAgeSidebarButton";
 import SectionIntro from "@/components/SectionIntro/SectionIntro";
 import BackToTop from "@/components/BackToTop/BackToTop";
+import type { Metadata } from "next";
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { age, type } = params;
+    const ageCategory = await prisma.ageCategory.findUnique({ where: { slug: age } });
+
+    if (!ageCategory || !titleMap[type]) return { title: "Contenu introuvable | Tissatout" };
+
+    return {
+        title: `${titleMap[type]} - ${ageCategory.title} | Tissatout`,
+        description: `Retrouvez des contenus ${type} spécialement conçus pour les enfants de ${ageCategory.title}.`,
+    };
+}
 
 interface PageProps {
     params: {
@@ -71,6 +84,7 @@ export default async function ContentByAgePage(props: PageProps) {
             <main className="content-age-page">
                 <h1>Contenus {type} pour {age}</h1>
                 <p>Aucun contenu trouvé pour cette tranche d'âge.</p>
+                <a href="/inspiration" className="link">Voir les autres idées</a>
             </main>
         );
     }

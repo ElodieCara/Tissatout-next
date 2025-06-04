@@ -1,5 +1,5 @@
 "use client";
-import Head from "next/head";
+
 import BackToTop from "@/components/BackToTop/BackToTop";
 import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
 import Banner from "@/components/Banner/Banner";
@@ -51,17 +51,6 @@ export default function ColoriagePage({
 
     return (
         <>
-            <Head>
-                <title>Coloriages à imprimer ✨ - Dessins gratuits à télécharger</title>
-                <meta name="description" content="Découvrez des centaines de coloriages à imprimer et à colorier ! Thèmes variés : animaux, mandalas, héros, saisons et bien plus encore. Imprimez gratuitement !" />
-                <meta name="keywords" content="coloriage à imprimer, dessin à colorier, coloriage enfant, mandalas, héros, saison" />
-                <meta property="og:title" content="Coloriages à imprimer ✨ - Dessins gratuits à télécharger" />
-                <meta property="og:description" content="Des centaines de coloriages gratuits à imprimer et à colorier. Explorez nos thèmes : animaux, mandalas, héros et bien plus encore !" />
-                <meta property="og:image" content="/assets/slide3.png" />
-                <meta property="og:url" content="https://ton-site.com/coloriages" />
-                <meta name="twitter:card" content="summary_large_image" />
-            </Head>
-
             <header className="coloriages__header">
                 <Banner
                     src={coloringBanner}

@@ -20,9 +20,38 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const printable = await getPrintableBySlug(params.slug);
     if (!printable) return { title: "Fiche introuvable" };
 
+    const baseUrl = "https://tissatout.fr"; // 🔁 À ajuster si nécessaire
+    const url = `${baseUrl}/activites-a-imprimer/${params.slug}`;
+    const image = printable.imageUrl?.startsWith("http")
+        ? printable.imageUrl
+        : `${baseUrl}${printable.imageUrl}`;
+
     return {
         title: printable.title,
         description: printable.description || "Fiche éducative à imprimer pour enfants – Tissatout",
+        alternates: {
+            canonical: url,
+        },
+        openGraph: {
+            title: printable.title,
+            description: printable.description || "Fiche éducative à imprimer",
+            type: "article",
+            url,
+            images: [
+                {
+                    url: image,
+                    width: 800,
+                    height: 600,
+                    alt: printable.title,
+                },
+            ],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: printable.title,
+            description: printable.description || "Fiche à imprimer pour enfants",
+            images: [image],
+        },
     };
 }
 

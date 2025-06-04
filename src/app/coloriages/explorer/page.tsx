@@ -2,6 +2,27 @@ import { getEducationalDrawings, getAllCategoriesWithDrawings, getTopLikedDrawin
 import ExplorerPage from "./ExplorerPage";
 import prisma from "@/lib/prisma";
 
+export const metadata = {
+    title: "Explorer les coloriages - Tissatout",
+    description:
+        "Découvrez des centaines de coloriages à imprimer gratuitement, classés par âge, thème, saison et pédagogie. Tissatout : l'exploration créative pour tous les enfants.",
+    keywords: [
+        "coloriages enfants",
+        "coloriage à imprimer",
+        "dessins gratuits",
+        "activité éducative",
+        "Tissatout",
+        "trivium pour enfants",
+        "saisons coloriages",
+        "coloriage éducatif",
+    ],
+    openGraph: {
+        title: "Explorer les coloriages - Tissatout",
+        description: "Coloriages à imprimer gratuits pour tous les âges. Explorez par thème, saison ou pédagogie.",
+        images: ["/images/banner.jpg"],
+    },
+};
+
 export default async function Page() {
     // 🔹 Données des dessins
     const educationalDrawings = await getEducationalDrawings();

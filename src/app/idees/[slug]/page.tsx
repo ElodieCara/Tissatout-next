@@ -9,6 +9,23 @@ import ReactMarkdown from "react-markdown";
 import ArticleFeedback from "@/app/articles/[slug]/ArticleFeedback";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import ShareActions from "@/components/ShareActions/ShareActions";
+import type { Metadata } from "next";
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const idea = await prisma.idea.findUnique({ where: { slug: params.slug } });
+
+    if (!idea) return { title: "Idée non trouvée" };
+
+    return {
+        title: `${idea.title} | Tissatout`,
+        description: idea.description || "Idée d’activité pour enfants.",
+        openGraph: {
+            title: idea.title,
+            description: idea.description || "",
+            images: idea.image ? [{ url: idea.image }] : [],
+        },
+    };
+}
 
 type Props = {
     params: { slug: string };
@@ -78,7 +95,7 @@ export default async function IdeaPage({ params }: Props) {
                         </div>
                     )}
                     <div className="idea-banner__content">
-                        <h1 className="idea-banner__title">{idea.title}</h1>
+                        <h2 className="idea-banner__title">{idea.title || "Illustration de l’idée"}</h2>
                         {idea.theme && (
                             <p className="idea-banner__theme">🌟 {idea.theme}</p>
                         )}

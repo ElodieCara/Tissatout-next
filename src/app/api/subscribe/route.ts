@@ -4,7 +4,11 @@ import bcrypt from "bcrypt";
 
 export async function POST(request: Request) {
     try {
-        const { email } = await request.json();
+        const { email, website } = await request.json();
+
+        if (website && website.trim() !== "") {
+            return NextResponse.json({ error: "Bot détecté." }, { status: 403 });
+        }
 
         if (!email || !email.includes("@")) {
             return NextResponse.json({ error: "Email invalide." }, { status: 400 });
