@@ -15,6 +15,7 @@ interface DrawingCardProps {
     showLikes?: boolean;
     showViews?: boolean;
     showButton?: boolean;
+    isNew?: boolean;
 }
 
 export default function DrawingCard({
@@ -26,7 +27,8 @@ export default function DrawingCard({
     likeCount = 0,
     showLikes = true,
     showViews = true,
-    showButton = true
+    showButton = true,
+    isNew = false,
 }: DrawingCardProps) {
     const [localLikeCount, setLocalLikeCount] = useState(likeCount);
     const [liked, setLiked] = useState(false);
@@ -60,14 +62,15 @@ export default function DrawingCard({
 
     return (
         <div className="drawing-card">
+            {isNew && <span className="drawing-card__badge">Nouveau</span>}
             <Link href={`/coloriages/${pageSlug}`}>
-                <div className="drawing-card__image-link">
+                <div className="drawing-card__link">
                     <Image
                         src={imageUrl}
                         alt={theme}
-                        width={300}
-                        height={200}
-                        className="drawing-card__image"
+                        width={180}
+                        height={180}
+                        className="drawing-card__link-image"
                         priority={true}
                     />
                 </div>

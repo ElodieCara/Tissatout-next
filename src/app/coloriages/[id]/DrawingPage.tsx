@@ -9,6 +9,7 @@ import Button from "@/components/Button/Button";
 import Breadcrumb from "../../../components/Breadcrumb/Breadcrumb";
 import DrawingBreadcrumb from "./components/DrawingBreadcrumb/DrawingBreadcrumb";
 import ShareActions from "@/components/ShareActions/ShareActions";
+import ExplorerBanner from "../explorer/components/ExplorerBanner";
 
 interface SiteSettings {
     coloringBanner: string;
@@ -116,14 +117,19 @@ export default function DrawingPage({ drawing }: { drawing: Drawing }) {
 
     return (
         <>
-            <Banner
-                src={settings?.coloringBanner || "/assets/default-coloring-banner.png"}
-                title={settings?.coloringTitle || "Coloriages à imprimer : libère ta créativité !"}
-                description={
-                    settings?.coloringDesc ||
-                    "Des centaines de dessins à imprimer gratuitement, pour tous les âges et tous les goûts !"
-                }
-            />
+            <div className="explorer-content">
+                <div className="explorer-banner-wrapper">
+                    <ExplorerBanner
+                        title="Imprime, colorie, recommence !"
+                        description="Offrez à votre enfant un moment de calme, de créativité… et de fierté !
+                    Téléchargez nos coloriages gratuitement et imprimez-les à volonté."
+                    />
+                    <Button href="/coloriages/explorer" className="cta-button">
+                        Explorer d’autres dessins
+                    </Button>
+                </div>
+
+            </div>
             <div className="drawing-page">
                 <DrawingBreadcrumb category={drawing.category?.name} drawingTitle={drawing.title} />
 

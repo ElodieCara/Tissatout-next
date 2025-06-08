@@ -16,10 +16,14 @@ export default function DrawingBreadcrumb({ category, drawingTitle }: DrawingBre
                     <Link className="breadcrumb__link" href="/"> Accueil</Link>
                 </li>
                 <span className="breadcrumb__separator"> &gt; </span>
+                <li className="breadcrumb__item">
+                    <Link className="breadcrumb__link" href="/coloriages"> Coloriages</Link>
+                </li>
+                <span className="breadcrumb__separator"> &gt; </span>
 
                 {/* Explorer */}
                 <li className="breadcrumb__item">
-                    <Link className="breadcrumb__link" href="/coloriages"> Explorer</Link>
+                    <Link className="breadcrumb__link" href="/coloriages/explorer"> Explorer</Link>
                 </li>
 
                 {/* Catégorie */}

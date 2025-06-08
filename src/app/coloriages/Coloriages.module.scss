@@ -112,7 +112,7 @@
     background: $background-color;
     padding: 30px;
     border-radius: 15px;
-    margin-bottom: 30px;
+    margin: 30px;
     box-shadow: $shadow-light;
     transition: box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
 
@@ -158,5 +158,64 @@
 @media (max-width: 480px) {
     .coloriages__theme-grid {
         grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+.section-button {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    margin-left: auto;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #f9b233; // jaune Tissatout
+    border: none;
+    border-radius: 2rem;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+
+    &:hover,
+    &:focus {
+        background-color: darken(#f9b233, 10%);
+        transform: translateY(-2px);
+        cursor: pointer;
+    }
+
+    &:active {
+        transform: scale(0.97);
+    }
+
+    &--secondary {
+        background-color: #2c3f64; // bleu Tissatout
+        color: #fff;
+
+        &:hover {
+            background-color: darken(#2c3f64, 10%);
+        }
+    }
+
+    &--small {
+        font-size: 0.85rem;
+        padding: 0.4rem 1rem;
+    }
+
+    &--icon {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+
+        svg {
+            width: 1.2rem;
+            height: 1.2rem;
+        }
+    }
+
+    // 📱 Responsive : taille ajustée sur petits écrans
+    @media (max-width: 600px) {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+        width: 100%;
+        text-align: center;
     }
 }

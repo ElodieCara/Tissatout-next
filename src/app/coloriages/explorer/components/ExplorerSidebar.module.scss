@@ -2,61 +2,69 @@
     width: 250px;
     position: sticky;
     top: 80px;
+    flex-shrink: 0;
     height: calc(100vh - 80px);
-    overflow-y: auto;
-    padding: 15px;
-    background: #f4f4f4;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    background: #ffeeda;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    font-family: 'Segoe UI', sans-serif;
 
     h3 {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 15px;
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
         text-transform: uppercase;
-        color: #222;
+        color: #2c3f64;
+        letter-spacing: 0.5px;
     }
 
     ul {
         list-style: none;
         padding: 0;
+        margin: 0;
     }
 
     li {
-        padding: 10px;
-        font-size: 16px;
-        transition: all 0.3s ease;
+        margin-bottom: 0.75rem;
         position: relative;
 
-        &:hover {
+        button {
+            all: unset;
+            display: block;
+            width: 100%;
+            font-size: 1rem;
+            padding: 0.6rem 1rem;
+            color: #2c3f64;
+            background: transparent;
+            border-radius: 8px;
+            transition: background 0.2s ease, color 0.2s ease;
             cursor: pointer;
-            color: #007bff;
+
+            &:hover {
+                background: #f9b23322;
+                color: #f78e74;
+            }
         }
 
         &.active {
-            font-weight: bold;
-            color: #007bff;
-            padding-left: 15px;
+            button {
+                font-weight: 600;
+                color: #2c3f64;
+                background: #f9b03362;
+            }
 
             &::before {
                 content: "";
                 position: absolute;
-                left: 0;
+                left: 0.25rem;
                 top: 50%;
                 transform: translateY(-50%);
-                height: 100%;
+                height: 70%;
                 width: 4px;
-                background: #007bff;
+                background: #2c3f64;
                 border-radius: 2px;
             }
-        }
-
-        button {
-            all: unset;
-            cursor: pointer;
-            width: 100%;
-            text-align: left;
-            display: block;
         }
     }
 }

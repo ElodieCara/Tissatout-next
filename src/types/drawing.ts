@@ -1,4 +1,5 @@
 export interface Drawing {
+    createdAt: string | number | Date;
     id: string;
     title: string;
     imageUrl: string;

@@ -16,7 +16,10 @@ const TrendingSection: React.FC<TrendingSectionProps> = ({
 }) => {
     return (
         <section className="trending-section">
-            <h2>🔥 Tendances</h2>
+            <h2>Tendances</h2>
+            <p className="section-subtitle">
+                Découvrez les coloriages les plus populaires auprès des enfants et de notre communauté !
+            </p>
             <div className="explorer-grid">
                 {trendingDrawings.length > 0 ? (
                     trendingDrawings.map((drawing, index) => (

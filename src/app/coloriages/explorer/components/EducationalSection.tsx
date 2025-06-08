@@ -3,7 +3,7 @@ import { Drawing } from "@/types/drawing";
 import { generateSlug } from "@/lib/utils";
 
 const categoriesData: Record<string, string[]> = {
-    "Éducatif & Trivium": [
+    "Trivium & Quadrivium": [
         "Grammaire - Lettres",
         "Grammaire - Mots",
         "Grammaire - Chiffres",
@@ -23,8 +23,8 @@ interface EducationalSectionProps {
 export default function EducationalSection({ educationalDrawings }: EducationalSectionProps) {
     return (
         <div className="educational-section">
-            <h2>🧠 Apprendre en s'amusant</h2>
-            <p>Découvrez nos coloriages éducatifs pour apprendre les lettres, les chiffres et bien plus encore !</p>
+            <h2>Apprendre en s'amusant</h2>
+            <p className="section-subtitle">Découvrez nos coloriages éducatifs pour apprendre les lettres, les chiffres et bien plus encore !</p>
 
             <div className="explorer-grid">
                 {Object.entries(educationalDrawings).map(([category, drawings]) => (

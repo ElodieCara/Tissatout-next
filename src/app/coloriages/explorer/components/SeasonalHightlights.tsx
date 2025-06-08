@@ -16,8 +16,8 @@ const SeasonalHighlights: React.FC<SeasonalHighlightsProps> = ({
 }) => {
     return (
         <section className="seasonal-highlights">
-            <h2>📌 Coups de cœur</h2>
-            <p>Découvrez nos coloriages les plus appréciés par la communauté ❤️</p>
+            <h2>Coups de cœur</h2>
+            <p className="section-subtitle">Découvrez nos coloriages les plus appréciés par la communauté ❤️</p>
 
             <div className="explorer-grid">
                 {topLikedDrawings.length > 0 ? (
