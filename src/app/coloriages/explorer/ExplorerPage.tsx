@@ -13,6 +13,7 @@ import Breadcrumb from "../../../components/Breadcrumb/Breadcrumb";
 import Button from "../../../components/Button/Button";
 import { Drawing } from "@/types/drawing";
 import { generateSlug } from "@/lib/utils";
+import MobileCategoryFilter from "./components/MobileCategoryFilter";
 
 interface ExplorerPageProps {
     educationalDrawings: Record<string, Drawing[]>;
@@ -57,21 +58,34 @@ export default function ExplorerPage({
     const [selectedTheme, setSelectedTheme] = useState<string | null>(initialTheme);
     const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
 
+    // État pour gérer l'affichage des coloriages avec limite
+    const [displayLimit, setDisplayLimit] = useState<number>(12); // Limite initiale de 12 coloriages
+    const INCREMENT = 12; // Nombre de coloriages à ajouter à chaque clic
+
     useEffect(() => {
         const theme = searchParams?.get("categorie") ?? null;
         const sub = searchParams?.get("sub") ?? null;
 
         setSelectedTheme(theme);
         setSelectedSubCategory(sub);
+
+        // Réinitialiser la limite quand on change de sous-catégorie
+        setDisplayLimit(12);
     }, [searchParams]);
 
     const handleThemeClick = (theme: string | null) => {
         setSelectedTheme(theme);
         setSelectedSubCategory(null);
+        setDisplayLimit(12); // Réinitialiser la limite
     };
 
     const handleSubCategoryClick = (subCategory: string) => {
         setSelectedSubCategory(subCategory);
+        setDisplayLimit(12); // Réinitialiser la limite
+    };
+
+    const handleLoadMore = () => {
+        setDisplayLimit(prev => prev + INCREMENT);
     };
 
     const filteredDrawings =
@@ -90,26 +104,9 @@ export default function ExplorerPage({
 
     return (
         <>
-
             <main className="explorer-container">
-                <BackToTop />
-                <ExplorerSidebar
-                    categories={categoriesData}
-                    selectedTheme={selectedTheme}
-                    onThemeSelect={handleThemeClick}
-                />
-
-                <div className="explorer-content">
-                    {/* 🎨 Banner toujours visible en haut */}
-                    <div className="explorer-banner-wrapper">
-                        <ExplorerBanner
-                            title="Des coloriages malins pour apprendre en s’amusant"
-                            description="Explorez nos tendances, nos coloriages saisonniers et éducatifs !"
-                        />
-                        <Button href="/coloriages" className="cta-button">
-                            ← Retour à l’accueil des coloriages
-                        </Button>
-                    </div>
+                <div className="explorer-layout">
+                    <BackToTop />
 
                     <Breadcrumb
                         crumbs={[
@@ -119,7 +116,36 @@ export default function ExplorerPage({
                             ...(selectedSubCategory ? [{ label: selectedSubCategory }] : [])
                         ]}
                     />
-
+                </div>
+                <ExplorerSidebar
+                    categories={categoriesData}
+                    selectedTheme={selectedTheme}
+                    onThemeSelect={handleThemeClick}
+                />
+                <div className="explorer-content">
+                    {/* 🎨 Banner toujours visible en haut */}
+                    <div className="explorer-banner-wrapper">
+                        <ExplorerBanner
+                            title="Des coloriages malins pour apprendre en s'amusant"
+                            description="Explorez nos tendances, nos coloriages saisonniers et éducatifs !"
+                        />
+                        <Button href="/coloriages" className="cta-button">
+                            ← Retour à l'accueil des coloriages
+                        </Button>
+                    </div>
+                    <Breadcrumb
+                        crumbs={[
+                            { label: "Accueil", href: "/" },
+                            { label: "Coloriages", href: "/coloriages" },
+                            ...(selectedTheme ? [{ label: selectedTheme, href: `?categorie=${selectedTheme}` }] : []),
+                            ...(selectedSubCategory ? [{ label: selectedSubCategory }] : [])
+                        ]}
+                    />
+                    <MobileCategoryFilter
+                        categories={categoriesData}
+                        selectedTheme={selectedTheme}
+                        onThemeSelect={handleThemeClick}
+                    />
                     {/* Sous-catégories */}
                     {selectedTheme && !selectedSubCategory && (
                         <div className="explorer-enhanced">
@@ -165,28 +191,56 @@ export default function ExplorerPage({
                         </div>
                     )}
 
-                    {/* Coloriages de la sous-catégorie */}
+                    {/* Coloriages de la sous-catégorie avec limite d'affichage */}
                     {selectedSubCategory && (
                         <div className="explorer-enhanced">
                             <h2>{selectedSubCategory}</h2>
                             <div className="explorer-grid">
                                 {drawingsByCategory[selectedSubCategory]?.length > 0 ? (
-                                    drawingsByCategory[selectedSubCategory].map((drawing) => (
-                                        <DrawingCard
-                                            key={drawing.id}
-                                            id={drawing.id}
-                                            imageUrl={drawing.imageUrl}
-                                            theme={drawing.title}
-                                            views={drawing.views ?? 0}
-                                            likeCount={drawing.likes ?? 0}
-                                            slug={drawing.slug ?? generateSlug(drawing.title, drawing.id)}
-                                            isNew={true}
-                                        />
-                                    ))
+                                    <>
+                                        {drawingsByCategory[selectedSubCategory]
+                                            .slice(0, displayLimit) // Limiter l'affichage
+                                            .map((drawing) => (
+                                                <DrawingCard
+                                                    key={drawing.id}
+                                                    id={drawing.id}
+                                                    imageUrl={drawing.imageUrl}
+                                                    theme={drawing.title}
+                                                    views={drawing.views ?? 0}
+                                                    likeCount={drawing.likes ?? 0}
+                                                    slug={drawing.slug ?? generateSlug(drawing.title, drawing.id)}
+                                                    isNew={true}
+                                                />
+                                            ))}
+                                    </>
                                 ) : (
                                     <p>⏳ Aucun coloriage disponible pour cette catégorie.</p>
                                 )}
                             </div>
+
+                            {/* Bouton "Voir plus" si il y a plus de coloriages à afficher */}
+                            {drawingsByCategory[selectedSubCategory]?.length > displayLimit && (
+                                <div className="load-more-container" style={{ textAlign: 'center', marginTop: '2rem' }}>
+                                    <button
+                                        onClick={handleLoadMore}
+                                        className="load-more-button"
+                                        style={{
+                                            padding: '12px 24px',
+                                            backgroundColor: '#2c3f64',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            fontSize: '16px',
+                                            cursor: 'pointer',
+                                            transition: 'background-color 0.3s ease'
+                                        }}
+                                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#2c3f64'}
+                                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#293347'}
+                                    >
+                                        Voir plus ({drawingsByCategory[selectedSubCategory].length - displayLimit} restants)
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     )}
 

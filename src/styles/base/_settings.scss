@@ -23,6 +23,10 @@ body {
         overflow-x: hidden; // protège ton layout mobile sans flinguer le sticky
     }
 
+    @media (max-width: 1500px) {
+        overflow-x: hidden; // protège ton layout mobile sans flinguer le sticky
+    }
+
 
 }
 

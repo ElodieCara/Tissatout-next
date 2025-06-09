@@ -7,6 +7,10 @@
     @media (max-width: 1024px) {
         flex-direction: column;
     }
+
+    .breadcrumb__list {
+        display: none;
+    }
 }
 
 .explorer-container {
@@ -19,6 +23,10 @@
     align-self: stretch;
     height: auto;
     overflow: visible;
+
+    .breadcrumb__list {
+        margin: 20px 0;
+    }
 }
 
 
@@ -117,6 +125,7 @@
 .cta-button {
     margin: 1.5rem auto 0;
     display: inline-block;
+    text-shadow: none;
     background-color: $secondary-color;
     color: $primary-color;
     font-weight: bold;
@@ -240,6 +249,15 @@
         flex-direction: column;
     }
 
+    .explorer-grid {
+        display: grid;
+        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        width: 100%;
+        justify-items: center
+    }
+
+
     .sidebar {
         width: 100%;
         position: relative;
@@ -255,9 +273,9 @@
         top: 0;
     }
 
-    .explorer-content {
-        padding-left: 0;
-    }
+    // .explorer-content {
+    //     padding-left: 0;
+    // }
 }
 
 @media (max-width: 768px) {

@@ -10,6 +10,14 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     font-family: 'Segoe UI', sans-serif;
 
+    @media (max-width: 768px) {
+        display: none;
+    }
+
+    @media (max-width: 1224px) {
+        display: none;
+    }
+
     h3 {
         font-size: 1.25rem;
         font-weight: 700;
@@ -45,78 +53,65 @@
                 background: #f9b23322;
                 color: #f78e74;
             }
+
+            &:active {
+                transform: scale(0.96);
+            }
         }
 
-        &.active {
-            button {
-                font-weight: 600;
-                color: #2c3f64;
-                background: #f9b03362;
-            }
+        &.active button {
+            font-weight: 600;
+            color: #2c3f64;
+            background: #f9b03362;
+        }
 
-            &::before {
-                content: "";
-                position: absolute;
-                left: 0.25rem;
-                top: 50%;
-                transform: translateY(-50%);
-                height: 70%;
-                width: 4px;
-                background: #2c3f64;
-                border-radius: 2px;
-            }
+        &.active::before {
+            content: "";
+            position: absolute;
+            left: 0.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 70%;
+            width: 4px;
+            background: #2c3f64;
+            border-radius: 2px;
         }
     }
 }
 
 @media (max-width: 767px) {
     .explorer-sidebar {
-        position: static;
-        width: 100%;
-        margin: 0;
-        padding: 0.5rem 1rem;
-        background-color: transparent;
-        box-shadow: none;
-        border: none;
-    }
+        position: sticky;
+        top: 70px; // sous la nav
+        background-color: #fffdf8;
+        padding: 0.5rem 0;
+        z-index: 5;
+        overflow-x: auto;
+        border-bottom: 1px solid #eee;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
-    .explorer-sidebar h3 {
-        display: none;
+        &::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 30px;
+            background: linear-gradient(to left, #fffdf8, transparent);
+            pointer-events: none;
+        }
     }
 
     .explorer-sidebar ul {
         display: flex;
-        flex-wrap: nowrap;
         overflow-x: auto;
+        padding: 0 1rem;
         gap: 0.5rem;
-        padding: 0;
-        margin: 0;
-        list-style: none;
-        scrollbar-width: none;
-    }
-
-    .explorer-sidebar ul::-webkit-scrollbar {
-        display: none;
+        scroll-snap-type: x mandatory;
     }
 
     .explorer-sidebar li {
-        flex: 0 0 auto;
+        scroll-snap-align: start;
     }
 
-    .explorer-sidebar button {
-        background-color: #fffdf8;
-        color: #2c3f64;
-        border: 1px solid #2c3f64;
-        border-radius: 20px;
-        padding: 0.5rem 1rem;
-        font-size: 0.875rem;
-        white-space: nowrap;
-        cursor: pointer;
-
-        &.active,
-        &:hover {
-            background-color: #fdca57;
-            color: #2c3f64;
-        }
-    }
 }

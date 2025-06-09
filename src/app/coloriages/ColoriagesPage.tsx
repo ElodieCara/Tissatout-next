@@ -37,14 +37,6 @@ const getCurrentSeason = () => {
     return "Été";
 };
 
-const isNew = (createdAt: string | number | Date) => {
-    const createdDate = new Date(createdAt);
-    if (isNaN(createdDate.getTime())) return false; // date invalide
-    const daysSinceCreation = (Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24);
-    return daysSinceCreation <= 7;
-};
-
-
 export default function ColoriagePage({
     drawings,
     coloringBanner,
@@ -88,7 +80,7 @@ export default function ColoriagePage({
                     <div className="coloriages__theme-section-title">
                         <img src="/icons/titres/crayons.png" alt="" />
                         <h2>Nouveaux coloriages</h2>
-                        <Link href="/coloriages/explorer?tri=nouveaux" className="section-button">
+                        <Link href="coloriages/explorer?categorie=Nouveautés" className="section-button">
                             Voir tous les nouveaux
                         </Link>
                     </div>
