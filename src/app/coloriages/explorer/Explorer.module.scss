@@ -1,14 +1,26 @@
 /* ✅ Conteneur Principal */
+.explorer-layout {
+    display: flex;
+    align-items: flex-start;
+    overflow: visible;
+
+    @media (max-width: 1024px) {
+        flex-direction: column;
+    }
+}
+
 .explorer-container {
+    flex: 1;
     display: flex;
     align-items: flex-start;
     max-width: 1400px;
     margin: 0 auto;
     padding: 20px;
-    align-self: stretch; // important si un conteneur vertical coupe le flux
+    align-self: stretch;
     height: auto;
     overflow: visible;
 }
+
 
 
 /* ✅ Cartes des sous-catégories */
@@ -224,6 +236,7 @@
 /* ✅ Responsive */
 @media (max-width: 1024px) {
     .explorer-container {
+        display: flex;
         flex-direction: column;
     }
 

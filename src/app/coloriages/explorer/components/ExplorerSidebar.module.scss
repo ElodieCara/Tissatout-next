@@ -68,3 +68,55 @@
         }
     }
 }
+
+@media (max-width: 767px) {
+    .explorer-sidebar {
+        position: static;
+        width: 100%;
+        margin: 0;
+        padding: 0.5rem 1rem;
+        background-color: transparent;
+        box-shadow: none;
+        border: none;
+    }
+
+    .explorer-sidebar h3 {
+        display: none;
+    }
+
+    .explorer-sidebar ul {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 0.5rem;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        scrollbar-width: none;
+    }
+
+    .explorer-sidebar ul::-webkit-scrollbar {
+        display: none;
+    }
+
+    .explorer-sidebar li {
+        flex: 0 0 auto;
+    }
+
+    .explorer-sidebar button {
+        background-color: #fffdf8;
+        color: #2c3f64;
+        border: 1px solid #2c3f64;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        cursor: pointer;
+
+        &.active,
+        &:hover {
+            background-color: #fdca57;
+            color: #2c3f64;
+        }
+    }
+}
