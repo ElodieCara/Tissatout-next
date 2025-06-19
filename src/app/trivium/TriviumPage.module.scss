@@ -5,8 +5,13 @@
    🎓 TRIVIUM BANNER
 ========================== */
 .trivium-banner {
+
+    .quickbar {
+        display: none;
+    }
+
     .nos-univers__banner {
-        justify-items: center;
+        //justify-items: center;
 
         &-image {
             max-width: 250px;

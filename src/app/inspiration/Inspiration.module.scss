@@ -4,8 +4,11 @@
 
 .inspiration {
     &__header {
-        text-align: center;
         margin-bottom: 40px;
+
+        .quickbar {
+            display: none;
+        }
     }
 
     &__filterButtons {

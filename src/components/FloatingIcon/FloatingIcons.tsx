@@ -1,9 +1,9 @@
+// components/FloatingIcon/FloatingIcons.tsx
 "use client";
+
 import { useEffect, useState, CSSProperties } from "react";
 
-const ICONS = ["⭐", "🎵", "🎶", "✨", "🌟", "🦋", "🎈", "🎀", "💫", "🧸"];
-
-const FIXED_POSITIONS: CSSProperties[] = [
+const FIXED_POSITIONS: Pick<CSSProperties, "top" | "left">[] = [
     { top: "5%", left: "10%" },
     { top: "10%", left: "80%" },
     { top: "15%", left: "20%" },
@@ -25,33 +25,49 @@ const FIXED_POSITIONS: CSSProperties[] = [
     { top: "95%", left: "15%" },
 ];
 
-export default function FloatingIcons() {
-    const [height, setHeight] = useState<number>(1000); // 🔥 Typage explicite
+interface Star {
+    id: number;
+    style: CSSProperties;
+}
 
+export default function FloatingIcons() {
+    const [stars, setStars] = useState<Star[] | null>(null);
+
+    // On ne rend rien en SSR pour éviter le mismatch
     useEffect(() => {
-        const wrapper = document.querySelector(".nos-univers__categories-wrapper");
-        if (wrapper) {
-            setHeight(wrapper.scrollHeight);
-        }
+        const generated = FIXED_POSITIONS.map((pos, i) => {
+            const size = Math.floor(Math.random() * 8) + 10;     // 10–17px
+            const delay = (Math.random() * 2).toFixed(2) + "s"; // 0.00–2.00s
+
+            return {
+                id: i,
+                style: {
+                    position: "absolute",
+                    top: pos.top,
+                    left: pos.left,
+                    width: `${size}px`,
+                    height: `${size}px`,
+                    animationDelay: delay,
+                } as CSSProperties,
+            };
+        });
+        setStars(generated);
     }, []);
 
-    const icons = FIXED_POSITIONS.map((pos, i) => ({
-        id: i,
-        style: {
-            ...pos,
-            fontSize: 35, // ✅ Nombre au lieu de string
-            color: ["#FFD700", "#FF4500", "#32CD32", "#1E90FF", "#FF69B4"][i % 5],
-            opacity: 0.9,
-            position: "absolute" as const, // ✅ Corrige l'erreur TypeScript
-        } as CSSProperties, // ✅ Force le type CSSProperties
-        icon: ICONS[i % ICONS.length],
-    }));
+    if (!stars) return null;
 
     return (
         <div className="floating-icons">
-            {icons.map(({ id, style, icon }) => (
-                <span key={id} className="floating-icon" style={style}>
-                    {icon}
+            {stars.map(({ id, style }) => (
+                <span key={id} className="floating-icon pop-star" style={style}>
+                    <svg
+                        viewBox="0 0 100 100"
+                        width={style.width as string}
+                        height={style.height as string} fill="#ffdc33"
+                        style={{ filter: "drop-shadow(0 0 4px #fff3b5)" }}
+                    >
+                        <path d="M50 0 Q60 45, 100 50 Q60 55, 50 100 Q40 55, 0 50 Q40 45, 50 0 Z" />
+                    </svg>
                 </span>
             ))}
         </div>
