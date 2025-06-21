@@ -5,6 +5,8 @@
 .inspiration {
     &__header {
         margin-bottom: 40px;
+        position: relative;
+        z-index: 1;
 
         .quickbar {
             display: none;
@@ -26,7 +28,7 @@
 
         &__newsGrid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 20px;
             justify-content: center;
             padding: 20px;

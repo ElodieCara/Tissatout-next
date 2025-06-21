@@ -14,9 +14,9 @@ const menuItems = [
         submenu: {
             age: [
                 { title: "Tout-petits", path: "/nos-univers/tout-petits" },
-                { title: "3 ans", path: "/nos-univers/3-ans" },
-                { title: "6 ans", path: "/nos-univers/6-ans" },
-                { title: "10 ans", path: "/nos-univers/10-ans" },
+                { title: "3 ans", path: "/nos-univers/des-3-ans" },
+                { title: "6 ans", path: "/nos-univers/des-6-ans" },
+                { title: "10 ans", path: "/nos-univers/des-10-ans" },
             ],
             theme: [
                 { title: "Trivium", path: "/trivium" },

@@ -8,6 +8,7 @@ import { getAllAgeCategories } from "../../../lib/ages";
 import themeImages from '@/data/themeIdeasImage';
 import BackToTop from "@/components/BackToTop/BackToTop";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
+import Quickbar from "@/components/Quickbar/Quickbar";
 
 
 const allAges = await getAllAgeCategories();
@@ -102,6 +103,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                         </div>
                     </div>
                 </section>
+                <Quickbar />
             </header>
 
 
@@ -160,7 +162,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                 </section>
 
                 {/* Conseils pour les parents */}
-                <section className="advices">
+                <section id="conseils" className="advices">
                     <div className="advices__header">
                         <div className="advices__text">
                             <h2>Conseils pour {ageCategory.title.toLowerCase()}</h2>
@@ -230,7 +232,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                 </section>
 
                 {/* Dessins à colorier */}
-                <section className="drawings">
+                <section id="coloriages" className="drawings">
                     <div className="drawings__header">
                         <div className="drawings__text">
                             <h2>Coloriages {ageCategory.title.toLowerCase()}</h2>
@@ -289,7 +291,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                 </section>
 
                 {/* Idées d’activités */}
-                <section className="ideas">
+                <section id="idees" className="ideas">
                     <div className="ideas__header">
                         <div className="ideas__text">
                             <h2>Idées d’activités pour {ageCategory.title}</h2>

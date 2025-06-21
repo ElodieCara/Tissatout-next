@@ -388,3 +388,15 @@
         }
     }
 }
+
+@media (max-width: 768px) {
+    .nos-univers__categories-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+    .nos-univers__categories-wrapper {
+        grid-template-columns: 1fr;
+    }
+}

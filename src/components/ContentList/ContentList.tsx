@@ -54,11 +54,11 @@ export default function ContentList({ items, type, title, age }: ContentListProp
 
 
     const titleMap: Record<string, string> = {
-        articles: "📚 Articles",
-        conseils: "🧸 Conseils",
-        idees: "💡 Idées créatives",
-        trivium: "📘 Activités Trivium",
-        quadrivium: "📗 Activités Quadrivium",
+        articles: "Articles",
+        conseils: "Conseils",
+        idees: "Idées créatives",
+        trivium: "Activités Trivium",
+        quadrivium: "Activités Quadrivium",
     };
 
     const subtitleMap: Record<string, string> = {

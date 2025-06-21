@@ -8,24 +8,34 @@ import Banner from "@/components/Banner/Banner";
 import Button from "@/components/Button/Button";
 import { Tag } from "@/types/home";
 import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
-import RubanTrivium from "@/components/Ruban/Ruban";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import { triviumData, quadriviumData } from "@/data/rubanActivity";
 import RubanUnivers from "@/components/Ruban/Ruban";
 import MysteryCard from "@/components/MysteryCard/MysteryCard";
+import { sections as staticSections } from "@/data/home";
 
 const categories = ["trivium", "quadrivium"];
 
 export default function NosUnivers({ settings }: { settings: any }) {
     const [selectedCategory, setSelectedCategory] = useState<"trivium" | "quadrivium">("trivium");
-    const [ageCategories, setAgeCategories] = useState<any[]>([]);
+    const [ageCategories, setAgeCategories] = useState<typeof staticSections>([]);
 
     useEffect(() => {
         fetch("/api/ageCategory")
-            .then((res) => res.json())
-            .then((data) => {
-                setAgeCategories(data);
-            });
+            .then(res => res.json())
+            .then((data: any[]) => {
+                // Merge : on prend la section fetchée, 
+                // et on y ajoute les tags de la section statique (même slug)
+                const merged = data.map(section => {
+                    const stat = staticSections.find(s => s.slug === section.slug);
+                    return {
+                        ...section,
+                        tags: stat?.tags ?? []      // si on n’a pas de stat, on met []
+                    };
+                });
+                setAgeCategories(merged);
+            })
+            .catch(err => console.error("Fetch ages failed:", err));
     }, []);
 
     return (
@@ -39,9 +49,9 @@ export default function NosUnivers({ settings }: { settings: any }) {
                         "Découvrez des activités adaptées à chaque âge pour stimuler la créativité, l’éveil et l’apprentissage des enfants. Trouvez des idées originales pour apprendre en s’amusant !"
                     }
                     buttons={[
-                        { label: "🌟 Par Âge", targetId: "univers" },
-                        { label: "🎓 Trivium", targetId: "trivium" },
-                        { label: "🎭 Centres d’Intérêt", targetId: "interets" },
+                        { label: "Par Âge", targetId: "univers" },
+                        { label: "Trivium", targetId: "trivium" },
+                        { label: "Centres d’Intérêt", targetId: "interets" },
                     ]}
                 />
             </header>
@@ -61,36 +71,39 @@ export default function NosUnivers({ settings }: { settings: any }) {
                     </span>
                 </h2>
 
-
                 <section id="univers" className="nos-univers__categories-wrapper">
-                    {ageCategories.map((section, index) => (
-                        <div key={section.title} className="nos-univers__categories__card">
-                            <Link href={`/nos-univers/${section.slug}`} className="nos-univers__categories__card-link">
-                                {section.tags && Array.isArray(section.tags) && section.tags.length > 0 && (
-                                    <div className="nos-univers__categories__card__tags">
-                                        {section.tags.map((tag: Tag, i: number) => (
-                                            <span key={i} className={`tag tag--${tag.color}`}>
-                                                {tag.label}
-                                            </span>
-                                        ))}
+                    {ageCategories.map((section, index) => {
+                        console.log("🧐 section", section.title, section.tags);
+                        return (
+
+                            <div key={section.title} className="nos-univers__categories__card">
+                                <Link href={`/nos-univers/${section.slug}`} className="nos-univers__categories__card-link">
+                                    {/* {section.tags && Array.isArray(section.tags) && section.tags.length > 0 && (
+                                        <div className="nos-univers__categories__card__tags">
+                                            {section.tags.map((tag: Tag, i: number) => (
+                                                <span key={i} className={`tag tag--${tag.color}`}>
+                                                    {tag.label}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )} */}
+
+                                    <div className="nos-univers__categories__card__image">
+                                        <Image src={section.imageCard} alt={section.title} width={160} height={160} />
                                     </div>
-                                )}
 
-                                <div className="nos-univers__categories__card__image">
-                                    <Image src={section.imageCard} alt={section.title} width={160} height={160} />
-                                </div>
+                                    <div className="nos-univers__categories__card__content">
+                                        <h2 className="nos-univers__categories__card__title">{section.title}</h2>
+                                        <p>{section.content}</p>
+                                        <p>{section.conclusion}</p>
+                                        <Button className="small">Explorer cet univers</Button>
+                                    </div>
+                                </Link>
 
-                                <div className="nos-univers__categories__card__content">
-                                    <h2 className="nos-univers__categories__card__title">{section.title}</h2>
-                                    <p>{section.content}</p>
-                                    <p>{section.conclusion}</p>
-                                    <Button className="small">Explorer cet univers</Button>
-                                </div>
-                            </Link>
-
-                            {index === 0 && <div className="nos-univers__categories__squished-plush" />}
-                        </div>
-                    ))}
+                                {index === 0 && <div className="nos-univers__categories__squished-plush" />}
+                            </div>
+                        );
+                    })}
                 </section>
 
                 {/* ACTIVITÉS TRIVIUM */}

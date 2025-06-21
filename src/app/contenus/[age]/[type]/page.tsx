@@ -91,8 +91,8 @@ export default async function ContentByAgePage(props: PageProps) {
 
     return (
         <main className="content-age-page">
-            <OpenAgeSidebarButton />
 
+            <OpenAgeSidebarButton />
             <SectionIntro
                 iconSrc={sectionIcons[type]}
                 title={titleMap[type]}

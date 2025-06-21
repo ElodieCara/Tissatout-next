@@ -1,0 +1,208 @@
+@use '../../styles/utils/variables' as vars;
+
+// Map SCSS : clé → couleur de texte
+$quicknav-colors: (
+  articles: vars.$secondary-color,
+  // ou la couleur choisie
+  conseils: vars.$quinary-color,
+  coloriages: vars.$tertiary-color,
+  idees:vars.$quaternary-color,
+);
+
+// Même logique pour la sheet mobile si vous voulez la même couleur de texte ou fond
+$sheet-colors: $quicknav-colors;
+
+
+// — Nav en bas pour tablette et desktop
+.quicknav {
+  display: none;
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    display: flex;
+    position: fixed;
+    bottom: env(safe-area-inset-bottom, 0);
+    left: 0;
+    right: 0;
+    justify-content: space-around;
+    padding: 0.5rem;
+    background: #efe5e3;
+    box-shadow: vars.$shadow-light;
+    z-index: 1000;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    background: none !important;
+    border: none !important;
+    padding: 0.5rem !important;
+    margin: 0 !important;
+    outline: none !important;
+    appearance: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:hover .quicknav__icon,
+    &:hover .quicknav__label {
+      transform: translateY(-2px);
+      transition: transform 0.2s ease;
+    }
+
+    &:active .quicknav__icon,
+    &:active .quicknav__label {
+      transform: translateY(1px);
+    }
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 0.25rem;
+    filter: var(--icon-filter); // ajustez par thème si besoin
+  }
+
+  &__label {
+    font-size: vars.$font-size-base;
+    color: vars.$primary-color;
+  }
+
+  // Boucle sur le map pour affecter couleur aux modificateurs
+  @each $key, $color in $quicknav-colors {
+    &__item--#{$key} {
+      .quicknav__label {
+        color: $color;
+      }
+    }
+  }
+}
+
+// — Floating Action Button (mobile/tablette)
+.fab {
+  display: block;
+
+  @media (min-width: 769px) {
+    display: none;
+  }
+
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  background: vars.$tertiary-color;
+  color: white;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: vars.$shadow-hover;
+  z-index: 1001;
+}
+
+// — Bottom sheet qui s’ouvre sous le FAB
+.sheet {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: 0.5rem;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: -100%; // cachée par défaut
+  padding: 1rem;
+  background: vars.$background-color;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  transition: bottom 0.3s ease;
+  z-index: 1000;
+
+  &--open {
+    bottom: 0; // fait remonter la sheet
+  }
+
+  &__item {
+    display: block;
+    padding: 0.75rem;
+    background: vars.$secondary-color;
+    color: vars.$background-color;
+    text-align: center;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-size: vars.$font-size-base;
+  }
+}
+
+
+
+// ------------------------ Mobile ----------------------------
+
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: -100%;
+  display: grid;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: vars.$background-color; // fond de la sheet
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  transition: bottom 0.3s ease;
+  z-index: 1000;
+
+  &--open {
+    bottom: 0;
+  }
+
+  &__item {
+    background: #2c3f64;
+    /* couleur de fond fixe */
+    color: #ffffff;
+    /* texte blanc */
+    border: 2px solid #2c3f64;
+    /* bordure de même couleur */
+    border-radius: 8px;
+    /* arrondi */
+    padding: 8px 16px;
+    /* zone cliquable confortable */
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background 0.2s ease, transform 0.1s ease;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:hover {
+      background: #253352;
+      /* Variante plus sombre au survol, adapte si besoin */
+      transform: translateY(-1px);
+    }
+  }
+
+  // Boucle pour appliquer la couleur de texte depuis map
+  @each $key, $color in $sheet-colors {
+    &__item--#{$key} {
+      color: $color;
+      // Si vous voulez un fond coloré léger pour mobile :
+      // background: lighten($color, 40%); 
+      // mais si vous ne voulez que le texte coloré, laissez background: none.
+    }
+  }
+}

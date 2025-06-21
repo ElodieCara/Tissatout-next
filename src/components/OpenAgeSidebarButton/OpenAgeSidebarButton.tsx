@@ -10,7 +10,7 @@ export default function OpenAgeSidebarButton() {
         <>
             <div className="sidebar-age__section">
                 <button onClick={() => setIsOpen(true)} className="sidebar-age__button">
-                    Ouvrir les catégories
+                    Ouvrir les catégories par âge
                     <span className="icon">⋮</span>
                 </button>
             </div>

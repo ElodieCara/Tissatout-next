@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { ReactNode } from "react";
 import Button from "../Button/Button";
+import FloatingIcons from "../FloatingIcon/FloatingIcons";
 
 interface SectionIntroProps {
     title: string;
@@ -37,7 +38,7 @@ export default function SectionIntro({
             <div className="section-intro__content">
                 <div className="section-intro__text">
                     <div className="section-intro__title">
-                        {iconSrc && <img src={iconSrc} alt="" className="section-intro__icon" />}
+                        {/* {iconSrc && <img src={iconSrc} alt="" className="section-intro__icon" />} */}
                         <h1 dangerouslySetInnerHTML={{ __html: title.replace(/\n/g, "<br/>") }} />
                     </div>
                     <p>{description}</p>
@@ -49,6 +50,16 @@ export default function SectionIntro({
                     )}
                 </div>
                 <div className="section-intro__image">
+                    <FloatingIcons />
+                    <div className="background-flare">
+                        <img src="/bg/bg-flare-tissatout.png" alt="Background Flare" />
+                        {/* ✨ Étoiles scintillantes */}
+                        <div className="twinkle star-1"></div>
+                        <div className="twinkle star-2"></div>
+                        <div className="twinkle star-3"></div>
+                        <div className="twinkle star-4"></div>
+                        <div className="twinkle star-5"></div>
+                    </div>
                     <Image
                         src={imageSrc}
                         alt="Illustration"

@@ -1068,3 +1068,20 @@
         }
     }
 }
+
+@media (max-width: 1024px) {
+    .age__image {
+        display: none;
+    }
+
+    .age__icon {
+        margin-bottom: 50px;
+
+        & img {
+            display: none;
+        }
+    }
+
+
+
+}
