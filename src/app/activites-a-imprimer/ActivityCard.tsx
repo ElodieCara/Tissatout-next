@@ -78,11 +78,11 @@ export default function ActivityCard({
 
 
     const priceLabel =
-        typeof pdfPrice === "number"
-            ? pdfPrice === 0
-                ? "Gratuit"
-                : `${pdfPrice.toFixed(2)} €`
-            : "Prix non défini";
+        pdfPrice === 0
+            ? "Gratuit"
+            : typeof pdfPrice === "number"
+                ? `${pdfPrice.toFixed(2)} €`
+                : "Prix non défini";
 
     return (
         <article className="activity-card">

@@ -246,6 +246,7 @@
                 text-decoration: none;
                 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
                 transition: background 0.2s ease-in-out;
+                text-shadow: 1px 1px 4px #0009;
 
                 &:hover {
                     background: darken($secondary-color, 10%);
@@ -284,7 +285,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: 2rem;
-        margin: 4rem 0;
+        margin: 2rem 0;
         justify-content: center;
 
         .feature {
@@ -354,6 +355,31 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         gap: 2rem;
+    }
+
+    &__load-more {
+        .activites__btn {
+            display: inline-flex;
+            background-color: #fdca57;
+            color: #2c3f64;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: .5rem 1.2rem;
+            border-radius: 1.5rem;
+            font-family: Nerko One, sans-serif;
+            font-size: 1rem;
+            line-height: 1.2;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all .2s;
+            box-shadow: 0 2px 4px #0002;
+
+            &:hover {
+                background: darken($secondary-color, 10%);
+            }
+        }
     }
 
     &__card {
@@ -441,8 +467,6 @@
             text-align: center;
         }
 
-
-
         &-texte {
             width: 100%;
             max-width: 600px;
@@ -467,6 +491,11 @@
 
             .reset-btn {
                 grid-column: span 2;
+
+                &:hover {
+                    transform: none;
+                }
+
             }
         }
     }

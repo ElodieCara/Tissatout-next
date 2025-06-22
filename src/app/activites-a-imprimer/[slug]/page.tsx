@@ -59,12 +59,21 @@ export default async function PrintablePage({ params }: Props) {
     const printable = await getPrintableBySlug(params.slug);
     if (!printable) return notFound();
 
+    // 1️⃣ On récupère d’abord tous les similaires
     const similar = await getSimilarPrintables(
         printable.id,
         printable.ageMin,
         printable.ageMax,
         printable.themes.map((t: any) => t.theme?.label).filter(Boolean)
     );
+
+    // 2️⃣ On filtre pour enlever la carte mystère non révélée
+    const now = new Date()
+    const visibles = similar.filter(s => {
+        if (!s.isMystery) return true            // toutes les cartes normales
+        if (!s.mysteryUntil) return false         // mystère sans date : on cache
+        return new Date(s.mysteryUntil) <= now    // mystère révélé : on garde
+    })
 
     const extraImages = printable.extraImages?.map(e => e.imageUrl) || [];
 
@@ -239,14 +248,14 @@ export default async function PrintablePage({ params }: Props) {
                 <div className="activites__separator">
                     <span> Et si on prolongeait l’aventure ? 👇</span>
                 </div>
-                {similar.length > 0 && (
+                {visibles.length > 0 && (
                     <section className="printable__similar">
                         <p className="printable__similar-intro">
                             Ces activités pourraient aussi plaire à votre enfant :
                         </p>
                         <h3>🎒 Activités similaires</h3>
                         <ul className="printable__similar-list">
-                            {similar.map((s) => (
+                            {visibles.map((s) => (
                                 <li key={s.id} className="printable__similar-card">
                                     <a href={`/activites-a-imprimer/${s.slug}`}>
                                         <Image

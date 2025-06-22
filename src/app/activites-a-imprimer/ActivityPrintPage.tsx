@@ -48,26 +48,49 @@ export default function ActivityPrintPage({ games }: ActivityPrintPageProps) {
     const printableActivities = activities.filter((a) => a.isPrintable);
     const shouldShowPlastifiedSection = currentPriceFilter !== "free";
 
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const res = await fetch("/api/printable");
+    //         const data = await res.json();
+    //         setActivities(data);
+
+    //         try {
+    //             const mysteryRes = await fetch("/api/printable");
+    //             if (mysteryRes.ok) {
+    //                 const mysteryData = await mysteryRes.json();
+    //                 if (mysteryData.hasMystery && !mysteryData.isRevealed) {
+    //                     setMysteryActivity({ mysteryUntil: mysteryData.mysteryUntil });
+    //                 }
+    //             }
+    //         } catch (error) {
+    //             console.log("Pas d'activité mystère en cours");
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
+
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch("/api/printable");
-            const data = await res.json();
+            const data: PrintableGame[] = await res.json();
             setActivities(data);
 
-            try {
-                const mysteryRes = await fetch("/api/printable");
-                if (mysteryRes.ok) {
-                    const mysteryData = await mysteryRes.json();
-                    if (mysteryData.hasMystery && !mysteryData.isRevealed) {
-                        setMysteryActivity({ mysteryUntil: mysteryData.mysteryUntil });
-                    }
-                }
-            } catch (error) {
-                console.log("Pas d'activité mystère en cours");
-            }
+            // On cherche l'activité mystère non encore révélée
+            const now = Date.now();
+            const pendingMystery = data.find(a =>
+                a.isMystery &&
+                a.mysteryUntil != null &&
+                new Date(a.mysteryUntil).getTime() > now
+            );
+            setMysteryActivity(
+                pendingMystery
+                    ? { mysteryUntil: pendingMystery.mysteryUntil! }
+                    : null
+            );
         };
         fetchData();
     }, []);
+
 
     useEffect(() => {
         setFilteredPdf(pdfActivities);
@@ -84,6 +107,12 @@ export default function ActivityPrintPage({ games }: ActivityPrintPageProps) {
         setAllThemes([...themes]);
         setAllTypes([...types]);
     }, [activities]);
+
+    const nonMysteryActivities = filteredPdf.filter(a =>
+        !(a.isMystery && a.mysteryUntil === mysteryActivity?.mysteryUntil)
+    );
+
+    const countToShow = mysteryActivity ? visibleCount - 1 : visibleCount;
 
     return (
         <>
@@ -300,33 +329,39 @@ export default function ActivityPrintPage({ games }: ActivityPrintPageProps) {
                                 )}
 
                                 {/* Afficher les autres activités */}
-                                {filteredPdf.slice(0, visibleCount).map((a) => (
-                                    <ActivityCard
-                                        key={a.id}
-                                        id={a.id}
-                                        slug={a.slug}
-                                        title={a.title}
-                                        ageRange={`${a.ageMin}–${a.ageMax} ans`}
-                                        imageUrl={a.imageUrl}
-                                        pdfUrl={a.pdfUrl}
-                                        pdfPrice={a.pdfPrice}
-                                        themes={a.themes?.map((t) => t.theme.label) || []}
-                                        types={a.types?.map((t) => t.type.label) || []}
-                                        isMystery={a.isMystery}
-                                        mysteryUntil={a.mysteryUntil}
-                                    />
-                                ))}
+                                {nonMysteryActivities
+                                    .slice(0, countToShow)
+                                    .map(a => (
+                                        <ActivityCard
+                                            key={a.id}
+                                            id={a.id}
+                                            slug={a.slug}
+                                            title={a.title}
+                                            ageRange={`${a.ageMin}–${a.ageMax} ans`}
+                                            imageUrl={a.imageUrl}
+                                            pdfUrl={a.pdfUrl}
+                                            pdfPrice={a.pdfPrice}
+                                            themes={a.themes?.map((t) => t.theme.label) || []}
+                                            types={a.types?.map((t) => t.type.label) || []}
+                                            isMystery={a.isMystery}
+                                            mysteryUntil={a.mysteryUntil}
+                                        />
+                                    ))}
                             </div>
-                            {visibleCount < filteredPdf.length && (
-                                <div style={{ textAlign: "center", marginTop: "2rem" }}>
-                                    <button
-                                        onClick={() => setVisibleCount((prev) => prev + 8)}
-                                        className="activites__btn"
-                                    >
-                                        ➕ Voir plus de fiches
-                                    </button>
-                                </div>
-                            )}
+                            {/* 3️⃣ Bouton “Voir plus” selon le nombre réel de cartes normales restantes */}
+                            {visibleCount <
+                                nonMysteryActivities.filter(a =>
+                                    !(a.isMystery && a.mysteryUntil === mysteryActivity?.mysteryUntil)
+                                ).length && (
+                                    <div className="activites__load-more" style={{ textAlign: "center", marginTop: "2rem" }}>
+                                        <button
+                                            onClick={() => setVisibleCount(prev => prev + 8)}
+                                            className="activites__btn"
+                                        >
+                                            ➕ Voir plus de fiches
+                                        </button>
+                                    </div>
+                                )}
                         </section>
 
                         <div className="activites__separator">

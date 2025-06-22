@@ -77,7 +77,7 @@ function MysteryActivityCard({ mysteryUntil, ageRange = "À découvrir" }: Myste
                                     width={100}
                                     height={100}
                                     // style={{ verticalAlign: "middle" }}
-                                    style={{ transform: "scale(1.2)", transition: "transform .3s" }}
+                                    style={{ pointerEvents: 'none', transform: "scale(1.2)", transition: "transform .3s" }}
                                 />
                             </div>
                             <div style={{
@@ -85,7 +85,8 @@ function MysteryActivityCard({ mysteryUntil, ageRange = "À découvrir" }: Myste
                                 color: "#ffd700",
                                 textShadow: "rgb(255 215 0 / 50%)",
                                 fontWeight: 'bold',
-                                animation: 'pulseShine 1.5s infinite'
+                                animation: 'pulseShine 1.5s infinite',
+                                pointerEvents: 'none',
                             }}>?</div>
 
                             <style jsx>
@@ -127,7 +128,7 @@ function MysteryActivityCard({ mysteryUntil, ageRange = "À découvrir" }: Myste
                 {/* Titre mystère */}
                 <div>
                     <h3 className="activity-card__title" style={{
-                        display: 'inline-flex', alignItems: 'center', lineHeight: '1', gap: '5px', fontWeight: 600,          // un peu plus gras
+                        display: 'inline-flex', pointerEvents: 'none', alignItems: 'center', lineHeight: '1', gap: '5px', fontWeight: 600,          // un peu plus gras
                         color: '#2A4D69'
                     }}>
                         <Image
@@ -137,7 +138,7 @@ function MysteryActivityCard({ mysteryUntil, ageRange = "À découvrir" }: Myste
                             height={24}
                             // style={{ verticalAlign: "middle" }}
                             style={{
-                                transform: "scale(1.2)", transition: "transform .3s"
+                                transform: "scale(1.2)", transition: "transform .3s", pointerEvents: 'none',
                             }}
                         />Activité Mystère</h3>
                 </div>
