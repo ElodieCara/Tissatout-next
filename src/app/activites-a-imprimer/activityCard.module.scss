@@ -59,7 +59,7 @@
     }
 
     &__tag {
-        background: #f9b233;
+        background: $secondary-color;
         color: #2c3f64;
         font-weight: bold;
         border-radius: 999px;
@@ -90,7 +90,7 @@
             font-weight: bold;
             padding: 0.6rem 1rem;
             border-radius: 0.5rem;
-            background-color: #f9b233;
+            background-color: $secondary-color;
             color: #2c3f64;
             text-decoration: none;
             transition: all 0.2s;
@@ -139,5 +139,20 @@
             font-size: 0.7rem;
             padding: 4px 10px;
         }
+    }
+}
+
+.mystery-bg {
+    background: linear-gradient(180deg, #5b828b 0%, #e7cea3 100%);
+    color: white;
+    /* pour que tout le texte soit lisible */
+    border-radius: 1rem;
+    /* coins arrondis */
+    overflow: hidden;
+
+    .floating-icons {
+        z-index: 0;
+        opacity: 0.5;
+        /* pour que l'image ne gêne pas les clics */
     }
 }

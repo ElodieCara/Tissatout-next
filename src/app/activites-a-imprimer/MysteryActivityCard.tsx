@@ -1,5 +1,9 @@
 "use client";
 
+import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
+import StarfieldCanvas from "@/components/FloatingIcon/FloatingIconsEnhanced";
+import FloatingIconsEnhanced from "@/components/FloatingIcon/FloatingIconsEnhanced";
+import EnhancedFloatingIcons from "@/components/FloatingIcon/FloatingIconsEnhanced";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
@@ -36,20 +40,23 @@ function MysteryActivityCard({ mysteryUntil, ageRange = "À découvrir" }: Myste
     }, [mysteryUntil, currentTime]);
 
     return (
-        <article className="activity-card">
+        <article className="activity-card mystery-bg"  >
+            <FloatingIconsEnhanced />
+            {/* <FloatingIcons /> */}
             {/* Image mystère - même structure que ActivityCard */}
             <div className="activity-card__link">
-                <div className="activity-card__image-wrapper">
-                    {/* Image mystère générée ou placeholder */}
+                <div className="activity-card__image-wrapper" style={{ position: "relative" }}>
+                    {/* Floating icons en arrière-plan */}
+                    <FloatingIcons />
                     <div
                         className="activity-card__image mystery-image"
                         style={{
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            //background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             position: 'relative',
-                            width: '400px',
+                            width: '100%',
                             height: '300px'
                         }}
                     >
@@ -60,10 +67,44 @@ function MysteryActivityCard({ mysteryUntil, ageRange = "À découvrir" }: Myste
                             left: '50%',
                             transform: 'translate(-50%, -50%)',
                             color: 'white',
-                            textAlign: 'center'
+                            textAlign: 'center',
+                            // width: '50%'
                         }}>
-                            <div style={{ fontSize: '4rem', marginBottom: '0.5rem' }}>🎭</div>
-                            <div style={{ fontSize: '2rem', opacity: 0.8 }}>?</div>
+                            <div style={{ fontSize: '4rem', marginBottom: '0.5rem' }}>
+                                <Image
+                                    src="/icons/theatre.png"
+                                    alt="Mystère"
+                                    width={100}
+                                    height={100}
+                                    // style={{ verticalAlign: "middle" }}
+                                    style={{ transform: "scale(1.2)", transition: "transform .3s" }}
+                                />
+                            </div>
+                            <div style={{
+                                fontSize: '3rem', opacity: 0.8,
+                                color: "#ffd700",
+                                textShadow: "rgb(255 215 0 / 50%)",
+                                fontWeight: 'bold',
+                                animation: 'pulseShine 1.5s infinite'
+                            }}>?</div>
+
+                            <style jsx>
+                                {`
+                               @keyframes pulseShine {
+                                    0%, 100% { 
+                                        transform: scale(1); 
+                                        opacity: 0.8;
+                                        text-shadow: 0 0 10px rgb(255 215 0 / 50%);
+                                    }
+                                    50% { 
+                                        transform: scale(1.15); 
+                                        opacity: 1;
+                                        text-shadow: 
+                                            0 0 20px rgb(255 215 0 / 80%), 
+                                            0 0 30px rgb(255 215 0 / 60%);
+    }
+                                }
+                                `}</style>
                         </div>
 
                         {/* Overlay avec texture */}
@@ -85,16 +126,33 @@ function MysteryActivityCard({ mysteryUntil, ageRange = "À découvrir" }: Myste
 
                 {/* Titre mystère */}
                 <div>
-                    <h3 className="activity-card__title">🎭 Activité Mystère</h3>
+                    <h3 className="activity-card__title" style={{
+                        display: 'inline-flex', alignItems: 'center', lineHeight: '1', gap: '5px', fontWeight: 600,          // un peu plus gras
+                        color: '#2A4D69'
+                    }}>
+                        <Image
+                            src="/icons/theatre.png"
+                            alt="Mystère"
+                            width={24}
+                            height={24}
+                            // style={{ verticalAlign: "middle" }}
+                            style={{
+                                transform: "scale(1.2)", transition: "transform .3s"
+                            }}
+                        />Activité Mystère</h3>
                 </div>
 
                 {/* Prix mystère */}
                 <p className="activity-card__price">Surprise</p>
 
                 {/* Tags mystère */}
-                <div className="activity-card__tags">
-                    <span className="activity-card__tag">Mystère</span>
-                    <span className="activity-card__tag">Nouveauté</span>
+                <div className="activity-card__tags" >
+                    <span className="activity-card__tag" style={{
+                        background: '#dca08d',
+                    }}>Mystère</span>
+                    <span className="activity-card__tag" style={{
+                        background: '#dca08d',
+                    }}>Nouveauté</span>
                 </div>
 
                 {/* Date de révélation au lieu du CTA */}
@@ -102,9 +160,8 @@ function MysteryActivityCard({ mysteryUntil, ageRange = "À découvrir" }: Myste
                     <div
                         className="activity-card__btn"
                         style={{
-                            background: '#667eea',
+                            background: '#dca08d',
                             cursor: 'default',
-                            opacity: 0.8
                         }}
                     >
                         <Image
