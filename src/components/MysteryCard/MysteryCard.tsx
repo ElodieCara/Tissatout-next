@@ -1,36 +1,46 @@
-import React from 'react';
+"use client";
+import React from "react";
+import { useRouter } from "next/navigation";
 
 interface MysteryCardProps {
     title: string;
     description: string;
-    primaryButtonText: string;
-    primaryButtonAction: () => void;
-    secondaryButtonText: string;
-    secondaryButtonAction: () => void;
     imageSrc: string;
     alt: string;
+    primaryButtonText: string;
+    primaryButtonLink: string;
+    secondaryButtonText: string;
+    secondaryButtonLink: string;
 }
 
 const MysteryCard: React.FC<MysteryCardProps> = ({
     title,
     description,
-    primaryButtonText,
-    primaryButtonAction,
-    secondaryButtonText,
-    secondaryButtonAction,
     imageSrc,
-    alt
+    alt,
+    primaryButtonText,
+    primaryButtonLink,
+    secondaryButtonText,
+    secondaryButtonLink,
 }) => {
+    const router = useRouter();
+
     return (
         <section className="activity-mystery">
             <div className="activity-mystery__content">
                 <h2 className="activity-mystery__title">{title}</h2>
                 <p className="activity-mystery__text">{description}</p>
                 <div className="activity-mystery__buttons">
-                    <button className="btn btn--primary" onClick={primaryButtonAction}>
+                    <button
+                        className="btn btn--primary"
+                        onClick={() => router.push(primaryButtonLink)}
+                    >
                         {primaryButtonText}
                     </button>
-                    <button className="btn btn--secondary" onClick={secondaryButtonAction}>
+                    <button
+                        className="btn btn--secondary"
+                        onClick={() => router.push(secondaryButtonLink)}
+                    >
                         {secondaryButtonText}
                     </button>
                 </div>

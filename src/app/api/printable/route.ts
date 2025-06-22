@@ -1,40 +1,61 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+// 🔧 Fonction utilitaire pour normaliser la mysteryUntil
+function parseMysteryUntil(rawDate: string | null): Date | null {
+    if (!rawDate) return null;
+
+    const date = new Date(rawDate);
+    if (isNaN(date.getTime())) return null;
+
+    const hasTime = rawDate.includes("T");
+    if (!hasTime && date.getUTCHours() === 0 && date.getUTCMinutes() === 0) {
+        // Fixe à 06h UTC = 8h heure de Paris
+        date.setUTCHours(6, 0, 0, 0);
+    }
+    return date;
+}
+
 export async function GET() {
     try {
-        const data = await prisma.printableGame.findMany({
+        const printables = await prisma.printableGame.findMany({
             include: {
-                themes: {
-                    include: {
-                        theme: true,
-                    },
-                },
-                types: {
-                    include: {
-                        type: true,
-                    },
-                },
+                themes: { include: { theme: true } },
+                types: { include: { type: true } },
             },
             orderBy: { createdAt: "desc" },
         });
 
-        // 🔥 Filtrer les relations nulles
-        const cleaned = data.map(game => ({
+        const games = printables.map(game => ({
             ...game,
             themes: game.themes.filter(t => t.theme !== null),
             types: game.types.filter(t => t.type !== null),
+            // on renvoie la date en ISO ou null
+            mysteryUntil: game.mysteryUntil?.toISOString() || null,
         }));
 
-        return NextResponse.json(cleaned);
+        return NextResponse.json(games);
     } catch (error) {
         console.error("❌ Erreur GET /api/printable :", error);
-        return NextResponse.json({ message: "Erreur serveur", error: (error as Error).message }, { status: 500 });
+        return NextResponse.json(
+            { message: "Erreur serveur", error: (error as Error).message },
+            { status: 500 }
+        );
     }
 }
 
 export async function POST(req: Request) {
     const body = await req.json();
+
+    // Si on coche isMystery, décocher l'ancien
+    if (body.isMystery) {
+        await prisma.printableGame.updateMany({
+            where: { isMystery: true },
+            data: { isMystery: false },
+        });
+    }
+
+    const mysteryUntilDate = parseMysteryUntil(body.mysteryUntil ?? null);
 
     const game = await prisma.printableGame.create({
         data: {
@@ -46,42 +67,59 @@ export async function POST(req: Request) {
             imageUrl: body.imageUrl,
             previewImageUrl: body.previewImageUrl ?? null,
             isPrintable: body.isPrintable,
-            printPrice: body.printPrice,
+            printPrice: body.printPrice ?? null,
             ageMin: body.ageMin,
             ageMax: body.ageMax,
             isFeatured: body.isFeatured,
-            article: body.articleId ? { connect: { id: body.articleId } } : undefined,
+            isMystery: body.isMystery ?? false,
+            mysteryUntil: mysteryUntilDate,
+            article: body.articleId
+                ? { connect: { id: body.articleId } }
+                : undefined,
         },
     });
 
-    // Associer thèmes et types après création
-    if (body.themeIds?.length) {
-        await prisma.gameTheme.createMany({
-            data: body.themeIds.map((themeId: string) => ({
-                gameId: game.id,
-                themeId,
-            })),
+    return NextResponse.json({ message: "Créé", game });
+}
+
+export async function PUT(req: Request, { params }: { params: { id: string } }) {
+    const body = await req.json();
+
+    // Si on coche isMystery, décocher l'ancien
+    if (body.isMystery) {
+        await prisma.printableGame.updateMany({
+            where: { isMystery: true },
+            data: { isMystery: false },
         });
     }
 
-    if (body.typeIds?.length) {
-        await prisma.gameType.createMany({
-            data: body.typeIds.map((typeId: string) => ({
-                gameId: game.id,
-                typeId,
-            })),
-        });
-    }
+    // Normalisation : soit null (non-mystère ou date invalide), soit Date
+    const mysteryUntilDate = body.isMystery
+        ? parseMysteryUntil(body.mysteryUntil ?? null)
+        : null;
 
-    // Créer les extraImages
-    if (body.extraImages?.length) {
-        await prisma.extraImage.createMany({
-            data: body.extraImages.map((url: string) => ({
-                gameId: game.id,
-                imageUrl: url,
-            })),
-        });
-    }
+    const game = await prisma.printableGame.update({
+        where: { id: params.id },
+        data: {
+            title: body.title,
+            slug: body.slug,
+            description: body.description,
+            pdfUrl: body.pdfUrl,
+            pdfPrice: body.pdfPrice ?? null,
+            imageUrl: body.imageUrl,
+            previewImageUrl: body.previewImageUrl ?? null,
+            isPrintable: body.isPrintable,
+            printPrice: body.printPrice ?? null,
+            ageMin: body.ageMin,
+            ageMax: body.ageMax,
+            isFeatured: body.isFeatured,
+            isMystery: body.isMystery ?? false,
+            mysteryUntil: mysteryUntilDate,
+            article: body.articleId
+                ? { connect: { id: body.articleId } }
+                : { disconnect: true },
+        },
+    });
 
-    return NextResponse.json({ message: "Créé" });
+    return NextResponse.json({ message: "Mis à jour", game });
 }

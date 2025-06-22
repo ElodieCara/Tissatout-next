@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { generateSlug } from "@/lib/utils";
 import SelectWithAdd from "./SelectWithAdd";
 import Breadcrumb from "./Breadcrumb";
+import { MysteryStatus } from "./MysteryStatus";
 
 interface Theme {
     id: string;
@@ -34,6 +35,8 @@ interface PrintableGameForm {
     typeIds: string[];
     articleId?: string | null;
     isFeatured: boolean;
+    isMystery: boolean,
+    mysteryUntil: string | undefined,
 }
 
 export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
@@ -51,6 +54,8 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
         themeIds: [],
         typeIds: [],
         isFeatured: false,
+        isMystery: false,
+        mysteryUntil: undefined,
     });
 
     const [themes, setThemes] = useState<Theme[]>([]);
@@ -83,6 +88,15 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
             if (gameId && gameId !== "new") {
                 const res = await fetch(`/api/printable/${gameId}`);
                 const data = await res.json();
+
+                // Conversion correcte de la date mysteryUntil
+                let mysteryUntilFormatted = undefined;
+                if (data.mysteryUntil) {
+                    const date = new Date(data.mysteryUntil);
+                    // Format pour datetime-local : YYYY-MM-DDTHH:MM
+                    mysteryUntilFormatted = date.toISOString().slice(0, 16);
+                }
+
                 setForm({
                     title: data.title,
                     slug: data.slug,
@@ -100,6 +114,8 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                     themeIds: data.themes.filter((t: any) => t.theme !== null).map((t: any) => t.theme.id),
                     typeIds: data.types.filter((t: any) => t.type !== null).map((t: any) => t.type.id),
                     articleId: data.articleId ?? null,
+                    isMystery: data.isMystery,
+                    mysteryUntil: mysteryUntilFormatted,
                 });
             }
         };
@@ -109,13 +125,22 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const target = e.target as HTMLInputElement;
         const { name, value, type, checked } = target;
+
+        let newValue: any;
+
+        if (type === "checkbox") {
+            newValue = checked;
+        } else if (type === "number") {
+            newValue = value === "" ? undefined : parseFloat(value);
+            // "2025-06-28T06:00:00.000Z"
+        } else if (name === "mysteryUntil") {
+            newValue = value;
+        } else {
+            newValue = value;
+        }
         setForm({
             ...form,
-            [name]: type === "checkbox"
-                ? checked
-                : type === "number"
-                    ? value === "" ? undefined : parseFloat(value)
-                    : value,
+            [name]: newValue,
         });
     };
 
@@ -147,7 +172,11 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
             typeIds: form.typeIds,
             printUrl: form.printUrl?.trim() || undefined,
             printPrice: form.printPrice,
+            mysteryUntil: form.mysteryUntil || null, // 👈 AJOUTE ÇA
         };
+
+
+        console.log("🧾 PAYLOAD ENVOYÉ :", payload);
 
         const res = await fetch(url, {
             method,
@@ -295,9 +324,47 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                             checked={form.isFeatured}
                             onChange={handleChange}
                         />
-                        Mettre en vedette sur la page d’accueil ?
+                        Mettre en vedette sur la page d'accueil ?
                     </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="isMystery"
+                            checked={form.isMystery}
+                            onChange={handleChange}
+                        />
+                        Activité mystère cette semaine
+                    </label>
+                    {form.isMystery && (
+                        <div style={{ marginTop: '10px' }}>
+                            <label htmlFor="mysteryUntil">Date et heure de révélation :</label>
+                            <input
+                                type="datetime-local"
+                                name="mysteryUntil"
+                                value={form.mysteryUntil ? form.mysteryUntil.slice(0, 16) : ""}
+                                onChange={handleChange}
+                                style={{ display: 'block', marginTop: '5px' }}
+                            />
+                            <small style={{ color: '#666', fontSize: '0.85em' }}>
+                                L'activité sera révélée à cette date/heure
+                            </small>
+                        </div>
+                    )}
                 </div>
+
+                <MysteryStatus
+                    isMystery={form.isMystery}
+                    mysteryUntil={form.mysteryUntil}
+                    mysteryStatus={
+                        !form.isMystery
+                            ? null
+                            : !form.mysteryUntil
+                                ? "SANS DATE"
+                                : new Date(form.mysteryUntil) > new Date()
+                                    ? "EN ATTENTE"
+                                    : "RÉVÉLÉE"
+                    }
+                />
 
                 <div className="admin-form__group">
                     <label>Tranche d’âge</label>
@@ -355,6 +422,8 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                         🔗 Ce jeu est actuellement lié à un article.
                     </div>
                 )}
+
+
 
                 <button type="submit" className="admin-form__button">
                     {gameId === "new" ? "Ajouter" : "Mettre à jour"}

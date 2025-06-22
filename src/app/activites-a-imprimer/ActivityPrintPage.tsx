@@ -7,6 +7,13 @@ import ActivityCard from "./ActivityCard";
 import ActivityFilter from "./ActivityFilters";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
+import { FullPrintable } from "@/lib/printables";
+import MysteryTeaser from "./MysteryTeaser";
+import MysteryActivityCard from "./MysteryActivityCard";
+
+interface ActivityPrintPageProps {
+    games: FullPrintable[];
+}
 
 interface PrintableGame {
     id: string;
@@ -21,9 +28,12 @@ interface PrintableGame {
     ageMax: number;
     themes?: { theme: { label: string } }[];
     types?: { type: { label: string } }[];
+    isMystery: boolean;
+    mysteryUntil: string | null;
+    _mysteryStatus?: string | null;
 }
 
-export default function ActivityPrintPage() {
+export default function ActivityPrintPage({ games }: ActivityPrintPageProps) {
     const [activities, setActivities] = useState<PrintableGame[]>([]);
     const [filteredPdf, setFilteredPdf] = useState<PrintableGame[]>([]);
     const [filteredPrintable, setFilteredPrintable] = useState<PrintableGame[]>([]);
@@ -31,6 +41,8 @@ export default function ActivityPrintPage() {
     const [allTypes, setAllTypes] = useState<string[]>([]);
     const [currentPriceFilter, setCurrentPriceFilter] = useState<"all" | "free" | "asc" | "desc">("all");
     const [visibleCount, setVisibleCount] = useState(8); // nombre initial
+    const [mysteryActivity, setMysteryActivity] = useState<{ mysteryUntil: string } | null>(null);
+
 
     const pdfActivities = activities.filter((a) => a.pdfUrl);
     const printableActivities = activities.filter((a) => a.isPrintable);
@@ -41,6 +53,18 @@ export default function ActivityPrintPage() {
             const res = await fetch("/api/printable");
             const data = await res.json();
             setActivities(data);
+
+            try {
+                const mysteryRes = await fetch("/api/printable");
+                if (mysteryRes.ok) {
+                    const mysteryData = await mysteryRes.json();
+                    if (mysteryData.hasMystery && !mysteryData.isRevealed) {
+                        setMysteryActivity({ mysteryUntil: mysteryData.mysteryUntil });
+                    }
+                }
+            } catch (error) {
+                console.log("Pas d'activité mystère en cours");
+            }
         };
         fetchData();
     }, []);
@@ -211,6 +235,13 @@ export default function ActivityPrintPage() {
                     </div>
                 </section>
 
+                {mysteryActivity && (
+                    <section className="activites__section">
+                        <MysteryTeaser mysteryUntil={mysteryActivity.mysteryUntil} />
+                    </section>
+                )}
+
+
                 <section className="activites__layout">
                     <div className="activites__list">
                         <section className="activites__section">
@@ -259,6 +290,16 @@ export default function ActivityPrintPage() {
                                 </div>
                             </section>
                             <div className="activites__grid">
+                                {/* Afficher d'abord la carte mystère si elle existe */}
+                                {mysteryActivity && (
+                                    <MysteryActivityCard
+                                        key="mystery-card"
+                                        mysteryUntil={mysteryActivity.mysteryUntil}
+                                        ageRange="À découvrir"
+                                    />
+                                )}
+
+                                {/* Afficher les autres activités */}
                                 {filteredPdf.slice(0, visibleCount).map((a) => (
                                     <ActivityCard
                                         key={a.id}
@@ -271,6 +312,8 @@ export default function ActivityPrintPage() {
                                         pdfPrice={a.pdfPrice}
                                         themes={a.themes?.map((t) => t.theme.label) || []}
                                         types={a.types?.map((t) => t.type.label) || []}
+                                        isMystery={a.isMystery}
+                                        mysteryUntil={a.mysteryUntil}
                                     />
                                 ))}
                             </div>

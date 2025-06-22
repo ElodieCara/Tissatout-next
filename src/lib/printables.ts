@@ -65,3 +65,38 @@ export async function getSimilarPrintables(
         },
     });
 }
+
+
+export async function getMysteryGame(): Promise<FullPrintable | null> {
+    return await prisma.printableGame.findFirst({
+        where: {
+            isMystery: true,
+            mysteryUntil: { gte: new Date() },
+        },
+        include: {
+            themes: { include: { theme: true } },
+            types: { include: { type: true } },
+            extraImages: true,
+        },
+    });
+}
+
+/**
+ * Renvoie le catalogue public (hors mystère ou mystères expirés)
+ */
+export async function getPublicGames(): Promise<FullPrintable[]> {
+    return await prisma.printableGame.findMany({
+        where: {
+            OR: [
+                { isMystery: false },
+                { mysteryUntil: { lt: new Date() } },
+            ],
+        },
+        include: {
+            themes: { include: { theme: true } },
+            types: { include: { type: true } },
+            extraImages: true,
+        },
+        orderBy: { createdAt: "desc" },
+    });
+}

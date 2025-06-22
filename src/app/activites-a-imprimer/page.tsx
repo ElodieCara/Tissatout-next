@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { getPublicGames } from "@/lib/printables";
 import ActivityPrintPage from "./ActivityPrintPage";
 
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export const metadata: Metadata = {
     }
 };
 
-export default function Page() {
-    return <ActivityPrintPage />;
+export default async function Page() {
+    const games = await getPublicGames();
+    return <ActivityPrintPage games={games} />;
 }

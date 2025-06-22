@@ -397,6 +397,10 @@ model PrintableGame {
   views      Int     @default(0)
   isFeatured Boolean @default(false)
 
+   /// ——— Pour l’activité mystère hebdomadaire ———
+  isMystery    Boolean   @default(false)
+  mysteryUntil DateTime?
+
   createdAt DateTime  @default(now())
   updatedAt DateTime? @default(now()) @updatedAt
 }

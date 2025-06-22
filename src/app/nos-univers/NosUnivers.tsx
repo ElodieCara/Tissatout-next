@@ -188,19 +188,19 @@ export default function NosUnivers({ settings }: { settings: any }) {
                             );
                         })}
                     </div>
-
                 </section>
 
                 <MysteryCard
                     title="🎁 Une activité mystère chaque semaine !"
                     description="Une surprise rigolote pour apprendre, réfléchir et t’amuser ! Inscris-toi au courrier des petits curieux pour ne rien manquer ✨"
-                    primaryButtonText="🔍 Voir l’activité mystère"
-                    primaryButtonAction={() => window.location.href = '/activite-mystere'}
-                    secondaryButtonText="📩 S’inscrire"
-                    secondaryButtonAction={() => window.location.href = '/newsletter'}
                     imageSrc="/images/activite-mystere-floutee.jpg"
                     alt="Aperçu activité mystère"
+                    primaryButtonText="🔍 Voir l’activité mystère"
+                    primaryButtonLink="/activite-mystere"
+                    secondaryButtonText="📩 S’inscrire"
+                    secondaryButtonLink="/newsletter"
                 />
+
             </div >
             <script type="application/ld+json" suppressHydrationWarning dangerouslySetInnerHTML={{
                 __html: JSON.stringify({
