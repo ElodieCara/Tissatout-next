@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Image from "next/image";
 import PrintButton from "@/components/PrintButton/PrintButton";
-import ArticleFeedback from "./ArticleFeedback";
-import CommentList from "./CommentList";
+import ArticleFeedback from "@/components/Feedback/Feedback";
+import CommentList from "@/components/CommentList/CommentList";
 import TableOfContents from "./TableOfContents";
 import Breadcrumb from "../../../components/Breadcrumb/Breadcrumb";
 import Button from "@/components/Button/Button";
@@ -289,9 +289,9 @@ export default async function ArticlePage({ params }: Props) {
                             </section>
                         )
                     }
-                    <div className="no-print">
-                        <ArticleFeedback articleId={article.id} />
-                        <CommentList articleId={article.id} />
+                    <div className="comments no-print">
+                        <ArticleFeedback resourceType="article" resourceId={article.id} />
+                        <CommentList resourceType="article" resourceId={article.id} />
                     </div>
                 </div>
                 <BackToTop />

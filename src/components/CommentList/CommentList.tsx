@@ -6,22 +6,51 @@ interface Comment {
     id: string;
     content: string;
     createdAt: string;
-    author?: string; // ✅ Ajout de l'auteur
+    author?: string;
 }
 
-export default function CommentList({ articleId }: { articleId: string }) {
+export default function CommentList({
+    resourceType,
+    resourceId
+}: {
+    resourceType: "article" | "advice" | "idea" | "printable";
+    resourceId: string;
+}) {
     const [comments, setComments] = useState<Comment[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        async function fetchComments() {
-            const res = await fetch(`/api/comments?articleId=${articleId}`);
-            const data = await res.json();
-            setComments(data);
-        }
-        fetchComments();
-    }, [articleId]);
+        const fetchComments = async () => {
+            try {
+                setLoading(true);
+                setError(null);
 
-    if (comments.length === 0) return null;
+                const response = await fetch(`/api/comments?type=${resourceType}&id=${resourceId}`);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Erreur lors du chargement des commentaires');
+                }
+
+                const data = await response.json();
+                setComments(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.error('Erreur lors du chargement des commentaires:', err);
+                setError(err instanceof Error ? err.message : 'Erreur inconnue');
+                setComments([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (resourceType && resourceId) {
+            fetchComments();
+        }
+    }, [resourceType, resourceId]);
+
+    if (loading) return <div>Chargement des commentaires...</div>;
+    if (error) return <div>Erreur: {error}</div>;
 
     return (
         <div className="article__comments">

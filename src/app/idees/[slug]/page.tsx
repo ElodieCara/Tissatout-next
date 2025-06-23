@@ -6,7 +6,7 @@ import PrintButton from "@/components/PrintButton/PrintButton";
 import CommentList from "@/components/CommentList/CommentList";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 import ReactMarkdown from "react-markdown";
-import ArticleFeedback from "@/app/articles/[slug]/ArticleFeedback";
+import ArticleFeedback from "@/components/Feedback/Feedback";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import ShareActions from "@/components/ShareActions/ShareActions";
 import type { Metadata } from "next";
@@ -204,8 +204,8 @@ export default async function IdeaPage({ params }: Props) {
 
                     {/* 💬 Et toi, qu'en as-tu pensé ? */}
                     <section className="idea__comments no-print">
-                        <ArticleFeedback articleId={idea.id} />
-                        <CommentList articleId={idea.id} />
+                        <ArticleFeedback resourceType="idea" resourceId={idea.id} />
+                        <CommentList resourceType="idea" resourceId={idea.id} />
                     </section>
 
                 </div>

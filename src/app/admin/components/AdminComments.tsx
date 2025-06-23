@@ -6,10 +6,10 @@ import Link from "next/link";
 interface Comment {
     id: string;
     content: string;
-    articleTitle: string;
-    articleSlug: string;
     approved: boolean;
     createdAt: string;
+    resourceLabel: string;
+    resourceSlug: string;
 }
 
 export default function AdminCommentsPage() {
@@ -55,8 +55,8 @@ export default function AdminCommentsPage() {
                     {comments.map((comment) => (
                         <li key={comment.id} className="admin-comments__item">
                             <p className="admin-comments__meta">
-                                <Link href={`/articles/${comment.articleSlug}`}>
-                                    {comment.articleTitle}
+                                <Link href={`/articles/${comment.resourceSlug}`}>
+                                    {comment.resourceLabel}
                                 </Link>{" "}
                                 — {new Date(comment.createdAt).toLocaleString("fr-FR")}
                             </p>

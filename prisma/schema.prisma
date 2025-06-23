@@ -51,16 +51,19 @@ model ArticleSection {
 }
 
 model Comment {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  content   String
-  articleId String   @db.ObjectId
-  article   Article  @relation(fields: [articleId], references: [id])
-  adviceId  String?  @db.ObjectId
-  advice    Advice?  @relation(fields: [adviceId], references: [id])
-  ideaId    String?  @db.ObjectId
-  idea      Idea?    @relation(fields: [ideaId], references: [id])
-  createdAt DateTime @default(now())
-  approved  Boolean  @default(false)
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  content     String
+  author      String?
+  articleId   String?         @db.ObjectId
+  article     Article?       @relation(fields: [articleId], references: [id])
+  adviceId    String?        @db.ObjectId
+  advice      Advice?        @relation(fields: [adviceId], references: [id])
+  ideaId      String?        @db.ObjectId
+  idea        Idea?          @relation(fields: [ideaId], references: [id])
+  printableId String?        @db.ObjectId
+  printable   PrintableGame? @relation("PrintableComments", fields: [printableId], references: [id])
+  createdAt   DateTime       @default(now())
+  approved    Boolean        @default(false)
 }
 
 model RelatedIdeaArticle {
@@ -397,12 +400,14 @@ model PrintableGame {
   views      Int     @default(0)
   isFeatured Boolean @default(false)
 
-   /// ——— Pour l’activité mystère hebdomadaire ———
+  /// ——— Pour l’activité mystère hebdomadaire ———
   isMystery    Boolean   @default(false)
   mysteryUntil DateTime?
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @default(now()) @updatedAt
+
+  comments Comment[] @relation("PrintableComments")
 }
 
 model ExtraImage {
@@ -445,4 +450,3 @@ model Subscriber {
   email     String   @unique
   createdAt DateTime @default(now())
 }
-

@@ -30,6 +30,10 @@ body {
 
 }
 
+section {
+    @include mix.container;
+}
+
 img,
 video,
 iframe {

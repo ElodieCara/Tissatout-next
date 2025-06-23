@@ -7,6 +7,9 @@ import BackToTop from "@/components/BackToTop/BackToTop";
 import PrintableGallery from "./PrintableGallery";
 import LikeButton from "./LikeButton";
 import ShareActions from "../../../components/ShareActions/ShareActions";
+import ArticleFeedback from "@/components/Feedback/Feedback";
+import CommentList from "@/components/CommentList/CommentList";
+
 
 type Props = {
     params: { slug: string };
@@ -17,11 +20,12 @@ type GameThemeSafe = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const printable = await getPrintableBySlug(params.slug);
+    const { slug } = await params;
+    const printable = await getPrintableBySlug(slug);
     if (!printable) return { title: "Fiche introuvable" };
 
     const baseUrl = "https://tissatout.fr"; // 🔁 À ajuster si nécessaire
-    const url = `${baseUrl}/activites-a-imprimer/${params.slug}`;
+    const url = `${baseUrl}/activites-a-imprimer/${slug}`;
     const image = printable.imageUrl?.startsWith("http")
         ? printable.imageUrl
         : `${baseUrl}${printable.imageUrl}`;
@@ -56,7 +60,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PrintablePage({ params }: Props) {
-    const printable = await getPrintableBySlug(params.slug);
+    const { slug } = await params;
+    const printable = await getPrintableBySlug(slug);
     if (!printable) return notFound();
 
     // 1️⃣ On récupère d’abord tous les similaires
@@ -245,6 +250,7 @@ export default async function PrintablePage({ params }: Props) {
                         </section>
                     )}
                 </div>
+
                 <div className="activites__separator">
                     <span> Et si on prolongeait l’aventure ? 👇</span>
                 </div>
@@ -275,7 +281,11 @@ export default async function PrintablePage({ params }: Props) {
                         </ul>
                     </section>
                 )}
-
+                {/* 💬 Et toi, qu'en as-tu pensé ? */}
+                <section className="comments no-print">
+                    <ArticleFeedback resourceType="printable" resourceId={printable.id} />
+                    <CommentList resourceType="printable" resourceId={printable.id} />
+                </section>
                 <BackToTop />
             </main>
         </>

@@ -6,7 +6,7 @@ import PrintButton from "@/components/PrintButton/PrintButton";
 import CommentList from "@/components/CommentList/CommentList";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 import ReactMarkdown from "react-markdown";
-import ArticleFeedback from "@/app/articles/[slug]/ArticleFeedback";
+import ArticleFeedback from "@/components/Feedback/Feedback";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import ShareActions from "@/components/ShareActions/ShareActions";
 
@@ -198,9 +198,9 @@ export default async function AdvicePage({ params }: Props) {
                     </div>
 
                     {/* 💬 Et toi, qu'en as-tu pensé ? */}
-                    <section className="advice__comments no-print">
-                        <ArticleFeedback articleId={advice.id} />
-                        <CommentList articleId={advice.id} />
+                    <section className="comments no-print">
+                        <ArticleFeedback resourceType="advice" resourceId={advice.id} />
+                        <CommentList resourceType="advice" resourceId={advice.id} />
                     </section>
 
                 </div>
