@@ -12,6 +12,7 @@ import AdminSiteSettings from "./AdminSiteSettings";
 import AdminCommentsPage from "./AdminComments";
 import AdminLesson from "./AdminLesson";
 import AdminPrintableGames from "./AdminPrintableGames";
+import { LogoutButton } from "@/app/admin/logout/page";
 
 
 
@@ -33,6 +34,11 @@ export default function AdminPage() {
                 onThemeSelect={(theme) => console.log("Thème sélectionné:", theme)}
                 onSubCategorySelect={(subCategory) => console.log("Sous-catégorie sélectionnée:", subCategory)}
             />
+
+            <div style={{ display: "flex", justifyContent: "flex-end", padding: "1rem" }}>
+                <LogoutButton />
+            </div>
+
             <nav className="admin__menu">
                 <button
                     onClick={() => handleSectionChange("ageCategory")}
