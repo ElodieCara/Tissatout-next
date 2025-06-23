@@ -28,6 +28,13 @@ export async function GET() {
         } else {
             label = "–"; slug = "";
         }
+
+        let resourceType = "";
+        if (c.article) resourceType = "Article";
+        if (c.advice) resourceType = "Conseil";
+        if (c.idea) resourceType = "Idée";
+        if (c.printable) resourceType = "Activité à imprimer";
+
         return {
             id: c.id,
             content: c.content,
@@ -35,6 +42,7 @@ export async function GET() {
             createdAt: c.createdAt,
             resourceLabel: label,
             resourceSlug: slug,
+            resourceType,
         };
     });
 

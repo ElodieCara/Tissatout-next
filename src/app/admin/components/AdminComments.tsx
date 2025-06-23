@@ -10,7 +10,19 @@ interface Comment {
     createdAt: string;
     resourceLabel: string;
     resourceSlug: string;
+    resourceType: string;
 }
+
+function getUrlPrefix(type: string): string {
+    switch (type) {
+        case "Article": return "articles";
+        case "Conseil": return "conseils";
+        case "Idée": return "idees";
+        case "Activité à imprimer": return "activites-a-imprimer";
+        default: return "";
+    }
+}
+
 
 export default function AdminCommentsPage() {
     const [comments, setComments] = useState<Comment[]>([]);
@@ -46,38 +58,33 @@ export default function AdminCommentsPage() {
     if (loading) return <p>Chargement des commentaires...</p>;
 
     return (
-        <div className="admin-comments">
-            <h2>Commentaires à modérer</h2>
-            {comments.length === 0 ? (
-                <p>Aucun commentaire pour le moment.</p>
-            ) : (
-                <ul className="admin-comments__list">
-                    {comments.map((comment) => (
-                        <li key={comment.id} className="admin-comments__item">
-                            <p className="admin-comments__meta">
-                                <Link href={`/articles/${comment.resourceSlug}`}>
-                                    {comment.resourceLabel}
-                                </Link>{" "}
-                                — {new Date(comment.createdAt).toLocaleString("fr-FR")}
-                            </p>
-                            <p className="admin-comments__content">{comment.content}</p>
-                            <div className="admin-comments__actions">
-                                {!comment.approved && (
-                                    <button onClick={() => updateCommentStatus(comment.id, true)}>
-                                        ✅ Approuver
-                                    </button>
-                                )}
-                                {comment.approved && (
-                                    <button onClick={() => updateCommentStatus(comment.id, false)}>
-                                        ⛔ Révoquer
-                                    </button>
-                                )}
-                                <button onClick={() => deleteComment(comment.id)}>🗑️ Supprimer</button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            )}
+        <div className="admin__comments">
+            <h2 className="admin__comments-title">💬 Commentaires à modérer</h2>
+            <ul className="admin__comments__list">
+                {comments.map((comment) => (
+                    <li key={comment.id} className="admin__comments__list-item">
+                        <div className="admin__comments__list-item-meta">
+                            <strong>{comment.resourceType}</strong> —
+                            <a href={`/${getUrlPrefix(comment.resourceType)}/${comment.resourceSlug}`} target="_blank">
+                                {comment.resourceLabel}
+                            </a> —{" "}
+                            {new Date(comment.createdAt).toLocaleString("fr-FR")}
+                        </div>
+                        <div className="admin__comments__list-item-content">
+                            {comment.content}
+                        </div>
+                        <div className="admin__comments__list-item-actions">
+                            {!comment.approved && (
+                                <button className="approve" onClick={() => updateCommentStatus(comment.id, true)}>✅ Approuver</button>
+                            )}
+                            {comment.approved && (
+                                <button className="revoke" onClick={() => updateCommentStatus(comment.id, false)}>⛔ Révoquer</button>
+                            )}
+                            <button className="delete" onClick={() => deleteComment(comment.id)}>🗑️ Supprimer</button>
+                        </div>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 }
