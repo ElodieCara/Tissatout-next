@@ -133,6 +133,7 @@
 
     &__footer {
         color: vars.$primary-color;
+        @include mix.separator;
     }
 }
 

@@ -17,7 +17,7 @@ body {
     background-color: #f8f5f1;
     height: auto;
     overflow-x: visible;
-    //background-color: #2c3f64;
+    //background-color: #2c3f64;    
 
     @media (max-width: 768px) {
         overflow-x: hidden; // protège ton layout mobile sans flinguer le sticky

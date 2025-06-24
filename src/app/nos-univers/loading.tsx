@@ -1,9 +1,9 @@
-import Image from "next/image";
+
 
 export default function Loading() {
     return (
         <div className="loading">
-            <Image
+            <img
                 src="/loader/tissatoupi-fly.png" // remplace par ton visuel
                 alt="Tissatoupi charge la page"
                 width={90}

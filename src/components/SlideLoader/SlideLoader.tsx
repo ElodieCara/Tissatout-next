@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Slideshow from "../Slideshow/Slideshow";
-import Loading from "@/app/nos-univers/[slug]/loading";
+import Loading from "@/app/nos-univers/loading";
 
 interface HomeSlide {
     id?: string;

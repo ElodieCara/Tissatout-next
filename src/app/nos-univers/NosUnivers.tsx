@@ -191,15 +191,17 @@ export default function NosUnivers({ settings }: { settings: any }) {
                 </section>
 
                 <MysteryCard
-                    title="🎁 Une activité mystère chaque semaine !"
-                    description="Une surprise rigolote pour apprendre, réfléchir et t’amuser ! Inscris-toi au courrier des petits curieux pour ne rien manquer ✨"
+                    title="Une activité mystérieuse à venir !"
+                    description="Une surprise rigolote pour apprendre, réfléchir et t'amuser ! Abonne-toi pour ne rien manquer."
                     imageSrc="/images/activite-mystere-floutee.jpg"
                     alt="Aperçu activité mystère"
-                    primaryButtonText="🔍 Voir l’activité mystère"
+                    isRevealed={false}
+                    revealDate="29/06/2025 à 11h08"
+                    isSubscribed={false}
                     primaryButtonLink="/activite-mystere"
-                    secondaryButtonText="📩 S’inscrire"
                     secondaryButtonLink="/newsletter"
                 />
+
 
             </div >
             <script type="application/ld+json" suppressHydrationWarning dangerouslySetInnerHTML={{

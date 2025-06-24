@@ -8,6 +8,7 @@ import FloatingIcons from "@/components/FloatingIcon/FloatingIcons";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import Banner from "@/components/Banner/Banner";
 import Button from "@/components/Button/Button";
+import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 
 // ✅ Sections disponibles
 const categories = [
@@ -64,6 +65,8 @@ export default function InspirationPage({
                 {selectedCategory === "ideas" && <InspirationIdeas ideas={ideas} />}
                 {selectedCategory === "advice" && <InspirationAdvice advices={advices} />}
             </section>
+
+            <NewsletterBanner />
         </>
     );
 }

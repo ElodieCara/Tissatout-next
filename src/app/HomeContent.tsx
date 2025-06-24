@@ -12,7 +12,7 @@ import arrowPrev from "@/assets/arrow-circle-right.png";
 import arrowNext from "@/assets/arrow-circle-left.png";
 import Slideshow from "@/components/Slideshow/Slideshow";
 import { Suspense } from "react";
-import Loading from "@/app/nos-univers/[slug]/loading";
+import Loading from "@/app/nos-univers/loading";
 import SlideLoader from "@/components/SlideLoader/SlideLoader";
 
 interface Article {

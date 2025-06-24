@@ -1,10 +1,15 @@
+@use '../../styles/base/mixins' as mix;
+@use '../../styles/base/typography' as typo;
+@use '../../styles/utils/variables' as vars;
+
 .suggestions-parents {
     margin-top: 2rem;
+    @include mix.separator;
 
     &__header {
         font-size: 1.4rem;
         margin-bottom: 1rem;
-        color: $primary-color;
+        color: vars.$primary-color;
         font-weight: bold;
     }
 
