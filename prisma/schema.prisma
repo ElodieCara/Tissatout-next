@@ -446,7 +446,14 @@ model GameType {
 }
 
 model Subscriber {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  email     String   @unique
-  createdAt DateTime @default(now())
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  emailData     String
+  emailIv       String
+  emailHash     String   @unique
+  status        String   @default("pending") // pending | active | unsubscribed
+  confirmedAt   DateTime?
+  confirmationToken String?                   // Token de confirmation
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
+

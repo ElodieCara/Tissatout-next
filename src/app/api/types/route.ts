@@ -1,22 +1,29 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
+import { withAdminGuard } from "@/lib/auth.guard";
 
 export async function GET() {
-    const types = await prisma.activityType.findMany({
-        select: { id: true, label: true },
-    });
-    return NextResponse.json(types);
+    try {
+        const types = await prisma.activityType.findMany({
+            select: { id: true, label: true },
+        });
+        return NextResponse.json(types);
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+    }
 }
 
+export async function POST(req: NextRequest) {
+    return withAdminGuard(req, async (_req) => {
+        const body = await req.json();
+        if (!body.label) {
+            return NextResponse.json({ error: "Le champ 'label' est requis" }, { status: 400 });
+        }
 
-// POST dans /api/themes/route.ts
-export async function POST(req: Request) {
-    const body = await req.json();
-    const type = await prisma.activityType.create({
-        data: { label: body.label },
+        const type = await prisma.activityType.create({
+            data: { label: body.label },
+        });
+        return NextResponse.json(type);
     });
-    return NextResponse.json(type);
 }
-
-
-

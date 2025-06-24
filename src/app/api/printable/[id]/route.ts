@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
+import { withAdminGuard } from "@/lib/auth.guard";
 
 // 🔧 Fonction utilitaire pour normaliser la mysteryUntil
 function parseMysteryUntil(rawDate: string | null | undefined): Date | null {
@@ -48,77 +49,82 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
 }
 
 // PUT pour mettre à jour une activité
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-    const body = await req.json();
+export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+    return withAdminGuard(req, async (_req) => {
+        const body = await req.json();
 
-    // Décocher l'ancienne mystère si on coche isMystery
-    if (body.isMystery) {
-        await prisma.printableGame.updateMany({
-            where: { isMystery: true },
-            data: { isMystery: false },
+        // Décocher l'ancienne mystère si on coche isMystery
+        if (body.isMystery) {
+            await prisma.printableGame.updateMany({
+                where: { isMystery: true },
+                data: { isMystery: false },
+            });
+        }
+
+        const mysteryUntilDate = parseMysteryUntil(
+            body.isMystery ? body.mysteryUntil : null
+        );
+
+        // Mise à jour principale
+        const game = await prisma.printableGame.update({
+            where: { id: context.params.id },
+            data: {
+                title: body.title,
+                slug: body.slug,
+                description: body.description,
+                pdfUrl: body.pdfUrl,
+                pdfPrice: body.pdfPrice ?? null,
+                imageUrl: body.imageUrl,
+                previewImageUrl: body.previewImageUrl ?? null,
+                isPrintable: body.isPrintable,
+                printPrice: body.printPrice ?? null,
+                ageMin: body.ageMin,
+                ageMax: body.ageMax,
+                isFeatured: body.isFeatured,
+                // Ajout de la logique mystère
+                isMystery: body.isMystery ?? false,
+                mysteryUntil: mysteryUntilDate,
+                article: body.articleId
+                    ? { connect: { id: body.articleId } }
+                    : { disconnect: true },
+            },
         });
-    }
 
-    const mysteryUntilDate = parseMysteryUntil(
-        body.isMystery ? body.mysteryUntil : null
-    );
+        // Relations themes/types/images
+        await prisma.gameTheme.deleteMany({ where: { gameId: context.params.id } });
+        await prisma.gameType.deleteMany({ where: { gameId: context.params.id } });
+        await prisma.extraImage.deleteMany({ where: { gameId: context.params.id } });
 
-    // Mise à jour principale
-    const game = await prisma.printableGame.update({
-        where: { id: params.id },
-        data: {
-            title: body.title,
-            slug: body.slug,
-            description: body.description,
-            pdfUrl: body.pdfUrl,
-            pdfPrice: body.pdfPrice ?? null,
-            imageUrl: body.imageUrl,
-            previewImageUrl: body.previewImageUrl ?? null,
-            isPrintable: body.isPrintable,
-            printPrice: body.printPrice ?? null,
-            ageMin: body.ageMin,
-            ageMax: body.ageMax,
-            isFeatured: body.isFeatured,
-            // Ajout de la logique mystère
-            isMystery: body.isMystery ?? false,
-            mysteryUntil: mysteryUntilDate,
-            article: body.articleId
-                ? { connect: { id: body.articleId } }
-                : { disconnect: true },
-        },
+        if (body.extraImages?.length) {
+            await prisma.extraImage.createMany({
+                data: body.extraImages.map((url: string) => ({
+                    gameId: context.params.id,
+                    imageUrl: url,
+                })),
+            });
+        }
+
+        if (body.themeIds?.length) {
+            await prisma.gameTheme.createMany({
+                data: body.themeIds.map((themeId: string) => ({ gameId: context.params.id, themeId })),
+            });
+        }
+
+        if (body.typeIds?.length) {
+            await prisma.gameType.createMany({
+                data: body.typeIds.map((typeId: string) => ({ gameId: context.params.id, typeId })),
+            });
+        }
+
+        return NextResponse.json({ message: "Mis à jour", game });
     });
 
-    // Relations themes/types/images
-    await prisma.gameTheme.deleteMany({ where: { gameId: params.id } });
-    await prisma.gameType.deleteMany({ where: { gameId: params.id } });
-    await prisma.extraImage.deleteMany({ where: { gameId: params.id } });
-
-    if (body.extraImages?.length) {
-        await prisma.extraImage.createMany({
-            data: body.extraImages.map((url: string) => ({
-                gameId: params.id,
-                imageUrl: url,
-            })),
-        });
-    }
-
-    if (body.themeIds?.length) {
-        await prisma.gameTheme.createMany({
-            data: body.themeIds.map((themeId: string) => ({ gameId: params.id, themeId })),
-        });
-    }
-
-    if (body.typeIds?.length) {
-        await prisma.gameType.createMany({
-            data: body.typeIds.map((typeId: string) => ({ gameId: params.id, typeId })),
-        });
-    }
-
-    return NextResponse.json({ message: "Mis à jour", game });
 }
 
 // DELETE d'une activité
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
-    await prisma.printableGame.delete({ where: { id: params.id } });
-    return NextResponse.json({ message: "Supprimé" });
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+    return withAdminGuard(req, async (_req) => {
+        await prisma.printableGame.delete({ where: { id: context.params.id } });
+        return NextResponse.json({ message: "Supprimé" });
+    });
 }

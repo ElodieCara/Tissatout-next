@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { generateSlug } from "@/lib/utils";
+import { withAdminGuard } from "@/lib/auth.guard";
 
 // 🟢 Récupérer tous les articles (READ)
 export async function GET() {
@@ -21,8 +22,8 @@ export async function GET() {
 }
 
 // 🟢 Ajouter un nouvel article (CREATE)
-export async function POST(req: Request) {
-    try {
+export async function POST(req: NextRequest) {
+    return withAdminGuard(req, async (_req) => {
         const body = await req.json();
         console.log("📥 Données reçues :", body);
 
@@ -70,10 +71,7 @@ export async function POST(req: Request) {
         });
 
         return NextResponse.json(newArticle, { status: 201 });
-    } catch (error) {
-        console.error("❌ Erreur lors de la création de l'article :", error);
-        return NextResponse.json({ message: "Erreur serveur", error: (error as Error).message }, { status: 500 });
-    }
+    });
 }
 
 

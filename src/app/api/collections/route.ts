@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { generateSlug } from "@/lib/utils";
 import { ObjectId } from "mongodb";
+import { withAdminGuard } from "@/lib/auth.guard";
 
 const prisma = new PrismaClient();
 
@@ -25,10 +26,9 @@ export async function GET(req: Request) {
     return NextResponse.json(collections);
 }
 
-
 // 👉 POST : créer une collection
-export async function POST(req: Request) {
-    try {
+export async function POST(req: NextRequest) {
+    return withAdminGuard(req, async (_req) => {
         const body = await req.json();
         const title = body.title?.trim();
         const slug = body.slug || generateSlug(title);
@@ -58,8 +58,5 @@ export async function POST(req: Request) {
         });
 
         return NextResponse.json(collection);
-    } catch (err) {
-        console.error(err);
-        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
-    }
+    });
 }

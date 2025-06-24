@@ -90,8 +90,8 @@ export default function DrawingCard({
                 </button>
             )}
             {showButton && (
-                <Link href={`/coloriages/${pageSlug}`} legacyBehavior>
-                    <a className="drawing-button">Voir le coloriage</a>
+                <Link href={`/coloriages/${pageSlug}`} className="drawing-button">
+                    Voir le coloriage
                 </Link>
             )}
         </div>

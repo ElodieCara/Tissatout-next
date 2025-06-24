@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { withAdminGuard } from "@/lib/auth.guard";
 
 // 🟢 Récupérer un article par ID (avec sections)
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
@@ -89,118 +90,119 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
 // 🟡 PUT: Mettre à jour un article
 export async function PUT(req: NextRequest, context: { params: { id: string } }) {
-    try {
-        const { params } = context;
-        const id = params?.id;
+    return withAdminGuard(req, async (_req) => {
+        try {
+            const { params } = context;
+            const id = params?.id;
 
-        if (!id) {
-            return NextResponse.json({ message: "❌ ID manquant" }, { status: 400 });
-        }
-
-        const body = await req.json();
-        const {
-            title,
-            content,
-            category,
-            author,
-            image,
-            iconSrc,
-            tags,
-            printableSupport,
-            description,
-            date,
-            ageCategories,
-            sections,
-            relatedArticleIds
-        } = body;
-
-        if (!title || !content || !category || !author) {
-            return NextResponse.json({ message: "❌ Titre, contenu, catégorie et auteur requis" }, { status: 400 });
-        }
-
-        const article = await prisma.article.findUnique({ where: { id } });
-        if (!article) {
-            return NextResponse.json({ message: "❌ Article non trouvé" }, { status: 404 });
-        }
-
-        // 🧹 Nettoyer les anciennes données
-        await prisma.articleSection.deleteMany({ where: { articleId: id } });
-        await prisma.relatedArticle.deleteMany({ where: { fromArticleId: id } });
-
-        // 🧱 Recréer les sections
-        if (Array.isArray(sections)) {
-            for (const section of sections) {
-                const rawStyle = section.style?.toLowerCase();
-                const normalizedStyle = ["highlight", "icon"].includes(rawStyle) ? rawStyle : "classique";
-
-                await prisma.articleSection.create({
-                    data: {
-                        title: section.title,
-                        content: section.content,
-                        style: normalizedStyle,
-                        articleId: id,
-                    },
-                });
+            if (!id) {
+                return NextResponse.json({ message: "❌ ID manquant" }, { status: 400 });
             }
-        }
 
-        // 🔗 Recréer les articles liés
-        if (Array.isArray(relatedArticleIds) && relatedArticleIds.length > 0) {
-            await prisma.relatedArticle.createMany({
-                data: relatedArticleIds.map((toId: string) => ({
-                    fromArticleId: id,
-                    toArticleId: toId,
-                })),
-            });
-        }
-
-        // ✏️ Mettre à jour l’article
-        const updatedArticle = await prisma.article.update({
-            where: { id },
-            data: {
+            const body = await req.json();
+            const {
                 title,
                 content,
-                image: image || null,
-                iconSrc: iconSrc || null,
                 category,
-                tags: tags || [],
-                printableSupport: printableSupport || null,
                 author,
-                description: description || null,
-                date: date ? new Date(date) : new Date(),
-                ageCategories: {
-                    deleteMany: {},
-                    create: (ageCategories || []).map((ageCategoryId: string) => ({
-                        ageCategory: { connect: { id: ageCategoryId } },
+                image,
+                iconSrc,
+                tags,
+                printableSupport,
+                description,
+                date,
+                ageCategories,
+                sections,
+                relatedArticleIds
+            } = body;
+
+            if (!title || !content || !category || !author) {
+                return NextResponse.json({ message: "❌ Titre, contenu, catégorie et auteur requis" }, { status: 400 });
+            }
+
+            const article = await prisma.article.findUnique({ where: { id } });
+            if (!article) {
+                return NextResponse.json({ message: "❌ Article non trouvé" }, { status: 404 });
+            }
+
+            // 🧹 Nettoyer les anciennes données
+            await prisma.articleSection.deleteMany({ where: { articleId: id } });
+            await prisma.relatedArticle.deleteMany({ where: { fromArticleId: id } });
+
+            // 🧱 Recréer les sections
+            if (Array.isArray(sections)) {
+                for (const section of sections) {
+                    const rawStyle = section.style?.toLowerCase();
+                    const normalizedStyle = ["highlight", "icon"].includes(rawStyle) ? rawStyle : "classique";
+
+                    await prisma.articleSection.create({
+                        data: {
+                            title: section.title,
+                            content: section.content,
+                            style: normalizedStyle,
+                            articleId: id,
+                        },
+                    });
+                }
+            }
+
+            // 🔗 Recréer les articles liés
+            if (Array.isArray(relatedArticleIds) && relatedArticleIds.length > 0) {
+                await prisma.relatedArticle.createMany({
+                    data: relatedArticleIds.map((toId: string) => ({
+                        fromArticleId: id,
+                        toArticleId: toId,
                     })),
+                });
+            }
+
+            // ✏️ Mettre à jour l’article
+            const updatedArticle = await prisma.article.update({
+                where: { id },
+                data: {
+                    title,
+                    content,
+                    image: image || null,
+                    iconSrc: iconSrc || null,
+                    category,
+                    tags: tags || [],
+                    printableSupport: printableSupport || null,
+                    author,
+                    description: description || null,
+                    date: date ? new Date(date) : new Date(),
+                    ageCategories: {
+                        deleteMany: {},
+                        create: (ageCategories || []).map((ageCategoryId: string) => ({
+                            ageCategory: { connect: { id: ageCategoryId } },
+                        })),
+                    },
                 },
-            },
-        });
+            });
 
-        console.log("✅ Article mis à jour :", updatedArticle.id);
-        return NextResponse.json({ message: "Article mis à jour avec succès", updatedArticle });
+            console.log("✅ Article mis à jour :", updatedArticle.id);
+            return NextResponse.json({ message: "Article mis à jour avec succès", updatedArticle });
 
-    } catch (error) {
-        console.error("❌ Erreur PUT article admin :", error);
-        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
-    }
+        } catch (error) {
+            console.error("❌ Erreur PUT article admin :", error);
+            return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+        }
+    });
 }
 
 
 
 // 🔴 DELETE: Supprimer un article
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
-    try {
-        const article = await prisma.article.findUnique({ where: { id: params.id } });
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+    const { id } = context.params;
 
-        if (!article) {
-            return NextResponse.json({ message: "❌ Article non trouvé" }, { status: 404 });
+    return withAdminGuard(req, async (_req) => {
+        // Ici tu peux utiliser id directement
+        try {
+            await prisma.article.delete({ where: { id } });
+            return NextResponse.json({ message: "✅ Article supprimé avec succès" });
+        } catch (error) {
+            return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
         }
-
-        await prisma.article.delete({ where: { id: params.id } });
-
-        return NextResponse.json({ message: "✅ Article supprimé avec succès" });
-    } catch (error) {
-        return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
-    }
+    });
 }
+

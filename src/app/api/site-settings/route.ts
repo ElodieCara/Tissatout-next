@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { withAdminGuard } from "@/lib/auth.guard";
 
 // 🔧 Nettoyage des données à mettre à jour : supprime `id` et évite les nulls
 function sanitizeUpdateData(data: Record<string, any>) {
@@ -43,9 +44,6 @@ export async function GET() {
                     newsBanner: "",
                     newsTitle: "",
                     newsDesc: "",
-                    contenusBanner: "",
-                    contenusTitle: "",
-                    contenusDesc: "",
                 },
             });
         }
@@ -59,27 +57,29 @@ export async function GET() {
 
 // 🔴 PUT : mise à jour des settings
 export async function PUT(req: NextRequest) {
-    try {
-        const body = await req.json();
-        const cleanedBody = sanitizeUpdateData(body);
+    return withAdminGuard(req, async (_req) => {
+        try {
+            const body = await req.json();
+            const cleanedBody = sanitizeUpdateData(body);
 
-        const settings = await prisma.siteSettings.findFirst();
+            const settings = await prisma.siteSettings.findFirst();
 
-        if (!settings) {
-            const created = await prisma.siteSettings.create({
-                data: cleanedBody as unknown as Prisma.SiteSettingsCreateInput,
+            if (!settings) {
+                const created = await prisma.siteSettings.create({
+                    data: cleanedBody as unknown as Prisma.SiteSettingsCreateInput,
+                });
+                return NextResponse.json(created);
+            }
+
+            const updated = await prisma.siteSettings.update({
+                where: { id: settings.id },
+                data: cleanedBody,
             });
-            return NextResponse.json(created);
+
+            return NextResponse.json(updated);
+        } catch (error) {
+            console.error("❌ Erreur PUT SiteSettings", error);
+            return NextResponse.json({ error: "Erreur serveur PUT" }, { status: 500 });
         }
-
-        const updated = await prisma.siteSettings.update({
-            where: { id: settings.id },
-            data: cleanedBody,
-        });
-
-        return NextResponse.json(updated);
-    } catch (error) {
-        console.error("❌ Erreur PUT SiteSettings", error);
-        return NextResponse.json({ error: "Erreur serveur PUT" }, { status: 500 });
-    }
+    });
 }

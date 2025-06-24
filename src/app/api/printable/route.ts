@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { withAdminGuard } from "@/lib/auth.guard";
 import prisma from "@/lib/prisma";
 
 // 🔧 Fonction utilitaire pour normaliser la mysteryUntil
@@ -44,82 +45,86 @@ export async function GET() {
     }
 }
 
-export async function POST(req: Request) {
-    const body = await req.json();
+export async function POST(req: NextRequest) {
+    return withAdminGuard(req, async (_req) => {
+        const body = await req.json();
 
-    // Si on coche isMystery, décocher l'ancien
-    if (body.isMystery) {
-        await prisma.printableGame.updateMany({
-            where: { isMystery: true },
-            data: { isMystery: false },
+        // Si on coche isMystery, décocher l'ancien
+        if (body.isMystery) {
+            await prisma.printableGame.updateMany({
+                where: { isMystery: true },
+                data: { isMystery: false },
+            });
+        }
+
+        const mysteryUntilDate = parseMysteryUntil(body.mysteryUntil ?? null);
+
+        const game = await prisma.printableGame.create({
+            data: {
+                title: body.title,
+                slug: body.slug,
+                description: body.description,
+                pdfUrl: body.pdfUrl,
+                pdfPrice: body.pdfPrice ?? null,
+                imageUrl: body.imageUrl,
+                previewImageUrl: body.previewImageUrl ?? null,
+                isPrintable: body.isPrintable,
+                printPrice: body.printPrice ?? null,
+                ageMin: body.ageMin,
+                ageMax: body.ageMax,
+                isFeatured: body.isFeatured,
+                isMystery: body.isMystery ?? false,
+                mysteryUntil: mysteryUntilDate,
+                article: body.articleId
+                    ? { connect: { id: body.articleId } }
+                    : undefined,
+            },
         });
-    }
 
-    const mysteryUntilDate = parseMysteryUntil(body.mysteryUntil ?? null);
-
-    const game = await prisma.printableGame.create({
-        data: {
-            title: body.title,
-            slug: body.slug,
-            description: body.description,
-            pdfUrl: body.pdfUrl,
-            pdfPrice: body.pdfPrice ?? null,
-            imageUrl: body.imageUrl,
-            previewImageUrl: body.previewImageUrl ?? null,
-            isPrintable: body.isPrintable,
-            printPrice: body.printPrice ?? null,
-            ageMin: body.ageMin,
-            ageMax: body.ageMax,
-            isFeatured: body.isFeatured,
-            isMystery: body.isMystery ?? false,
-            mysteryUntil: mysteryUntilDate,
-            article: body.articleId
-                ? { connect: { id: body.articleId } }
-                : undefined,
-        },
+        return NextResponse.json({ message: "Créé", game });
     });
-
-    return NextResponse.json({ message: "Créé", game });
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-    const body = await req.json();
+export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+    return withAdminGuard(req, async (_req) => {
+        const body = await req.json();
 
-    // Si on coche isMystery, décocher l'ancien
-    if (body.isMystery) {
-        await prisma.printableGame.updateMany({
-            where: { isMystery: true },
-            data: { isMystery: false },
+        // Si on coche isMystery, décocher l'ancien
+        if (body.isMystery) {
+            await prisma.printableGame.updateMany({
+                where: { isMystery: true },
+                data: { isMystery: false },
+            });
+        }
+
+        // Normalisation : soit null (non-mystère ou date invalide), soit Date
+        const mysteryUntilDate = body.isMystery
+            ? parseMysteryUntil(body.mysteryUntil ?? null)
+            : null;
+
+        const game = await prisma.printableGame.update({
+            where: { id: context.params.id },
+            data: {
+                title: body.title,
+                slug: body.slug,
+                description: body.description,
+                pdfUrl: body.pdfUrl,
+                pdfPrice: body.pdfPrice ?? null,
+                imageUrl: body.imageUrl,
+                previewImageUrl: body.previewImageUrl ?? null,
+                isPrintable: body.isPrintable,
+                printPrice: body.printPrice ?? null,
+                ageMin: body.ageMin,
+                ageMax: body.ageMax,
+                isFeatured: body.isFeatured,
+                isMystery: body.isMystery ?? false,
+                mysteryUntil: mysteryUntilDate,
+                article: body.articleId
+                    ? { connect: { id: body.articleId } }
+                    : { disconnect: true },
+            },
         });
-    }
 
-    // Normalisation : soit null (non-mystère ou date invalide), soit Date
-    const mysteryUntilDate = body.isMystery
-        ? parseMysteryUntil(body.mysteryUntil ?? null)
-        : null;
-
-    const game = await prisma.printableGame.update({
-        where: { id: params.id },
-        data: {
-            title: body.title,
-            slug: body.slug,
-            description: body.description,
-            pdfUrl: body.pdfUrl,
-            pdfPrice: body.pdfPrice ?? null,
-            imageUrl: body.imageUrl,
-            previewImageUrl: body.previewImageUrl ?? null,
-            isPrintable: body.isPrintable,
-            printPrice: body.printPrice ?? null,
-            ageMin: body.ageMin,
-            ageMax: body.ageMax,
-            isFeatured: body.isFeatured,
-            isMystery: body.isMystery ?? false,
-            mysteryUntil: mysteryUntilDate,
-            article: body.articleId
-                ? { connect: { id: body.articleId } }
-                : { disconnect: true },
-        },
+        return NextResponse.json({ message: "Mis à jour", game });
     });
-
-    return NextResponse.json({ message: "Mis à jour", game });
 }
