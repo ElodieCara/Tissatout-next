@@ -12,6 +12,7 @@ import AdminSiteSettings from "./AdminSiteSettings";
 import AdminCommentsPage from "./AdminComments";
 import AdminLesson from "./AdminLesson";
 import AdminPrintableGames from "./AdminPrintableGames";
+import AdminSubscribersPage from "./AdminSubscribersPage";
 import { LogoutButton } from "@/app/admin/logout/page";
 
 
@@ -57,6 +58,12 @@ export default function AdminPage() {
                     className={activeSection === "comments" ? "active" : ""}
                 >
                     💬 Commentaires
+                </button>
+                <button
+                    onClick={() => handleSectionChange("subscribers")}
+                    className={activeSection === "subscribers" ? "active" : ""}
+                >
+                    📧 Abonnés
                 </button>
             </nav>
 
@@ -110,6 +117,7 @@ export default function AdminPage() {
                 {activeSection === "printable" && <AdminPrintableGames />}
                 {activeSection === "ageCategory" && <AdminAgeCategory />}
                 {activeSection === "comments" && <AdminCommentsPage />}
+                {activeSection === "subscribers" && <AdminSubscribersPage />}
             </div>
         </div>
     );

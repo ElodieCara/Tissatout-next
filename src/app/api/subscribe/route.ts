@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { encryptEmail } from "@/lib/crypto";
-import crypto from "crypto"; // ✅ Pour hash + confirmToken
-import nodemailer from "nodemailer"; // ✅ À installer si pas déjà fait
+import crypto from "crypto"; // Pour hash + confirmationToken
+import nodemailer from "nodemailer"; // À installer si pas déjà fait
 
+// ------------------------------------------------------
+// ✅ GET : Confirmer une adresse e‑mail
+// ------------------------------------------------------
 export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url);
@@ -36,11 +39,14 @@ export async function GET(request: Request) {
     }
 }
 
+// ------------------------------------------------------
+// ✅ POST : Inscrire un nouvel abonné
+// ------------------------------------------------------
 export async function POST(request: Request) {
     try {
         const { email, website } = await request.json();
 
-        // 👇 1️⃣ Anti-bot
+        // 👇 1️⃣ Anti‑bot
         if (website && website.trim() !== "") {
             return NextResponse.json({ error: "Bot détecté." }, { status: 403 });
         }
@@ -62,7 +68,7 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: "Vous êtes déjà inscrit(e)." }, { status: 400 });
         }
 
-        // 👇 6️⃣ Chiffrement
+        // 👇 6️⃣ Chiffrement de l'email
         const { iv, data } = encryptEmail(normalizedEmail);
 
         // 👇 7️⃣ Génération du token de confirmation
@@ -79,26 +85,33 @@ export async function POST(request: Request) {
             },
         });
 
-        // 👇 9️⃣ Configuration du transporteur
+        // 👇 9️⃣ Configuration du transporteur Ethereal
+        const testAccount = await nodemailer.createTestAccount();
         const transporter = nodemailer.createTransport({
-            host: "mail.gandi.net",
+            host: "smtp.ethereal.email",
             port: 587,
             secure: false,
             auth: {
-                user: process.env.EMAIL_USER!,
-                pass: process.env.EMAIL_PASS!,
+                user: testAccount.user,
+                pass: testAccount.pass,
             },
         });
 
-        // 👇 🔥 Envoi du mail
-        await transporter.sendMail({
-            from: "no-reply@tonsite.fr",
+        // 👇 🔥 Envoi du mail de confirmation
+        const info = await transporter.sendMail({
+            from: `"Tissatout" <${testAccount.user}>`,
             to: normalizedEmail,
             subject: "Confirmez votre inscription",
-            text: `Cliquez ici pour confirmer votre inscription : https://tonsite.com/api/confirm?token=${confirmationToken}`
+            text: `Cliquez ici pour confirmer : http://localhost:3000/confirm?token=${confirmationToken}`
         });
 
-        return NextResponse.json({ message: "Inscription réussie ! Veuillez confirmer votre email.", id: newUser.id }, { status: 201 });
+        // 👇 ⚡️ Log du lien de test Ethereal
+        console.log("Prévisualisation du mail Ethereal:", nodemailer.getTestMessageUrl(info));
+
+        return NextResponse.json(
+            { message: "Inscription réussie ! Veuillez confirmer votre email.", id: newUser.id },
+            { status: 201 }
+        );
     } catch (error) {
         console.error(error);
         return NextResponse.json({ error: "Erreur serveur." }, { status: 500 });
