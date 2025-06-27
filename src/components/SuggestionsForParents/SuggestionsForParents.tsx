@@ -3,6 +3,7 @@ import Image from "next/image";
 
 export interface SuggestionItem {
     id: string;
+    type: string;
     title: string;
     slug: string;
     age?: string | null;
@@ -32,7 +33,7 @@ const SuggestionsForParents: React.FC<SuggestionsForParentsProps> = ({ items }) 
 
                     return (
                         <Link
-                            href={`/articles/${item.slug}`}
+                            href={`/${item.type}/${item.slug}`}
                             key={item.id}
                             className="suggestions-parents__card"
                         >
@@ -67,7 +68,9 @@ const SuggestionsForParents: React.FC<SuggestionsForParentsProps> = ({ items }) 
 
                                 <h3 className="suggestions-parents__title">{item.title}</h3>
                                 <p className="suggestions-parents__description">
-                                    {item.description ?? "Pas de description disponible."}
+                                    {item.description
+                                        ? item.description.slice(0, 120) + (item.description.length > 120 ? "…" : "")
+                                        : "Pas de description disponible."}
                                 </p>
                             </div>
                         </Link>

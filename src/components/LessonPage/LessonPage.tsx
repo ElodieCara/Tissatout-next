@@ -1,11 +1,16 @@
-"use client";
 
 import LessonHeader from "./LessonHeader";
 import LessonStatusToggle from "./LessonStatusToggle";
 import LessonBlock from "./LessonBlock";
 import type { Lesson } from "@/types/lessons";
+import ArticleFeedback from "../Feedback/Feedback";
+import CommentList from "../CommentList/CommentList";
+import NewsletterBanner from "../NewsletterBanner/NewsletterBanner";
+import SuggestionsForParents from "../SuggestionsForParents/SuggestionsForParents";
+import { getRandomSuggestions } from "@/lib/suggestions";
 
-export default function LessonPage({ lesson }: { lesson: Lesson }) {
+export default async function LessonPage({ lesson }: { lesson: Lesson }) {
+    const suggestions = await getRandomSuggestions("trivium", 4);
     return (
         <article className="lesson">
             <LessonHeader
@@ -47,6 +52,20 @@ export default function LessonPage({ lesson }: { lesson: Lesson }) {
 
                 </aside>
             </div>
+
+            {/* 💬 Et toi, qu'en as-tu pensé ? */}
+            <section className="comments no-print">
+                <ArticleFeedback resourceType="printable" resourceId={lesson.id} />
+                <CommentList resourceType="printable" resourceId={lesson.id} />
+            </section>
+
+            <section className=" no-print">
+                <NewsletterBanner />
+            </section>
+
+            <section className="no-print">
+                <SuggestionsForParents items={suggestions} />
+            </section>
         </article>
     );
 }

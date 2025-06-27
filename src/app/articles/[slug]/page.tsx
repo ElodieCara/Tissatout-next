@@ -11,6 +11,9 @@ import Breadcrumb from "../../../components/Breadcrumb/Breadcrumb";
 import Button from "@/components/Button/Button";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import ShareActions from "@/components/ShareActions/ShareActions";
+import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
+import SuggestionsForParents from "@/components/SuggestionsForParents/SuggestionsForParents";
+import { getRandomSuggestions } from "@/lib/suggestions";
 
 
 type Props = {
@@ -62,6 +65,10 @@ export default async function ArticlePage({ params }: Props) {
         const index = normalizedStyle === "classique" ? ++classiqueIndex : undefined;
 
         return { ...section, normalizedStyle, index };
+    });
+
+    const suggestions = await getRandomSuggestions("articles", 4, {
+        excludeId: article.id
     });
 
     return (
@@ -289,10 +296,20 @@ export default async function ArticlePage({ params }: Props) {
                             </section>
                         )
                     }
-                    <div className="comments no-print">
+                    <div className="comments no-print mystery">
                         <ArticleFeedback resourceType="article" resourceId={article.id} />
                         <CommentList resourceType="article" resourceId={article.id} />
                     </div>
+
+                    {/* 📰 Newsletter */}
+                    <section className="idea__newsletter no-print">
+                        <NewsletterBanner />
+                    </section>
+
+                    {/* 👉 Suggestions */}
+                    <section className="idea__suggestions no-print">
+                        <SuggestionsForParents items={suggestions} />
+                    </section>
                 </div>
                 <BackToTop />
             </main >

@@ -11,6 +11,11 @@ import TriviumSidebar from "@/components/Trivium/SidebarSommaire";
 import CollectionBanner from "@/components/Trivium/CollectionBanner";
 import Breadcrumb from "../Breadcrumb/Breadcrumb";
 import BackToTop from "../BackToTop/BackToTop";
+import ArticleFeedback from "../Feedback/Feedback";
+import CommentList from "../CommentList/CommentList";
+import NewsletterBanner from "../NewsletterBanner/NewsletterBanner";
+import SuggestionsForParents from "../SuggestionsForParents/SuggestionsForParents";
+import { getRandomSuggestions } from "@/lib/suggestions";
 
 interface LessonModulePageProps {
     module: "trivium" | "quadrivium";

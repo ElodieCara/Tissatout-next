@@ -10,6 +10,9 @@ import ArticleFeedback from "@/components/Feedback/Feedback";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import ShareActions from "@/components/ShareActions/ShareActions";
 import type { Metadata } from "next";
+import { getRandomSuggestions } from "@/lib/suggestions";
+import SuggestionsForParents from "@/components/SuggestionsForParents/SuggestionsForParents";
+import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const idea = await prisma.idea.findUnique({ where: { slug: params.slug } });
@@ -65,6 +68,11 @@ export default async function IdeaPage({ params }: Props) {
     if (!idea) {
         notFound();
     }
+
+    const suggestions = await getRandomSuggestions("idees", 4, {
+        excludeId: idea.id,
+        ageCategoryIds: idea.ageCategories.map(ac => ac.ageCategoryId),
+    });
 
     console.log("📥 Articles liés récupérés :", idea.relatedArticles);
 
@@ -206,6 +214,16 @@ export default async function IdeaPage({ params }: Props) {
                     <section className="idea__comments no-print">
                         <ArticleFeedback resourceType="idea" resourceId={idea.id} />
                         <CommentList resourceType="idea" resourceId={idea.id} />
+                    </section>
+
+                    {/* 📰 Newsletter */}
+                    <section className="idea__newsletter no-print">
+                        <NewsletterBanner />
+                    </section>
+
+                    {/* 👉 Suggestions */}
+                    <section className="idea__suggestions no-print">
+                        <SuggestionsForParents items={suggestions} />
                     </section>
 
                 </div>

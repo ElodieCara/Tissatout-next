@@ -1,7 +1,6 @@
 "use client";
 
 import Image from 'next/image';
-import enveloppeIcon from '../../../public/icons/enveloppe.png';
 
 export default function NewsletterBanner() {
     return (
@@ -9,7 +8,7 @@ export default function NewsletterBanner() {
             <div className="newsletter-banner">
                 <div className="newsletter-banner__image">
                     <Image
-                        src={enveloppeIcon}
+                        src="/icons/enveloppe.png"
                         alt="Enveloppe avec cœur"
                         width={134}
                         height={134}

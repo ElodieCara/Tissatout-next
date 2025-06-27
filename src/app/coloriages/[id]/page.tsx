@@ -1,7 +1,12 @@
 import { Suspense } from "react";
 import { getDrawingBySlug } from "@/lib/server";
+import { getRandomSuggestions } from "@/lib/suggestions";
 import DrawingPage from "./DrawingPage";
 import DrawingSidebar from "@/app/coloriages/[id]/components/DrawingSidebar/DrawingSidebar";
+import ArticleFeedback from "@/components/Feedback/Feedback";
+import CommentList from "@/components/CommentList/CommentList";
+import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
+import SuggestionsForParents from "@/components/SuggestionsForParents/SuggestionsForParents";
 
 export default async function Page({ params }: { params: { id: string } }) {
     // Il faut attendre les paramètres avant de les utiliser
@@ -35,6 +40,8 @@ export default async function Page({ params }: { params: { id: string } }) {
         return <p className="drawing-page--error">❌ Coloriage introuvable.</p>;
     }
 
+    const suggestions = await getRandomSuggestions("coloriages", 5);
+
     console.log("✅ Dessin trouvé :", drawing);
 
     return (
@@ -51,6 +58,20 @@ export default async function Page({ params }: { params: { id: string } }) {
                     />
                 </Suspense>
             )}
+
+            {/* 💬 Et toi, qu'en as-tu pensé ? */}
+            <section className="comments no-print mystery">
+                <ArticleFeedback resourceType="printable" resourceId={drawing.id} />
+                <CommentList resourceType="printable" resourceId={drawing.id} />
+            </section>
+
+            <section className=" no-print">
+                <NewsletterBanner />
+            </section>
+
+            <section className="no-print">
+                <SuggestionsForParents items={suggestions} />
+            </section>
         </div>
     );
 }

@@ -9,6 +9,9 @@ import ReactMarkdown from "react-markdown";
 import ArticleFeedback from "@/components/Feedback/Feedback";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import ShareActions from "@/components/ShareActions/ShareActions";
+import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
+import SuggestionsForParents from "@/components/SuggestionsForParents/SuggestionsForParents";
+import { getRandomSuggestions } from "@/lib/suggestions";
 
 type Props = {
     params: { slug: string };
@@ -31,6 +34,8 @@ export default async function AdvicePage({ params }: Props) {
     if (!advice) {
         notFound();
     }
+
+    const suggestions = await getRandomSuggestions("conseils", 4);
 
     return (
         <>
@@ -201,6 +206,14 @@ export default async function AdvicePage({ params }: Props) {
                     <section className="comments no-print">
                         <ArticleFeedback resourceType="advice" resourceId={advice.id} />
                         <CommentList resourceType="advice" resourceId={advice.id} />
+                    </section>
+
+                    <section className=" no-print">
+                        <NewsletterBanner />
+                    </section>
+
+                    <section className="no-print">
+                        <SuggestionsForParents items={suggestions} />
                     </section>
 
                 </div>

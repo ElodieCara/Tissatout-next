@@ -9,6 +9,7 @@ import themeImages from '@/data/themeIdeasImage';
 import BackToTop from "@/components/BackToTop/BackToTop";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 import Quickbar from "@/components/Quickbar/Quickbar";
+import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 
 
 const allAges = await getAllAgeCategories();
@@ -359,6 +360,9 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                         </p>
                     </div>
                 </section>
+
+                <NewsletterBanner />
+
                 <BackToTop />
             </main>
         </div>

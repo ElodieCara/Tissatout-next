@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-const ALLOWED_TYPES = ["article", "advice", "idea", "printable"] as const;
+const ALLOWED_TYPES = ["article", "advice", "idea", "printable", "lesson"] as const;
 type ResourceType = typeof ALLOWED_TYPES[number];
 
 interface CommentFormProps {

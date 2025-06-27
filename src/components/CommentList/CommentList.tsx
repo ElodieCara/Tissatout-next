@@ -13,7 +13,7 @@ export default function CommentList({
     resourceType,
     resourceId
 }: {
-    resourceType: "article" | "advice" | "idea" | "printable";
+    resourceType: "article" | "advice" | "idea" | "printable" | "printable-drawing" | "drawing" | "lesson";
     resourceId: string;
 }) {
     const [comments, setComments] = useState<Comment[]>([]);
@@ -21,6 +21,14 @@ export default function CommentList({
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        if (!resourceType || !resourceId) {
+            console.warn(
+                "⏳ CommentList : props manquantes → type ou id vide, skip fetch."
+            );
+            setLoading(false);
+            setComments([]);
+            return;
+        }
         const fetchComments = async () => {
             try {
                 setLoading(true);

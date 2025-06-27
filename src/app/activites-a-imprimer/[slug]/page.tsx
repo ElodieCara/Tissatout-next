@@ -9,6 +9,8 @@ import LikeButton from "./LikeButton";
 import ShareActions from "../../../components/ShareActions/ShareActions";
 import ArticleFeedback from "@/components/Feedback/Feedback";
 import CommentList from "@/components/CommentList/CommentList";
+import MysteryCard from "@/components/MysteryCard/MysteryCard";
+import MysteryActivityCard from "../MysteryActivityCard";
 
 
 type Props = {
@@ -251,6 +253,22 @@ export default async function PrintablePage({ params }: Props) {
                     )}
                 </div>
 
+                {/* 💬 Et toi, qu'en as-tu pensé ? */}
+                <section className="comments no-print mystery">
+                    <ArticleFeedback resourceType="printable" resourceId={printable.id} />
+                    <CommentList resourceType="printable" resourceId={printable.id} />
+                </section>
+
+                <MysteryCard title="Une activité mystérieuse à venir !"
+                    description="Une surprise rigolote pour apprendre, réfléchir et t'amuser ! Abonne-toi pour ne rien manquer."
+                    imageSrc="/images/activite-mystere-floutee.jpg"
+                    alt="Aperçu activité mystère"
+                    isRevealed={false}
+                    revealDate="29/06/2025 à 11h08"
+                    isSubscribed={false}
+                    primaryButtonLink="/activite-mystere"
+                    secondaryButtonLink="/newsletter" />
+
                 <div className="activites__separator">
                     <span> Et si on prolongeait l’aventure ? 👇</span>
                 </div>
@@ -281,12 +299,9 @@ export default async function PrintablePage({ params }: Props) {
                         </ul>
                     </section>
                 )}
-                {/* 💬 Et toi, qu'en as-tu pensé ? */}
-                <section className="comments no-print">
-                    <ArticleFeedback resourceType="printable" resourceId={printable.id} />
-                    <CommentList resourceType="printable" resourceId={printable.id} />
-                </section>
+
                 <BackToTop />
+
             </main>
         </>
     );

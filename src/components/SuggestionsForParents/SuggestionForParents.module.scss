@@ -3,8 +3,9 @@
 @use '../../styles/utils/variables' as vars;
 
 .suggestions-parents {
-    margin-top: 2rem;
+    @include mix.container;
     @include mix.separator;
+    padding: 2rem;
 
     &__header {
         font-size: 1.4rem;
@@ -16,6 +17,7 @@
 
     &__list {
         display: flex;
+        justify-content: center;
         gap: 1.5rem;
         overflow-x: auto;
         padding-bottom: 1rem;
