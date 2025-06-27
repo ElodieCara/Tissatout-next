@@ -24,11 +24,11 @@ export async function POST(req: Request) {
             to: "contact@tissatout.fr",    // <<< Tu recevras sur ta boîte Tissatout
             subject: "Nouveau message depuis Tissatout",
             text: `
-Nom: ${name}
-Email: ${email}
-Message:
-${message}
-            `,
+                    Nom: ${name}
+                    Email: ${email}
+                    Message:
+                    ${message}
+                                `,
         });
 
         return NextResponse.json({ success: true });

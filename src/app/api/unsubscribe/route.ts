@@ -3,18 +3,22 @@ import prisma from "@/lib/prisma";
 
 export async function POST(request: Request) {
     try {
-        const { hash } = await request.json();
+        const { token } = await request.json();
 
-        if (!hash) {
-            return NextResponse.json({ error: "Hash requis" }, { status: 400 });
+        if (!token) {
+            return NextResponse.json({ error: "Token requis" }, { status: 400 });
         }
 
-        const subscriber = await prisma.subscriber.findUnique({ where: { emailHash: hash } });
+        const subscriber = await prisma.subscriber.findFirst({ where: { confirmationToken: token } });
         if (!subscriber) {
             return NextResponse.json({ error: "Aucun abonné trouvé" }, { status: 404 });
         }
 
-        await prisma.subscriber.delete({ where: { id: subscriber.id } });
+        await prisma.subscriber.update({
+            where: { id: subscriber.id },
+            data: { status: "unsubscribed", confirmationToken: null },
+        });
+
         return NextResponse.json({ message: "✅ Désinscription effectuée" });
     } catch (error) {
         console.error(error);

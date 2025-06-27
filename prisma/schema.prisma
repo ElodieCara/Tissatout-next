@@ -453,6 +453,7 @@ model Subscriber {
   status        String   @default("pending") // pending | active | unsubscribed
   confirmedAt   DateTime?
   confirmationToken String?                   // Token de confirmation
+  unsubscribeHash   String? 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

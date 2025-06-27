@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { encryptEmail } from "@/lib/crypto";
 import crypto from "crypto"; // Pour hash + confirmationToken
-import nodemailer from "nodemailer"; // À installer si pas déjà fait
+import { Resend } from "resend";
 
 // ------------------------------------------------------
 // ✅ GET : Confirmer une adresse e‑mail
@@ -85,28 +85,29 @@ export async function POST(request: Request) {
             },
         });
 
-        // 👇 9️⃣ Configuration du transporteur Ethereal
-        const testAccount = await nodemailer.createTestAccount();
-        const transporter = nodemailer.createTransport({
-            host: "smtp.ethereal.email",
-            port: 587,
-            secure: false,
-            auth: {
-                user: testAccount.user,
-                pass: testAccount.pass,
-            },
-        });
+        // 👇 9️⃣ ENVOI DU MAIL DE CONFIRMATION AVEC RESEND
+        const resend = new Resend(process.env.RESEND_API_KEY!);
+        const confirmationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/confirm?token=${confirmationToken}`;
+        const unsubscribeUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/unsubscribe?token=${confirmationToken}`;
 
-        // 👇 🔥 Envoi du mail de confirmation
-        const info = await transporter.sendMail({
-            from: `"Tissatout" <${testAccount.user}>`,
+        const { error } = await resend.emails.send({
+            from: "contact@tissatout.fr",
             to: normalizedEmail,
             subject: "Confirmez votre inscription",
-            text: `Cliquez ici pour confirmer : http://localhost:3000/confirm?token=${confirmationToken}`
+            text: `Bienvenue sur Tissatout !
+            
+            Cliquez ici pour confirmer : ${confirmationUrl}
+            
+            Si vous ne souhaitez plus recevoir nos emails, vous pouvez vous désinscrire en un clic ici : ${unsubscribeUrl}
+
+            Merci.
+            `
         });
 
-        // 👇 ⚡️ Log du lien de test Ethereal
-        console.log("Prévisualisation du mail Ethereal:", nodemailer.getTestMessageUrl(info));
+        if (error) {
+            console.error(error);
+            return NextResponse.json({ error: "Échec de l'envoi du mail de confirmation" }, { status: 500 });
+        }
 
         return NextResponse.json(
             { message: "Inscription réussie ! Veuillez confirmer votre email.", id: newUser.id },
