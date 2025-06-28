@@ -1,6 +1,7 @@
 import { getEducationalDrawings, getAllCategoriesWithDrawings, getTopLikedDrawings, getTrendingDrawings } from "@/lib/server";
 import ExplorerPage from "./ExplorerPage";
 import prisma from "@/lib/prisma";
+import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 
 export const metadata = {
     title: "Explorer les coloriages - Tissatout",
@@ -38,17 +39,20 @@ export default async function Page() {
     const coloringDesc = settings?.coloringDesc || "Explorez des centaines de coloriages gratuits à imprimer.";
 
     return (
-        <ExplorerPage
-            educationalDrawings={educationalDrawings}
-            drawingsByCategory={drawingsByCategory}
-            topImages={topImages}
-            coloringCounts={coloringCounts}
-            topLikedDrawings={topLikedDrawings}
-            trendingDrawings={trendingDrawings}
-            coloringBanner={coloringBanner}
-            coloringTitle={coloringTitle}
-            coloringDesc={coloringDesc}
-        />
+        <>
+            <ExplorerPage
+                educationalDrawings={educationalDrawings}
+                drawingsByCategory={drawingsByCategory}
+                topImages={topImages}
+                coloringCounts={coloringCounts}
+                topLikedDrawings={topLikedDrawings}
+                trendingDrawings={trendingDrawings}
+                coloringBanner={coloringBanner}
+                coloringTitle={coloringTitle}
+                coloringDesc={coloringDesc}
+            />
+            <NewsletterBanner />
+        </>
     );
 }
 

@@ -121,13 +121,36 @@
     }
 }
 
+@media screen and (max-width: 768px) {
+    .container__news {
+        .news-content {
+            grid-template-columns: 1fr; // empile les deux colonnes
+            gap: 30px; // écarte un peu
+
+            &__images-gallery {
+                max-width: 100%;
+            }
+        }
+
+        h2 {
+            font-size: 1.6rem; // plus petit titre
+            text-align: center;
+
+            &::after {
+                margin: 10px auto; // centrer le trait décoratif
+            }
+        }
+    }
+}
+
+
 
 /******************* IDEAS ***********************/
 .container__ideas {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 82px;
+    //display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    // padding-top: 82px;
 
     h2 {
         text-align: center;

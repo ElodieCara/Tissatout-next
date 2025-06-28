@@ -14,6 +14,7 @@ import Button from "../../../components/Button/Button";
 import { Drawing } from "@/types/drawing";
 import { generateSlug } from "@/lib/utils";
 import MobileCategoryFilter from "./components/MobileCategoryFilter";
+import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 
 interface ExplorerPageProps {
     educationalDrawings: Record<string, Drawing[]>;
@@ -244,6 +245,23 @@ export default function ExplorerPage({
                         </div>
                     )}
 
+                    {!selectedTheme && (
+                        <div className="explorer-intro">
+                            <h1>Explorer tous nos coloriages à imprimer</h1>
+                            <p>
+                                Bienvenue dans notre grande collection de coloriages à imprimer, pensés pour éveiller l’imagination des enfants de 3 à 10 ans.
+                                Ici, chaque dessin est une porte ouverte vers un moment calme, créatif et joyeux. Parcourez nos thèmes : saisons, fêtes, animaux,
+                                contes et bien plus. Téléchargez, imprimez, coloriez — et gardez précieusement les œuvres de vos petites mains.
+                            </p>
+                            <p>
+                                Tous nos coloriages sont gratuits et classés par âge et par thème. Vous trouverez des coloriages pour Noël, Saisons, Pâques,
+                                mais aussi pour apprendre en s’amusant : lettres, chiffres, formes et nature.
+                                Une activité simple pour occuper les enfants à la maison, à l’école ou pendant les vacances.
+                            </p>
+                        </div>
+                    )}
+
+
                     {/* Page d'accueil des coloriages */}
                     {!selectedTheme && (
                         <div className="explorer-enhanced">
@@ -253,6 +271,8 @@ export default function ExplorerPage({
                         </div>
                     )}
                 </div>
+
+
             </main >
         </>
     );

@@ -29,7 +29,9 @@
     }
 }
 
-
+.explorer-intro {
+    color: $primary-color;
+}
 
 /* ✅ Cartes des sous-catégories */
 .sub-category-card {
@@ -97,10 +99,10 @@
 
     h2 {
         font-size: 24px;
-        font-weight: bold;
+        font-weight: bolder;
         text-align: center;
         margin-bottom: 20px;
-        color: #222;
+        color: $primary-color;
         text-transform: uppercase;
         letter-spacing: 1px;
     }
@@ -126,7 +128,7 @@
     margin: 1.5rem auto 0;
     display: inline-block;
     text-shadow: none;
-    background-color: $secondary-color;
+    background-color: #fcc0b6;
     color: $primary-color;
     font-weight: bold;
     font-size: 1rem;
@@ -187,7 +189,7 @@
     /* ✅ Section Tendances */
     .section-subtitle,
     .explorer-subtitle {
-        font-size: 1rem;
+        font-size: 1.5rem;
         text-align: center;
         margin-bottom: 1.5rem;
         color: $primary-color;
@@ -200,15 +202,28 @@
         margin-top: 2rem;
     }
 
+    .trending-section {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
     &__grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 1rem;
     }
 
-    &__seasonal-highlights {
+    .seasonal-highlights {
         text-align: center;
         margin-top: 2rem;
+        color: #fffefa;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        background: #fff;
+        ;
     }
 
     &__search-bar {
@@ -225,9 +240,13 @@
         }
     }
 
-    &__educational-section {
+    .educational-section {
         text-align: center;
         margin-top: 2rem;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 4px 10px #0000001a;
     }
 }
 
@@ -280,7 +299,7 @@
 
 @media (max-width: 768px) {
     .explorer-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: none;
     }
 }
 
@@ -314,6 +333,15 @@
 
 /* ✅ Mobiles (max 768px) */
 @media (max-width: 768px) {
+
+    .explorer-intro {
+        text-align: center;
+    }
+
+    .explorer-container {
+        align-items: unset;
+    }
+
     .explorer-enhanced {
         padding: 1rem;
 

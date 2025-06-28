@@ -12,6 +12,8 @@
     width: 100%;
     box-sizing: border-box;
     overflow-x: hidden;
+    gap: 5rem;
+
 
     // Responsive footer mobile
     @media (max-width: 768px) {
@@ -22,7 +24,7 @@
         text-align: center;
 
         &__information__navigation {
-            flex-direction: column;
+            flex-direction: column !important;
             gap: 2rem;
         }
     }

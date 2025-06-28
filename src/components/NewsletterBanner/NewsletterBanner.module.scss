@@ -1,5 +1,6 @@
 .newsletter {
     @include separator;
+    padding: 2rem !important;
 
     &-banner {
         display: flex;
@@ -87,6 +88,51 @@
             &__cta {
                 width: 100%;
             }
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .newsletter-banner {
+        flex-direction: column; // Passe en colonne
+        align-items: center; // Centre tout
+        padding: 1.5rem 1rem;
+        gap: 0;
+
+        &__image {
+            flex: 0 0 auto; // Laisse l’image shrinker
+            margin-bottom: 1rem;
+
+            .rotate {
+                transform: rotate(-10deg); // Optionnel : moins incliné pour mobile
+            }
+        }
+
+        &__text {
+            flex: none;
+        }
+
+        &__container {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+
+            h2 {
+                text-align: center;
+                //font-size: 1.3rem;
+                margin-bottom: 0.5rem;
+            }
+
+            p {
+                text-align: center;
+                font-size: 0.95rem;
+                margin-bottom: 1rem;
+            }
+        }
+
+        &__cta {
+            width: 100%;
+            font-size: 1rem;
         }
     }
 }

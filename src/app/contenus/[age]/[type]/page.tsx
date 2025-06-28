@@ -1,3 +1,5 @@
+// src/app/contenus/[age]/[type]/page.tsx
+
 import { notFound } from "next/navigation";
 import ContentList from "@/components/ContentList/ContentList";
 import { getContenusParAgeEtType } from "@/lib/contenus";
@@ -6,6 +8,7 @@ import OpenAgeSidebarButton from "@/components/OpenAgeSidebarButton/OpenAgeSideb
 import SectionIntro from "@/components/SectionIntro/SectionIntro";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import type { Metadata } from "next";
+import { getRandomSuggestions } from "@/lib/suggestions";
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { age, type } = params;
@@ -33,7 +36,6 @@ const bannerImages: Record<string, string> = {
     trivium: "/banners/banner-trivium.png",
     quadrivium: "/banners/banner-quadrivium.png",
     coloriages: "/banners/banner-coloriages.png",
-
 };
 
 const titleMap: Record<string, string> = {
@@ -56,7 +58,6 @@ export const sectionIcons: Record<string, string> = {
 
 export default async function ContentByAgePage(props: PageProps) {
     const { age, type } = props.params;
-    const settings = await prisma.siteSettings.findFirst();
 
     const validTypes = ["articles", "conseils", "idees", "trivium", "quadrivium", "coloriages"];
     if (!validTypes.includes(type)) return notFound();
@@ -64,7 +65,6 @@ export default async function ContentByAgePage(props: PageProps) {
     const ageCategory = await prisma.ageCategory.findUnique({
         where: { slug: age },
     });
-
     if (!ageCategory) return notFound();
 
     const descriptionMap: Record<string, string> = {
@@ -76,10 +76,8 @@ export default async function ContentByAgePage(props: PageProps) {
         coloriages: `Des dessins simples à imprimer pour les enfants de ${ageCategory.title} : amusants, éducatifs, ou inspirés des saisons.`,
     };
 
-    const data = await getContenusParAgeEtType(age, type);
-
-
-    if (!data || data.length === 0) {
+    const rawData = await getContenusParAgeEtType(age, type);
+    if (!rawData || rawData.length === 0) {
         return (
             <main className="content-age-page">
                 <h1>Contenus {type} pour {age}</h1>
@@ -89,9 +87,22 @@ export default async function ContentByAgePage(props: PageProps) {
         );
     }
 
+    // ✅ Assure-toi que chaque item porte `type`
+    const data = rawData.map(item => ({
+        ...item,
+        type: type,
+    }));
+
+    // ✅ Nettoie la date pour correspondre à ContentItem
+    const rawSuggestions = await getRandomSuggestions("articles", 4);
+    const suggestions = rawSuggestions.map(item => ({
+        ...item,
+        type: item.type ?? "articles",
+        date: item.date ?? undefined,
+    }));
+
     return (
         <main className="content-age-page">
-
             <OpenAgeSidebarButton />
             <SectionIntro
                 iconSrc={sectionIcons[type]}
@@ -101,13 +112,12 @@ export default async function ContentByAgePage(props: PageProps) {
                 backgroundColor="#2c3f64"
                 type={type}
             />
-
             <BackToTop />
-
             <ContentList
                 items={data}
                 type={type}
                 age={ageCategory.title}
+                suggestions={suggestions}
             />
         </main>
     );

@@ -8,11 +8,13 @@ import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 import { reverseThemeMapping } from "@/lib/themeMapping";
 import NewsletterBanner from "../NewsletterBanner/NewsletterBanner";
 import SuggestionsForParents from "../SuggestionsForParents/SuggestionsForParents";
+import { getRandomSuggestions } from "@/lib/suggestions";
 
 export interface ContentItem {
     id: string;
     title: string;
     slug: string;
+    type: string;
     age?: string;
     date?: string;
     iconSrc?: string | null;
@@ -27,30 +29,12 @@ interface ContentListProps {
     type: string;
     title?: string;
     age?: string;
+    suggestions: ContentItem[];
 }
 
-export default function ContentList({ items, type, title, age }: ContentListProps) {
+export default function ContentList({ items, type, title, age, suggestions }: ContentListProps) {
     const [visibleCount, setVisibleCount] = useState(6);
     const displayed = items.slice(0, visibleCount);
-    const [suggestions, setSuggestions] = useState<ContentItem[]>([]);
-
-    useEffect(() => {
-        const fetchSuggestions = async () => {
-            try {
-                const response = await fetch(`/api/suggestions?type=${type}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setSuggestions(data);
-                } else {
-                    console.error("Erreur lors de la récupération des suggestions");
-                }
-            } catch (error) {
-                console.error("Erreur réseau :", error);
-            }
-        };
-
-        fetchSuggestions();
-    }, [type]);
 
 
     const titleMap: Record<string, string> = {
@@ -169,10 +153,12 @@ export default function ContentList({ items, type, title, age }: ContentListProp
                     <p>{seoTextMap[type].replace("{age}", age.toLowerCase())}</p>
                 </div>
             )}
+
+            <NewsletterBanner />
             <div className="suggestions">
                 <SuggestionsForParents items={suggestions} />
             </div>
-            <NewsletterBanner />
+
 
         </section>
     );

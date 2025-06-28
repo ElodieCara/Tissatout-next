@@ -3,9 +3,9 @@
     position: sticky;
     top: 80px;
     flex-shrink: 0;
-    height: calc(100vh - 80px);
+    //height: calc(100vh - 80px);
     padding: 1.5rem;
-    background: #ffeeda;
+    background: white;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     font-family: 'Segoe UI', sans-serif;
@@ -50,8 +50,8 @@
             cursor: pointer;
 
             &:hover {
-                background: #f9b23322;
-                color: #f78e74;
+                background: #f8f5f1;
+                color: #f8f5f1;
             }
 
             &:active {
@@ -62,7 +62,7 @@
         &.active button {
             font-weight: 600;
             color: #2c3f64;
-            background: #f9b03362;
+            background: #f8f5f1;
         }
 
         &.active::before {

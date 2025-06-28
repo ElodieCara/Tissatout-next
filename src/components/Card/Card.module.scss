@@ -94,3 +94,9 @@
         }
     }
 }
+
+@media screen and (max-width: 768px) {
+    .card__content__actions {
+        display: none !important;
+    }
+}
