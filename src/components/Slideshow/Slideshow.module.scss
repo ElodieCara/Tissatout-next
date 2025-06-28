@@ -127,6 +127,11 @@
         gap: 7px;
         flex-direction: column;
         letter-spacing: 1px;
+        padding-left: 10%;
+
+        @media (max-width: 1024px) {
+            padding-left: 0%;
+        }
 
 
         & h1 {

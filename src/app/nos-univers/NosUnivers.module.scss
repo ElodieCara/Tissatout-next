@@ -11,6 +11,10 @@
         display: none;
     }
 
+    &__breadcrumb {
+        margin-top: 20px;
+    }
+
     &__categories {
         display: flex;
         justify-content: center;

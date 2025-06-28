@@ -6,7 +6,6 @@ import Banner from "@/components/Banner/Banner";
 import ActivityCard from "./ActivityCard";
 import ActivityFilter from "./ActivityFilters";
 import BackToTop from "@/components/BackToTop/BackToTop";
-import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 import { FullPrintable } from "@/lib/printables";
 import MysteryTeaser from "./MysteryTeaser";
 import MysteryActivityCard from "./MysteryActivityCard";
@@ -158,12 +157,6 @@ export default function ActivityPrintPage({ games }: ActivityPrintPageProps) {
                 />
             </header>
             <main className="activites">
-                <Breadcrumb
-                    crumbs={[
-                        { label: "Accueil", href: "/" },
-                        { label: "Activités à imprimer" } // Pas de href = page actuelle
-                    ]}
-                />
                 <section className="activites__intro">
                     <h1>Fiches pédagogiques à imprimer</h1>
                     <h2 className="highlighted">Trivium & Quadrivium</h2>

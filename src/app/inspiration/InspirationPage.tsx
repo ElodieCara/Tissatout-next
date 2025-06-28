@@ -9,6 +9,7 @@ import BackToTop from "@/components/BackToTop/BackToTop";
 import Banner from "@/components/Banner/Banner";
 import Button from "@/components/Button/Button";
 import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
+import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 
 // ✅ Sections disponibles
 const categories = [
@@ -38,6 +39,7 @@ export default function InspirationPage({
         <>
             <FloatingIcons />
             <BackToTop />
+
             <header className="inspiration__header">
                 <Banner
                     src={inspirationBanner}

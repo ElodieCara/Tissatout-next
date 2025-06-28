@@ -14,6 +14,7 @@ import RubanUnivers from "@/components/Ruban/Ruban";
 import MysteryCard from "@/components/MysteryCard/MysteryCard";
 import { sections as staticSections } from "@/data/home";
 
+
 const categories = ["trivium", "quadrivium"];
 
 export default function NosUnivers({ settings }: { settings: any }) {
@@ -70,6 +71,7 @@ export default function NosUnivers({ settings }: { settings: any }) {
                         </Image>Les univers par âge
                     </span>
                 </h2>
+
 
                 <section id="univers" className="nos-univers__categories-wrapper">
                     {ageCategories.map((section, index) => {

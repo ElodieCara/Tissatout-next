@@ -6,7 +6,6 @@ import Banner from "@/components/Banner/Banner";
 import DrawingCard from "@/components/DrawingCard/DrawingCard";
 import { Drawing } from "@/types/drawing";
 import { generateSlug } from "@/lib/utils";
-import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 
 
 // 🎯 Gestion des catégories et sous-catégories
@@ -69,12 +68,6 @@ export default function ColoriagePage({
             {/* <FloatingIcons /> */}
             <main className="coloriages__container">
                 <BackToTop />
-                <Breadcrumb
-                    crumbs={[
-                        { label: "Accueil", href: "/" },
-                        { label: "Coloriages", href: "/coloriages" },
-                    ]}
-                />
                 {/* 1️⃣ Coloriages Nouveautés */}
                 <section id="nouveautes" className="coloriages__theme-section">
                     <div className="coloriages__theme-section-title">
