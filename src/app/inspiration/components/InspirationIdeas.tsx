@@ -21,8 +21,11 @@ const themes = [
     { key: "Été", label: "🌞 Été" },
     { key: "Automne", label: "🍂 Automne" },
     { key: "Noël", label: "🎄 Noël" },
-    { key: "Halloween", label: "🎃 Halloween" },
-    { key: "Pâques", label: "🐣 Pâques" }
+    { key: "Pâques", label: "🐣 Pâques" },
+    { key: "Toussaint", label: "🕯️ Toussaint" },
+    { key: "Saint-Jean", label: "🔥 Saint-Jean" },
+    { key: "Épiphanie", label: "👑 Épiphanie" },
+    { key: "Chandeleur", label: "🕯️ Chandeleur" }
 ];
 
 const themeMapping: Record<string, string> = {
@@ -31,8 +34,11 @@ const themeMapping: Record<string, string> = {
     "Été": "summer",
     "Automne": "autumn",
     "Noël": "christmas",
-    "Halloween": "halloween",
-    "Pâques": "easter"
+    "Pâques": "easter",
+    "Toussaint": "toussaint",
+    "Saint-Jean": "saint-jean",
+    "Épiphanie": "epiphanie",
+    "Chandeleur": "chandeleur"
 };
 
 export default function InspirationIdeas({ ideas }: { ideas: Idea[] }) {

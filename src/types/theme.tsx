@@ -5,6 +5,9 @@ export type Theme =
     | "winter-theme"
     | "spring-theme"
     | "autumn-theme"
-    | "halloween-theme"
     | "christmas-theme"
-    | "back-to-school-theme";
+    | "back-to-school-theme"
+    | "toussaint-theme"
+    | "chandeleur-theme"
+    | "saint-jean-theme"
+    | "epiphanie-theme";

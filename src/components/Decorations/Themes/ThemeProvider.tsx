@@ -21,8 +21,11 @@ const themes: Record<Theme, string> = {
     "winter-theme": "winter-theme",
     "spring-theme": "spring-theme",
     "autumn-theme": "autumn-theme",
-    "halloween-theme": "halloween-theme",
     "christmas-theme": "christmas-theme",
+    "toussaint-theme": "toussaint-theme",
+    "chandeleur-theme": "chandeleur-theme",
+    "saint-jean-theme": "saint-jean-theme",
+    "epiphanie-theme": "epiphanie-theme"
 };
 
 interface ThemeContextType {
@@ -53,6 +56,12 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
         const year = new Date().getFullYear();
         const easterDate = calculateEaster(year);
 
+        // Définir tes dates fixes AVANT de les appeler
+        const toussaint = new Date(year, 10 - 1, 1);      // 1er novembre
+        const chandeleur = new Date(year, 2 - 1, 2);      // 2 février
+        const epiphanie = new Date(year, 0, 6);           // 6 janvier
+        const saintJean = new Date(year, 5, 24);          // 24 juin
+
         if (forceTheme !== null) return;
 
         const now = new Date();
@@ -64,11 +73,17 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
         easterWeekStart.setDate(easterDate.getDate() - 7);
 
         if (now >= easterWeekStart && now <= easterDate) {
-            setTheme("easter-theme"); // Thème appliqué pour Pâques
+            setTheme("easter-theme");
+        } else if (now.toDateString() === epiphanie.toDateString()) {
+            setTheme("epiphanie-theme");
+        } else if (now.toDateString() === chandeleur.toDateString()) {
+            setTheme("chandeleur-theme");
+        } else if (now.toDateString() === saintJean.toDateString()) {
+            setTheme("saint-jean-theme");
+        } else if (now.toDateString() === toussaint.toDateString()) {
+            setTheme("toussaint-theme");
         } else if (month === 11 && day >= 20) {
             setTheme("christmas-theme");
-        } else if (month === 10 && day >= 25) {
-            setTheme("halloween-theme");
         } else if ((month === 8 && day >= 20) || (month === 9 && day <= 15)) {
             setTheme("back-to-school-theme");
         } else if (month >= 5 && month <= 7) {
