@@ -43,7 +43,11 @@ export default function ArticleFeedback({ resourceType, resourceId }: CommentFor
 
     return (
         <div className="article__feedback">
-            <h2 className="article__feedback-title">💬 Et toi, qu'en as-tu pensé ?</h2>
+            <div className="article__feedback-texte">
+                <img src="/icons/commentaires/bulle.png" alt="icone bulle de dialogue" width="36"
+                    height="36" />
+                <h2 className="article__feedback-title">Et toi, qu'en as-tu pensé ?</h2>
+            </div>
             <form className="article__feedback-form" onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -63,7 +67,17 @@ export default function ArticleFeedback({ resourceType, resourceId }: CommentFor
                 />
 
                 <button type="submit" disabled={loading} className="article__feedback-submit">
-                    {loading ? "Envoi..." : "Envoyer 💌"}
+                    {loading ? "Envoi..." : (
+                        <div className="article__feedback-btn">
+                            Envoyer
+                            <img
+                                src="/icons/commentaires/envoyer.png"
+                                alt="Icône enveloppe"
+                                width={24}
+                                height={24}
+                                className="article__feedback-icon"
+                            />
+                        </div>)}
                 </button>
                 {message && <p className="article__feedback-message">{message}</p>}
             </form>

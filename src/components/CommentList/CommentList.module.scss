@@ -1,11 +1,17 @@
 .article__comments {
     margin-top: 3rem;
 
+    &-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
     &-title {
         font-size: 1.3rem;
-        margin-bottom: 1rem;
         color: #2c3f64;
     }
+
 
     &-list {
         display: flex;
@@ -27,13 +33,6 @@
         &:hover {
             background: #fff7e0;
         }
-    }
-
-    &-header {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 0.5rem;
     }
 
     &-avatar {

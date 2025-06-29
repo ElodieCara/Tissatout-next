@@ -62,12 +62,17 @@ export default function CommentList({
 
     return (
         <div className="article__comments">
-            <h3 className="article__comments-title">🗣️ Les avis des lecteurs</h3>
+            <div className="article__comments-header">
+                <img src="/icons/commentaires/silhouette.png" alt="icone silhouette commentaire" width={36} height={36} />
+                <h3 className="article__comments-title">Les avis des lecteurs</h3>
+            </div>
             <ul className="article__comments-list">
                 {comments.map((comment) => (
                     <li key={comment.id} className="article__comments-item">
                         <div className="article__comments-header">
-                            <div className="article__comments-avatar">👤</div>
+                            <div className="article__comments-avatar">
+                                <img src="/icons/commentaires/avatar.png" alt="icone silhouette commentaire" width={36} height={36} />
+                            </div>
                             <div>
                                 <p className="article__comments-author">
                                     {comment.author?.trim() || "Un Tissatoupeur"}

@@ -84,10 +84,16 @@
         }
 
         &__category {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            text-transform: capitalize;
+            align-items: center;
+            display: flex;
+            gap: 0.5rem;
+
+            &-texte {
+                font-size: 1.2rem;
+                font-weight: 600;
+                text-transform: capitalize;
+                color: vars.$primary-color;
+            }
         }
 
         &__description {
@@ -208,7 +214,15 @@
             &-title {
                 font-size: 2rem;
                 color: vars.$primary-color;
+                font-size: 1.3rem;
+                font-weight: bold;
+            }
+
+            &-texte {
+                display: flex;
+                align-items: center;
                 margin-bottom: 1rem;
+                gap: 0.5rem;
             }
 
             &-list {
@@ -249,13 +263,6 @@
                 font-size: 1.1rem;
                 font-weight: bold;
             }
-        }
-
-        &__related-title {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            color: #2c3f64;
         }
 
         &__comments {

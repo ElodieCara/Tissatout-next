@@ -65,9 +65,15 @@ export default async function AdvicePage({ params }: Props) {
                     )}
                     <div className="advice-banner__content">
                         <h2 className="advice-banner__title">{advice.title}</h2>
-                        {advice.category && (
-                            <p className="advice-banner__category">🎯 {advice.category}</p>
-                        )}
+                        <div className="advice-banner__category">
+                            <img src="/icons/titres/cible.png" alt="Icône thématique"
+                                width="36"
+                                height="36" />
+                            {advice.category && (
+                                <p className="advice-banner__category-texte">
+                                    {advice.category}</p>
+                            )}
+                        </div>
                         {advice.description && (
                             <p className="advice-banner__description">{advice.description}</p>
                         )}
@@ -163,7 +169,11 @@ export default async function AdvicePage({ params }: Props) {
                             </div>
 
                             <section className="advice__related">
-                                <h2 className="advice__related-title">🔎 Pour aller plus loin</h2>
+                                <div className="advice__related-texte">
+                                    <img src="/icons/loupe.png" alt="Icône section" width="36"
+                                        height="36" />
+                                    <h2 className="advice__related-title">Pour aller plus loin</h2>
+                                </div>
                                 <p>Découvre d'autres conseils pratiques pour t'accompagner !</p>
 
                                 <div className="advice__related-list">
