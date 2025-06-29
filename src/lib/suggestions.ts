@@ -12,6 +12,11 @@ export async function getRandomSuggestions(type: string, limit: number = 5,
                     id: { not: options?.excludeId },
                     category: options?.category,
                 },
+                include: {
+                    ageCategories: {
+                        include: { ageCategory: true },
+                    },
+                },
                 orderBy: { date: "desc" },
                 take: limit,
             }).then((articles) =>
@@ -22,7 +27,8 @@ export async function getRandomSuggestions(type: string, limit: number = 5,
                     title: article.title,
                     image: article.image ?? null,
                     description: article.description ?? null,
-                    date: article.date ? article.date.toISOString() : null, // ✅ Conversion ici
+                    date: article.date ? article.date.toISOString() : null,
+                    age: article.ageCategories?.[0]?.ageCategory?.title ?? null,
                 }))
             );
 
@@ -31,6 +37,11 @@ export async function getRandomSuggestions(type: string, limit: number = 5,
                 where: {
                     id: { not: options?.excludeId },
                     category: options?.category,
+                },
+                include: {
+                    ageCategories: {
+                        include: { ageCategory: true },
+                    },
                 },
                 orderBy: { createdAt: "desc" },
                 take: limit,
@@ -43,6 +54,7 @@ export async function getRandomSuggestions(type: string, limit: number = 5,
                     image: conseil.imageUrl ?? null,
                     description: conseil.description ?? null,
                     date: conseil.createdAt ? conseil.createdAt.toISOString() : null,
+                    age: conseil.ageCategories?.[0]?.ageCategory?.title ?? null,
                 }))
             );
 
@@ -58,6 +70,13 @@ export async function getRandomSuggestions(type: string, limit: number = 5,
                         }
                         : undefined,
                 },
+                include: {
+                    ageCategories: {
+                        include: {
+                            ageCategory: true // ← le vrai contenu est ici
+                        }
+                    }
+                },
                 orderBy: { createdAt: "desc" },
                 take: limit,
             }).then((idees) =>
@@ -69,6 +88,8 @@ export async function getRandomSuggestions(type: string, limit: number = 5,
                     image: idee.image ?? null,
                     description: idee.description ?? null,
                     date: idee.createdAt ? idee.createdAt.toISOString() : null,
+                    age: idee.ageCategories?.[0]?.ageCategory?.title ?? null
+
                 }))
             );
 
