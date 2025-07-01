@@ -18,6 +18,10 @@
         justify-content: center;
         gap: 15px;
         margin-bottom: 30px;
+
+        .filter-button {
+            min-width: 150px;
+        }
     }
 
     &__content {

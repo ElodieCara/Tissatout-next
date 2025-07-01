@@ -13,9 +13,9 @@ import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 
 // ✅ Sections disponibles
 const categories = [
-    { key: "articles", label: "💡 Inspirations" },
-    { key: "ideas", label: "🔥 Idées" },
-    { key: "advice", label: "📝 Conseils" }
+    { key: "articles", label: "Inspirations" },
+    { key: "ideas", label: "Idées" },
+    { key: "advice", label: "Conseils" }
 ];
 
 export default function InspirationPage({

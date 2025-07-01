@@ -15,17 +15,17 @@ interface Idea {
 }
 
 const themes = [
-    { key: "", label: "🌍 Tout afficher" },
-    { key: "Hiver", label: "❄️ Hiver" },
-    { key: "Printemps", label: "🌸 Printemps" },
-    { key: "Été", label: "🌞 Été" },
-    { key: "Automne", label: "🍂 Automne" },
-    { key: "Noël", label: "🎄 Noël" },
-    { key: "Pâques", label: "🐣 Pâques" },
-    { key: "Toussaint", label: "🕯️ Toussaint" },
-    { key: "Saint-Jean", label: "🔥 Saint-Jean" },
-    { key: "Épiphanie", label: "👑 Épiphanie" },
-    { key: "Chandeleur", label: "🕯️ Chandeleur" }
+    { key: "", icon: "/icons/themes/monde.png", label: "Tout afficher" },
+    { key: "Hiver", icon: "/icons/themes/hiver.png", label: "Hiver" },
+    { key: "Printemps", icon: "/icons/themes/printemps.png", label: "Printemps" },
+    { key: "Été", icon: "/icons/themes/soleil.png", label: "Été" },
+    { key: "Automne", icon: "/icons/themes/automne.png", label: "Automne" },
+    { key: "Noël", icon: "/icons/themes/noel.png", label: "Noël" },
+    { key: "Pâques", icon: "/icons/themes/paque.png", label: "Pâques" },
+    { key: "Toussaint", icon: "/icons/themes/toussaint.png", label: "Toussaint" },
+    { key: "Saint-Jean", icon: "/icons/themes/saintjean.png", label: "Saint-Jean" },
+    { key: "Épiphanie", icon: "/icons/themes/epiphanie.png", label: "Épiphanie" },
+    { key: "Chandeleur", icon: "/icons/themes/chandeleur.png", label: "Chandeleur" }
 ];
 
 const themeMapping: Record<string, string> = {
@@ -59,20 +59,26 @@ export default function InspirationIdeas({ ideas }: { ideas: Idea[] }) {
 
     return (
         <section className="container__inspiration--ideas">
-            <h2>🔥 Idées {selectedTheme ? `pour ${selectedTheme}` : "toutes saisons confondues"}</h2>
+            <h2>Idées {selectedTheme ? `pour ${selectedTheme}` : "toutes saisons confondues"}</h2>
 
             {/* 🔵 Filtres par thème */}
             <div className="container__inspiration__filters">
                 <div className="container__inspiration__filters-buttons">
-                    {themes.map(({ key, label }) => (
+                    {themes.map(({ key, label, icon }) => (
                         <div key={label} className="filter-circle-wrapper">
                             <button
                                 className={`filter-circle ${selectedTheme === key ? "active" : ""}`}
                                 onClick={() => handleThemeFilter(key)}
                             >
-                                <span className="filter-circle__icon">{label.split(" ")[0]}</span>
+                                <img
+                                    src={icon}
+                                    alt={`Icône ${label}`}
+                                    className="filter-circle__icon"
+                                    width={42}
+                                    height={42}
+                                />
                             </button>
-                            <span className="filter-circle__text">{label.split(" ")[1]}</span>
+                            <span className="filter-circle__text">{label}</span>
                         </div>
                     ))}
                 </div>

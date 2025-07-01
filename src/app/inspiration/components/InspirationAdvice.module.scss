@@ -21,6 +21,12 @@
     }
 }
 
+.container__advice h2 {
+    font-size: 2rem;
+    color: vars.$primary-color;
+    margin-bottom: 10px;
+}
+
 .advice__categories {
     display: flex;
     justify-content: center;
@@ -67,60 +73,155 @@
 // ***************** Ajout de l’effet médiéval ***********************
 .medieval__categories {
     display: flex;
+    //flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-top: 30px;
+    gap: 2rem;
+    margin: 2rem auto;
+    max-width: 1200px;
 }
 
 .medieval__card {
-    width: 280px;
-    background: vars.$secondary-color;
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    cursor: pointer;
-    border: 2px solid vars.$primary-color;
     position: relative;
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 2/3;
+    -webkit-mask-image: url('/assets/medieval/feston.png');
+    mask-image: url('/assets/medieval/feston.png');
+    mask-size: cover;
+    mask-repeat: no-repeat;
+    background: #c7a269;
+    cursor: pointer;
 
     &:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        background: lighten(vars.$secondary-color, 10%);
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     }
 
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: #c7a269; // Couleur de fond
+        border-radius: 0; // pas de masque ici
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        z-index: -1;
+        border-radius: inherit;
+    }
+
+    .medieval__card__cta {
+        position: absolute;
+        bottom: 3rem;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0.5;
+        transition: opacity 0.2s ease;
+
+        .medieval__card:hover & {
+            opacity: 1;
+        }
+    }
+
+
     .medieval__card__icon {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        //background: #fff;
+        width: 130px;
+        height: 155px;
+        margin: 0 auto 1rem;
+        border-radius: 50%;
+        font-size: 2rem;
+        // box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
     h3 {
-        font-size: 1.2rem;
+        font-size: 2rem;
+        padding: 0 1rem;
         font-weight: bold;
-        color: vars.$primary-color;
+        margin-bottom: 0.5rem;
+        color: #2c3f64;
     }
 
     p {
-        font-size: 0.95rem;
-        color: vars.$primary-color;
+        font-size: 1.5rem;
+        padding: 0 1rem;
+        line-height: 1.5;
+        color: #444;
     }
 }
+
+.medieval__card--savoirs {
+    -webkit-mask-image: url('/assets/medieval/rhetorique.png');
+    mask-image: url('/assets/medieval/rhetorique.png');
+    mask-size: cover;
+    mask-repeat: no-repeat;
+    aspect-ratio: 375/560; // Important pour garder le feston net
+}
+
+.medieval__card--harmonie {
+    -webkit-mask-image: url('/assets/medieval/rhetorique.png');
+    mask-image: url('/assets/medieval/rhetorique.png');
+    mask-size: cover;
+    mask-repeat: no-repeat;
+    aspect-ratio: 367/542; // Important pour garder le feston net
+}
+
+.medieval__card--eloquence {
+    -webkit-mask-image: url('/assets/medieval/rhetorique.png');
+    mask-image: url('/assets/medieval/rhetorique.png');
+    mask-size: cover;
+    mask-repeat: no-repeat;
+    aspect-ratio: 367/542;
+}
+
 
 // ***************** Affichage des conseils ***********************
 .medieval__advice {
     text-align: left;
     margin-top: 20px;
     padding: 20px;
-    background: vars.$tertiary-color;
-    border-radius: 12px;
+    background: vars.$primary-color;
+    border-radius: 30px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 
     h3 {
+        display: flex;
         font-size: 1.5rem;
-        color: vars.$primary-color;
-        margin-bottom: 10px;
+        color: #f78e74;
+        gap: 2rem;
+        margin-left: 1rem;
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 2rem;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-bottom: 20px;
+        gap: 2rem;
+
+        h3 {
+            font-size: 1.5rem;
+            color: #f78e74;
+            margin-right: 10px;
+        }
+
+        .medieval__advice__icon {
+            font-size: 2rem;
+            color: #f78e74;
+        }
     }
 
     .medieval__advice__list {
@@ -196,8 +297,25 @@
     }
 }
 
+.medieval__loadMore-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background: #2c3f64;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+
+    &:hover {
+        background: darken(#2c3f64, 10%);
+    }
+}
+
+
 // ✅ Responsive
-@media (max-width: 768px) {
+@media (max-width: 980px) {
 
     .advice__categories,
     .medieval__categories {
