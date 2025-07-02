@@ -12,31 +12,30 @@ import BackToTop from "@/components/BackToTop/BackToTop";
 import { triviumData, quadriviumData } from "@/data/rubanActivity";
 import RubanUnivers from "@/components/Ruban/Ruban";
 import MysteryCard from "@/components/MysteryCard/MysteryCard";
-import { sections as staticSections } from "@/data/home";
 
+
+interface AgeCategory {
+    title: string;
+    slug: string;
+    content?: string;
+    conclusion?: string;
+    imageCard?: string;
+    tags?: Tag[];
+}
 
 const categories = ["trivium", "quadrivium"];
 
 export default function NosUnivers({ settings }: { settings: any }) {
     const [selectedCategory, setSelectedCategory] = useState<"trivium" | "quadrivium">("trivium");
-    const [ageCategories, setAgeCategories] = useState<typeof staticSections>([]);
+    //const [ageCategories, setAgeCategories] = useState<typeof staticSections>([]);
+    const [ageCategories, setAgeCategories] = useState<AgeCategory[]>([]);
 
     useEffect(() => {
         fetch("/api/ageCategory")
             .then(res => res.json())
-            .then((data: any[]) => {
-                // Merge : on prend la section fetchée, 
-                // et on y ajoute les tags de la section statique (même slug)
-                const merged = data.map(section => {
-                    const stat = staticSections.find(s => s.slug === section.slug);
-                    return {
-                        ...section,
-                        tags: stat?.tags ?? []      // si on n’a pas de stat, on met []
-                    };
-                });
-                setAgeCategories(merged);
-            })
-            .catch(err => console.error("Fetch ages failed:", err));
+            .then(data => {
+                setAgeCategories(data);
+            });
     }, []);
 
     return (
@@ -91,7 +90,12 @@ export default function NosUnivers({ settings }: { settings: any }) {
                                     )} */}
 
                                     <div className="nos-univers__categories__card__image">
-                                        <Image src={section.imageCard} alt={section.title} width={160} height={160} />
+                                        <Image
+                                            src={section.imageCard || "/default.jpg"}
+                                            alt={section.title}
+                                            width={160}
+                                            height={160}
+                                        />
                                     </div>
 
                                     <div className="nos-univers__categories__card__content">

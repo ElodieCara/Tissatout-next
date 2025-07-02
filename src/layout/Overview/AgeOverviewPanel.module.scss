@@ -67,20 +67,32 @@
             background-color: #a18cd1;
         }
 
-        svg {
+        .age-panel__icon {
             flex-shrink: 0;
-            width: 20px;
-            height: 20px;
+            width: 24px; // ✅ Taille fixe ici
+            height: 24px;
+            display: inline-flex;
+
+            img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
         }
     }
 
+    // &__link-icon {
+    //     width: none !important;
+    // }
 
-    &__image {
-        position: relative;
-        margin-top: 2rem;
-        width: 100%;
-        height: 160px;
-        border-radius: 16px;
-        overflow: hidden;
-    }
+
+    // &__image {
+    //     position: relative;
+    //     margin-top: 2rem;
+    //     width: 100%;
+    //     height: 160px;
+    //     border-radius: 16px;
+    //     overflow: hidden;
+    // }
 }

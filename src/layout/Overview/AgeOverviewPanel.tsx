@@ -24,23 +24,54 @@ const AgeOverviewPanel: React.FC<AgeOverviewPanelProps> = ({ category }) => {
                     href={`/contenus/${slug}/${title.includes("10") ? "quadrivium" : "trivium"}`}
                     className="age-panel__link age-panel__link--trivium"
                 >
-                    📘 Activités {title.includes("10") ? "Quadrivium" : "Trivium"}
+                    <Image
+                        src="/icons/titres/quadrivium.png"
+                        alt="Trivium"
+                        width={24}
+                        height={24}
+                    />
+                    Activités {title.includes("10") ? "Quadrivium" : "Trivium"}
                 </a>
 
                 <a href={`/contenus/${slug}/articles`} className="age-panel__link age-panel__link--articles">
-                    📰 Articles
+                    <Image
+                        className="age-panel__link-icon"
+                        src="/icons/titres/livre.png"
+                        alt="Articles"
+                        width={24}
+                        height={24}
+                    />
+                    Articles
                 </a>
 
                 <a href={`/contenus/${slug}/conseils`} className="age-panel__link age-panel__link--conseils">
-                    🧸 Conseils
+                    <Image
+                        src="/icons/titres/nounours.png"
+                        alt="Conseils"
+                        width={24}
+                        height={24}
+                    />
+                    Conseils
                 </a>
 
                 <a href={`/contenus/${slug}/idees`} className="age-panel__link age-panel__link--idees">
-                    🎨 Idées créatives
+                    <Image
+                        src="/icons/titres/cible.png"
+                        alt="Idées créatives"
+                        width={24}
+                        height={24}
+                    />
+                    Idées créatives
                 </a>
 
                 <a href={`/contenus/${slug}/coloriages`} className="age-panel__link age-panel__link--coloriages">
-                    🖍️ Coloriages
+                    <Image
+                        src="/icons/titres/coloriages.png"
+                        alt="Coloriages"
+                        width={24}
+                        height={24}
+                    />
+                    Coloriages
                 </a>
             </div>
         </div>

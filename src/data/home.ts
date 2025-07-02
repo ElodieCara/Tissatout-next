@@ -23,93 +23,93 @@ import { Slide, Section, News, Idea, Activity } from "@/types/home"; // Types d�
 export type ActivityCategory = "trivium" | "quadrivium";
 
 export const slide: Slide[] = [
-    { id: 1, image: Slide1 },
-    { id: 2, image: Slide2 },
-    { id: 3, image: Slide3 },
+    { id: 1, image: D6 },
+    { id: 2, image: D6 },
+    { id: 3, image: D6 },
 ];
 
-export const sections: Section[] = [
-    {
-        title: "Tout-petits",
-        color: "#ECAC3E",
-        buttonImage: Tp,
-        imageCard: Tp,
-        slug: "tout-petits",
-        content: "Tout-petits : éveil et magie des premiers moments 🎨✨",
-        description: "Plongez avec votre enfant dans un univers d’éveil tout en douceur. 🌟 Découvrez des activités pensées pour stimuler sa curiosité et développer ses sens :",
-        activities: [
-            "🖍️ Coloriages simples pour ses premières œuvres d’art.",
-            "🧩 Jeux de manipulation pour éveiller sa motricité.",
-            "📖 Comptines illustrées pour enrichir son imaginaire.",
-        ],
-        conclusion: "Offrez-lui des moments d’émerveillement tout en partageant des instants magiques ensemble. 💕",
-        tags: [
-            { label: "Éveil & Motricité", color: "yellow" },
-            { label: "Coloriages", color: "blue" },
-            { label: "Comptines", color: "orange" }
-        ]
-    },
-    {
-        title: "Dès 3 ans",
-        color: "rgb(2 141 2)",
-        buttonImage: D3,
-        imageCard: D3,
-        slug: "des-3-ans",
-        content: "Dès 3 ans : créativité et premières découvertes 🌈",
-        description: "Accompagnez votre enfant dans ses premières aventures créatives et éducatives :",
-        activities: [
-            "🎨 Coloriages thématiques pour éveiller leur imagination.",
-            "✂️ Premiers bricolages simples pour créer avec leurs petites mains.",
-            "🔵 Jeux de reconnaissance des formes et des couleurs pour apprendre en s’amusant.",
-        ],
-        conclusion: "Transformez chaque journée en une nouvelle découverte ludique et enrichissante. ✨",
-        tags: [
-            { label: "Créativité", color: "green" },
-            { label: "Bricolage", color: "red" },
-            { label: "Jeux éducatifs", color: "blue" }
-        ]
-    },
-    {
-        title: "Dès 6 ans",
-        color: "#CF000F",
-        buttonImage: D6,
-        imageCard: D6,
-        slug: "des-6-ans",
-        content: "Dès 6 ans : exploration et autonomie 🚀",
-        description: "Place à l’imagination débordante et aux premières explorations ! Votre enfant pourra :",
-        activities: [
-            "🎨 Réaliser des bricolages plus élaborés pour exprimer sa créativité.",
-            "🖌️ Découvrir des activités artistiques pour développer son goût pour le dessin et la peinture.",
-            "🧠 Participer à des jeux de logique et des défis amusants pour réfléchir tout en s’amusant.",
-        ],
-        conclusion: "Encouragez-le à relever ses premiers défis et à développer son autonomie en toute confiance ! 🌟",
-        tags: [
-            { label: "Activités artistiques", color: "blue" },
-            { label: "Jeux de logique", color: "red" },
-            { label: "Défis éducatifs", color: "orange" }
-        ]
-    },
-    {
-        title: "Dès 10 ans",
-        color: "#0066D5",
-        buttonImage: D8,
-        imageCard: D8,
-        slug: "des-10-ans",
-        content: "Dès 10 ans : création et défis stimulants 🧠🎨",
-        description: "Pour les esprits curieux et les créateurs en herbe, découvrez des activités captivantes :",
-        activities: [
-            "🛠️ Participer à des ateliers DIY pour concevoir leurs propres créations.",
-            "🧩 Résoudre des jeux d’énigmes et de réflexion pour stimuler leur logique.",
-            "🎭 S’engager dans des projets créatifs avancés pour laisser libre cours à leur imagination.",
-        ],
-        conclusion: "Offrez-leur des outils pour s’épanouir et exprimer pleinement leur créativité tout en s’amusant. 🌟",
-        tags: [
-            { label: "DIY & Création", color: "green" },
-            { label: "Énigmes & Réflexion", color: "red" },
-            { label: "Projets créatifs", color: "blue" }
-        ]
-    },
-];
+// export const sections: Section[] = [
+//     {
+//         title: "Tout-petits",
+//         color: "#ECAC3E",
+//         buttonImage: D6,
+//         imageCard: D6,
+//         slug: "tout-petits",
+//         content: "Tout-petits : éveil et magie des premiers moments 🎨✨",
+//         description: "Plongez avec votre enfant dans un univers d’éveil tout en douceur. 🌟 Découvrez des activités pensées pour stimuler sa curiosité et développer ses sens :",
+//         activities: [
+//             "🖍️ Coloriages simples pour ses premières œuvres d’art.",
+//             "🧩 Jeux de manipulation pour éveiller sa motricité.",
+//             "📖 Comptines illustrées pour enrichir son imaginaire.",
+//         ],
+//         conclusion: "Offrez-lui des moments d’émerveillement tout en partageant des instants magiques ensemble. 💕",
+//         tags: [
+//             { label: "Éveil & Motricité", color: "yellow" },
+//             { label: "Coloriages", color: "blue" },
+//             { label: "Comptines", color: "orange" }
+//         ]
+//     },
+//     {
+//         title: "Dès 3 ans",
+//         color: "rgb(2 141 2)",
+//         buttonImage: D3,
+//         imageCard: D3,
+//         slug: "des-3-ans",
+//         content: "Dès 3 ans : créativité et premières découvertes 🌈",
+//         description: "Accompagnez votre enfant dans ses premières aventures créatives et éducatives :",
+//         activities: [
+//             "🎨 Coloriages thématiques pour éveiller leur imagination.",
+//             "✂️ Premiers bricolages simples pour créer avec leurs petites mains.",
+//             "🔵 Jeux de reconnaissance des formes et des couleurs pour apprendre en s’amusant.",
+//         ],
+//         conclusion: "Transformez chaque journée en une nouvelle découverte ludique et enrichissante. ✨",
+//         tags: [
+//             { label: "Créativité", color: "green" },
+//             { label: "Bricolage", color: "red" },
+//             { label: "Jeux éducatifs", color: "blue" }
+//         ]
+//     },
+//     {
+//         title: "Dès 6 ans",
+//         color: "#CF000F",
+//         buttonImage: D6,
+//         imageCard: D6,
+//         slug: "des-6-ans",
+//         content: "Dès 6 ans : exploration et autonomie 🚀",
+//         description: "Place à l’imagination débordante et aux premières explorations ! Votre enfant pourra :",
+//         activities: [
+//             "🎨 Réaliser des bricolages plus élaborés pour exprimer sa créativité.",
+//             "🖌️ Découvrir des activités artistiques pour développer son goût pour le dessin et la peinture.",
+//             "🧠 Participer à des jeux de logique et des défis amusants pour réfléchir tout en s’amusant.",
+//         ],
+//         conclusion: "Encouragez-le à relever ses premiers défis et à développer son autonomie en toute confiance ! 🌟",
+//         tags: [
+//             { label: "Activités artistiques", color: "blue" },
+//             { label: "Jeux de logique", color: "red" },
+//             { label: "Défis éducatifs", color: "orange" }
+//         ]
+//     },
+//     {
+//         title: "Dès 10 ans",
+//         color: "#0066D5",
+//         buttonImage: D8,
+//         imageCard: D8,
+//         slug: "des-10-ans",
+//         content: "Dès 10 ans : création et défis stimulants 🧠🎨",
+//         description: "Pour les esprits curieux et les créateurs en herbe, découvrez des activités captivantes :",
+//         activities: [
+//             "🛠️ Participer à des ateliers DIY pour concevoir leurs propres créations.",
+//             "🧩 Résoudre des jeux d’énigmes et de réflexion pour stimuler leur logique.",
+//             "🎭 S’engager dans des projets créatifs avancés pour laisser libre cours à leur imagination.",
+//         ],
+//         conclusion: "Offrez-leur des outils pour s’épanouir et exprimer pleinement leur créativité tout en s’amusant. 🌟",
+//         tags: [
+//             { label: "DIY & Création", color: "green" },
+//             { label: "Énigmes & Réflexion", color: "red" },
+//             { label: "Projets créatifs", color: "blue" }
+//         ]
+//     },
+// ];
 
 
 
