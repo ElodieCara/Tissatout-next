@@ -54,7 +54,7 @@ const MysteryCard: React.FC<MysteryCardProps> = ({
                 justifyContent: 'center',
                 position: 'relative',
                 width: '100%',
-                height: '300px'
+
             }}>
                 <FloatingIconsEnhanced />
                 <div className="activity-mystery__content">
