@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import { activities } from "@/data/home";
 import { useEffect, useState } from "react";
@@ -25,10 +26,15 @@ interface AgeCategory {
 
 const categories = ["trivium", "quadrivium"];
 
-export default function NosUnivers({ settings }: { settings: any }) {
+export default async function NosUnivers({ settings }: { settings: any }) {
     const [selectedCategory, setSelectedCategory] = useState<"trivium" | "quadrivium">("trivium");
     //const [ageCategories, setAgeCategories] = useState<typeof staticSections>([]);
     const [ageCategories, setAgeCategories] = useState<AgeCategory[]>([]);
+    const mystery = await prisma.printableGame.findFirst({
+        where: { isMystery: true },
+    });
+
+    if (!mystery) return null;
 
     useEffect(() => {
         fetch("/api/ageCategory")
@@ -202,7 +208,7 @@ export default function NosUnivers({ settings }: { settings: any }) {
                     imageSrc="/images/activite-mystere-floutee.jpg"
                     alt="Aperçu activité mystère"
                     isRevealed={false}
-                    revealDate="29/06/2025 à 11h08"
+                    revealDate={mystery?.mysteryUntil ? mystery.mysteryUntil.toISOString() : ""}
                     isSubscribed={false}
                     primaryButtonLink="/activite-mystere"
                     secondaryButtonLink="/newsletter"

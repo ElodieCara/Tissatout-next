@@ -24,7 +24,7 @@ export default function NewsletterBanner() {
                     <p>Abonnez-vous à notre newsletter pour recevoir directement nos astuces par email.</p>
                     <button
                         className="newsletter-banner__cta"
-                        onClick={() => (window.location.href = "/newsletter")}
+                        onClick={() => (window.location.href = "/subscribe")}
                     >
                         Je m’inscris
                     </button>

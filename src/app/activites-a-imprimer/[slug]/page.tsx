@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import { Metadata } from "next";
 import { getPrintableBySlug, getSimilarPrintables } from "@/lib/printables";
@@ -65,6 +66,10 @@ export default async function PrintablePage({ params }: Props) {
     const { slug } = await params;
     const printable = await getPrintableBySlug(slug);
     if (!printable) return notFound();
+    const mystery = await prisma.printableGame.findFirst({
+        where: { isMystery: true },
+    });
+    if (!mystery) return null;
 
     // 1️⃣ On récupère d’abord tous les similaires
     const similar = await getSimilarPrintables(
@@ -264,7 +269,7 @@ export default async function PrintablePage({ params }: Props) {
                     imageSrc="/images/activite-mystere-floutee.jpg"
                     alt="Aperçu activité mystère"
                     isRevealed={false}
-                    revealDate="29/06/2025 à 11h08"
+                    revealDate={mystery?.mysteryUntil ? mystery.mysteryUntil.toISOString() : ""}
                     isSubscribed={false}
                     primaryButtonLink="/activite-mystere"
                     secondaryButtonLink="/newsletter" />

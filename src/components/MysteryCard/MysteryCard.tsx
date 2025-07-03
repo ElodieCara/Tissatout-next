@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import FloatingIconsEnhanced from "../FloatingIcon/FloatingIconsEnhanced";
 
@@ -21,13 +22,28 @@ const MysteryCard: React.FC<MysteryCardProps> = ({
     description,
     imageSrc,
     alt,
-    isRevealed,
     revealDate,
     isSubscribed,
     primaryButtonLink,
     secondaryButtonLink,
 }) => {
     const router = useRouter();
+    const [isRevealed, setIsRevealed] = useState(false);
+
+    useEffect(() => {
+        const now = new Date();
+        const reveal = new Date(revealDate);
+
+        if (now >= reveal) {
+            setIsRevealed(true);
+        } else {
+            const timeout = reveal.getTime() - now.getTime();
+            const timer = setTimeout(() => {
+                setIsRevealed(true);
+            }, timeout);
+            return () => clearTimeout(timer);
+        }
+    }, [revealDate]);
 
     return (
         <section className="mystery">
@@ -55,7 +71,7 @@ const MysteryCard: React.FC<MysteryCardProps> = ({
                             </button>
                         ) : (
                             <button className="btn btn--primary btn--disabled" disabled>
-                                ⏳ Révélation le {revealDate}
+                                ⏳ Révélation le {new Date(revealDate).toLocaleString("fr-FR")}
                             </button>
                         )}
                         <button
@@ -68,8 +84,6 @@ const MysteryCard: React.FC<MysteryCardProps> = ({
                 </div>
 
                 <div className="activity-mystery__image">
-
-
                     <img
                         src="/icons/theatre.png"
                         alt="Mystère"

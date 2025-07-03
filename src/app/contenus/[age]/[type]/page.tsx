@@ -99,6 +99,7 @@ export default async function ContentByAgePage(props: PageProps) {
         ...item,
         type: item.type ?? "articles",
         date: item.date ?? undefined,
+        age: "age" in item ? item.age ?? undefined : undefined,
     }));
 
     return (

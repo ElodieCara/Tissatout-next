@@ -1,22 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useGlobalLoading } from "./GlobalLoadingContext";
 import Image from "next/image";
 
 export default function Loading() {
-    const [showLoading, setShowLoading] = useState(false);
+    const { isLoading } = useGlobalLoading();
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setShowLoading(true);
-        }, 300);
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    if (!showLoading) {
-        return null;
-    }
+    if (!isLoading) return null;
 
     return (
         <div className="loading">
