@@ -100,3 +100,16 @@ export async function getPublicGames(): Promise<FullPrintable[]> {
         orderBy: { createdAt: "desc" },
     });
 }
+
+export async function getServerSideProps() {
+    const mystery = await getMysteryGame();
+
+    return {
+        props: {
+            mystery: mystery ? {
+                slug: mystery.slug,
+                mysteryUntil: mystery.mysteryUntil?.toISOString() ?? null,
+            } : null,
+        },
+    };
+}

@@ -25,6 +25,9 @@ export const metadata = {
 
 export default async function Page() {
     const settings = await prisma.siteSettings.findFirst();
+    const mystery = await prisma.printableGame.findFirst({
+        where: { isMystery: true },
+    });
 
     return (
         <NosUnivers
@@ -33,6 +36,7 @@ export default async function Page() {
                 universTitle: settings?.universTitle || "🌟 Nos Univers",
                 universDesc: settings?.universDesc || "Découvrez des activités éducatives pour tous les âges !"
             }}
+            mystery={mystery}
         />
     );
 }

@@ -270,8 +270,11 @@ export default async function PrintablePage({ params }: Props) {
                     alt="Aperçu activité mystère"
                     isRevealed={false}
                     revealDate={mystery?.mysteryUntil ? mystery.mysteryUntil.toISOString() : ""}
-                    isSubscribed={false}
-                    primaryButtonLink="/activite-mystere"
+                    primaryButtonLink={
+                        mystery?.slug
+                            ? `/activites-a-imprimer/${mystery.slug}`
+                            : "/activites-a-imprimer"
+                    } isSubscribed={false}
                     secondaryButtonLink="/newsletter" />
 
                 <div className="activites__separator">
