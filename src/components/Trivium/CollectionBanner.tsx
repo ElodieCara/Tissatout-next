@@ -26,7 +26,7 @@ export default function CollectionBanner({
         <div className={`collection-banner ${collapsed ? "collection-banner--collapsed" : ""}`}>
             <div className="collection-banner__header">
                 <h2 className="collection-banner__title" onClick={() => setCollapsed(!collapsed)}>
-                    📚 {title}
+                    {title}
                     <span className="collection-banner__toggle">
                         {collapsed ? "▼" : "▲"}
                     </span>
