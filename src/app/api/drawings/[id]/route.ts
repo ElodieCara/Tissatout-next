@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { withAdminGuard } from "@/lib/auth.guard";
+import path from "path";
+import { unlink } from "fs/promises";
 import { ObjectId } from "mongodb";
 
 const prisma = new PrismaClient();
@@ -107,8 +109,38 @@ export async function DELETE(req: NextRequest, context: { params: { id: string }
                 return NextResponse.json({ error: "ID manquant" }, { status: 400 });
             }
 
+            // 🟢 Chercher le coloriage pour connaître l'image
+            const drawing = await prisma.drawing.findUnique({
+                where: { id },
+                select: { imageUrl: true },
+            });
+
+            if (!drawing) {
+                return NextResponse.json({ error: "Coloriage introuvable" }, { status: 404 });
+            }
+
+            // 🟢 Supprimer l'image du disque si présente
+            if (drawing.imageUrl) {
+                const fileName = drawing.imageUrl.split("/uploads/")[1];
+                if (fileName) {
+                    const filePath = path.join(process.cwd(), "public/uploads", fileName);
+                    try {
+                        await unlink(filePath);
+                        console.log(`✅ Image supprimée : ${fileName}`);
+                    } catch (err: any) {
+                        if (err.code === "ENOENT") {
+                            console.log("🔍 Image déjà absente, rien à faire");
+                        } else {
+                            console.error("❌ Erreur suppression image :", err);
+                        }
+                    }
+                }
+            }
+
+            // 🟢 Supprimer le coloriage en base
             await prisma.drawing.delete({ where: { id } });
-            return NextResponse.json({ message: "✅ Coloriage supprimé" });
+
+            return NextResponse.json({ message: "✅ Coloriage et image supprimés" });
         } catch (error) {
             console.error("❌ Erreur DELETE coloriage :", error);
             return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });

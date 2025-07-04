@@ -1,5 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
+import path from "path";
+import { unlink } from "fs/promises";
 import { withAdminGuard } from "@/lib/auth.guard";
 
 // 🔧 Fonction utilitaire pour normaliser la mysteryUntil
@@ -123,8 +125,42 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
 
 // DELETE d'une activité
 export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
-    return withAdminGuard(req, async (_req) => {
-        await prisma.printableGame.delete({ where: { id: context.params.id } });
-        return NextResponse.json({ message: "Supprimé" });
+    return withAdminGuard(req, async () => {
+        const { id } = context.params;
+
+        const game = await prisma.printableGame.findUnique({
+            where: { id },
+            include: { extraImages: true }
+        });
+        if (!game) {
+            return NextResponse.json({ error: "❌ Activité introuvable" }, { status: 404 });
+        }
+
+        // 🔹 Supprimer le visuel principal
+        if (game.imageUrl) {
+            const fileName = game.imageUrl.split("/uploads/")[1];
+            if (fileName) {
+                const filePath = path.join(process.cwd(), "public/uploads", fileName);
+                await unlink(filePath).catch(() => null);
+            }
+        }
+
+        // 🔹 Supprimer les visuels extra
+        for (const img of game.extraImages) {
+            if (img.imageUrl) {
+                const fileName = img.imageUrl.split("/uploads/")[1];
+                if (fileName) {
+                    const filePath = path.join(process.cwd(), "public/uploads", fileName);
+                    await unlink(filePath).catch(() => null);
+                }
+            }
+        }
+
+        // 🔹 Supprimer en base (ExtraImage a `onDelete: Cascade` donc safe)
+        await prisma.printableGame.delete({ where: { id } });
+
+        return NextResponse.json({ message: "✅ PrintableGame supprimé avec images." });
     });
 }
+
+

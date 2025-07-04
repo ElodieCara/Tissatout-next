@@ -1,4 +1,6 @@
 import prisma from "@/lib/prisma";
+import path from "path";
+import { unlink } from "fs/promises";
 import { NextRequest, NextResponse } from "next/server";
 import { withAdminGuard } from "@/lib/auth.guard";
 
@@ -192,17 +194,49 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
 
 
 // 🔴 DELETE: Supprimer un article
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
-    const { id } = context.params;
+// export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+//     const { id } = context.params;
 
-    return withAdminGuard(req, async (_req) => {
-        // Ici tu peux utiliser id directement
-        try {
-            await prisma.article.delete({ where: { id } });
-            return NextResponse.json({ message: "✅ Article supprimé avec succès" });
-        } catch (error) {
-            return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+//     return withAdminGuard(req, async (_req) => {
+//         // Ici tu peux utiliser id directement
+//         try {
+//             await prisma.article.delete({ where: { id } });
+//             return NextResponse.json({ message: "✅ Article supprimé avec succès" });
+//         } catch (error) {
+//             return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
+//         }
+//     });
+// }
+
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+    return withAdminGuard(req, async () => {
+        const { id } = context.params;
+
+        const article = await prisma.article.findUnique({ where: { id } });
+        if (!article) {
+            return NextResponse.json({ error: "❌ Article introuvable" }, { status: 404 });
         }
+
+        // 🔹 Supprimer les pivots
+        await prisma.relatedArticle.deleteMany({ where: { fromArticleId: id } });
+        await prisma.relatedArticle.deleteMany({ where: { toArticleId: id } });
+        await prisma.relatedIdeaArticle.deleteMany({ where: { toArticleId: id } });
+
+        // 🔹 Supprimer l’image
+        if (article.image) {
+            const fileName = article.image.split("/uploads/")[1];
+            if (fileName) {
+                const filePath = path.join(process.cwd(), "public/uploads", fileName);
+                await unlink(filePath).catch(() => null);
+            }
+        }
+
+        // 🔹 Supprimer l'article
+        await prisma.article.delete({ where: { id } });
+
+        return NextResponse.json({ message: "✅ Article supprimé avec image et pivots." });
     });
 }
+
+
 

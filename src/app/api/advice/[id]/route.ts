@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse, NextRequest } from "next/server";
+import path from "path";
+import { unlink } from "fs/promises";
 import { withAdminGuard } from "@/lib/auth.guard";
 
 const prisma = new PrismaClient();
@@ -110,15 +112,32 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 // 🔴 DELETE : Supprimer un conseil
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
-    return withAdminGuard(req, async (_req) => {
-        const { id } = params;
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+    return withAdminGuard(req, async () => {
+        const { id } = context.params;
 
-        if (!id) {
-            return NextResponse.json({ error: "❌ ID manquant." }, { status: 400 });
+        const advice = await prisma.advice.findUnique({ where: { id } });
+        if (!advice) {
+            return NextResponse.json({ error: "❌ Conseil introuvable" }, { status: 404 });
         }
 
+        // 🔹 Supprimer les pivots
+        await prisma.relatedAdvice.deleteMany({ where: { fromAdviceId: id } });
+        await prisma.relatedAdvice.deleteMany({ where: { toAdviceId: id } });
+
+        // 🔹 Supprimer l’image
+        if (advice.imageUrl) {
+            const fileName = advice.imageUrl.split("/uploads/")[1];
+            if (fileName) {
+                const filePath = path.join(process.cwd(), "public/uploads", fileName);
+                await unlink(filePath).catch(() => null);
+            }
+        }
+
+        // 🔹 Supprimer le conseil
         await prisma.advice.delete({ where: { id } });
-        return NextResponse.json({ message: "✅ Conseil supprimé avec succès !" });
+
+        return NextResponse.json({ message: "✅ Conseil supprimé avec image et pivots." });
     });
 }
+

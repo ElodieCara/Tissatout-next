@@ -34,9 +34,7 @@ const Footer: React.FC = () => {
                     {/* Liens Utiles */}
                     <ul className="container__footer__information__navigation--liens">
                         <h3>Liens Utiles</h3>
-                        <li>
-                            <Link href="/contact">Contact</Link>
-                        </li>
+
                         <li>
                             <Link href="/confidentialite">Politique de confidentialité</Link>
                         </li>
@@ -49,6 +47,12 @@ const Footer: React.FC = () => {
                     <ul className="container__footer__information__navigation--liens">
                         <h3>Informations</h3>
                         <li>
+                            <Link href="/contact">Contact</Link>
+                        </li>
+                        <li>
+                            <Link href="/subscribe">Newsletter</Link>
+                        </li>
+                        {/* <li>
                             <Link href="/blog">Blog</Link>
                         </li>
                         <li>
@@ -56,11 +60,11 @@ const Footer: React.FC = () => {
                         </li>
                         <li>
                             <Link href="/temoignages">Témoignages</Link>
-                        </li>
+                        </li> */}
                     </ul>
 
                     {/* Avec Vous */}
-                    <ul className="container__footer__information__navigation--liens">
+                    {/* <ul className="container__footer__information__navigation--liens">
                         <h3>Avec vous !</h3>
                         <li>
                             <Link href="/feedback">Remarques ?</Link>
@@ -68,7 +72,7 @@ const Footer: React.FC = () => {
                         <li>
                             <Link href="/ideas">Vos idées !</Link>
                         </li>
-                    </ul>
+                    </ul>*/}
                 </div>
             </div>
         </footer>

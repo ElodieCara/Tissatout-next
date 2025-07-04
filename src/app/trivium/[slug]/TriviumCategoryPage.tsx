@@ -48,9 +48,9 @@ export default function TriviumCategory({ category, lessons }: { category: strin
             )}
 
             <div className="lesson-actions">
-                <Link href="/fiches/jeanne-darc.pdf">📝 Fiche à imprimer</Link>
-                {/* <Link href="/quiz/jeanne-darc">🎲 Faire le quiz</Link> */}
-                <Link href="/illustrations/jeanne-darc">🎨 Voir l’image</Link>
+                <Link href="/fiches/jeanne-darc.pdf"> Fiche à imprimer</Link>
+                {/* <Link href="/quiz/jeanne-darc">Faire le quiz</Link> */}
+                <Link href="/illustrations/jeanne-darc"> Voir l’image</Link>
             </div>
 
         </main>

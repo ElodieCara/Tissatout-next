@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import path from "path";
+import { unlink } from "fs/promises";
 import { withAdminGuard } from "@/lib/auth.guard";
 
 // 🔹 GET : Récupérer une seule leçon par ID
@@ -60,22 +62,41 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
 
 // 🔴 DELETE : Supprimer une leçon
 export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
-    return withAdminGuard(req, async (_req) => {
+    return withAdminGuard(req, async () => {
         const { id } = context.params;
 
         if (!id) {
-            return NextResponse.json({ error: "ID manquant." }, { status: 400 });
+            return NextResponse.json({ error: "❌ ID manquant." }, { status: 400 });
         }
 
-        try {
-            await prisma.lesson.delete({
-                where: { id }
-            });
+        // 1️⃣ Récupérer la leçon
+        const lesson = await prisma.lesson.findUnique({
+            where: { id },
+            select: { image: true },
+        });
 
-            return NextResponse.json({ success: true });
-        } catch (error) {
-            console.error("Erreur DELETE leçon :", error);
-            return NextResponse.json({ error: "Erreur lors de la suppression." }, { status: 500 });
+        if (!lesson) {
+            return NextResponse.json({ error: "❌ Leçon introuvable." }, { status: 404 });
         }
+
+        // 2️⃣ Supprimer l’image physique si présente
+        if (lesson.image) {
+            const fileName = lesson.image.split("/uploads/")[1];
+            if (fileName) {
+                const filePath = path.join(process.cwd(), "public/uploads", fileName);
+                await unlink(filePath).catch(err => {
+                    if (err.code === "ENOENT") {
+                        console.log("🔍 Image déjà absente");
+                    } else {
+                        console.error("❌ Erreur suppression image :", err);
+                    }
+                });
+            }
+        }
+
+        // 3️⃣ Supprimer la leçon
+        await prisma.lesson.delete({ where: { id } });
+
+        return NextResponse.json({ message: "✅ Leçon supprimée avec image." });
     });
 }
