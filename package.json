@@ -9,10 +9,11 @@
     "start": "next start",
     "lint": "next lint",
     "seed": "ts-node prisma/seed.ts",
-    "test": "jest",
+    "test": "npm run test:api && npm run test:e2e",
     "test:unit": "jest tests/unit",
     "test:integration": "jest tests/integration",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:api": "npm run test:unit && npm run test:integration"
   },
   "dependencies": {
     "@prisma/client": "^6.2.1",

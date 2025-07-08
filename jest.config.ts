@@ -18,6 +18,7 @@ const config: JestConfigWithTsJest = {
   transformIgnorePatterns: [
     '/node_modules/(?!jose).+\\.js$',
   ],
+  testPathIgnorePatterns: ["<rootDir>/tests/e2e/"],
 };
 
 export default config;
