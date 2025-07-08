@@ -18,7 +18,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ iconSrc, title, description, 
                         loading="lazy"
                         width={50}  // ✅ Largeur définie
                         height={50} // ✅ Hauteur définie
-                        unoptimized
+                        unoptimized={false}
                     />
                 )}
             </div>

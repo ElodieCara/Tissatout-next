@@ -1,12 +1,11 @@
 "use client";
 
-import { useGlobalLoading } from "./GlobalLoadingContext";
+
 import Image from "next/image";
 
-export default function Loading() {
-    const { isLoading } = useGlobalLoading();
 
-    if (!isLoading) return null;
+export default function Loading() {
+
 
     return (
         <div className="loading">

@@ -1,8 +1,7 @@
 import "@/styles/globals.scss";
 import Footer from "@/layout/Footer/Footer";
 import Header from "@/layout/Header/Header";
-import Loading from "./loading";
-import { GlobalLoadingProvider } from "./GlobalLoadingContext";
+
 
 export default function RootLayout({
   children,
@@ -18,12 +17,9 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <GlobalLoadingProvider>
-          <Loading />
-          <Header />
-          <main>{children}</main>
-          <Footer />
-        </GlobalLoadingProvider>
+        <Header />
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );

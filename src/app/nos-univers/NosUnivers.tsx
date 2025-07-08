@@ -147,7 +147,7 @@ export default function NosUnivers({ settings, mystery }: { settings: any; myste
                         </span>
                     </h2>
                     <p className="nos-univers__activites-intro">
-                        Découvrez des activités ludiques et éducatives classées par thématiques pour apprendre, créer et s’amuser à tout âge ! 🚀✨
+                        Découvrez des activités ludiques et éducatives classées par thématiques pour apprendre, créer et s’amuser à tout âge ! ✨
                     </p>
 
                     <div className="nos-univers__activites-filter">
