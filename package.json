@@ -12,7 +12,7 @@
     "test": "npm run test:api && npm run test:e2e",
     "test:unit": "jest tests/unit",
     "test:integration": "jest tests/integration",
-    "test:e2e": "playwright test",
+    "test:e2e": "dotenv -e .env.test -- cross-env NODE_ENV=test playwright test",
     "test:api": "npm run test:unit && npm run test:integration"
   },
   "dependencies": {
@@ -47,9 +47,12 @@
     "@types/prop-types": "^15.7.14",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "jest": "^30.0.4",
+    "mongodb": "^6.17.0",
     "prisma": "^6.2.1",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
