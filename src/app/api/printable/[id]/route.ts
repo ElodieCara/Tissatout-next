@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import path from "path";
 import { unlink } from "fs/promises";
 import { withAdminGuard } from "@/lib/auth.guard";
+import { ObjectId } from "mongodb";
 
 // 🔧 Fonction utilitaire pour normaliser la mysteryUntil
 function parseMysteryUntil(rawDate: string | null | undefined): Date | null {
@@ -19,6 +20,15 @@ function parseMysteryUntil(rawDate: string | null | undefined): Date | null {
 
 // GET d'une activité unique
 export async function GET(_req: Request, { params }: { params: { id: string } }) {
+
+    // 🔒 Vérifie si l'id est un ObjectId MongoDB valide
+    if (!ObjectId.isValid(params.id)) {
+        return NextResponse.json(
+            { error: "Invalid id" },
+            { status: 400 }
+        );
+    }
+
     try {
         const game = await prisma.printableGame.findUnique({
             where: { id: params.id },
@@ -52,6 +62,14 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
 
 // PUT pour mettre à jour une activité
 export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+    // 🔒 Vérifie si l'id est un ObjectId MongoDB valide
+    if (!ObjectId.isValid(context.params.id)) {
+        return NextResponse.json(
+            { error: "Invalid id" },
+            { status: 400 }
+        );
+    }
+
     return withAdminGuard(req, async (_req) => {
         const body = await req.json();
 
@@ -125,6 +143,14 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
 
 // DELETE d'une activité
 export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+    // 🔒 Vérifie si l'id est un ObjectId MongoDB valide
+    if (!ObjectId.isValid(context.params.id)) {
+        return NextResponse.json(
+            { error: "Invalid id" },
+            { status: 400 }
+        );
+    }
+
     return withAdminGuard(req, async () => {
         const { id } = context.params;
 
