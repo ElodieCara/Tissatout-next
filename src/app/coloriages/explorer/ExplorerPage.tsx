@@ -23,29 +23,31 @@ interface ExplorerPageProps {
     coloringCounts: Record<string, number>;
     topLikedDrawings: Drawing[];
     trendingDrawings: Drawing[];
+    categoriesData: Record<string, string[]>;
     coloringBanner: string;
     coloringTitle: string;
     coloringDesc: string;
 }
 
-const categoriesData: Record<string, string[]> = {
-    "Saisons et Fêtes": ["Hiver", "Printemps", "Été", "Automne", "Noël", "Halloween", "Pâques"],
-    "Thèmes": ["Animaux", "Véhicules", "Espace", "Pirates"],
-    "Âge": ["Tout Petits (0-3 ans)", "Dès 3 ans", "Dès 6 ans", "Dès 10 ans"],
-    "Trivium & Quadrivium": [
-        "Grammaire - Lettres",
-        "Grammaire - Mots",
-        "Grammaire - Chiffres",
-        "Logique - Puzzle",
-        "Logique - Coloriages numérotés",
-        "Logique - Labyrinthe",
-        "Rhétorique - Histoires",
-        "Rhétorique - Mythologie",
-        "Rhétorique - Philosophie"
-    ]
-};
+// const categoriesData: Record<string, string[]> = {
+//     "Saisons et Fêtes": ["Hiver", "Printemps", "Été", "Automne", "Noël", "Halloween", "Pâques"],
+//     "Thèmes": ["Animaux", "Véhicules", "Espace", "Pirates"],
+//     "Âge": ["Tout Petits (0-3 ans)", "Dès 3 ans", "Dès 6 ans", "Dès 10 ans"],
+//     "Trivium & Quadrivium": [
+//         "Grammaire - Lettres",
+//         "Grammaire - Mots",
+//         "Grammaire - Chiffres",
+//         "Logique - Puzzle",
+//         "Logique - Coloriages numérotés",
+//         "Logique - Labyrinthe",
+//         "Rhétorique - Histoires",
+//         "Rhétorique - Mythologie",
+//         "Rhétorique - Philosophie"
+//     ]
+// };
 
 export default function ExplorerPage({
+    categoriesData,
     educationalDrawings,
     drawingsByCategory,
     topImages,

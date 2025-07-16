@@ -27,7 +27,7 @@ export const metadata = {
 export default async function Page() {
     // 🔹 Données des dessins
     const educationalDrawings = await getEducationalDrawings();
-    const { drawingsByCategory, topImages, coloringCounts } = await getAllCategoriesWithDrawings();
+    const { categoriesData, drawingsByCategory, topImages, coloringCounts } = await getAllCategoriesWithDrawings();
     const topLikedDrawings = await getTopLikedDrawings();
     const trendingDrawings = await getTrendingDrawings();
 
@@ -41,6 +41,7 @@ export default async function Page() {
     return (
         <>
             <ExplorerPage
+                categoriesData={categoriesData}
                 educationalDrawings={educationalDrawings}
                 drawingsByCategory={drawingsByCategory}
                 topImages={topImages}

@@ -72,16 +72,25 @@ export async function getSimilarDrawings(category: string, currentId: string, li
 
 /** ✅ Récupère toutes les catégories + leurs dessins */
 export async function getAllCategoriesWithDrawings() {
+
+    const sections = await prisma.categorySection.findMany({
+        include: { categories: true },
+        orderBy: { name: "asc" },
+    });
+
     const categoriesData: Record<string, string[]> = {
-        "Saisons et Fêtes": ["Hiver", "Printemps", "Été", "Automne", "Noël", "Halloween", "Pâques"],
-        "Thèmes": ["Animaux", "Véhicules", "Espace", "Pirates"],
-        "Âge": ["Tout Petits (0-3 ans)", "Dès 3 ans", "Dès 6 ans", "Dès 10 ans"],
-        "Éducatif & Trivium": [
-            "Grammaire - Lettres", "Grammaire - Mots", "Grammaire - Chiffres",
-            "Logique - Puzzle", "Logique - Coloriages numérotés", "Logique - Labyrinthe",
-            "Rhétorique - Histoires", "Rhétorique - Mythologie", "Rhétorique - Philosophie"
-        ]
+        // "Saisons et Fêtes": ["Hiver", "Printemps", "Été", "Automne", "Noël", "Halloween", "Pâques"],
+        // "Thèmes": ["Animaux", "Véhicules", "Espace", "Pirates"],
+        // "Âge": ["Tout Petits (0-3 ans)", "Dès 3 ans", "Dès 6 ans", "Dès 10 ans"],
+        // "Éducatif & Trivium": [
+        //     "Grammaire - Lettres", "Grammaire - Mots", "Grammaire - Chiffres",
+        //     "Logique - Puzzle", "Logique - Coloriages numérotés", "Logique - Labyrinthe",
+        //     "Rhétorique - Histoires", "Rhétorique - Mythologie", "Rhétorique - Philosophie"
+        // ]
     };
+    for (const section of sections) {
+        categoriesData[section.name] = section.categories.map((cat) => cat.name);
+    }
 
     const drawings = await prisma.drawing.findMany({
         include: { category: true },

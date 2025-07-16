@@ -22,7 +22,7 @@ const ExplorerSidebar: React.FC<ExplorerSidebarProps> = ({ categories, selectedT
                 </li>
 
                 {/* 🔁 Liste des thèmes */}
-                {Object.keys(categories).map((theme) => (
+                {Object.keys(categories || {}).map((theme) => (
                     <li key={theme} className={selectedTheme === theme ? "active" : ""}>
                         <button onClick={() => onThemeSelect(theme)}>{theme}</button>
                     </li>
