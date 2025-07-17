@@ -151,9 +151,15 @@ export default function DrawingPage({ drawing }: { drawing: Drawing }) {
                             <span className="drawing-page__likes-count">{localLikes}</span>
                         </button>
 
-                        <div className="drawing-page__description">
-                            <p>Découvrez ce magnifique coloriage **{drawing.title}**, idéal pour les enfants et les amateurs d’illustrations créatives.</p>
-                        </div>
+                        {drawing.description && drawing.description.trim() !== "" ? (
+                            <div className="drawing-page__description">
+                                <p>{drawing.description}</p>
+                            </div>
+                        ) : (
+                            <div className="drawing-page__description">
+                                <p>Découvrez ce magnifique coloriage <strong>{drawing.title}</strong>, idéal pour les enfants et les amateurs d’illustrations créatives.</p>
+                            </div>
+                        )}
 
                         <div className="drawing-page__button">
                             <Button className="large" variant="primary" onClick={handlePrint}>Imprimer</Button>

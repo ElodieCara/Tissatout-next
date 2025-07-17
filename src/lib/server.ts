@@ -37,6 +37,7 @@ export async function getDrawings(): Promise<Drawing[]> {
         likes: d.likes ?? 0,
         slug: d.slug ?? "",
         createdAt: d.createdAt,
+        description: d.description,
         category: d.category ? { name: d.category.name } : undefined,
     }));
 }
@@ -46,11 +47,24 @@ export async function getDrawingById(id: string): Promise<Drawing | null> {
     console.log("🔍 Recherche du dessin avec l'ID :", id);
 
     try {
-        return await prisma.drawing.update({
+        const drawing = await prisma.drawing.update({
             where: { id },
             data: { views: { increment: 1 } },
             include: { category: true }, // ✅ Inclure la catégorie pour éviter les erreurs
         });
+
+        return {
+            id: drawing.id,
+            title: drawing.title,
+            imageUrl: drawing.imageUrl,
+            views: drawing.views ?? 0,
+            likes: drawing.likes ?? 0,
+            slug: drawing.slug ?? "",
+            createdAt: drawing.createdAt,
+            description: drawing.description,
+            category: drawing.category ? { name: drawing.category.name } : undefined,
+        };
+
     } catch (error) {
         console.error("❌ Erreur Prisma :", error);
         return null;
@@ -156,6 +170,7 @@ export async function getEducationalDrawings(): Promise<Record<string, Drawing[]
             likes: d.likes ?? 0,
             slug: d.slug ?? "",
             createdAt: d.createdAt,
+            description: d.description,
             category: d.category ? { name: d.category.name } : undefined
         }));
     }
@@ -179,6 +194,7 @@ export async function getTopLikedDrawings(limit: number = 4): Promise<Drawing[]>
         likes: d.likes ?? 0,
         category: d.category ? { name: d.category.name } : undefined,
         slug: d.slug ?? "",
+        description: d.description,
         createdAt: d.createdAt,
     }));
 }
@@ -199,6 +215,7 @@ export async function getTrendingDrawings(limit: number = 4): Promise<Drawing[]>
         likes: d.likes ?? 0,
         slug: d.slug ?? "",
         createdAt: d.createdAt,
+        description: d.description,
         category: d.category ? { name: d.category.name } : undefined,
     }));
 }
@@ -222,7 +239,18 @@ export async function getDrawingBySlug(slug: string): Promise<Drawing | null> {
             data: { views: { increment: 1 } }, // ✅ Incrémente les vues
         });
 
-        return drawing; // ✅ Retourne le dessin mis à jour
+        return {
+            id: drawing.id,
+            title: drawing.title,
+            imageUrl: drawing.imageUrl,
+            views: drawing.views ?? 0,
+            likes: drawing.likes ?? 0,
+            slug: drawing.slug ?? "",
+            createdAt: drawing.createdAt,
+            description: drawing.description,
+            category: drawing.category ? { name: drawing.category.name } : undefined,
+        }; // ✅ Retourne le dessin mis à jour
+
     } catch (error) {
         console.error("❌ Erreur Prisma :", error);
         return null;

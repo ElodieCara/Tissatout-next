@@ -217,6 +217,7 @@ model Drawing {
   updatedAt  DateTime         @updatedAt
   likes      Int              @default(0)
   slug       String           @unique
+  description String?
 
   // ✅ Relation Many-to-Many gérée par un modèle pivot
   ageCategories AgeCategoryDrawing[]

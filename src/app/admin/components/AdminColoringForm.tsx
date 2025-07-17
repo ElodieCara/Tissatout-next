@@ -11,6 +11,7 @@ interface Coloring {
     title: string;
     imageUrl: string;
     categoryId: string;
+    description?: string;
     ageCategories: string[];
     slug?: string;
 }
@@ -34,7 +35,8 @@ export default function AdminColoringForm({ coloringId }: { coloringId?: string 
         title: "",
         imageUrl: "",
         categoryId: "",
-        ageCategories: []
+        ageCategories: [],
+        description: "",
     });
 
     const [sections, setSections] = useState<Section[]>([]);
@@ -112,9 +114,12 @@ export default function AdminColoringForm({ coloringId }: { coloringId?: string 
     }, [coloringId]);
 
     // 🟡 Gestion des changements dans le formulaire
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    ) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
+
 
     // ✅ Gérer la sélection des catégories d'âge
     const handleAgeCategoryChange = (id: string) => {
@@ -178,6 +183,7 @@ export default function AdminColoringForm({ coloringId }: { coloringId?: string 
                     imageUrl: form.imageUrl,
                     categoryId: form.categoryId,
                     slug,
+                    description: form.description,
                     ageCategories: form.ageCategories // Envoi direct du tableau d'IDs
                 }),
             });
@@ -214,6 +220,18 @@ export default function AdminColoringForm({ coloringId }: { coloringId?: string 
                 <div className="admin-form__group">
                     <label htmlFor="title">Titre</label>
                     <input type="text" name="title" value={form.title} onChange={handleChange} required />
+                </div>
+
+                {/* 📌 Description */}
+                <div className="admin-form__group">
+                    <label htmlFor="description">Description</label>
+                    <textarea
+                        name="description"
+                        value={form.description || ""}
+                        onChange={handleChange}
+                        rows={4}
+                        placeholder="Description pédagogique, historique ou SEO du coloriage"
+                    />
                 </div>
 
                 {/* ✅ Sélection des âges concernés */}

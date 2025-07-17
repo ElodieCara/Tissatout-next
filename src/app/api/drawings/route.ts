@@ -39,7 +39,7 @@ export async function GET(req: Request) {
 export async function POST(req: NextRequest) {
     return withAdminGuard(req, async (_req) => {
         try {
-            const { title, imageUrl, categoryId, ageCategories } = await req.json();
+            const { title, imageUrl, categoryId, ageCategories, description } = await req.json();
 
             if (!title || !imageUrl || !categoryId) {
                 return NextResponse.json(
@@ -87,6 +87,7 @@ export async function POST(req: NextRequest) {
                     imageUrl,
                     categoryId,
                     slug,
+                    description,
                     ageCategories: {
                         create: ageCategories.map((ageId: string) => ({
                             ageCategory: { connect: { id: ageId } }
@@ -108,7 +109,7 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
     return withAdminGuard(req, async (_req) => {
         try {
-            const { id, title, imageUrl, categoryId, ageCategories } = await req.json();
+            const { id, title, imageUrl, categoryId, ageCategories, description } = await req.json();
 
             if (!id || !title || !imageUrl || !categoryId) {
                 return NextResponse.json(
@@ -152,7 +153,8 @@ export async function PUT(req: NextRequest) {
                         create: ageCategories.map((ageId: string) => ({
                             ageCategory: { connect: { id: ageId } }
                         }))
-                    }
+                    },
+                    description,
                 },
                 include: { ageCategories: true }
             });

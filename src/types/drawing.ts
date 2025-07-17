@@ -3,6 +3,7 @@ export interface Drawing {
     id: string;
     title: string;
     imageUrl: string;
+    description?: string | null;
     views: number;
     category?: {
         name: string;

@@ -8,14 +8,14 @@ import { ObjectId } from "mongodb";
 const prisma = new PrismaClient();
 
 // 🟢 Récupérer un coloriage
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: { params: { id: string } }) {
     try {
-        if (!params.id) {
+        if (!context.params.id) {
             return NextResponse.json({ error: "ID manquant" }, { status: 400 });
         }
 
         const drawing = await prisma.drawing.findUnique({
-            where: { id: params.id },
+            where: { id: context.params.id },
             include: {
                 category: true,
                 ageCategories: {
@@ -44,7 +44,7 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
         try {
             const { id } = context.params; // ✅ Attendre `params.id`
             const body = await req.json();
-            const { title, imageUrl, categoryId, ageCategories, slug } = body;
+            const { title, imageUrl, categoryId, ageCategories, slug, description } = body;
 
             if (!title || !imageUrl || !categoryId) {
                 return NextResponse.json({ error: "❌ Titre, image et catégorie requis" }, { status: 400 });
@@ -74,6 +74,7 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
                     imageUrl,
                     categoryId,
                     slug: slug || undefined,
+                    description,
                     ageCategories: {
                         deleteMany: {}, // Supprimer les anciens liens
                         create: ageCategoryIds.map((ageId: string) => ({
