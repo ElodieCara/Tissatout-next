@@ -34,7 +34,6 @@
     }
 
     li {
-        margin-bottom: 0.75rem;
         position: relative;
 
         button {
@@ -51,7 +50,7 @@
 
             &:hover {
                 background: #f8f5f1;
-                color: #f8f5f1;
+                color: $tertiary-color;
             }
 
             &:active {
