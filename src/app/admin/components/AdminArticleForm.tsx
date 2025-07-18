@@ -14,7 +14,9 @@ const categoryIcons: Record<string, string> = {
     "chiffre": "/icons/chiffre.png",
     "logique": "/icons/logique.png",
     "mobilité": "/icons/mobilite.png",
-    "craft": "/icons/crafts.png"
+    "craft": "/icons/crafts.png",
+    "histoire": "/icons/redaction.png",
+    "savoirs": "/icons/telescope.png"
 };
 
 interface Section {
@@ -315,6 +317,8 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                         <option value="logique">🧩 Jeux de logique</option>
                         <option value="mobilité">🚀 Jeux de mobilité</option>
                         <option value="craft">✂️ Loisirs créatifs</option>
+                        <option value="histoire">📜 Histoire & Découvertes</option>
+                        <option value="savoirs">🎓 Grands Savoirs</option>
                     </select>
                 </div>
 
@@ -402,7 +406,7 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                                     onChange={(e) => updateSection(index, "content", e.target.value)}
                                     className="admin-form__textarea"
                                 />
-                                <div className="admin-form__preview">
+                                <div className="admin-form__preview markdown-content">
                                     <ReactMarkdown>{section.content}</ReactMarkdown>
                                 </div>
                             </div>

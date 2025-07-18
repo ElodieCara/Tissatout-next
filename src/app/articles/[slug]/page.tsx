@@ -132,7 +132,7 @@ export default async function ArticlePage({ params }: Props) {
                         />
                     </div>
                     <header className="article__header">
-                        <div className="article__top">
+                        <div className="article__top no-print">
 
                             <div className="advice__share">
                                 <ShareActions imageUrl={article.image || ""} title={article.title} />
@@ -156,7 +156,7 @@ export default async function ArticlePage({ params }: Props) {
                                     alt="Icône de catégorie"
                                     width={48}
                                     height={48}
-                                    className="article__icon"
+                                    className="article__icon  no-print"
                                 />
                             )}
                             <h1 className="article__title">{article.title}</h1>

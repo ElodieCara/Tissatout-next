@@ -13,6 +13,21 @@
         width: 100%;
         height: auto;
     }
+
+    /* Cacher images si option "pas d'image" cochée */
+    body.no-image-print img,
+    body.no-image-print figure,
+    body.no-image-print picture,
+    // body.no-image-print .article-banner,
+
+    // body.no-image-print .article-banner *,
+    body.no-image-print .article__grid-image,
+    body.no-image-print .article__image,
+    body.no-image-print .advice__section-image,
+    body.no-image-print .lesson__section-image,
+    body.no-image-print .idea__section-image {
+        display: none !important;
+    }
 }
 
 /* 🖨️ Pour impression de TOUT ce qui est article, advice, idea, lesson */
@@ -23,20 +38,6 @@
         box-shadow: none !important;
         // border: none !important;
         background: none !important;
-    }
-
-    /* Cacher images si option "pas d'image" cochée */
-    body.no-image-print img,
-    body.no-image-print figure,
-    body.no-image-print picture,
-    body.no-image-print .article-banner,
-    body.no-image-print .article-banner *,
-    body.no-image-print .article__grid-image,
-    body.no-image-print .article__image,
-    body.no-image-print .advice__section-image,
-    body.no-image-print .lesson__section-image,
-    body.no-image-print .idea__section-image {
-        display: none !important;
     }
 
     /* Cacher navigation et éléments superflus */
@@ -50,9 +51,19 @@
     .article__comments,
     .article__tags,
     .article__print,
+    .article__title,
     .article__related,
+    .article__grid-image,
+    .article-banner__buttons,
     .advice__share {
         display: none !important;
+    }
+
+    .article__meta {
+        display: block !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        /* Pour compatibilité moderne */
     }
 
     /* Forcer l'affichage du contenu principal */
@@ -69,10 +80,11 @@
         margin: 0;
     }
 
+
     /* Rendre visible et propre le titre */
     .article__header,
     .article__title-block,
-    .article__title {
+    .article-banner {
         display: block !important;
         visibility: visible !important;
         color: black !important;
@@ -81,77 +93,113 @@
         margin-bottom: 2rem;
         font-size: 2.5rem;
         font-weight: bold;
+        background-color: none !important;
     }
 
-    /* ✅ Pour les images dans le texte à l'impression */
-    .print-article img.article__image,
-    .print-advice img.advice__section-image,
-    .print-idea img.idea__section-image,
-    .print-lesson img.lesson__section-image,
-    .article__grid-image img,
-    .article__section img,
-    .advice__section img,
-    .idea__section img,
-    .lesson__section img {
-        max-width: 40% !important;
+    /* Neutralise tous les backgrounds à l’impression */
+    .article-banner,
+    .article-banner__background,
+    .article-banner__container,
+    .article-banner__image,
+    .article-banner__content {
+        background: none !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+    }
+
+    /* Retire le fond sur tout le body */
+    body,
+    .article,
+    .article__container {
+        background: #fff !important;
+        background-color: #fff !important;
+        color: #222 !important;
+    }
+
+    /* Option : supprime l’image de fond de la bannière */
+    .article-banner__background {
+        display: none !important;
+    }
+}
+
+@media print {
+
+    .article__sections-grid,
+    .article__section {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+    }
+
+    section,
+    .article__section,
+    .article__sections-grid,
+    .article__section-content,
+    .article__section-header,
+    .article__section-title {
+        min-height: 0 !important;
         height: auto !important;
-        float: right;
-        margin: 1rem auto;
-        page-break-inside: avoid;
-        break-inside: avoid;
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
     }
+}
 
+@media print {
+
+    .article__header,
+    .print-header {
+        text-align: left !important;
+        background: none !important;
+        margin-bottom: 0.8rem !important;
+        padding-bottom: 0 !important;
+        page-break-after: avoid !important;
+    }
 
     .article__title,
-    .advice__title,
-    .idea__title,
-    .lesson__title {
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
-        color: black !important;
+    .print-title {
+        font-size: 1.4rem !important;
+        font-weight: bold !important;
+        margin: 0 0 0.5rem 0 !important;
+        color: #222 !important;
+        line-height: 1.15 !important;
     }
 
-    /* Style général des paragraphes */
+    .article__description,
+    .print-desc {
+        font-size: 1rem !important;
+        color: #555 !important;
+        margin: 0 0 0.3rem 0 !important;
+        max-width: 90% !important;
+    }
+
+    .article__meta,
+    .print-meta {
+        font-size: 0.85rem !important;
+        color: #888 !important;
+        margin: 0 0 0.7rem 0 !important;
+    }
+
+    .article__image,
+    .print-image {
+        display: block !important;
+        max-width: 60% !important;
+        margin: 0.5rem 0 1.5rem 0 !important;
+        float: none !important;
+        page-break-inside: avoid !important;
+    }
+
+    .article__sections-grid,
+    .print-body {
+        display: block !important;
+        margin-top: 0 !important;
+        column-count: 1 !important;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
     .article__section,
-    .advice__section,
-    .idea__section,
-    .lesson__section {
-        margin-bottom: 2rem;
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-
-    p,
-    h1,
-    h2,
-    h3,
-    h4,
-    section,
-    article,
-    div {
-        page-break-inside: avoid;
-        break-inside: avoid;
-    }
-
-    img {
-        max-width: 100% !important;
-        height: auto !important;
-        page-break-inside: avoid;
-        break-inside: avoid;
-        display: block;
-        margin: 1rem auto;
-    }
-
-    body {
-        background: white !important;
-        color: black !important;
-        margin: 0;
-        padding: 0;
-    }
-
-    /* Ajoute une marge papier propre */
-    @page {
-        margin: 1.5cm;
+    .print-section {
+        display: block !important;
+        margin: 0 0 1.5rem 0 !important;
+        page-break-inside: avoid !important;
     }
 }

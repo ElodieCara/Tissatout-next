@@ -257,6 +257,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             background-color: #fff;
             text-align: center;
+            height: 100%;
         }
 
         &-summary {
@@ -448,4 +449,42 @@
         margin-top: 3rem;
         color: #203e75;
     }
+}
+
+.md-p {
+    margin: 0 0 1.4em 0;
+    line-height: 1.7;
+}
+
+.md-ul,
+.md-ol {
+    margin: 0 0 1.2em 2em;
+    padding-left: 1.4em;
+}
+
+.md-li {
+    margin-bottom: 0.6em;
+}
+
+.md-h2,
+.md-h3,
+.md-h4 {
+    margin-top: 2em;
+    margin-bottom: 0.8em;
+    font-weight: bold;
+    font-size: 1.25em;
+}
+
+.md-strong {
+    font-weight: bold;
+}
+
+.md-em {
+    font-style: italic;
+}
+
+
+.article__section-content {
+    /* Ajoute aussi une marge pour séparer du titre */
+    margin-top: 1em;
 }
