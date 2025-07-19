@@ -17,12 +17,12 @@ const categoriesData = {
         "Grammaire - Lettres",
         "Grammaire - Mots",
         "Grammaire - Chiffres",
-        "Logique - Puzzle",
+        // "Logique - Puzzle",
         "Logique - Coloriages numérotés",
-        "Logique - Labyrinthe",
-        "Rhétorique - Histoires",
-        "Rhétorique - Mythologie",
-        "Rhétorique - Philosophie"
+        // "Logique - Labyrinthe",
+        // "Rhétorique - Histoires",
+        // "Rhétorique - Mythologie",
+        // "Rhétorique - Philosophie"
     ]
 };
 
@@ -159,29 +159,37 @@ export default function ColoriagePage({
                 <section id="ages" className="coloriages__theme-section">
                     <div className="coloriages__theme-section-title" >
                         <img src="/icons/titres/nounours.png" alt="" />
-                        <h2> Coloriages par âge</h2>
+                        <h2>Coloriages par âge</h2>
                         <Link
                             href={`/coloriages/explorer?categorie=${encodeURIComponent("Âge")}`}
                             className="section-button"
                         >
                             Explorer cette tranche d’âge
                         </Link>
-
                     </div>
-                    {Object.entries(categoriesData["Âge"]).map(([label, category]) => (
-                        <div key={category}>
+                    {categoriesData["Âge"].map((label) => (
+                        <div key={label}>
                             <h3>🖍 {label}</h3>
                             <div className="coloriages__theme-grid">
                                 {drawings
-                                    .filter(d => d.category?.name === category)
+                                    .filter(d => d.category?.name === label)
                                     .slice(0, 4)
                                     .map(drawing => (
-                                        <DrawingCard key={drawing.id} id={drawing.id} imageUrl={drawing.imageUrl} theme={drawing.title} views={drawing.views ?? 0} likeCount={drawing.likes ?? 0} slug={drawing.slug || generateSlug(drawing.title, drawing.id)} />
+                                        <DrawingCard
+                                            key={drawing.id}
+                                            id={drawing.id}
+                                            imageUrl={drawing.imageUrl}
+                                            theme={drawing.title}
+                                            views={drawing.views ?? 0}
+                                            likeCount={drawing.likes ?? 0}
+                                            slug={drawing.slug || generateSlug(drawing.title, drawing.id)}
+                                        />
                                     ))}
                             </div>
                         </div>
                     ))}
                 </section>
+
 
                 {/* 4️⃣ Coloriages éducatifs (Trivium) 📚 */}
                 <section id="educatif" className="coloriages__theme-section">
