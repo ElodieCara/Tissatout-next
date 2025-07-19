@@ -6,7 +6,7 @@ export default async function AdminPrintableFormPage({
     params: { gameId: string };
 }) {
     // ⚠️ await avant d’extraire gameId
-    const { gameId } = await params;
+    const { gameId } = params;
 
     return <AdminPrintableForm gameId={gameId} />;
 }
