@@ -22,11 +22,29 @@ export const metadata: Metadata = {
     },
 };
 
-
 export default async function Page() {
     const drawings = await getDrawings(); // ✅ Données des dessins
 
     const settings = await prisma.siteSettings.findFirst(); // ✅ Données des bannières
+
+    // 🟡 Récupère dynamiquement les catégories pour chaque section
+    const themesSection = await prisma.categorySection.findFirst({
+        where: { name: "Thèmes" },
+        include: { categories: true }
+    });
+    const agesSection = await prisma.categorySection.findFirst({
+        where: { name: "Âge" },
+        include: { categories: true }
+    });
+    // 🔧 CORRECTION : Utilise le bon nom de section
+    const educatifSection = await prisma.categorySection.findFirst({
+        where: { name: "Éducatif & Trivium" }, // ✅ Nom correct de votre section
+        include: { categories: true }
+    });
+
+    const themes = themesSection?.categories || [];
+    const ages = agesSection?.categories || [];
+    const educatif = educatifSection?.categories || []; // ✅ Renommé pour plus de clarté
 
     const coloringBanner = settings?.coloringBanner || "/assets/slide3.png";
     const coloringTitle = settings?.coloringTitle || "🎨 Coloriages à imprimer";
@@ -38,6 +56,9 @@ export default async function Page() {
             coloringBanner={coloringBanner}
             coloringTitle={coloringTitle}
             coloringDesc={coloringDesc}
+            themes={themes}
+            ages={ages}
+            educatif={educatif} // ✅ Passe les catégories éducatives
         />
     );
 }

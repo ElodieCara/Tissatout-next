@@ -1,3 +1,4 @@
+// src/app/ideas/[slug]/page.tsx
 import { notFound } from "next/navigation";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
@@ -9,15 +10,91 @@ import ReactMarkdown from "react-markdown";
 import ArticleFeedback from "@/components/Feedback/Feedback";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import ShareActions from "@/components/ShareActions/ShareActions";
-import type { Metadata } from "next";
 import { getRandomSuggestions } from "@/lib/suggestions";
 import SuggestionsForParents from "@/components/SuggestionsForParents/SuggestionsForParents";
 import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
+import type { Metadata } from "next";
+import Link from "next/link";
+
+type Props = {
+    params: { slug: string };
+};
+
+type Section = {
+    id: string;
+    title: string;
+    content: string;
+    style: string | null;
+    imageUrl?: string | null;
+    coloring?: {
+        id: string;
+        title: string;
+        slug: string;
+        imageUrl?: string;
+    } | null;
+    activity?: {
+        id: string;
+        title: string;
+        slug: string;
+        imageUrl?: string;
+    } | null;
+};
+
+type IdeaWithRelations = {
+    id: string;
+    title: string;
+    description?: string;
+    theme?: string;
+    image?: string;
+    slug: string;
+    sections: Section[];
+    ageCategories: {
+        ageCategory: {
+            id: string;
+            title: string;
+            slug: string;
+            imageBanner: string;
+        };
+    }[];
+    relatedArticles: {
+        toArticle: {
+            id: string;
+            title: string;
+            slug: string;
+            image?: string;
+        };
+    }[];
+    relatedLinks: {
+        toIdea: {
+            id: string;
+            title: string;
+            slug: string;
+        };
+    }[];
+    relatedColorings: {
+        toColoring: {
+            id: string;
+            title: string;
+            slug: string;
+            image?: string;
+        };
+    }[];
+    relatedActivities: {
+        toActivity: {
+            id: string;
+            title: string;
+            slug: string;
+            imageUrl?: string;
+        };
+    }[];
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const idea = await prisma.idea.findUnique({ where: { slug: params.slug } });
 
-    if (!idea) return { title: "Idée non trouvée" };
+    if (!idea) {
+        return { title: "Idée non trouvée" };
+    }
 
     return {
         title: `${idea.title} | Tissatout`,
@@ -30,55 +107,38 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
 }
 
-type Props = {
-    params: { slug: string };
-};
-
-// 🔥 Définition du type Section
-type Section = {
-    id: string;
-    title: string;
-    content: string;
-    style: string | null;
-    imageUrl?: string | null;
-};
-
-
 export default async function IdeaPage({ params }: Props) {
-    const { slug } = await params;
-
     const idea = await prisma.idea.findUnique({
-        where: { slug },
+        where: { slug: params.slug },
         include: {
             ageCategories: { include: { ageCategory: true } },
-            sections: true,
-            relatedLinks: {
+            relatedLinks: { include: { toIdea: true } },
+            relatedArticles: { include: { toArticle: true } },
+
+            // Sections avec leurs coloriages et activités liés
+            sections: {
                 include: {
-                    toIdea: true,
-                },
+                    coloring: true,  // Drawing lié via coloringId
+                    activity: true   // Activity lié via activityId
+                }
             },
-            relatedArticles: { // 🔥 Ajout ici
-                include: {
-                    toArticle: true,
-                },
-            },
+
+            // Relations M2M pour compatibilité
+            relatedColorings: { include: { toColoring: true } },
+            relatedActivities: { include: { toActivity: true } },
         },
     });
 
-    if (!idea) {
-        notFound();
-    }
+    if (!idea) notFound();
+    const ideaTyped = idea as unknown as IdeaWithRelations;
 
     const suggestions = await getRandomSuggestions("idees", 4, {
         excludeId: idea.id,
-        ageCategoryIds: idea.ageCategories.map(ac => ac.ageCategoryId),
+        ageCategoryIds: ideaTyped.ageCategories.map(ac => ac.ageCategory.id),
     });
-
-    console.log("📥 Articles liés récupérés :", idea.relatedArticles);
 
     return (
         <>
-            {/* 🖼️ Bandeau principal */}
             <header className="idea-banner">
                 <div className="idea-banner__background">
                     {idea.image && (
@@ -90,23 +150,15 @@ export default async function IdeaPage({ params }: Props) {
                         />
                     )}
                 </div>
-
                 <div className="idea-banner__container">
                     {idea.image && (
                         <div className="idea-banner__image">
-                            <Image
-                                src={idea.image}
-                                alt={idea.title}
-                                width={400}
-                                height={400}
-                            />
+                            <Image src={idea.image} alt={idea.title} width={400} height={400} />
                         </div>
                     )}
                     <div className="idea-banner__content">
-                        <h2 className="idea-banner__title">{idea.title || "Illustration de l’idée"}</h2>
-                        {idea.theme && (
-                            <p className="idea-banner__theme">🌟 {idea.theme}</p>
-                        )}
+                        <h2 className="idea-banner__title">{idea.title}</h2>
+                        {idea.theme && <p className="idea-banner__theme">🌟 {idea.theme}</p>}
                         {idea.description && (
                             <p className="idea-banner__description">{idea.description}</p>
                         )}
@@ -117,11 +169,8 @@ export default async function IdeaPage({ params }: Props) {
                 </div>
             </header>
 
-            {/* 🧱 Contenu principal */}
             <main className="idea print-idea">
                 <div className="idea__container">
-
-                    {/* 🧭 Fil d'Ariane */}
                     <div className="no-print">
                         <Breadcrumb
                             crumbs={[
@@ -132,19 +181,14 @@ export default async function IdeaPage({ params }: Props) {
                         />
                     </div>
 
-                    {/* 🔥 Wrapper flex */}
                     <div className="idea__body">
-
-                        {/* 🧱 Colonne gauche = Contenu principal */}
                         <div className="idea__main">
                             <h1 className="idea__title">{idea.title}</h1>
-
                             <div className="idea__share">
                                 <ShareActions imageUrl={idea.image || ""} title={idea.title} />
                             </div>
 
-                            {/* ➡️ Boucle sur toutes les sections */}
-                            {idea.sections?.map((section: Section) => (
+                            {ideaTyped.sections.map(section => (
                                 <section
                                     key={section.id}
                                     id={section.title.replace(/\s+/g, "-").toLowerCase()}
@@ -156,47 +200,81 @@ export default async function IdeaPage({ params }: Props) {
 
                                     {section.imageUrl && (
                                         <div className="idea__section-image">
-                                            <Image src={section.imageUrl} alt={section.title} width={600} height={400} />
+                                            <Image
+                                                src={section.imageUrl}
+                                                alt={section.title}
+                                                width={600}
+                                                height={400}
+                                            />
                                         </div>
                                     )}
+
+
+                                    {/* 🖍️ Coloriage associé à la section */}
+                                    {section.coloring && (
+                                        <div className="idea__related-item center-btn">
+                                            <Link href={`/coloriages/${section.coloring.slug}`}>
+                                                <button
+                                                    type="button"
+                                                    className=" button red-button "
+                                                >
+                                                    Voir le coloriage
+                                                </button>
+                                            </Link>
+                                        </div>
+                                    )}
+
+                                    {section.activity && (
+                                        <div className="idea__related-item center-btn">
+                                            <h4>🧩 Activité associée</h4>
+                                            <Link href={`/activites-a-imprimer/${section.activity.slug}`}>
+
+                                                <button className="button red-button">
+                                                    Voir l’activité associée
+                                                </button>
+
+                                            </Link>
+                                        </div>
+                                    )}
+
                                     <ReactMarkdown>{section.content}</ReactMarkdown>
+
                                 </section>
                             ))}
-
                         </div>
 
-                        {/* 📚 Colonne droite = Sommaire + Pour aller plus loin */}
                         <aside className="idea__sidebar">
                             <div className="idea__toc">
                                 <TableOfContents
-                                    sections={[...idea.sections.map((section) => ({
+                                    sections={ideaTyped.sections.map(section => ({
                                         title: section.title,
                                         id: section.title.replace(/\s+/g, "-").toLowerCase(),
-                                    }))]}
+                                    }))}
                                 />
                             </div>
 
                             <section className="idea__related">
                                 <h2 className="idea__related-title">🔎 Pour aller plus loin</h2>
                                 <p>Découvre d'autres idées inspirantes !</p>
-
                                 <div className="idea__related-list">
-                                    {idea.relatedArticles && idea.relatedArticles.length > 0 ? (
-                                        idea.relatedArticles.map((relation) => (
+                                    {ideaTyped.relatedArticles.length > 0 ? (
+                                        ideaTyped.relatedArticles.map(({ toArticle }) => (
                                             <a
-                                                key={relation.toArticle.id}
-                                                href={`/articles/${relation.toArticle.slug}`}
+                                                key={toArticle.id}
+                                                href={`/articles/${toArticle.slug}`}
                                                 className="idea__related-item"
                                             >
                                                 <div className="idea__related-card">
-                                                    {relation.toArticle.image && (
+                                                    {toArticle.image && (
                                                         <img
-                                                            src={relation.toArticle.image}
-                                                            alt={relation.toArticle.title}
+                                                            src={toArticle.image}
+                                                            alt={toArticle.title}
                                                             className="idea__related-image"
                                                         />
                                                     )}
-                                                    <h3 className="idea__related-name">{relation.toArticle.title}</h3>
+                                                    <h3 className="idea__related-name">
+                                                        {toArticle.title}
+                                                    </h3>
                                                 </div>
                                             </a>
                                         ))
@@ -205,27 +283,21 @@ export default async function IdeaPage({ params }: Props) {
                                     )}
                                 </div>
                             </section>
-
                         </aside>
-
                     </div>
 
-                    {/* 💬 Et toi, qu'en as-tu pensé ? */}
                     <section className="idea__comments no-print">
                         <ArticleFeedback resourceType="idea" resourceId={idea.id} />
                         <CommentList resourceType="idea" resourceId={idea.id} />
                     </section>
 
-                    {/* 📰 Newsletter */}
                     <section className="idea__newsletter no-print">
                         <NewsletterBanner />
                     </section>
 
-                    {/* 👉 Suggestions */}
                     <section className="idea__suggestions no-print">
                         <SuggestionsForParents items={suggestions} />
                     </section>
-
                 </div>
                 <BackToTop />
             </main>

@@ -54,7 +54,7 @@ model Comment {
   id          String         @id @default(auto()) @map("_id") @db.ObjectId
   content     String
   author      String?
-  articleId   String?         @db.ObjectId
+  articleId   String?        @db.ObjectId
   article     Article?       @relation(fields: [articleId], references: [id])
   adviceId    String?        @db.ObjectId
   advice      Advice?        @relation(fields: [adviceId], references: [id])
@@ -87,10 +87,12 @@ model Idea {
   comments    Comment[]
 
   // ✅ Relation Many-to-Many gérée par un modèle pivot
-  ageCategories   AgeCategoryIdea[]
-  relatedArticles RelatedIdeaArticle[] @relation("FromIdeaArticle")
-  relatedLinks    RelatedIdea[]        @relation("FromIdea")
-  linkedFrom      RelatedIdea[]        @relation("ToIdea")
+  ageCategories     AgeCategoryIdea[]
+  relatedArticles   RelatedIdeaArticle[]  @relation("FromIdeaArticle")
+  relatedColorings  RelatedIdeaColoring[] @relation("FromIdeaColoring")
+  relatedActivities RelatedIdeaActivity[] @relation("FromIdeaActivity")
+  relatedLinks      RelatedIdea[]         @relation("FromIdea")
+  linkedFrom        RelatedIdea[]         @relation("ToIdea")
 }
 
 model RelatedIdea {
@@ -101,12 +103,36 @@ model RelatedIdea {
   toIdea     Idea   @relation("ToIdea", fields: [toIdeaId], references: [id])
 }
 
+model RelatedIdeaColoring {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  fromIdea     Idea    @relation("FromIdeaColoring", fields: [fromIdeaId], references: [id])
+  fromIdeaId   String  @db.ObjectId
+  toColoring   Drawing @relation(fields: [toColoringId], references: [id])
+  toColoringId String  @db.ObjectId
+}
+
+model RelatedIdeaActivity {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  fromIdea     Idea     @relation("FromIdeaActivity", fields: [fromIdeaId], references: [id])
+  fromIdeaId   String   @db.ObjectId
+  toActivity   Activity @relation(fields: [toActivityId], references: [id])
+  toActivityId String   @db.ObjectId
+}
+
 model IdeaSection {
   id       String  @id @default(auto()) @map("_id") @db.ObjectId
   title    String
   content  String
   style    String?
   imageUrl String?
+
+  coloringId   String?  @db.ObjectId
+  coloring     Drawing? @relation(fields: [coloringId], references: [id], name: "SectionToColoring")
+
+  activityId   String?  @db.ObjectId
+  activity     Activity? @relation(fields: [activityId], references: [id], name: "SectionToActivity")
+
+
   idea     Idea    @relation(fields: [ideaId], references: [id], onDelete: Cascade)
   ideaId   String  @db.ObjectId
 }
@@ -152,12 +178,15 @@ model AgeCategoryTag {
 }
 
 model Activity {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  id            String                @id @default(auto()) @map("_id") @db.ObjectId
   title         String
+  slug          String                @unique
   description   String
   link          String?
-  ageCategory   AgeCategory @relation(fields: [ageCategoryId], references: [id])
-  ageCategoryId String      @db.ObjectId
+  ageCategory   AgeCategory           @relation(fields: [ageCategoryId], references: [id])
+  ageCategoryId String                @db.ObjectId
+  relatedIdeas  RelatedIdeaActivity[]
+  sections      IdeaSection[]  @relation(name: "SectionToActivity")
 }
 
 model AdviceSection {
@@ -210,17 +239,19 @@ model Drawing {
   title    String
   imageUrl String
 
-  views      Int              @default(0)
-  categoryId String?          @db.ObjectId
-  category   DrawingCategory? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  createdAt  DateTime         @default(now())
-  updatedAt  DateTime         @updatedAt
-  likes      Int              @default(0)
-  slug       String           @unique
+  views       Int              @default(0)
+  categoryId  String?          @db.ObjectId
+  category    DrawingCategory? @relation(fields: [categoryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  likes       Int              @default(0)
+  slug        String           @unique
   description String?
+  sections    IdeaSection[]  @relation(name: "SectionToColoring")
 
   // ✅ Relation Many-to-Many gérée par un modèle pivot
   ageCategories AgeCategoryDrawing[]
+  relatedIdeas  RelatedIdeaColoring[]
 }
 
 model CategorySection {
@@ -447,15 +478,14 @@ model GameType {
 }
 
 model Subscriber {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  emailData     String
-  emailIv       String
-  emailHash     String   @unique
-  status        String   @default("pending") // pending | active | unsubscribed
-  confirmedAt   DateTime?
-  confirmationToken String?                   // Token de confirmation
-  unsubscribeHash   String? 
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  emailData         String
+  emailIv           String
+  emailHash         String    @unique
+  status            String    @default("pending") // pending | active | unsubscribed
+  confirmedAt       DateTime?
+  confirmationToken String? // Token de confirmation
+  unsubscribeHash   String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
-

@@ -38,7 +38,7 @@ export async function getDrawings(): Promise<Drawing[]> {
         slug: d.slug ?? "",
         createdAt: d.createdAt,
         description: d.description,
-        category: d.category ? { name: d.category.name } : undefined,
+        category: d.category ? { id: d.category.id, name: d.category.name } : undefined,
     }));
 }
 
@@ -171,7 +171,7 @@ export async function getEducationalDrawings(): Promise<Record<string, Drawing[]
             slug: d.slug ?? "",
             createdAt: d.createdAt,
             description: d.description,
-            category: d.category ? { name: d.category.name } : undefined
+            category: d.category ? { id: d.category.id, name: d.category.name } : undefined
         }));
     }
 
@@ -192,7 +192,7 @@ export async function getTopLikedDrawings(limit: number = 4): Promise<Drawing[]>
         imageUrl: d.imageUrl,
         views: d.views ?? 0,
         likes: d.likes ?? 0,
-        category: d.category ? { name: d.category.name } : undefined,
+        category: d.category ? { id: d.category.id, name: d.category.name } : undefined,
         slug: d.slug ?? "",
         description: d.description,
         createdAt: d.createdAt,
@@ -216,7 +216,7 @@ export async function getTrendingDrawings(limit: number = 4): Promise<Drawing[]>
         slug: d.slug ?? "",
         createdAt: d.createdAt,
         description: d.description,
-        category: d.category ? { name: d.category.name } : undefined,
+        category: d.category ? { id: d.category.id, name: d.category.name } : undefined,
     }));
 }
 

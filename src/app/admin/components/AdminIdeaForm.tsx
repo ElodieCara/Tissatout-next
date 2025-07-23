@@ -14,8 +14,29 @@ interface Section {
     content: string;
     style?: string;
     imageUrl?: string;
+    relatedColoringId?: string;
+    relatedActivityId?: string;
+
 }
 
+interface RawSection {
+    title?: string;
+    content?: string;
+    style?: string;
+    imageUrl?: string;
+    relatedColoringId?: string;
+    relatedActivityId?: string;
+}
+
+interface RawRelation {
+    id: string;
+}
+
+interface OptionWithImage {
+    id: string;
+    title: string;
+    imageUrl: string;
+}
 
 export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
     const [form, setForm] = useState({
@@ -24,13 +45,21 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
         image: "",
         theme: "",
         ageCategories: [] as string[],
-        sections: [{ title: "", content: "", style: "", imageUrl: "" }],
+        sections: [{
+            title: "", content: "", style: "", imageUrl: "", relatedColoringId: "",
+            relatedActivityId: ""
+        }],
         relatedArticles: [] as string[],
     });
     const [message, setMessage] = useState("");
     const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
     const [allArticles, setAllArticles] = useState<{ id: string; title: string }[]>([]);
     const [selectedArticles, setSelectedArticles] = useState<string[]>([]);
+    const [allColorings, setAllColorings] = useState<OptionWithImage[]>([]);
+    const [allActivities, setAllActivities] = useState<OptionWithImage[]>([]);
+    const [selectedSectionColorings, setSelectedSectionColorings] = useState<string[]>([]);
+    const [selectedSectionActivities, setSelectedSectionActivities] = useState<string[]>([]);
+
     const router = useRouter();
 
     // Charger les données de l'idée si un `ideaId` est passé
@@ -40,18 +69,37 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                 .then((res) => res.json())
                 .then((data) => {
                     console.log("📝 Idée récupérée :", data);
+                    const cleanSections = (data.sections || []).map((section: RawSection) => ({
+                        title: section.title || "",
+                        content: section.content || "",
+                        style: section.style || "",
+                        imageUrl: section.imageUrl || "",
+                        relatedColoringId: section.relatedColoringId || "",
+                        relatedActivityId: section.relatedActivityId || "",
+                    }));
 
                     setForm({
                         ...data,
                         ageCategories: Array.isArray(data.ageCategories) ? data.ageCategories : [],
-                        sections: data.sections || [{ title: "", content: "", style: "" }],
-                        relatedArticles: data.relatedArticles.map((relation: any) => relation.id) || [],
+                        sections: cleanSections.length > 0 ? cleanSections : [{
+                            title: "", content: "", style: "", imageUrl: "", relatedColoringId: "", relatedActivityId: ""
+                        }],
+                        relatedArticles: data.relatedArticles.map((relation: RawRelation) => relation.id) || [],
                     });
 
-                    // ✅ Mettre à jour le select multiple
-                    setSelectedArticles(data.relatedArticles.map((relation: any) => relation.id));
+                    setSelectedArticles(data.relatedArticles.map((relation: RawRelation) => relation.id));
+
+                    // 🔥 AJOUTER CETTE PARTIE POUR INITIALISER LES ÉTATS DES SECTIONS
+                    const coloringIds = cleanSections.map((section: RawSection) => section.relatedColoringId || "");
+                    const activityIds = cleanSections.map((section: RawSection) => section.relatedActivityId || "");
+                    setSelectedSectionColorings(coloringIds);
+                    setSelectedSectionActivities(activityIds);
                 })
                 .catch(() => setMessage("❌ Erreur lors du chargement de l'idée."));
+        } else {
+            // 🔥 POUR UNE NOUVELLE IDÉE, INITIALISER AVEC UNE SECTION VIDE
+            setSelectedSectionColorings([""]);
+            setSelectedSectionActivities([""]);
         }
 
         // Charger toutes les catégories d'âge disponibles
@@ -69,6 +117,23 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                 console.log("📥 Articles reçus :", data);
                 setAllArticles(data);
             });
+
+        // Coloriages
+        fetch("/api/drawings")
+            .then(res => res.json())
+            .then(data => {
+                console.log("🎨 Coloriages reçus :", data);
+                setAllColorings(data);
+            });
+
+        // Activités
+        fetch("/api/printable-games")
+            .then(res => res.json())
+            .then(data => {
+                console.log("🧩 Activités reçues :", data);
+                setAllActivities(data);
+            });
+
 
     }, [ideaId]);
 
@@ -123,6 +188,11 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
             relatedArticleIds: selectedArticles,
         });
 
+        // 🔥 AJOUTER CE LOG POUR VÉRIFIER LES SECTIONS
+        console.log("📋 Sections détaillées :", form.sections);
+        console.log("🎨 Coloriages sélectionnés :", selectedSectionColorings);
+        console.log("🧩 Activités sélectionnées :", selectedSectionActivities);
+
         try {
             const res = await fetch(url, {
                 method,
@@ -131,6 +201,15 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                     ...form,
                     ageCategoryIds: form.ageCategories,
                     relatedArticleIds: selectedArticles,
+                    sections: form.sections.map((section: Section) => ({
+                        title: section.title,
+                        content: section.content,
+                        style: section.style,
+                        imageUrl: section.imageUrl,
+                        relatedColoringId: section.relatedColoringId || null,
+                        relatedActivityId: section.relatedActivityId || null,
+                    }))
+
                 }),
             });
 
@@ -138,9 +217,12 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                 setMessage(`✅ Idée ${ideaId ? "mise à jour" : "ajoutée"} avec succès !`);
                 setTimeout(() => router.push("/admin?section=ideas"), 1000);
             } else {
+                const errorData = await res.json();
+                console.error("❌ Erreur serveur :", errorData);
                 setMessage("❌ Erreur lors de l'enregistrement de l'idée.");
             }
-        } catch {
+        } catch (error) {
+            console.error("❌ Erreur de connexion :", error);
             setMessage("❌ Erreur de connexion avec le serveur.");
         }
     };
@@ -149,10 +231,16 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
     const addSection = () => {
         setForm((prev) => ({
             ...prev,
-            sections: [...prev.sections, { title: "", content: "", style: "", imageUrl: "" }],
+            sections: [...prev.sections, {
+                title: "", content: "", style: "", imageUrl: "", relatedColoringId: "",
+                relatedActivityId: "",
+            }],
         }));
-    };
 
+        // 🔥 AJOUTER CETTE PARTIE
+        setSelectedSectionColorings(prev => [...prev, ""]);
+        setSelectedSectionActivities(prev => [...prev, ""]);
+    };
     useEffect(() => {
         fetch("/api/articles")
             .then(res => res.json())
@@ -181,14 +269,51 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
         const updatedSections = [...form.sections];
         updatedSections[index][field] = value;
         setForm({ ...form, sections: updatedSections });
+
+        // 🔥 AJOUTER CETTE PARTIE POUR SYNCHRONISER LES STATES
+        if (field === 'relatedColoringId') {
+            const newSelectedColorings = [...selectedSectionColorings];
+            newSelectedColorings[index] = value;
+            setSelectedSectionColorings(newSelectedColorings);
+        }
+
+        if (field === 'relatedActivityId') {
+            const newSelectedActivities = [...selectedSectionActivities];
+            newSelectedActivities[index] = value;
+            setSelectedSectionActivities(newSelectedActivities);
+        }
     };
 
     const removeSection = (index: number) => {
         const updatedSections = [...form.sections];
         updatedSections.splice(index, 1);
         setForm({ ...form, sections: updatedSections });
+
+        // 🔥 METTRE À JOUR LES ÉTATS DES COLORIAGES ET ACTIVITÉS
+        const updatedColorings = [...selectedSectionColorings];
+        updatedColorings.splice(index, 1);
+        setSelectedSectionColorings(updatedColorings);
+
+        const updatedActivities = [...selectedSectionActivities];
+        updatedActivities.splice(index, 1);
+        setSelectedSectionActivities(updatedActivities);
     };
 
+    // 🔧 AUSSI, AJOUTEZ CETTE FONCTION DE DÉBOGAGE TEMPORAIRE
+    const debugSectionData = () => {
+        console.log("🔍 DEBUG - État actuel :");
+        console.log("Form sections:", form.sections);
+        console.log("Selected colorings:", selectedSectionColorings);
+        console.log("Selected activities:", selectedSectionActivities);
+
+        form.sections.forEach((section, index) => {
+            console.log(`Section ${index}:`, {
+                title: section.title,
+                relatedColoringId: section.relatedColoringId,
+                relatedActivityId: section.relatedActivityId,
+            });
+        });
+    };
 
     return (
         <div className="admin-form">
@@ -276,9 +401,12 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                         <option value="summer">🌞 Été</option>
                         <option value="spring">🌸 Printemps</option>
                         <option value="autumn">🍂 Automne</option>
-                        <option value="halloween">🎃 Halloween</option>
                         <option value="christmas">🎄 Noël</option>
                         <option value="easter">🐣 Pâques</option>
+                        <option value="Toussaint">🕯️ Toussaint</option>
+                        <option value="Epiphanie">👑 Épiphanie</option>
+                        <option value="Chandeleur">🕯️ Chandeleur</option>
+                        <option value="Saint-Jean">🔥 Saint Jean</option>
                     </select>
                 </div>
 
@@ -346,6 +474,79 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                                 <option value="highlight">Fond coloré</option>
                                 <option value="icon">Avec icône</option>
                             </select>
+
+                            {/* 🔹 Sélectionner un coloriage lié */}
+                            <div className="admin-form__group">
+                                <label>🎨 Coloriage à lier à cette section :</label>
+                                <select
+                                    id={`section-${index}-coloring`}
+                                    value={section.relatedColoringId || ""}
+                                    onChange={e => updateSection(index, "relatedColoringId", e.target.value)}
+                                >
+                                    <option value="">— Aucun —</option>
+                                    {allColorings
+                                        .sort((a, b) => a.title.localeCompare(b.title, 'fr', { sensitivity: 'base' }))
+                                        .map(coloring => (
+                                            <option key={coloring.id} value={coloring.id}>
+                                                {coloring.title}
+                                            </option>
+                                        ))
+                                    }
+                                </select>
+
+                                {/* Affiche le titre (et une miniature si dispo) du coloriage sélectionné */}
+                                {section.relatedColoringId && (() => {
+                                    const sel = allColorings.find(c => c.id === section.relatedColoringId);
+                                    if (!sel) return null;
+                                    return (
+                                        <div style={{ display: 'flex', alignItems: 'center', marginTop: 8 }}>
+                                            {sel.imageUrl && (
+                                                <img
+                                                    src={sel.imageUrl}
+                                                    alt={sel.title}
+                                                    style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, marginRight: 8 }}
+                                                />
+                                            )}
+                                            <span>{sel.title}</span>
+                                        </div>
+                                    );
+                                })()}
+                            </div>
+
+                            {/* 🔹 Sélectionner une activité liée */}
+                            <div className="admin-form__group">
+                                <label>🧩 Activité à lier à cette section :</label>
+                                <select
+                                    value={section.relatedActivityId || ""}
+                                    onChange={e => updateSection(index, "relatedActivityId", e.target.value)}
+                                >
+                                    <option value="">— Aucune —</option>
+                                    {allActivities.map(activity => (
+                                        <option key={activity.id} value={activity.id}>
+                                            {activity.title}
+                                        </option>
+                                    ))}
+                                </select>
+
+                                {/* Affiche le titre (et une miniature si dispo) de l’activité sélectionnée */}
+                                {section.relatedActivityId && (() => {
+                                    const sel = allActivities.find(a => a.id === section.relatedActivityId);
+                                    if (!sel) return null;
+                                    return (
+                                        <div style={{ display: 'flex', alignItems: 'center', marginTop: 8 }}>
+                                            {sel.imageUrl && (
+                                                <img
+                                                    src={sel.imageUrl}
+                                                    alt={sel.title}
+                                                    style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, marginRight: 8 }}
+                                                />
+                                            )}
+                                            <span>{sel.title}</span>
+                                        </div>
+                                    );
+                                })()}
+                            </div>
+
 
                             {/* 🔹 Bouton de suppression */}
                             <button type="button" onClick={() => removeSection(index)}>🗑️ Supprimer</button>
