@@ -69,7 +69,7 @@ export default async function PrintablePage({ params }: Props) {
     const mystery = await prisma.printableGame.findFirst({
         where: { isMystery: true },
     });
-    if (!mystery) return null;
+    //if (!mystery) return null;
 
     // 1️⃣ On récupère d’abord tous les similaires
     const similar = await getSimilarPrintables(
@@ -88,6 +88,11 @@ export default async function PrintablePage({ params }: Props) {
     })
 
     const extraImages = printable.extraImages?.map(e => e.imageUrl) || [];
+
+    console.log("🖼 printable =", printable);
+    console.log("🎩 mystery =", mystery);
+    console.log("🤝 similar =", similar);
+    console.log("👀 visibles =", visibles);
 
     return (
         <>

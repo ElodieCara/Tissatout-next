@@ -53,6 +53,7 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
         ageMax: 6,
         themeIds: [],
         typeIds: [],
+        extraImages: [],
         isFeatured: false,
         isMystery: false,
         mysteryUntil: undefined,
@@ -116,6 +117,7 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                     articleId: data.articleId ?? null,
                     isMystery: data.isMystery,
                     mysteryUntil: mysteryUntilFormatted,
+                    extraImages: data.extraImages || [],
                 });
             }
         };
@@ -262,9 +264,42 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                     <input type="file" accept="image/*" multiple onChange={handleExtraImagesUpload} />
                     <div className="preview-thumbs">
                         {form.extraImages?.map((url, index) => (
-                            <img key={index} src={url} alt={`Image ${index + 1}`} className="thumb" />
+                            <div key={index} className="thumb-wrapper" style={{ position: 'relative', display: 'inline-block', margin: '0.5em' }}>
+                                <img
+                                    src={url}
+                                    alt={`Image ${index + 1}`}
+                                    className="thumb"
+                                    style={{ display: 'block', maxWidth: '100px', borderRadius: '4px' }}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        // Supprime l’URL à cet index
+                                        setForm(prev => ({
+                                            ...prev,
+                                            extraImages: prev.extraImages!.filter((_, i) => i !== index),
+                                        }));
+                                    }}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        right: 0,
+                                        background: 'rgba(0,0,0,0.5)',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: '50%',
+                                        width: '1.2em',
+                                        height: '1.2em',
+                                        cursor: 'pointer',
+                                    }}
+                                    aria-label={`Supprimer l’image ${index + 1}`}
+                                >
+                                    ×
+                                </button>
+                            </div>
                         ))}
                     </div>
+
                 </div>
 
 

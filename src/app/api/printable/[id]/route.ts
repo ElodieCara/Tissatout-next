@@ -113,9 +113,10 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
         // Relations themes/types/images
         await prisma.gameTheme.deleteMany({ where: { gameId: context.params.id } });
         await prisma.gameType.deleteMany({ where: { gameId: context.params.id } });
-        await prisma.extraImage.deleteMany({ where: { gameId: context.params.id } });
 
-        if (body.extraImages?.length) {
+        if (Array.isArray(body.extraImages) && body.extraImages.length > 0) {
+            // on ne supprime et ne recrée que s’il y a au moins une entrée
+            await prisma.extraImage.deleteMany({ where: { gameId: context.params.id } });
             await prisma.extraImage.createMany({
                 data: body.extraImages.map((url: string) => ({
                     gameId: context.params.id,
@@ -123,6 +124,8 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
                 })),
             });
         }
+
+
 
         if (body.themeIds?.length) {
             await prisma.gameTheme.createMany({
@@ -142,51 +145,38 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
 }
 
 // DELETE d'une activité
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
-    // 🔒 Vérifie si l'id est un ObjectId MongoDB valide
-    if (!ObjectId.isValid(context.params.id)) {
-        return NextResponse.json(
-            { error: "Invalid id" },
-            { status: 400 }
-        );
+export async function DELETE(
+    req: NextRequest,
+    { params }: { params: { id: string } }
+) {
+    const id = params.id;
+    if (!ObjectId.isValid(id)) {
+        return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 
     return withAdminGuard(req, async () => {
-        const { id } = context.params;
+        // 1️⃣ Supprimer d'abord les ExtraImage liées
+        await prisma.extraImage.deleteMany({ where: { gameId: id } });
 
+        // 2️⃣ Supprimer les fichiers sur le disque (optionnel)
         const game = await prisma.printableGame.findUnique({
             where: { id },
-            include: { extraImages: true }
+            select: { imageUrl: true, extraImages: true },
         });
-        if (!game) {
-            return NextResponse.json({ error: "❌ Activité introuvable" }, { status: 404 });
+        if (game?.imageUrl) {
+            const fn = game.imageUrl.split("/uploads/")[1];
+            await unlink(path.join(process.cwd(), "public/uploads", fn)).catch(() => null);
+        }
+        for (const img of game?.extraImages || []) {
+            const fn = img.imageUrl.split("/uploads/")[1];
+            await unlink(path.join(process.cwd(), "public/uploads", fn)).catch(() => null);
         }
 
-        // 🔹 Supprimer le visuel principal
-        if (game.imageUrl) {
-            const fileName = game.imageUrl.split("/uploads/")[1];
-            if (fileName) {
-                const filePath = path.join(process.cwd(), "public/uploads", fileName);
-                await unlink(filePath).catch(() => null);
-            }
-        }
-
-        // 🔹 Supprimer les visuels extra
-        for (const img of game.extraImages) {
-            if (img.imageUrl) {
-                const fileName = img.imageUrl.split("/uploads/")[1];
-                if (fileName) {
-                    const filePath = path.join(process.cwd(), "public/uploads", fileName);
-                    await unlink(filePath).catch(() => null);
-                }
-            }
-        }
-
-        // 🔹 Supprimer en base (ExtraImage a `onDelete: Cascade` donc safe)
+        // 3️⃣ Enfin, supprimer le PrintableGame
         await prisma.printableGame.delete({ where: { id } });
-
         return NextResponse.json({ message: "✅ PrintableGame supprimé avec images." });
     });
 }
+
 
 

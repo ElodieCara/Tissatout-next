@@ -197,33 +197,33 @@ export default async function IdeaPage({ params }: Props) {
                                     <div className="idea__separator">
                                         <span>{section.title}</span>
                                     </div>
+                                    <div className="idea__section-content">
+                                        {section.imageUrl && (
+                                            <div className="idea__section-image">
+                                                <Image
+                                                    src={section.imageUrl}
+                                                    alt={section.title}
+                                                    width={600}
+                                                    height={400}
+                                                />
+                                            </div>
+                                        )}
 
-                                    {section.imageUrl && (
-                                        <div className="idea__section-image">
-                                            <Image
-                                                src={section.imageUrl}
-                                                alt={section.title}
-                                                width={600}
-                                                height={400}
-                                            />
-                                        </div>
-                                    )}
 
-
-                                    {/* 🖍️ Coloriage associé à la section */}
-                                    {section.coloring && (
-                                        <div className="idea__related-item center-btn">
-                                            <Link href={`/coloriages/${section.coloring.slug}`}>
-                                                <button
-                                                    type="button"
-                                                    className=" button red-button "
-                                                >
-                                                    Voir le coloriage
-                                                </button>
-                                            </Link>
-                                        </div>
-                                    )}
-
+                                        {/* 🖍️ Coloriage associé à la section */}
+                                        {section.coloring && (
+                                            <div className="idea__related-item center-btn">
+                                                <Link href={`/coloriages/${section.coloring.slug}`}>
+                                                    <button
+                                                        type="button"
+                                                        className=" button red-button "
+                                                    >
+                                                        Voir le coloriage
+                                                    </button>
+                                                </Link>
+                                            </div>
+                                        )}
+                                    </div>
                                     {section.activity && (
                                         <div className="idea__related-item center-btn">
                                             <h4>🧩 Activité associée</h4>
@@ -237,7 +237,19 @@ export default async function IdeaPage({ params }: Props) {
                                         </div>
                                     )}
 
-                                    <ReactMarkdown>{section.content}</ReactMarkdown>
+                                    <ReactMarkdown
+                                        components={{
+                                            h2: ({ node, ...props }) => <h2 className="md-h2" {...props} />,
+                                            h3: ({ node, ...props }) => <h3 className="md-h3" {...props} />,
+                                            p: ({ node, ...props }) => <p className="md-p" {...props} />,
+                                            ul: ({ node, ...props }) => <ul className="md-ul" {...props} />,
+                                            li: ({ node, ...props }) => <li className="md-li" {...props} />,
+                                            strong: ({ node, ...props }) => <strong className="md-strong" {...props} />,
+                                            em: ({ node, ...props }) => <em className="md-em" {...props} />,
+                                        }}
+                                    >
+                                        {section.content}
+                                    </ReactMarkdown>
 
                                 </section>
                             ))}
@@ -300,7 +312,7 @@ export default async function IdeaPage({ params }: Props) {
                     </section>
                 </div>
                 <BackToTop />
-            </main>
+            </main >
         </>
     );
 }

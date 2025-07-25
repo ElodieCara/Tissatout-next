@@ -309,6 +309,11 @@
         &__section {
             margin-bottom: 4rem;
             text-align: left;
+            color: #333;
+
+            &-content {
+                margin-bottom: 30px;
+            }
 
             h2 {
                 font-size: 1.8rem;
