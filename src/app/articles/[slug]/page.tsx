@@ -14,6 +14,8 @@ import ShareActions from "@/components/ShareActions/ShareActions";
 import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 import SuggestionsForParents from "@/components/SuggestionsForParents/SuggestionsForParents";
 import { getRandomSuggestions } from "@/lib/suggestions";
+import { slugify } from '@/lib/slugify';
+
 
 
 type Props = {
@@ -196,9 +198,10 @@ export default async function ArticlePage({ params }: Props) {
                     <section className="article__sections-grid">
                         {processedSections.map((section, i) => {
                             const className = `article__section article__section--${section.normalizedStyle}`;
+                            const anchor = slugify(section.title)
 
                             return (
-                                <article key={i} className={className}>
+                                <article key={i} id={anchor} className={className}>
                                     <div className="article__section-header">
                                         {section.normalizedStyle === "icon" && (
                                             <span className="article__section-icon">
@@ -255,7 +258,34 @@ export default async function ArticlePage({ params }: Props) {
                                 </article>
                             );
                         })}
+
+                        {/* 🔗 Activité imprimable liée */}
+                        {article.printableGame?.length > 0 && (
+                            <section className="article__related article__printable">
+                                <h2 className="article__related-title">Activité liée</h2>
+                                <div className="article__related-list">
+                                    <a
+                                        key={article.printableGame[0].id}
+                                        href={`/activites-a-imprimer/${article.printableGame[0].slug}`}
+                                        className="article__related-card"
+                                    >
+                                        {/* tu peux réutiliser l’icône que tu souhaites */}
+                                        <span className="article__related-icon">
+                                            <img src="/icons/activites/activitefiche.png" alt="Fiche à imprimer"
+                                                width={150}
+                                                height={150}
+                                            />
+                                        </span>
+                                        <span className="article__related-title-text">
+                                            {article.printableGame[0].title} ({article.printableGame[0].pdfPrice ?? "gratuit"} €)
+                                        </span>
+                                    </a>
+                                </div>
+                            </section>
+                        )}
                     </section>
+
+
 
                     {/* 🔗 Articles liés */}
                     {

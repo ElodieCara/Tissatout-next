@@ -10,6 +10,7 @@ const pages = [
     { slug: "/confidentialite", label: "Politique de confidentialité" },
     { slug: "/cookies", label: "Utilisation des cookies" },
     { slug: "/charte-utilisateur", label: "Charte utilisateur" },
+    { slug: "/licence", label: "Licence CC BY‑NC 4.0" },
 ];
 
 export default function LegalPageLayout({ title, children }: { title: string; children: React.ReactNode }) {

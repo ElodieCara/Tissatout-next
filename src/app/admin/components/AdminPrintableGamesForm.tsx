@@ -65,6 +65,20 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
     const [articles, setArticles] = useState<{ id: string; title: string }[]>([]);
     const router = useRouter();
 
+    const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await fetch("/api/upload", { method: "POST", body: formData });
+        const data = await res.json();
+        if (res.ok && data.pdfUrl) {
+            setForm(prev => ({ ...prev, pdfUrl: data.pdfUrl }));
+        } else {
+            setMessage("Erreur lors de l'upload du PDF");
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             const [themeRes, typeRes] = await Promise.all([
@@ -303,10 +317,25 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                 </div>
 
 
-                <div className="admin-form__group">
-                    <label htmlFor="pdfUrl">Lien vers le PDF</label>
-                    <input type="text" name="pdfUrl" value={form.pdfUrl} onChange={handleChange} required />
+                <div className="admin-form__upload">
+                    <label htmlFor="pdfFile">Fichier PDF de l’activité</label>
+                    <input
+                        id="pdfFile"
+                        type="file"
+                        accept="application/pdf"
+                        onChange={handlePdfUpload}
+                        required
+                    />
+                    {form.pdfUrl && (
+                        <p style={{ marginTop: 8 }}>
+                            📄 PDF chargé :{" "}
+                            <a href={form.pdfUrl} target="_blank" rel="noopener noreferrer">
+                                {form.pdfUrl.split("/").pop()}
+                            </a>
+                        </p>
+                    )}
                 </div>
+
 
                 <div className="admin-form__group">
                     <label htmlFor="pdfPrice">Prix du PDF (€)</label>

@@ -28,7 +28,20 @@ export async function GET() {
         });
 
         const games = printables.map(game => ({
-            ...game,
+            id: game.id,
+            title: game.title,
+            slug: game.slug,
+            description: game.description,
+            pdfUrl: game.pdfUrl,
+            pdfPrice: game.pdfPrice,
+            imageUrl: game.imageUrl,
+            previewImageUrl: game.previewImageUrl,
+            isPrintable: game.isPrintable,
+            printPrice: game.printPrice,
+            ageMin: game.ageMin,
+            ageMax: game.ageMax,
+            isFeatured: game.isFeatured,
+            isMystery: game.isMystery,
             themes: game.themes.filter(t => t.theme !== null),
             types: game.types.filter(t => t.type !== null),
             // on renvoie la date en ISO ou null

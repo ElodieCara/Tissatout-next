@@ -68,11 +68,15 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
     const [selectedAges, setSelectedAges] = useState<string[]>([]);
     const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
     const [allArticles, setAllArticles] = useState<ArticleOption[]>([]);
-    const [printableGames, setPrintableGames] = useState<{ id: string; title: string }[]>([]);
+    const [printableGames, setPrintableGames] = useState<{ id: string; title: string; slug: string }[]>([]);
 
     // 🟢 Charger l'article en modification
     useEffect(() => {
         async function fetchData() {
+            // → Étape 0.5 : Charger tous les jeux imprimables
+            const printableRes = await fetch("/api/printable");
+            const printableData = await printableRes.json();
+            setPrintableGames(printableData);
             // 🟡 Étape 1 : Charger tous les articles sauf l'actuel
             const allRes = await fetch("/api/articles");
             const allData = await allRes.json();
@@ -122,7 +126,7 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                 };
 
                 if (Array.isArray(gameData)) {
-                    setPrintableGames(gameData.map((g: any) => ({ id: g.id, title: g.title })));
+                    setPrintableGames(gameData.map((g: any) => ({ id: g.id, title: g.title, slug: g.slug })));
                 } else {
                     console.warn("❌ gameData n'est pas un tableau :", gameData);
                     setPrintableGames([]); // On met une liste vide plutôt que de planter
@@ -424,13 +428,40 @@ export default function AdminArticleForm({ articleId }: { articleId?: string }) 
                         value={form.printableGameId ?? ""}
                         onChange={(e) => setForm({ ...form, printableGameId: e.target.value || null })}
                     >
-                        <option value="">Aucun</option>
-                        {printableGames.map((game) => (
+                        {form.printableGameId ? (
+                            // on remplace "Aucun" par le titre du jeu déjà choisi
+                            <option value={form.printableGameId}>
+                                {printableGames.find(g => g.id === form.printableGameId)?.title}
+                            </option>
+                        ) : (
+                            // sinon on propose "Aucun"
+                            <option value="">Aucun</option>
+                        )}
+                        {/* Puis la liste complète */}
+                        {printableGames.map(game => (
                             <option key={game.id} value={game.id}>
                                 {game.title}
                             </option>
                         ))}
+
                     </select>
+                    {form.printableGameId && (() => {
+                        const jeu = printableGames.find((g) => g.id === form.printableGameId);
+                        if (!jeu) return null;
+                        return (
+                            <p style={{ marginTop: 8, fontSize: "0.9em" }}>
+                                👉{" "}
+                                <a
+                                    href={`/activites-a-imprimer/${jeu.slug}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    style={{ color: "#555" }}
+                                >
+                                    Ouvrir la fiche « {jeu.title} »
+                                </a>
+                            </p>
+                        );
+                    })()}
                 </div>
 
 

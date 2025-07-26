@@ -80,7 +80,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
             ...article,
             sections,
             relatedArticles,
-            printableGame: article.printableGame,
+            printableGame,
         });
 
     } catch (error) {
@@ -115,7 +115,8 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
                 date,
                 ageCategories,
                 sections,
-                relatedArticleIds
+                relatedArticleIds,
+                printableGameId,
             } = body;
 
             if (!title || !content || !category || !author) {
@@ -180,6 +181,23 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
                     },
                 },
             });
+
+            // 2️⃣ on (dé)lie le printableGame
+            if (printableGameId) {
+                await prisma.printableGame.updateMany({
+                    where: { articleId: updatedArticle.id },
+                    data: { articleId: null },
+                });
+                await prisma.printableGame.update({
+                    where: { id: body.printableGameId },
+                    data: { articleId: updatedArticle.id },
+                });
+            } else {
+                await prisma.printableGame.updateMany({
+                    where: { articleId: updatedArticle.id },
+                    data: { articleId: null },
+                });
+            }
 
             console.log("✅ Article mis à jour :", updatedArticle.id);
             return NextResponse.json({ message: "Article mis à jour avec succès", updatedArticle });

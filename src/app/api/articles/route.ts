@@ -23,16 +23,13 @@ export async function GET() {
 
 // 🟢 Ajouter un nouvel article (CREATE)
 export async function POST(req: NextRequest) {
-    return withAdminGuard(req, async (_req) => {
+    return withAdminGuard(req, async () => {
         const body = await req.json();
-        console.log("📥 Données reçues :", body);
-
-        if (!body.title || !body.content || !body.category || !body.author) {
-            return NextResponse.json({ message: "❌ Titre, contenu, catégorie et auteur requis" }, { status: 400 });
-        }
+        // … tes validations …
 
         const slug = generateSlug(body.title, crypto.randomUUID());
 
+        // 1️⃣ CREATE article **sans** printableGame dans data
         const newArticle = await prisma.article.create({
             data: {
                 title: body.title,
@@ -45,33 +42,48 @@ export async function POST(req: NextRequest) {
                 author: body.author,
                 description: body.description || null,
                 date: body.date ? new Date(body.date) : new Date(),
-
                 ageCategories: {
-                    create: body.ageCategories.map((ageCategoryId: string) => ({
-                        ageCategory: { connect: { id: ageCategoryId } },
+                    create: (body.ageCategories || []).map((ageId: string) => ({
+                        ageCategory: { connect: { id: ageId } },
                     })),
                 },
-
-                // ✅ Ajouter les sections avec style normalisé
                 sections: {
-                    create: Array.isArray(body.sections)
-                        ? body.sections.map((section: any) => {
-                            const rawStyle = section.style?.toLowerCase();
-                            const style = ["highlight", "icon"].includes(rawStyle) ? rawStyle : "classique";
-
-                            return {
-                                title: section.title,
-                                content: section.content,
-                                style,
-                            };
-                        })
-                        : [],
+                    create: (body.sections || []).map((sec: any) => ({
+                        title: sec.title,
+                        content: sec.content,
+                        style: ["highlight", "icon"].includes(sec.style) ? sec.style : "classique",
+                    })),
                 },
             },
         });
 
+        // 2️⃣ Liaison du jeu imprimable **après** la création
+        if (body.printableGameId) {
+            // On délie d'abord tout ancien
+            await prisma.printableGame.updateMany({
+                where: { articleId: newArticle.id },
+                data: { articleId: null },
+            });
+            // Puis on relie
+            await prisma.printableGame.update({
+                where: { id: body.printableGameId },
+                data: { articleId: newArticle.id },
+            });
+        }
+
+        // 3️⃣ Création des “articles liés”
+        if (Array.isArray(body.relatedArticleIds) && body.relatedArticleIds.length) {
+            await prisma.relatedArticle.createMany({
+                data: (body.relatedArticleIds as string[]).map((toId: string) => ({
+                    fromArticleId: newArticle.id,
+                    toArticleId: toId,
+                })),
+            });
+        }
+
         return NextResponse.json(newArticle, { status: 201 });
     });
 }
+
 
 
