@@ -23,6 +23,9 @@ interface Advice {
     imageUrl?: string;
     category: string;
     relatedAdvices?: string[];
+    relatedActivities?: string[];
+    relatedArticles?: string[];
+    relatedColorings?: string[];
     ageCategories?: string[];
     slug?: string;
     sections: Section[];
@@ -44,6 +47,10 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
     const router = useRouter();
     const [ageCategories, setAgeCategories] = useState<{ id: string; title: string }[]>([]);
     const [allAdvices, setAllAdvices] = useState<{ id: string; title: string }[]>([]);
+    const [allActivities, setAllActivities] = useState<{ id: string; title: string }[]>([]);
+    const [allArticles, setAllArticles] = useState<{ id: string; title: string }[]>([]);
+    const [allColorings, setAllColorings] = useState<{ id: string; title: string }[]>([]);
+
 
     useEffect(() => {
         async function fetchData() {
@@ -81,12 +88,42 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
 
     useEffect(() => {
         async function fetchAllAdvices() {
+            // 🔹 Conseils
             const res = await fetch("/api/advice");
-            const data = await res.json();
-            setAllAdvices(data);
+            const data = (await res.json()) as { id: string; title: string }[];
+            setAllAdvices(
+                // si tu veux trier aussi les conseils :
+                data.sort((a, b) => a.title.localeCompare(b.title))
+            );
+
+            // 1️⃣ Activités imprimables
+            const resAct = await fetch("/api/printable");
+            if (resAct.ok) {
+                const actData = (await resAct.json()) as { id: string; title: string }[];
+                actData.sort((a, b) => a.title.localeCompare(b.title));
+                setAllActivities(actData);
+            }
+
+            // 2️⃣ Articles
+            const resArt = await fetch("/api/articles");
+            if (resArt.ok) {
+                const artData = (await resArt.json()) as { id: string; title: string }[];
+                artData.sort((a, b) => a.title.localeCompare(b.title));
+                setAllArticles(artData);
+            }
+
+            // 3️⃣ Coloriages (drawings)
+            const resCol = await fetch("/api/drawings");
+            if (resCol.ok) {
+                const colData = (await resCol.json()) as { id: string; title: string }[];
+                colData.sort((a, b) => a.title.localeCompare(b.title));
+                setAllColorings(colData);
+            }
         }
+
         fetchAllAdvices();
     }, []);
+
 
     // ✅ Gérer le changement de sélection
     const handleRelatedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -96,6 +133,9 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
         setForm(prev => ({
             ...prev,
             relatedAdvices: selectedOptions,
+            relatedActivities: prev.relatedActivities || [],
+            relatedArticles: prev.relatedArticles || [],
+            relatedColorings: prev.relatedColorings || [],
         }));
     };
 
@@ -136,6 +176,9 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
             ...form,
             ageCategoryIds: form.ageCategories,
             relatedAdvices: form.relatedAdvices,
+            relatedActivities: form.relatedActivities,
+            relatedArticles: form.relatedArticles,
+            relatedColorings: form.relatedColorings,
         });
 
         const safeId = crypto.randomUUID().slice(0, 6);
@@ -148,7 +191,9 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
                 body: JSON.stringify({
                     ...form,
                     ageCategoryIds: form.ageCategories,
-                    relatedAdvices: form.relatedAdvices, // ✅ On passe les conseils liés
+                    relatedAdvices: form.relatedAdvices,
+                    relatedArticles: form.relatedArticles,
+                    relatedColorings: form.relatedColorings,
                 }),
             });
 
@@ -238,6 +283,58 @@ export default function AdminAdviceForm({ adviceId }: { adviceId?: string }) {
                         ))}
                     </select>
                 </div>
+
+                {/* 🎲 Activités liées */}
+                <div className="admin-form__group">
+                    <label>Activités liées :</label>
+                    <select
+                        multiple
+                        value={form.relatedActivities || []}
+                        onChange={e => {
+                            const vals = Array.from(e.target.selectedOptions, o => o.value);
+                            setForm(f => ({ ...f, relatedActivities: vals }));
+                        }}
+                    >
+                        {allActivities.map(a => (
+                            <option key={a.id} value={a.id}>{a.title}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* 📄 Articles liés */}
+                <div className="admin-form__group">
+                    <label>Articles liés :</label>
+                    <select
+                        multiple
+                        value={form.relatedArticles || []}
+                        onChange={e => {
+                            const vals = Array.from(e.target.selectedOptions, o => o.value);
+                            setForm(f => ({ ...f, relatedArticles: vals }));
+                        }}
+                    >
+                        {allArticles.map(a => (
+                            <option key={a.id} value={a.id}>{a.title}</option>
+                        ))}
+                    </select>
+                </div>
+
+                {/* 🖍️ Coloriages liés */}
+                <div className="admin-form__group">
+                    <label>Coloriages liés :</label>
+                    <select
+                        multiple
+                        value={form.relatedColorings || []}
+                        onChange={e => {
+                            const vals = Array.from(e.target.selectedOptions, o => o.value);
+                            setForm(f => ({ ...f, relatedColorings: vals }));
+                        }}
+                    >
+                        {allColorings.map(c => (
+                            <option key={c.id} value={c.id}>{c.title}</option>
+                        ))}
+                    </select>
+                </div>
+
 
                 <div className="admin-form__upload">
                     <label>📸 Image</label>

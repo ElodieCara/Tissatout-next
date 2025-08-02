@@ -127,7 +127,7 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
             });
 
         // Activités
-        fetch("/api/printable-games")
+        fetch("/api/printable")
             .then(res => res.json())
             .then(data => {
                 console.log("🧩 Activités reçues :", data);
@@ -211,6 +211,7 @@ export default function AdminIdeaForm({ ideaId }: AdminIdeaFormProps) {
                     }))
 
                 }),
+                credentials: 'include',
             });
 
             if (res.ok) {

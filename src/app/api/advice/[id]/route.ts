@@ -6,11 +6,28 @@ import { withAdminGuard } from "@/lib/auth.guard";
 
 const prisma = new PrismaClient();
 
-// 🟢 GET : Récupérer un conseil
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-    return withAdminGuard(req, async (_req) => {
-        const { id } = params;
+interface AdviceBody {
+    title: string;
+    content: string;
+    category: string;
+    description?: string;
+    imageUrl?: string;
+    author?: string;
+    ageCategories?: string[];
+    sections?: { title: string; content: string; style?: string; imageUrl?: string }[];
+    relatedAdvices?: string[];
+    relatedActivities?: string[];
+    relatedArticles?: string[];
+    relatedColorings?: string[];
+}
 
+// 🟢 GET : Récupérer un conseil
+export async function GET(
+    req: NextRequest,
+    { params }: { params: { id: string } }
+) {
+    return withAdminGuard(req, async () => {
+        const { id } = params;
         if (!id) {
             return NextResponse.json({ error: "❌ ID manquant." }, { status: 400 });
         }
@@ -18,13 +35,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         const advice = await prisma.advice.findUnique({
             where: { id },
             include: {
-                ageCategories: {
-                    include: { ageCategory: true },
-                },
+                ageCategories: { include: { ageCategory: true } },
                 sections: true,
-                relatedFrom: {
-                    include: { toAdvice: true },
-                },
+                relatedFrom: { include: { toAdvice: true } },
+                relatedActivities: { include: { toActivity: true } },
+                relatedArticles: { include: { toArticle: true } },
+                relatedColorings: { include: { toColoring: true } },
             },
         });
 
@@ -40,37 +56,47 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 }
 
 // 🟡 PUT : Modifier un conseil
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-    return withAdminGuard(req, async (_req) => {
+export async function PUT(
+    req: NextRequest,
+    { params }: { params: { id: string } }
+) {
+    return withAdminGuard(req, async () => {
         const { id } = params;
-
         if (!id) {
             return NextResponse.json({ error: "❌ ID manquant." }, { status: 400 });
         }
 
-        const body = await req.json();
+        const body: AdviceBody = await req.json();
         const {
             title,
             content,
             category,
             description,
             imageUrl,
-            ageCategories = [],
-            sections,
             author,
+            ageCategories = [],
+            sections = [],
+            relatedAdvices = [],
+            relatedActivities = [],
+            relatedArticles = [],
+            relatedColorings = [],
         } = body;
 
         if (!title || !content || !category) {
             return NextResponse.json({ error: "❌ Champs obligatoires manquants." }, { status: 400 });
         }
 
-        const ageCategoryIds = ageCategories
-            .map((item: any) =>
-                typeof item === "object" && item !== null && "id" in item ? item.id : item
-            )
-            .filter(Boolean);
+        // Supprimer tous les anciens liens
+        await prisma.relatedAdvice.deleteMany({ where: { fromAdviceId: id } });
+        await prisma.relatedActivity.deleteMany({ where: { fromAdviceId: id } });
+        await prisma.relatedAdviceArticle.deleteMany({ where: { fromAdviceId: id } });
+        await prisma.relatedColoring.deleteMany({ where: { fromAdviceId: id } });
 
-        const updatedAdvice = await prisma.advice.update({
+        // Normaliser les IDs de catégories d'âge
+        const ageIds = ageCategories.filter(Boolean);
+
+        // Mettre à jour
+        const updated = await prisma.advice.update({
             where: { id },
             data: {
                 title,
@@ -78,66 +104,67 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
                 category,
                 description: description || null,
                 imageUrl: imageUrl || null,
-                author: author || "",
+                author: author || null,
                 ageCategories: {
                     deleteMany: {},
-                    create: ageCategoryIds.map((ageId: string) => ({ ageCategoryId: ageId })),
+                    create: ageIds.map(ageId => ({ ageCategoryId: ageId })),
                 },
                 sections: {
                     deleteMany: {},
-                    create: sections.map((section: any) => ({
-                        title: section.title,
-                        content: section.content,
-                        style: section.style || "classique",
-                        imageUrl: section.imageUrl || "",
+                    create: sections.map(sec => ({
+                        title: sec.title,
+                        content: sec.content,
+                        style: sec.style || 'classique',
+                        imageUrl: sec.imageUrl || null,
                     })),
                 },
                 relatedFrom: {
-                    deleteMany: {},
-                    create: (body.relatedAdvices || []).map((id: string) => ({ toAdviceId: id })),
+                    create: relatedAdvices.map((toAdviceId: string) => ({ toAdviceId })),
+                },
+                relatedActivities: {
+                    create: relatedActivities.map((toActivityId: string) => ({ toActivityId })),
+                },
+                relatedArticles: {
+                    create: relatedArticles.map((toArticleId: string) => ({ toArticleId })),
+                },
+                relatedColorings: {
+                    create: relatedColorings.map((toColoringId: string) => ({ toColoringId })),
                 },
             },
             include: {
                 ageCategories: { include: { ageCategory: true } },
                 sections: true,
                 relatedFrom: { include: { toAdvice: true } },
+                relatedActivities: { include: { toActivity: true } },
+                relatedArticles: { include: { toArticle: true } },
+                relatedColorings: { include: { toColoring: true } },
             },
         });
 
         return NextResponse.json({
-            ...updatedAdvice,
-            ageCategories: updatedAdvice.ageCategories.map(ac => ac.ageCategoryId),
+            ...updated,
+            ageCategories: updated.ageCategories.map(ac => ac.ageCategoryId),
         });
     });
 }
 
 // 🔴 DELETE : Supprimer un conseil
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+export async function DELETE(
+    req: NextRequest,
+    { params }: { params: { id: string } }
+) {
     return withAdminGuard(req, async () => {
-        const { id } = context.params;
-
-        const advice = await prisma.advice.findUnique({ where: { id } });
-        if (!advice) {
-            return NextResponse.json({ error: "❌ Conseil introuvable" }, { status: 404 });
-        }
-
-        // 🔹 Supprimer les pivots
+        const { id } = params;
+        // Supprimer pivots
         await prisma.relatedAdvice.deleteMany({ where: { fromAdviceId: id } });
         await prisma.relatedAdvice.deleteMany({ where: { toAdviceId: id } });
-
-        // 🔹 Supprimer l’image
-        if (advice.imageUrl) {
-            const fileName = advice.imageUrl.split("/uploads/")[1];
-            if (fileName) {
-                const filePath = path.join(process.cwd(), "public/uploads", fileName);
-                await unlink(filePath).catch(() => null);
-            }
+        // Supprimer image
+        const advice = await prisma.advice.findUnique({ where: { id } });
+        if (advice?.imageUrl) {
+            const fname = advice.imageUrl.split('/uploads/')[1];
+            if (fname) await unlink(path.join(process.cwd(), 'public/uploads', fname));
         }
-
-        // 🔹 Supprimer le conseil
         await prisma.advice.delete({ where: { id } });
-
-        return NextResponse.json({ message: "✅ Conseil supprimé avec image et pivots." });
+        return NextResponse.json({ message: '✅ Conseil supprimé.' });
     });
 }
-

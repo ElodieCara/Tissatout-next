@@ -15,8 +15,9 @@ export interface ContentItem {
     title: string;
     slug: string;
     type: string;
+    module?: "trivium" | "quadrivium";
     age?: string;
-    date?: string;
+    date?: string | null;
     iconSrc?: string | null;
     imageUrl?: string | null;
     image: string | null;
@@ -33,6 +34,7 @@ interface ContentListProps {
 }
 
 export default function ContentList({ items, type, title, age, suggestions }: ContentListProps) {
+    console.log("items reçus par ContentList :", items);
     const [visibleCount, setVisibleCount] = useState(6);
     const displayed = items.slice(0, visibleCount);
 
@@ -83,7 +85,7 @@ export default function ContentList({ items, type, title, age, suggestions }: Co
                 <div className="content-list__grid">
                     {displayed.map((item) => (
                         <Link
-                            href={`/${type}/${item.slug}`}
+                            href={`/${item.module}/${item.slug}`}
                             key={item.id}
                             className="content-list__card"
                         >

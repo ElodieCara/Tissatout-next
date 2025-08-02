@@ -12,6 +12,7 @@ import ShareActions from "@/components/ShareActions/ShareActions";
 import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 import SuggestionsForParents from "@/components/SuggestionsForParents/SuggestionsForParents";
 import { getRandomSuggestions } from "@/lib/suggestions";
+import Link from "next/link";
 
 type Props = {
     params: { slug: string };
@@ -23,10 +24,16 @@ export default async function AdvicePage({ params }: Props) {
         include: {
             ageCategories: { include: { ageCategory: true } },
             sections: true,
-            relatedFrom: { // ✅ AJOUTER ÇA
+            relatedFrom: {
                 include: {
                     toAdvice: true,
                 },
+            },
+            relatedArticles: {
+                include: { toArticle: true },
+            },
+            relatedColorings: {
+                include: { toColoring: true },
             },
         },
     });
@@ -177,34 +184,70 @@ export default async function AdvicePage({ params }: Props) {
                                 <p>Découvre d'autres conseils pratiques pour t'accompagner !</p>
 
                                 <div className="advice__related-list">
-                                    {advice.relatedFrom && advice.relatedFrom.length > 0 ? (
-                                        advice.relatedFrom.map((relation) => (
-                                            relation.toAdvice ? (
-                                                <a
-                                                    key={relation.toAdvice.id}
-                                                    href={`/conseils/${relation.toAdvice.slug}`}
-                                                    className="advice__related-item"
-                                                >
-                                                    <div className="advice__related-card">
-                                                        {relation.toAdvice.imageUrl ? (
-                                                            <img
-                                                                src={relation.toAdvice.imageUrl}
-                                                                alt={relation.toAdvice.title}
-                                                                className="advice__related-image"
-                                                            />
-                                                        ) : (
-                                                            <div className="advice__related-placeholder">Image non disponible</div>
-                                                        )}
-                                                        <h3 className="advice__related-name">{relation.toAdvice.title}</h3>
-                                                    </div>
-                                                </a>
-                                            ) : (
-                                                <p>Conseil non trouvé.</p>
-                                            )
-                                        ))
-                                    ) : (
-                                        <p>Aucun conseil supplémentaire pour l’instant.</p>
+                                    {/* Conseils liés */}
+                                    {advice.relatedFrom.length > 0 && (
+                                        <section className="advice__related-group">
+                                            <h3>📝 Autres conseils</h3>
+                                            <div className="advice__related-list">
+                                                {advice.relatedFrom.map(r => (
+                                                    <Link className="advice__related-item" key={r.toAdvice.id} href={`/conseils/${r.toAdvice.slug}`}>
+
+                                                        {/* miniature ou placeholder */}
+                                                        {r.toAdvice.imageUrl
+                                                            ? <Image src={r.toAdvice.imageUrl} width={100} height={70} alt="" />
+                                                            : <div className="placeholder">Pas d’image</div>}
+                                                        <span>{r.toAdvice.title}</span>
+
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        </section>
                                     )}
+
+                                    {/* Articles liés */}
+                                    {advice.relatedArticles.length > 0 && (
+                                        <section className="advice__related-group">
+                                            <h3>📄 Articles liés</h3>
+                                            <div className="advice__related-list">
+                                                {advice.relatedArticles.map(r => {
+                                                    const art = r.toArticle;
+                                                    return (
+                                                        <Link className="advice__related-item" key={art.id} href={`/articles/${art.slug}`}>
+
+                                                            {art.image
+                                                                ? <Image src={art.image} width={100} height={70} alt="" />
+                                                                : <div className="placeholder">Pas d’image</div>}
+                                                            <span>{art.title}</span>
+
+                                                        </Link>
+                                                    );
+                                                })}
+                                            </div>
+                                        </section>
+                                    )}
+
+                                    {/* Coloriages liés */}
+                                    {advice.relatedColorings.length > 0 && (
+                                        <section className="advice__related-group">
+                                            <h3>🖍️ Coloriages liés</h3>
+                                            <div className="advice__related-list">
+                                                {advice.relatedColorings.map(r => {
+                                                    const col = r.toColoring;
+                                                    return (
+                                                        <Link className="advice__related-item" key={col.id} href={`/coloriages/${col.slug}`}>
+
+                                                            {col.imageUrl
+                                                                ? <Image src={col.imageUrl} width={100} height={70} alt="" />
+                                                                : <div className="placeholder">Pas d’image</div>}
+                                                            <span>{col.title}</span>
+
+                                                        </Link>
+                                                    );
+                                                })}
+                                            </div>
+                                        </section>
+                                    )}
+
                                 </div>
                             </section>
 

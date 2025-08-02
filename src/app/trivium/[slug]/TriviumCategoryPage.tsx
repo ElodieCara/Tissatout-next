@@ -24,7 +24,7 @@ export default function TriviumCategory({ category, lessons }: { category: strin
                     {lessons.map((lesson) => (
                         <Link
                             key={lesson.slug}
-                            href={`/trivium/${lesson.slug}`}
+                            href={`/${lesson.module}/${lesson.slug}`}
                             className="lesson-card"
                             aria-label={`Voir la leçon : ${lesson.title}`}
                         >

@@ -26,11 +26,12 @@ model Article {
   // ✅ Relation Many-to-Many gérée par un modèle pivot
   ageCategories AgeCategoryArticle[]
 
-  relatedLinks    RelatedArticle[]     @relation("FromArticle")
-  linkedFrom      RelatedArticle[]     @relation("ToArticle")
-  relatedToIdeas  RelatedIdeaArticle[] @relation("ToIdeaArticle")
-  printableGameId String?              @db.ObjectId
-  printableGame   PrintableGame[]      @relation("ArticleToGame")
+  relatedLinks              RelatedArticle[]       @relation("FromArticle")
+  linkedFrom                RelatedArticle[]       @relation("ToArticle")
+  relatedToIdeas            RelatedIdeaArticle[]   @relation("ToIdeaArticle")
+  printableGameId           String?                @db.ObjectId
+  printableGame             PrintableGame[]        @relation("ArticleToGame")
+  relatedFromAdviceArticles RelatedAdviceArticle[] @relation("FromAdviceToArticle")
 }
 
 model RelatedArticle {
@@ -126,15 +127,14 @@ model IdeaSection {
   style    String?
   imageUrl String?
 
-  coloringId   String?  @db.ObjectId
-  coloring     Drawing? @relation(fields: [coloringId], references: [id], name: "SectionToColoring")
+  coloringId String?  @db.ObjectId
+  coloring   Drawing? @relation(fields: [coloringId], references: [id], name: "SectionToColoring")
 
-  activityId   String?  @db.ObjectId
-  activity     Activity? @relation(fields: [activityId], references: [id], name: "SectionToActivity")
+  activityId String?   @db.ObjectId
+  activity   Activity? @relation(fields: [activityId], references: [id], name: "SectionToActivity")
 
-
-  idea     Idea    @relation(fields: [ideaId], references: [id], onDelete: Cascade)
-  ideaId   String  @db.ObjectId
+  idea   Idea   @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  ideaId String @db.ObjectId
 }
 
 model AgeCategory {
@@ -178,15 +178,16 @@ model AgeCategoryTag {
 }
 
 model Activity {
-  id            String                @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
-  slug          String                @unique
-  description   String
-  link          String?
-  ageCategory   AgeCategory           @relation(fields: [ageCategoryId], references: [id])
-  ageCategoryId String                @db.ObjectId
-  relatedIdeas  RelatedIdeaActivity[]
-  sections      IdeaSection[]  @relation(name: "SectionToActivity")
+  id                     String                @id @default(auto()) @map("_id") @db.ObjectId
+  title                  String
+  slug                   String                @unique
+  description            String
+  link                   String?
+  ageCategory            AgeCategory           @relation(fields: [ageCategoryId], references: [id])
+  ageCategoryId          String                @db.ObjectId
+  relatedIdeas           RelatedIdeaActivity[]
+  linkedAdviceActivities RelatedActivity[]     @relation("FromAdviceActivity")
+  sections               IdeaSection[]         @relation(name: "SectionToActivity")
 }
 
 model AdviceSection {
@@ -222,9 +223,39 @@ model Advice {
   comments    Comment[]
 
   // ✅ Relation Many-to-Many gérée par un modèle pivot
-  ageCategories AgeCategoryAdvice[]
-  relatedFrom   RelatedAdvice[]     @relation("FromAdvice")
-  relatedTo     RelatedAdvice[]     @relation("ToAdvice")
+  ageCategories     AgeCategoryAdvice[]
+  relatedFrom       RelatedAdvice[]        @relation("FromAdvice")
+  relatedTo         RelatedAdvice[]        @relation("ToAdvice")
+  relatedActivities RelatedActivity[]      @relation("FromAdviceActivity")
+  relatedArticles   RelatedAdviceArticle[] @relation("FromAdviceToArticle")
+  relatedColorings  RelatedColoring[]      @relation("FromAdviceColoring")
+}
+
+model RelatedActivity {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  fromAdvice   Advice   @relation("FromAdviceActivity", fields: [fromAdviceId], references: [id])
+  fromAdviceId String   @db.ObjectId
+  toActivity   Activity @relation("FromAdviceActivity", fields: [toActivityId], references: [id])
+  toActivityId String   @db.ObjectId
+}
+
+model RelatedAdviceArticle {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  fromAdvice   Advice  @relation("FromAdviceToArticle", fields: [fromAdviceId], references: [id])
+  fromAdviceId String  @db.ObjectId
+  toArticle    Article @relation("FromAdviceToArticle", fields: [toArticleId], references: [id])
+  toArticleId  String  @db.ObjectId
+
+  @@index([fromAdviceId])
+  @@index([toArticleId])
+}
+
+model RelatedColoring {
+  id           String  @id @default(auto()) @map("_id") @db.ObjectId
+  fromAdvice   Advice  @relation("FromAdviceColoring", fields: [fromAdviceId], references: [id])
+  fromAdviceId String  @db.ObjectId
+  toColoring   Drawing @relation("FromAdviceColoring", fields: [toColoringId], references: [id])
+  toColoringId String  @db.ObjectId
 }
 
 model User {
@@ -247,11 +278,12 @@ model Drawing {
   likes       Int              @default(0)
   slug        String           @unique
   description String?
-  sections    IdeaSection[]  @relation(name: "SectionToColoring")
+  sections    IdeaSection[]    @relation(name: "SectionToColoring")
 
   // ✅ Relation Many-to-Many gérée par un modèle pivot
-  ageCategories AgeCategoryDrawing[]
-  relatedIdeas  RelatedIdeaColoring[]
+  ageCategories              AgeCategoryDrawing[]
+  relatedIdeas               RelatedIdeaColoring[]
+  relatedFromAdviceColorings RelatedColoring[]     @relation("FromAdviceColoring")
 }
 
 model CategorySection {

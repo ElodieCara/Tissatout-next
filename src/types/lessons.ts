@@ -2,6 +2,7 @@ export interface Lesson {
     id: string;
     title: string;
     slug: string;
+    module: "trivium" | "quadrivium";
     content: string;
     image: string | null;
     category: string;
@@ -46,4 +47,21 @@ export interface CollectionWithLessons extends Collection {
     description: string | null;
     module: "trivium" | "quadrivium";
     lessons: Lesson[];
+}
+
+export interface ContentItem {
+    id: string;
+    title: string;
+    slug: string;
+    type: string;
+    image: string | null;
+    description: string | null;
+    date: string | null; // Changé pour correspondre aux données réelles
+    age?: string; // Rendu optionnel car pas toujours présent
+    module?: "trivium" | "quadrivium";
+    // Propriétés optionnelles supplémentaires pour la compatibilité
+    iconSrc?: string | null;
+    imageUrl?: string | null;
+    tagLabel?: string | null;
+    category?: string | null;
 }

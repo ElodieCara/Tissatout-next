@@ -46,9 +46,12 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
                     homework: data.homework ?? "",
                     image: data.image ?? null,
                     published: data.published,
-                    collection: {
-                        connect: { id: data.collectionId }
-                    },
+                    module: data.module,
+                    ...(data.collectionId && {
+                        collection: {
+                            connect: { id: data.collectionId },
+                        },
+                    }),
                 },
             });
 

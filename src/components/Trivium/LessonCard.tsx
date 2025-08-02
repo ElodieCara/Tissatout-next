@@ -7,7 +7,7 @@ import LessonStatusBadge from "./LessonsStatusBadge";
 
 export default function LessonCard({ lesson }: { lesson: Lesson }) {
     return (
-        <Link href={`/trivium/${lesson.slug}`} className="lesson-card">
+        <Link href={`/${lesson.module}/${lesson.slug}`} className="lesson-card">
 
             <div className="lesson-card__image-wrapper">
                 <Image

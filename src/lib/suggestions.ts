@@ -98,7 +98,9 @@ export async function getRandomSuggestions(type: string, limit: number = 5,
             return prisma.lesson.findMany({
                 where: {
                     id: { not: options?.excludeId },
-                    module: type,
+                    module: type === "trivium" ? "trivium"
+                        : type === "quadrivium" ? "quadrivium"
+                            : undefined,
                 },
                 orderBy: { createdAt: "desc" },
                 take: limit,
@@ -111,6 +113,7 @@ export async function getRandomSuggestions(type: string, limit: number = 5,
                     image: lesson.image ?? null,
                     description: lesson.summary ?? null,
                     age: lesson.ageTag ?? null,
+                    module: type as "trivium" | "quadrivium",
                     date: lesson.createdAt ? lesson.createdAt.toISOString() : null,
                 }))
             );

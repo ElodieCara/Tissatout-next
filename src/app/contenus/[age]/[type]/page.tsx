@@ -9,6 +9,7 @@ import SectionIntro from "@/components/SectionIntro/SectionIntro";
 import BackToTop from "@/components/BackToTop/BackToTop";
 import type { Metadata } from "next";
 import { getRandomSuggestions } from "@/lib/suggestions";
+import type { ContentItem } from "@/types/lessons"; // Ajuste le chemin selon ton projet
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { age, type } = params;
@@ -44,7 +45,7 @@ const titleMap: Record<string, string> = {
     idees: "Activités et idées créatives pour petits artistes",
     trivium: "Activités Trivium pour jouer avec les mots et l'esprit",
     quadrivium: "Découvertes Quadrivium pour petits explorateurs du savoir",
-    coloriages: "Coloriages à imprimer pour rêver, apprendre et s’amuser",
+    coloriages: "Coloriages à imprimer pour rêver, apprendre et s'amuser",
 };
 
 export const sectionIcons: Record<string, string> = {
@@ -71,7 +72,7 @@ export default async function ContentByAgePage(props: PageProps) {
         articles: `Des articles adaptés à l'âge de ${ageCategory.title} pour nourrir la curiosité.`,
         conseils: `Des pistes tendres et concrètes pour soutenir les enfants de ${ageCategory.title} dans leur monde en construction.`,
         idees: `Des idées ludiques et éducatives pour éveiller la créativité des enfants de ${ageCategory.title}.`,
-        trivium: `Grammaire, logique et rhétorique dès ${ageCategory.title} ? C’est possible avec des activités amusantes.`,
+        trivium: `Grammaire, logique et rhétorique dès ${ageCategory.title} ? C'est possible avec des activités amusantes.`,
         quadrivium: `Mathématiques, musique, astronomie et géométrie adaptées aux ${ageCategory.title}.`,
         coloriages: `Des dessins simples à imprimer pour les enfants de ${ageCategory.title} : amusants, éducatifs, ou inspirés des saisons.`,
     };
@@ -87,19 +88,36 @@ export default async function ContentByAgePage(props: PageProps) {
         );
     }
 
-    // ✅ Assure-toi que chaque item porte `type`
-    const data = rawData.map(item => ({
-        ...item,
-        type: type,
-    }));
+    // ✅ Typage explicite après mapping - force ContentItem[]
+    const data: ContentItem[] = rawData.map(item => {
+        if (type === "trivium" || type === "quadrivium") {
+            return {
+                ...item,
+                type,
+                module: type as "trivium" | "quadrivium",
+                age: ageCategory.title, // Ajoute l'age depuis ageCategory
+                date: item.date || null // Convertit undefined en null
+            };
+        }
+        return {
+            ...item,
+            type,
+            module: undefined,
+            age: ageCategory.title, // Ajoute l'age depuis ageCategory
+            date: item.date || null // Convertit undefined en null
+        };
+    });
 
-    // ✅ Nettoie la date pour correspondre à ContentItem
+    // ✅ Typage explicite pour les suggestions
     const rawSuggestions = await getRandomSuggestions("articles", 4);
-    const suggestions = rawSuggestions.map(item => ({
+    const suggestions: ContentItem[] = rawSuggestions.map(item => ({
         ...item,
         type: item.type ?? "articles",
-        date: item.date ?? undefined,
-        age: "age" in item ? item.age ?? undefined : undefined,
+        module: ('module' in item && (item.module === "trivium" || item.module === "quadrivium"))
+            ? item.module
+            : undefined,
+        date: item.date ?? null, // Convertit undefined en null
+        age: ('age' in item && item.age) ? item.age : undefined,
     }));
 
     return (
