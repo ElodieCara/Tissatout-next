@@ -1,0 +1,51 @@
+.mystery-teaser {
+    display: none; //rendre caché par défaut
+    background-color: #fefcf9; // ton de fond pastel doux
+    padding: 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(44, 63, 100, 0.1);
+    color: #2c3f64; // bleu foncé : lisible
+}
+
+.mystery-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #2c3f64;
+}
+
+.mystery-description {
+    font-size: 1rem;
+    color: #316470;
+    margin-bottom: 0.5rem;
+}
+
+.mystery-countdown {
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
+    color: #f78e74; // saumon doux mais lisible
+}
+
+.countdown-label {
+    margin-right: 0.25rem;
+    color: #316470;
+}
+
+.countdown-time {
+    color: #FDCA57; // jaune pastel foncé
+}
+
+.mystery-date {
+    font-size: 0.85rem;
+    color: #2c3f64;
+    margin-top: 0.25rem;
+    font-style: italic;
+}
+
+.mystery-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #FDCA57;
+}

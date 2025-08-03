@@ -188,71 +188,74 @@ export default async function IdeaPage({ params }: Props) {
                                 <ShareActions imageUrl={idea.image || ""} title={idea.title} />
                             </div>
 
-                            {ideaTyped.sections.map(section => (
-                                <section
-                                    key={section.id}
-                                    id={section.title.replace(/\s+/g, "-").toLowerCase()}
-                                    className={`idea__section ${section.style || "classique"}`}
-                                >
-                                    <div className="idea__separator">
-                                        <span>{section.title}</span>
-                                    </div>
-                                    <div className="idea__section-content">
-                                        {section.imageUrl && (
-                                            <div className="idea__section-image">
-                                                <Image
-                                                    src={section.imageUrl}
-                                                    alt={section.title}
-                                                    width={600}
-                                                    height={400}
-                                                />
-                                            </div>
-                                        )}
+                            {ideaTyped.sections.map(section => {
+                                console.log('section.activity', section.activity);
+                                return (
+                                    <section
+                                        key={section.id}
+                                        id={section.title.replace(/\s+/g, "-").toLowerCase()}
+                                        className={`idea__section ${section.style || "classique"}`}
+                                    >
+                                        <div className="idea__separator">
+                                            <span>{section.title}</span>
+                                        </div>
+                                        <div className="idea__section-content">
+                                            {section.imageUrl && (
+                                                <div className="idea__section-image">
+                                                    <Image
+                                                        src={section.imageUrl}
+                                                        alt={section.title}
+                                                        width={600}
+                                                        height={400}
+                                                    />
+                                                </div>
+                                            )}
 
 
-                                        {/* 🖍️ Coloriage associé à la section */}
-                                        {section.coloring && (
+                                            {/* 🖍️ Coloriage associé à la section */}
+                                            {section.coloring && (
+                                                <div className="idea__related-item center-btn">
+                                                    <Link href={`/coloriages/${section.coloring.slug}`}>
+                                                        <button
+                                                            type="button"
+                                                            className=" button red-button "
+                                                        >
+                                                            Voir le coloriage
+                                                        </button>
+                                                    </Link>
+                                                </div>
+                                            )}
+                                        </div>
+                                        {section.activity && (
                                             <div className="idea__related-item center-btn">
-                                                <Link href={`/coloriages/${section.coloring.slug}`}>
-                                                    <button
-                                                        type="button"
-                                                        className=" button red-button "
-                                                    >
-                                                        Voir le coloriage
+                                                <h4>🧩 Activité associée</h4>
+                                                <Link href={`/activites-a-imprimer/${section.activity.slug}`}>
+
+                                                    <button className="button red-button">
+                                                        Voir l’activité associée
                                                     </button>
+
                                                 </Link>
                                             </div>
                                         )}
-                                    </div>
-                                    {section.activity && (
-                                        <div className="idea__related-item center-btn">
-                                            <h4>🧩 Activité associée</h4>
-                                            <Link href={`/activites-a-imprimer/${section.activity.slug}`}>
 
-                                                <button className="button red-button">
-                                                    Voir l’activité associée
-                                                </button>
+                                        <ReactMarkdown
+                                            components={{
+                                                h2: ({ node, ...props }) => <h2 className="md-h2" {...props} />,
+                                                h3: ({ node, ...props }) => <h3 className="md-h3" {...props} />,
+                                                p: ({ node, ...props }) => <p className="md-p" {...props} />,
+                                                ul: ({ node, ...props }) => <ul className="md-ul" {...props} />,
+                                                li: ({ node, ...props }) => <li className="md-li" {...props} />,
+                                                strong: ({ node, ...props }) => <strong className="md-strong" {...props} />,
+                                                em: ({ node, ...props }) => <em className="md-em" {...props} />,
+                                            }}
+                                        >
+                                            {section.content}
+                                        </ReactMarkdown>
 
-                                            </Link>
-                                        </div>
-                                    )}
-
-                                    <ReactMarkdown
-                                        components={{
-                                            h2: ({ node, ...props }) => <h2 className="md-h2" {...props} />,
-                                            h3: ({ node, ...props }) => <h3 className="md-h3" {...props} />,
-                                            p: ({ node, ...props }) => <p className="md-p" {...props} />,
-                                            ul: ({ node, ...props }) => <ul className="md-ul" {...props} />,
-                                            li: ({ node, ...props }) => <li className="md-li" {...props} />,
-                                            strong: ({ node, ...props }) => <strong className="md-strong" {...props} />,
-                                            em: ({ node, ...props }) => <em className="md-em" {...props} />,
-                                        }}
-                                    >
-                                        {section.content}
-                                    </ReactMarkdown>
-
-                                </section>
-                            ))}
+                                    </section>
+                                )
+                            })}
                         </div>
 
                         <aside className="idea__sidebar">

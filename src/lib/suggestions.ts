@@ -124,6 +124,13 @@ export async function getRandomSuggestions(type: string, limit: number = 5,
                     id: { not: options?.excludeId },
                     category: options?.category ? { name: options.category } : undefined,
                 },
+                include: {
+                    ageCategories: {
+                        include: {
+                            ageCategory: true,
+                        },
+                    },
+                },
                 orderBy: { createdAt: "desc" },
                 take: limit,
             }).then((drawings) =>
@@ -133,7 +140,8 @@ export async function getRandomSuggestions(type: string, limit: number = 5,
                     slug: drawing.slug,
                     title: drawing.title,
                     image: drawing.imageUrl ?? null,
-                    description: null,
+                    description: drawing.description ?? null,
+                    age: drawing.ageCategories?.[0]?.ageCategory?.title ?? null,
                     date: drawing.createdAt ? drawing.createdAt.toISOString() : null,
                 }))
             );
