@@ -36,7 +36,11 @@ const Card: React.FC<CardProps> = ({ cover, title, content, date, type, category
                 <div className="card__content__text">
                     <h3 className="card__content__text__title">{title}</h3>
                     <p className="card__content__text__description">{content}</p>
-                    {date && <p className="card__content__text__date">{date}</p>} {/* ✅ Ajout de la date */}
+                    {date && <p className="card__content__text__date"> {new Date(date).toLocaleDateString("fr-FR", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                    })}</p>}
                 </div>
 
                 {/* ✅ Affichage des tags */}

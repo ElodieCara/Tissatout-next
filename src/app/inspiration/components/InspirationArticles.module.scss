@@ -125,7 +125,24 @@
                     }
 
                     &__tags {
-                        bottom: 265px;
+                        display: flex;
+                        flex-wrap: wrap;
+                        gap: 6px 8px; // vertical, horizontal
+                        margin-bottom: 8px;
+
+                        // optionnel : pour limiter à 2 lignes max sans troncature moche
+                        max-height: 4.2em;
+                        overflow: hidden;
+
+                        & span {
+                            padding: 2px 6px;
+                            font-size: 0.75rem;
+                            background: #f9b233;
+                            color: #2c3f64;
+                            border-radius: 4px;
+                            white-space: nowrap;
+                        }
+
                     }
                 }
             }
