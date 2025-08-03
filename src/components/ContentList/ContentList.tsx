@@ -85,7 +85,7 @@ export default function ContentList({ items, type, title, age, suggestions }: Co
                 <div className="content-list__grid">
                     {displayed.map((item) => (
                         <Link
-                            href={`/${item.module}/${item.slug}`}
+                            href={`/${item.module ?? item.type}/${item.slug}`}
                             key={item.id}
                             className="content-list__card"
                         >
