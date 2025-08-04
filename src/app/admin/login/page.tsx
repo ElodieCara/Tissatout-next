@@ -19,7 +19,7 @@ export default function AdminLoginPage() {
         setLoading(false);
 
         if (!res.ok) {
-            setError("Mot de passe incorrect");
+            setError("Identifiants incorrects");
         } else {
             window.location.href = "/admin";
         }
@@ -60,6 +60,7 @@ export default function AdminLoginPage() {
                 </h1>
                 <input
                     type="email"
+                    autoComplete="email"
                     placeholder="Adresse email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -76,6 +77,7 @@ export default function AdminLoginPage() {
 
                 <input
                     type="password"
+                    autoComplete="current-password"
                     placeholder="Mot de passe"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
