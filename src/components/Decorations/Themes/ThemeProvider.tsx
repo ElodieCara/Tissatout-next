@@ -12,7 +12,6 @@ import { calculateEaster } from "@/utils/dateHelpers";
 import ThemeDecorations from "@/components/Decorations/Themes/ThemeDecorations";
 import { decorationsConfig } from "@/data/decorationsConfig";
 
-
 const themes: Record<Theme, string> = {
     "back-to-school-theme": "back-to-school-theme",
     "easter-theme": "easter-theme",
@@ -33,7 +32,6 @@ interface ThemeContextType {
     setForceTheme: (theme: Theme | null) => void;
 }
 
-
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const useTheme = () => {
@@ -44,7 +42,6 @@ export const useTheme = () => {
     return context;
 };
 
-
 const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     const [theme, setTheme] = useState<Theme>("default-theme");
     const [forceTheme, setForceTheme] = useState<Theme | null>(null);
@@ -52,11 +49,9 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     const themeToApply = forceTheme || theme;
 
     useEffect(() => {
-
         const year = new Date().getFullYear();
         const easterDate = calculateEaster(year);
 
-        // Définir tes dates fixes AVANT de les appeler
         const toussaint = new Date(year, 10 - 1, 1);      // 1er novembre
         const chandeleur = new Date(year, 2 - 1, 2);      // 2 février
         const epiphanie = new Date(year, 0, 6);           // 6 janvier
@@ -68,7 +63,6 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
         const month = now.getMonth();
         const day = now.getDate();
 
-        // Une semaine avant Pâques
         const easterWeekStart = new Date(easterDate);
         easterWeekStart.setDate(easterDate.getDate() - 7);
 
@@ -100,15 +94,15 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
     }, [forceTheme]);
 
     useEffect(() => {
-        // Appliquer la classe CSS du thème sur <body>
         document.body.className = `${themeToApply}`;
     }, [themeToApply]);
 
-
     useEffect(() => {
-        console.log("forceTheme:", forceTheme);
-        console.log("theme (auto):", theme);
-        console.log("themeToApply (appliqué):", themeToApply);
+        if (process.env.NODE_ENV === "development") {
+            console.log("forceTheme:", forceTheme);
+            console.log("theme (auto):", theme);
+            console.log("themeToApply (appliqué):", themeToApply);
+        }
     }, [forceTheme, theme, themeToApply]);
 
     const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -118,19 +112,21 @@ const ThemeProvider: React.FC<{ children?: ReactNode }> = ({ children }) => {
 
     return (
         <ThemeContext.Provider value={{ theme: themeToApply, setForceTheme }}>
-            <div style={{ position: "fixed", top: "10px", right: "5px", zIndex: 999 }}>
-                <label htmlFor="theme-selector" style={{ marginRight: "10px", color: "white" }}>
-                    Tester les thèmes :
-                </label>
-                <select id="theme-selector" onChange={handleThemeChange} value={forceTheme || "auto"}>
-                    <option value="auto">Automatique</option>
-                    {Object.keys(themes).map((key) => (
-                        <option key={key} value={key}>
-                            {key.charAt(0).toUpperCase() + key.slice(1)}
-                        </option>
-                    ))}
-                </select>
-            </div>
+            {process.env.NODE_ENV === "development" && (
+                <div style={{ position: "fixed", top: "10px", right: "5px", zIndex: 999 }}>
+                    <label htmlFor="theme-selector" style={{ marginRight: "10px", color: "white" }}>
+                        Tester les thèmes :
+                    </label>
+                    <select id="theme-selector" onChange={handleThemeChange} value={forceTheme || "auto"}>
+                        <option value="auto">Automatique</option>
+                        {Object.keys(themes).map((key) => (
+                            <option key={key} value={key}>
+                                {key.charAt(0).toUpperCase() + key.slice(1)}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+            )}
 
             <ThemeDecorations theme={themeToApply} />
 
