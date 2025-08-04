@@ -5,7 +5,6 @@
 
 .nos-univers {
     position: relative;
-    //height: 300px;
 
     .quickbar {
         display: none;
@@ -65,7 +64,7 @@
             gap: 20px;
             width: 100%;
             max-width: 1000px;
-            justify-content: center; // ✅ Centre la grille
+            justify-content: center;
             background-color: #F8F5F1;
             position: relative;
             z-index: 1;
@@ -237,13 +236,13 @@
 
         &__squished-plush {
             position: absolute;
-            bottom: -26px; // 🔥 Juste sous le cadre
+            bottom: -26px;
             left: 50%;
-            transform: translateX(-50%) scale(1, 1); // 🧸 Debout par défaut
+            transform: translateX(-50%) scale(1, 1);
             font-size: 50px;
             opacity: 0.9;
             transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-            z-index: -1; // ✅ Sous le cadre
+            z-index: -1;
 
         }
     }
@@ -289,14 +288,6 @@
 
             .filter-button {
                 background: vars.$secondary-color;
-                // color: #333;
-                // border: none;
-                // padding: 10px 20px;
-                // font-size: 16px;
-                // font-weight: bold;
-                // border-radius: 8px;
-                // cursor: pointer;
-                // transition: 0.3s;
                 @include mix.font-tertiary;
 
                 &.active {
@@ -315,7 +306,7 @@
 
         &-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); // Responsive
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             justify-content: center;
             gap: 20px;
             max-width: 900px;
@@ -336,7 +327,7 @@
             animation: moveGradient 12s ease-in-out infinite;
             color: white;
             border-radius: 15px;
-            padding: 20px; // ✅ Espace intérieur plus grand
+            padding: 20px;
             text-align: center;
             display: flex;
             flex-direction: column;

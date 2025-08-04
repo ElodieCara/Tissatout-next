@@ -73,7 +73,6 @@
 // ***************** Ajout de l’effet médiéval ***********************
 .medieval__categories {
     display: flex;
-    //flex-wrap: wrap;
     justify-content: center;
     gap: 2rem;
     margin: 2rem auto;
@@ -101,8 +100,8 @@
         content: "";
         position: absolute;
         inset: 0;
-        background: #c7a269; // Couleur de fond
-        border-radius: 0; // pas de masque ici
+        background: #c7a269;
+        border-radius: 0;
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
         z-index: -1;
         border-radius: inherit;
@@ -126,13 +125,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        //background: #fff;
         width: 130px;
         height: 155px;
         margin: 0 auto 1rem;
         border-radius: 50%;
         font-size: 2rem;
-        // box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
     h3 {
@@ -156,7 +153,7 @@
     mask-image: url('/assets/medieval/rhetorique.png');
     mask-size: cover;
     mask-repeat: no-repeat;
-    aspect-ratio: 375/560; // Important pour garder le feston net
+    aspect-ratio: 375/560;
 }
 
 .medieval__card--harmonie {
@@ -164,7 +161,7 @@
     mask-image: url('/assets/medieval/rhetorique.png');
     mask-size: cover;
     mask-repeat: no-repeat;
-    aspect-ratio: 367/542; // Important pour garder le feston net
+    aspect-ratio: 367/542;
 }
 
 .medieval__card--eloquence {
@@ -226,10 +223,10 @@
 
     .medieval__advice__list {
         display: grid;
-        grid-template-columns: 1fr; // ✅ Force une seule colonne
-        gap: 20px; // ✅ Ajoute un espace entre les cartes
+        grid-template-columns: 1fr;
+        gap: 20px;
         margin-top: 20px;
-        justify-items: center; // ✅ Centre les cartes dans la colonne
+        justify-items: center;
     }
 
 
@@ -237,9 +234,9 @@
         width: 100%;
         max-width: 1000px;
         min-height: 120px;
-        display: flex; // ✅ Met l’image et le texte en ligne
+        display: flex;
         align-items: center;
-        gap: 15px; // ✅ Ajoute un espace entre l’image et le texte
+        gap: 15px;
         background: white;
         padding: 15px;
         border-radius: 8px;
@@ -258,14 +255,14 @@
 
         .medieval__advice__item-image {
             width: 100%;
-            height: 160px; // ✅ Taille plus raisonnable
+            height: 160px;
             overflow: hidden;
             border-radius: 8px;
 
             img {
                 width: 100%;
                 height: 100%;
-                object-fit: cover; // ✅ Coupe proprement l'image si trop grande
+                object-fit: cover;
                 display: block;
             }
         }

@@ -5,7 +5,6 @@
     background-color: vars.$light-gray;
     padding: 2rem 1rem;
 
-    // Centrage du contenu (container mixin si tu en as un)
     &>* {
         @include mix.container;
     }
@@ -76,7 +75,7 @@
         }
 
         @media (max-width: 768px) {
-            order: -1; // Icône au-dessus du bloc texte si besoin
+            order: -1;
             justify-content: space-between;
             width: 100%;
             align-items: flex-start;
@@ -152,7 +151,7 @@
                 top: 0.5em;
                 width: 0.6rem;
                 height: 0.6rem;
-                background-color: #f78e74; // 🎯 ta couleur saumon
+                background-color: #f78e74;
                 border-radius: 50%;
             }
         }
@@ -179,10 +178,8 @@
                 left: 50%;
                 transform: translateX(-50%);
                 width: 100%;
-                /* ou ce que tu veux */
                 height: 2px;
                 background-color: #f78e74;
-                /* couleur du trait */
                 border-radius: 2px;
             }
         }
@@ -243,8 +240,6 @@
     &__card {
         display: flex;
         height: 280px;
-        // border: 2px solid #0055aa;
-        // border-radius: 1rem;
         overflow: hidden;
         padding: 1.5rem;
         gap: 2rem;
@@ -274,27 +269,19 @@
                 }
             }
         }
-
-        // @media (max-width: 768px) {
-        //     flex-direction: column;
-
-        //     &.reverse {
-        //         flex-direction: column;
-        //     }
-        // }
     }
 
     &__image {
         flex: 0 0 45%;
         height: 220px;
         overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); // 🌟 ici l’ombre
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         border-radius: 25px;
 
         img {
             width: 100%;
             height: 220px;
-            object-fit: cover; // 🧠 LA CLÉ
+            object-fit: cover;
             border-radius: 0.5rem;
         }
     }
@@ -348,7 +335,7 @@
 
         &:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); // ombre plus marquée au hover
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
     }
 }
@@ -403,7 +390,7 @@
 
         // ✅ SÉPARATEUR (même pour les reverse)
         &__separator {
-            width: 100% !important; // 🔒 force horizontal
+            width: 100% !important;
             height: 3px !important;
             margin: 1.5rem 0 !important;
         }
@@ -654,32 +641,18 @@
             font-weight: bold;
             color: vars.$dark-primary-color;
         }
-
-        // & .drawings__button {
-        //     background-color: #f7b733;
-        //     color: white;
-        //     padding: 0.5rem 1.25rem;
-        //     border-radius: 999px;
-        //     font-weight: bold;
-        //     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        //     transition: background-color 0.2s;
-
-        //     &:hover {
-        //         background-color: #f59e0b;
-        //     }
-        // }
     }
 
     &__content {
         display: grid;
-        grid-template-columns: 1.2fr 2.8fr; // ou 1.3 / 2.7 selon effet voulu
+        grid-template-columns: 1.2fr 2.8fr;
         gap: 1.5rem;
         margin: 0 auto;
         align-items: center;
 
         &__text {
             display: flex;
-            align-items: center; // aligne verticalement
+            align-items: center;
             gap: 1rem;
             margin-top: 1rem;
 
@@ -810,17 +783,14 @@
         gap: 2rem;
 
         @media screen and (min-width: 992px) {
-            grid-template-columns: repeat(3, 1fr); // 🔒 max 3 cartes par ligne
+            grid-template-columns: repeat(3, 1fr);
         }
     }
 
     &__card {
-        //background-size: contain;
-        /* Éviter que l'image de fond se répète */
         border-radius: 15px;
         padding: 20px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        /* Ombre douce pour faire ressortir les cards */
         display: flex;
         align-items: center;
         flex-direction: column;
@@ -830,7 +800,6 @@
         gap: 0.75rem;
         z-index: 0;
 
-        /* On n'ajoute pas de flou à la card entière ici */
         &:hover {
             transform: translateY(-4px);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
@@ -840,18 +809,13 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%; // ou 150% si tu préfères
+            width: 100%;
             height: 100%;
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
             z-index: -1;
             transition: filter 0.3s ease-in-out;
-
-            // &:hover {
-            // //filter: blur(5px);
-            // /* Appliquer le flou uniquement à l'image de fond lors du hover */
-            // }
         }
 
         &__icon {
@@ -912,7 +876,6 @@
     gap: 1.5rem;
 }
 
-// Ajoute ce bloc pour régler le problème de respiration :
 .advices__text,
 .articles__text,
 .drawings__text,
@@ -922,14 +885,14 @@
 
     h2 {
         margin: 0;
-        margin-bottom: 0.5rem; // 👈 Respiration entre le titre et l’intro
+        margin-bottom: 0.5rem;
     }
 
     p {
         margin: 0;
         font-size: 1rem;
         line-height: 1.6;
-        color: rgba(255, 255, 255, 0.85); // pour fond sombre (ajuste pour fond clair)
+        color: rgba(255, 255, 255, 0.85);
     }
 }
 

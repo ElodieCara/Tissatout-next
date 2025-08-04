@@ -13,7 +13,7 @@
     & h2,
     h3,
     p {
-        color: $dark-primary-color; // Remplace par une couleur plus visible
+        color: $dark-primary-color;
         text-align: center;
         margin-bottom: 1rem;
     }
@@ -342,10 +342,9 @@
             color: $dark-primary-color;
             text-align: left;
 
-            // Pour que le texte soit bien visible
+
             background-color: #fff;
 
-            // Et pour que le bouton de suppression ne prenne pas trop de place
             button {
                 padding: 0.25rem 0.5rem;
                 font-size: 0.85rem;

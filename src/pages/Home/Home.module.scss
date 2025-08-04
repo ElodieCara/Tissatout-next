@@ -36,7 +36,7 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            max-width: 450px; // Réduit la largeur à 70% de la largeur totale
+            max-width: 450px;
             margin: 0 auto;
 
 
@@ -56,9 +56,7 @@
 
                     &:hover {
                         transform: translateY(-5px);
-                        /* Légère élévation */
                         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-                        /* Ombre plus marquée */
                     }
                 }
             }
@@ -124,8 +122,8 @@
 @media screen and (max-width: 768px) {
     .container__news {
         .news-content {
-            grid-template-columns: 1fr; // empile les deux colonnes
-            gap: 30px; // écarte un peu
+            grid-template-columns: 1fr;
+            gap: 30px;
 
             &__images-gallery {
                 max-width: 100%;
@@ -133,11 +131,11 @@
         }
 
         h2 {
-            font-size: 1.6rem; // plus petit titre
+            font-size: 1.6rem;
             text-align: center;
 
             &::after {
-                margin: 10px auto; // centrer le trait décoratif
+                margin: 10px auto;
             }
         }
     }
@@ -147,10 +145,6 @@
 
 /******************* IDEAS ***********************/
 .container__ideas {
-    //display: flex;
-    // flex-direction: column;
-    // align-items: center;
-    // padding-top: 82px;
 
     h2 {
         text-align: center;
@@ -181,11 +175,10 @@
             position: relative;
             display: flex;
             flex-wrap: wrap;
-            gap: 20px; // Ajout d'un espace entre les cartes
+            gap: 20px;
 
             .ideas-content__card__link {
                 display: block;
-                // border-radius: 10px;
                 overflow: hidden;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 color: white;
@@ -292,12 +285,6 @@
                         }
                     }
                 }
-
-                // & img {
-                //     width: 100%;
-                //     height: auto;
-                //     border-bottom: 5px solid white;
-                // }
             }
         }
     }

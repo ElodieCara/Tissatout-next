@@ -8,8 +8,8 @@
     &-banner {
         position: relative;
         width: 100%;
-        min-height: 400px; // hauteur raisonnable
-        background-color: #fdfbf5; // couleur de base douce en fond
+        min-height: 400px;
+        background-color: #fdfbf5;
         overflow: hidden;
 
         &__background {
@@ -284,11 +284,11 @@
             position: relative;
 
             span {
-                font-size: 1.8rem; // un peu plus gros que 1.1rem
+                font-size: 1.8rem;
                 font-weight: bold;
                 text-transform: uppercase;
                 color: vars.$primary-color;
-                background: #f8f5f1; // ou white si ton fond est blanc
+                background: #f8f5f1;
                 padding: 0 1rem;
                 position: relative;
                 z-index: 2;
@@ -318,7 +318,7 @@
             h2 {
                 font-size: 1.8rem;
                 margin-bottom: 1rem;
-                color: #2c3f64; // ou ton gris foncé principal
+                color: #2c3f64;
             }
 
             p {

@@ -1,14 +1,9 @@
 .explorer-banner {
     display: flex;
-    flex-direction: row; // ✅ à côté
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     text-align: left;
-    // background: #293347;
-    // color: #fff;
-    // padding: 2rem;
-    // border-radius: 10px;
-    // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     max-width: 100%;
     overflow: hidden;
     position: relative;
@@ -60,8 +55,6 @@
             font-size: 1rem;
         }
     }
-
-
 
     /* 🔍 Barre de recherche */
     .search-bar {
