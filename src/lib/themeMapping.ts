@@ -3,9 +3,12 @@ export const themeMapping: Record<string, string> = {
     "Printemps": "spring",
     "Été": "summer",
     "Automne": "autumn",
-    "Toussaint": "toussaint",
+    "Toussaint": "Toussaint",
     "Noël": "christmas",
     "Pâques": "easter",
+    "Chandeleur": "chandeleur",
+    "Saint-Jean": "saint-jean",
+    "Epiphanie": "epiphanie",
 };
 
 const reverseThemeMapping: Record<string, string> = Object.fromEntries(

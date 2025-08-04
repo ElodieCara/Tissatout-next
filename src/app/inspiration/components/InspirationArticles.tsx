@@ -17,13 +17,13 @@ interface Article {
 }
 
 export default function InspirationArticles({ articles }: { articles: Article[] }) {
-    const [visibleArticles, setVisibleArticles] = useState(10);
+    const [visibleArticles, setVisibleArticles] = useState(6);
     const [isLoading, setIsLoading] = useState(false);
 
     const loadMoreArticles = () => {
         setIsLoading(true);
         setTimeout(() => {
-            setVisibleArticles((prev) => prev + 10);
+            setVisibleArticles((prev) => prev + 3);
             setIsLoading(false);
         }, 1500);
     };

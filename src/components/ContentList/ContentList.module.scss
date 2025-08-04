@@ -48,10 +48,8 @@
     &__sidebar {
         position: sticky;
         top: 100px;
-        /* Ajuste cette valeur selon la hauteur de ton header */
         height: fit-content;
         max-height: calc(100vh - 120px);
-        /* Garde un espace en bas pour ne pas dépasser */
         background-color: #f9f9f9;
         border-radius: 10px;
         padding: 1.5rem;
@@ -110,7 +108,7 @@
     &__card-title {
         font-size: 1.4rem;
         margin-bottom: 0.8rem;
-        color: #2c3f64; // ta couleur bleu secondaire
+        color: #2c3f64;
     }
 
     &__description {
@@ -228,16 +226,16 @@
 @media (max-width: 768px) {
     .content-list {
         &__grid {
-            grid-template-columns: 1fr; // ✅ 1 seule colonne
-            gap: 1.2rem; // un gap plus petit si tu veux
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
         }
 
         &__card {
-            flex-direction: column; // ✅ Si jamais tu utilises du flex interne
+            flex-direction: column;
         }
 
         &__image-wrapper {
-            height: auto; // ✅ Laisse l’image s’adapter
+            height: auto;
 
             img {
                 width: 100%;
