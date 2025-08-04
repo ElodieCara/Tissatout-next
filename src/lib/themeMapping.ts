@@ -3,7 +3,7 @@ export const themeMapping: Record<string, string> = {
     "Printemps": "spring",
     "Été": "summer",
     "Automne": "autumn",
-    "Halloween": "halloween",
+    "Toussaint": "toussaint",
     "Noël": "christmas",
     "Pâques": "easter",
 };

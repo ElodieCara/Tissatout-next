@@ -71,7 +71,7 @@ $themes: (
             acorns: '/assets/decorations/autumn/autumn-acorns.png',
             owl: '/assets/decorations/autumn/autumn-owl.png'
         )),
-    halloween: (bg-color: #fdf4e3,
+    toussaint: (bg-color: #fdf4e3,
         text-color: #2c3f64,
         icon-filter: brightness(0) saturate(100%) invert(50%) sepia(80%) saturate(2000%) hue-rotate(20deg) brightness(95%) contrast(105%), // Orange doré pour les icônes 🎃
         decorations: (bat: '/assets/decorations/halloween/halloween-bat.png',
@@ -119,7 +119,7 @@ $tag-colors: (
     geometrie: #c7a269,
     astronomie: $dark-primary-color,
     christmas: #db4d4d,
-    halloween: #ef9e4d,
+    toussaint: #ef9e4d,
     spring: #97d89a,
     summer: #f7ca70,
     autumn: #c78c6c,

@@ -1,5 +1,5 @@
 // src/data/themeImages.ts
-export type Theme = "winter" | "christmas" | "easter" | "spring" | "summer" | "autumn" | "halloween" | "default";
+export type Theme = "winter" | "christmas" | "easter" | "spring" | "summer" | "autumn" | "toussaint" | "chandeleur" | "saintJean" | "epiphanie" | "default";
 
 const themeImages: Record<Theme, { icon: string; background: string }> = {
     winter: {
@@ -26,9 +26,21 @@ const themeImages: Record<Theme, { icon: string; background: string }> = {
         icon: "/icons/autumn.png",
         background: "/bg/autumn-bg.png",
     },
-    halloween: {
-        icon: "/icons/halloween.png",
-        background: "/bg/halloween-bg.png",
+    toussaint: {
+        icon: "/icons/themes/toussaint.png",
+        background: "/bg/toussaint-bg.png",
+    },
+    chandeleur: {
+        icon: "/icons/themes/chandeleur.png",
+        background: "/bg/chandeleur-bg.png",
+    },
+    saintJean: {
+        icon: "/icons/themes/saintjean.png",
+        background: "/bg/saintjean-bg.png",
+    },
+    epiphanie: {
+        icon: "/icons/themes/epiphanie.png",
+        background: "/bg/epiphanie-bg.png",
     },
     default: {
         icon: "/icons/idea-default.png",

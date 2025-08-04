@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 export default function AdminLoginPage() {
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ export default function AdminLoginPage() {
         const res = await fetch("/api/admin/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ password }),
+            body: JSON.stringify({ email, password }),
         });
         setLoading(false);
 
@@ -57,6 +58,22 @@ export default function AdminLoginPage() {
                 >
                     Connexion Admin
                 </h1>
+                <input
+                    type="email"
+                    placeholder="Adresse email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    style={{
+                        padding: "0.75rem",
+                        fontSize: "1rem",
+                        borderRadius: "6px",
+                        border: "1px solid #ccc",
+                        marginBottom: "1rem",
+                        width: "100%",
+                        boxSizing: "border-box",
+                    }}
+                />
+
                 <input
                     type="password"
                     placeholder="Mot de passe"

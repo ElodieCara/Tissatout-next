@@ -17,8 +17,11 @@ const ThemeIcon: React.FC<ThemeIconProps> = ({ theme }) => {
         "winter-theme": "/assets/winter.png",
         "spring-theme": "/assets/spring.png",
         "autumn-theme": "/assets/autumn.png",
-        "halloween-theme": "/assets/pumpkin.png",
+        "toussaint-theme": "/assets/pumpkin.png",
         "christmas-theme": "/assets/christmas.png",
+        "chandeleur-theme": "/assets/default.png",
+        "saint-jean-theme": "/assets/default.png",
+        "epiphanie-theme": "/assets/default.png",
     };
 
     useEffect(() => {

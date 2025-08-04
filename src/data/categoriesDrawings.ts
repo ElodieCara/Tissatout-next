@@ -7,7 +7,7 @@ export const categoriesDrawings = {
         { id: new ObjectId().toString(), name: "Été 🌞" },
         { id: new ObjectId().toString(), name: "Automne 🍂" },
         { id: new ObjectId().toString(), name: "Noël 🎄" },
-        { id: new ObjectId().toString(), name: "Halloween 🎃" },
+        { id: new ObjectId().toString(), name: "Toussaint 🎃" },
         { id: new ObjectId().toString(), name: "Pâques 🐣" },
         { id: new ObjectId().toString(), name: "Fête des Mères 💐" },
         { id: new ObjectId().toString(), name: "Fête des Pères 👨‍👧" },

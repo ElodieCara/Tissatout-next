@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 const categoriesData = {
-    "Saisons et Fêtes": ["Hiver", "Printemps", "Été", "Automne", "Noël", "Halloween", "Pâques"],
+    "Saisons et Fêtes": ["Hiver", "Printemps", "Été", "Automne", "Noël", "Toussaint", "Pâques"],
     "Thèmes": ["Animaux", "Véhicules", "Espace", "Pirates"],
     "Âge": ["Tout Petits (0-3 ans)", "Dès 3 ans", "Dès 6 ans", "Dès 10 ans"],
     "Éducatif & Trivium": [

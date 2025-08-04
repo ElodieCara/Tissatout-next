@@ -5,6 +5,10 @@ import { notFound } from "next/navigation";
 export default async function Page({ params }: { params: { slug: string } }) {
     const slug = params.slug;
 
+    if (typeof slug !== "string") {
+        throw new Error("Le slug doit être une chaîne valide.");
+    }
+
     console.log("📌 Slug reçu :", slug);
     const ageCategory = await prisma.ageCategory.findUnique({
         where: { slug },

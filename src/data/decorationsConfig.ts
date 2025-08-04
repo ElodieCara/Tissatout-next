@@ -22,7 +22,7 @@ export const decorationsConfig: Record<Theme, { className: string }[]> = {
         { className: "decoration-acorns" },
         { className: "decoration-owl" },
     ],
-    "halloween-theme": [
+    "toussaint-theme": [
         { className: "decoration-bat" },
         { className: "decoration-ghost" },
         { className: "decoration-witch-hat" },
@@ -44,4 +44,7 @@ export const decorationsConfig: Record<Theme, { className: string }[]> = {
     ],
     // Ajoutez une entrée vide pour "default-theme"
     "default-theme": [],
+    "chandeleur-theme": [],
+    "saint-jean-theme": [],
+    "epiphanie-theme": [],
 };

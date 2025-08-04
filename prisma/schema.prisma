@@ -7,6 +7,15 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Admin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String   // stocke ici le mot de passe hashé (pas en clair !)
+  name      String?
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+}
+
 model Article {
   id               String           @id @default(auto()) @map("_id") @db.ObjectId
   title            String

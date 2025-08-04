@@ -38,6 +38,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
     console.log("Advices:", ageCategory.advices);
     console.log("Ideas:", ageCategory.ideas);
 
+
     return (
         <div>
             <header>
@@ -331,7 +332,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                                             <div
                                                 className="ideas__card__background"
                                                 style={{
-                                                    backgroundImage: `url(${themeImages[idea.theme as keyof typeof themeImages]?.background || themeImages.default.background})`,
+                                                    backgroundImage: `url(${background})`,
                                                     backgroundSize: "",  // Couvre toute la surface de la card
                                                     backgroundRepeat: "no-repeat",
                                                     backgroundPosition: "center",
