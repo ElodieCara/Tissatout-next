@@ -7,13 +7,13 @@ const Footer: React.FC = () => {
         <footer className="container__footer">
             {/* Réseaux sociaux */}
             <div className="container__footer__social">
-                <Link href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+                <Link href="https://www.facebook.com/profile.php?id=61578981664913" target="_blank" rel="noopener noreferrer">
                     <FaFacebook size={30} />
                 </Link>
-                <Link href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+                <Link href="https://www.instagram.com/tissatout.site" target="_blank" rel="noopener noreferrer">
                     <FaInstagram size={30} />
                 </Link>
-                <Link href="https://www.pinterest.com" target="_blank" rel="noopener noreferrer">
+                <Link href="https://pinterest.com/tissatout/" target="_blank" rel="noopener noreferrer">
                     <FaPinterest size={30} />
                 </Link>
             </div>

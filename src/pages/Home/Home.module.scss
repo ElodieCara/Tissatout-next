@@ -270,14 +270,15 @@
                     .card__content {
                         display: flex;
                         flex-direction: column;
-                        justify-content: space-between;
-                        flex-grow: 1;
-                        height: 45%;
-                        margin: 10px;
+                        justify-content: flex-end;
+                        padding: 10px;
+                        height: 40%;
 
 
                         & h3 {
-                            font-size: 1.5rem;
+                            font-size: 1rem;
+                            width: 50%;
+                            height: 0%;
                         }
 
                         & p {

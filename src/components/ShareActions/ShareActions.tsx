@@ -1,7 +1,7 @@
 "use client";
 
-import { FaFacebook, FaPinterest } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa6";
+import { FaFacebook, FaPinterest, FaWhatsapp, FaEnvelope } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6"; // pour l'icône X (Twitter)
 
 interface ShareActionsProps {
     imageUrl: string;
@@ -20,13 +20,21 @@ export default function ShareActions({ imageUrl, title }: ShareActionsProps) {
 
     const shareOnPinterest = () => {
         window.open(
-            `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(pageUrl)}`,
+            `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(pageUrl)}&media=${encodeURIComponent(imageUrl)}&description=${encodeURIComponent(title)}`,
             "_blank"
         );
     };
 
-    const goToInstagram = () => {
-        window.open("https://www.instagram.com/tissatout", "_blank"); // mets ton compte ici
+    const shareOnWhatsApp = () => {
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(title + ' ' + pageUrl)}`, "_blank");
+    };
+
+    const shareByEmail = () => {
+        window.open(`mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(pageUrl)}`, "_blank");
+    };
+
+    const shareOnX = () => {
+        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(title)}`, "_blank");
     };
 
     return (
@@ -37,8 +45,14 @@ export default function ShareActions({ imageUrl, title }: ShareActionsProps) {
             <button onClick={shareOnPinterest} aria-label="Partager sur Pinterest">
                 <FaPinterest />
             </button>
-            <button onClick={goToInstagram} aria-label="Voir sur Instagram">
-                <FaInstagram />
+            <button onClick={shareOnWhatsApp} aria-label="Partager sur WhatsApp">
+                <FaWhatsapp />
+            </button>
+            <button onClick={shareByEmail} aria-label="Partager par Email">
+                <FaEnvelope />
+            </button>
+            <button onClick={shareOnX} aria-label="Partager sur X (ancien Twitter)">
+                <FaXTwitter />
             </button>
         </div>
     );
