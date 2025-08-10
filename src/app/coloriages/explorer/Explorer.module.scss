@@ -157,8 +157,6 @@
     background-color: #e6a82a;
 }
 
-
-
 /* ✅ Section Explorer Enhanced */
 .explorer-enhanced {
     padding: 2rem;
@@ -166,12 +164,10 @@
     color: white;
     margin-top: 20px;
     transition: opacity 0.3s ease-in-out;
-    /* ✅ Empêche de dépasser */
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
     gap: 1rem;
-    /* ✅ Centre le contenu */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -188,16 +184,6 @@
         text-align: center;
         color: $secondary-color;
     }
-
-    /* ✅ Bannière */
-    // &__banner {
-    //     display: flex;
-    //     align-items: center;
-    //     justify-content: space-between;
-    //     padding: 2rem;
-    //     background: $primary-color;
-    //     border-radius: 10px;
-    // }
 
     /* ✅ Section Tendances */
     .section-subtitle,
@@ -304,10 +290,6 @@
         box-shadow: none;
         top: 0;
     }
-
-    // .explorer-content {
-    //     padding-left: 0;
-    // }
 }
 
 @media (max-width: 768px) {
