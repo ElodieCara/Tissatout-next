@@ -1,12 +1,27 @@
+import "server-only";
 import prisma from "@/lib/prisma"; // ✅ Utilisation de Prisma
 import { Drawing } from "@/types/drawing";
+import { headers } from "next/headers";
+
+// ✅ Base URL sûre (dev/preview/prod) — aucun localhost en prod
+async function getBaseUrl() {
+    // 1) Fallback explicite si tu déclares BASE_URL sur Vercel
+    if (process.env.BASE_URL) return process.env.BASE_URL;
+    // 2) Déduire depuis la requête (fonctionne en dev/preview/prod)
+    const h = await headers(); // <- sur ton setup, TS attend un await
+    const proto = h.get("x-forwarded-proto") ?? "http";
+    const host = h.get("x-forwarded-host") ?? h.get("host");
+    return `${proto}://${host}`;
+}
 
 /** ✅ Récupère toutes les inspirations */
 export async function getInspirationData() {
+    const baseUrl = await getBaseUrl();
+
     const [articlesRes, ideasRes, adviceRes] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/articles`, { next: { revalidate: 60 } }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/ideas`, { next: { revalidate: 60 } }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/advice`, { next: { revalidate: 60 } })
+        fetch(`${baseUrl}/api/articles`, { next: { revalidate: 60 } }),
+        fetch(`${baseUrl}/api/ideas`, { next: { revalidate: 60 } }),
+        fetch(`${baseUrl}/api/advice`, { next: { revalidate: 60 } }),
     ]);
 
     if (!articlesRes.ok || !ideasRes.ok || !adviceRes.ok) {

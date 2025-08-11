@@ -1,11 +1,26 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { encryptEmail } from "@/lib/crypto";
-import crypto from "crypto"; // Pour hash + confirmationToken
+import crypto from "crypto";
 import { Resend } from "resend";
 
+// ⚠️ Important pour Cloud SDK & uploads signés
+export const runtime = "nodejs";
+// Évite tout cache sur cette route
+export const dynamic = "force-dynamic";
+
+function getBaseUrl(request: Request) {
+    // 1) Si tu veux figer une base en prod, définis BASE_URL (non public) dans Vercel
+    //    Production: https://tissatout.fr
+    //    Preview:    https://<projet>-<branche>.vercel.app
+    if (process.env.BASE_URL) return process.env.BASE_URL;
+
+    // 2) Sinon, prends l’origine réelle de la requête (localhost en dev, vercel.app en preview/prod)
+    return new URL(request.url).origin;
+}
+
 // ------------------------------------------------------
-// ✅ GET : Confirmer une adresse e‑mail
+// ✅ GET : Confirmer une adresse e-mail
 // ------------------------------------------------------
 export async function GET(request: Request) {
     try {
@@ -46,35 +61,35 @@ export async function POST(request: Request) {
     try {
         const { email, website } = await request.json();
 
-        // 👇 1️⃣ Anti‑bot
+        // 1) Anti-bot
         if (website && website.trim() !== "") {
             return NextResponse.json({ error: "Bot détecté." }, { status: 403 });
         }
 
-        // 👇 2️⃣ Validation de l'email
+        // 2) Validation de l'email
         if (!email || !email.includes("@")) {
             return NextResponse.json({ error: "Email invalide." }, { status: 400 });
         }
 
-        // 👇 3️⃣ Normalisation
+        // 3) Normalisation
         const normalizedEmail = email.toLowerCase().trim();
 
-        // 👇 4️⃣ Hash unique de l'email
+        // 4) Hash unique
         const hash = crypto.createHash("sha256").update(normalizedEmail).digest("hex");
 
-        // 👇 5️⃣ Vérification existence
+        // 5) Existence
         const existingUser = await prisma.subscriber.findUnique({ where: { emailHash: hash } });
         if (existingUser) {
             return NextResponse.json({ error: "Vous êtes déjà inscrit(e)." }, { status: 400 });
         }
 
-        // 👇 6️⃣ Chiffrement de l'email
+        // 6) Chiffrement
         const { iv, data } = encryptEmail(normalizedEmail);
 
-        // 👇 7️⃣ Génération du token de confirmation
+        // 7) Token de confirmation
         const confirmationToken = crypto.randomBytes(32).toString("hex");
 
-        // 👇 8️⃣ Création du nouvel abonné
+        // 8) Création
         const newUser = await prisma.subscriber.create({
             data: {
                 emailData: data,
@@ -85,23 +100,24 @@ export async function POST(request: Request) {
             },
         });
 
-        // 👇 9️⃣ ENVOI DU MAIL DE CONFIRMATION AVEC RESEND
-        const resend = new Resend(process.env.RESEND_API_KEY!);
-        const confirmationUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/confirm?token=${confirmationToken}`;
-        const unsubscribeUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/unsubscribe?token=${confirmationToken}`;
+        // 9) Lien sûrs (sans NEXT_PUBLIC_ côté serveur)
+        const baseUrl = getBaseUrl(request);
+        const confirmationUrl = `${baseUrl}/confirm?token=${confirmationToken}`;
+        const unsubscribeUrl = `${baseUrl}/unsubscribe?token=${confirmationToken}`;
 
+        // 10) Envoi mail
+        const resend = new Resend(process.env.RESEND_API_KEY!);
         const { error } = await resend.emails.send({
             from: "contact@tissatout.fr",
             to: normalizedEmail,
             subject: "Confirmez votre inscription",
             text: `Bienvenue sur Tissatout !
-            
-            Cliquez ici pour confirmer : ${confirmationUrl}
-            
-            Si vous ne souhaitez plus recevoir nos emails, vous pouvez vous désinscrire en un clic ici : ${unsubscribeUrl}
 
-            Merci.
-            `
+Cliquez ici pour confirmer : ${confirmationUrl}
+
+Si vous ne souhaitez plus recevoir nos emails, vous pouvez vous désinscrire en un clic ici : ${unsubscribeUrl}
+
+Merci.`
         });
 
         if (error) {
