@@ -2,30 +2,25 @@ import type { NextConfig } from "next";
 import path from "path";
 
 const nextConfig: NextConfig = {
-  sassOptions: {
-    includePaths: [path.join(__dirname, "src/styles")],
-  },
+  sassOptions: { includePaths: [path.join(__dirname, "src/styles")] },
   images: {
-    // Configuration pour autoriser les images de Cloudinary
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "res.cloudinary.com",
-        pathname: "/**", // autorise tous les chemins Cloudinary
+        pathname: `/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/**`,
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: `/${process.env.CLOUDINARY_CLOUD_NAME}/image/fetch/**`,
       },
     ],
   },
   async rewrites() {
-    return [
-      {
-        source: "/sitemap.xml",
-        destination: "/sitemap",
-      },
-    ];
+    return [{ source: "/sitemap.xml", destination: "/sitemap" }];
   },
-  // images: {
-  //   domains: ["res.cloudinary.com"],
-  // },
 };
 
 export default nextConfig;
