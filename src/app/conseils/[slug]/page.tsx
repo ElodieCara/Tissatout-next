@@ -13,14 +13,53 @@ import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 import SuggestionsForParents from "@/components/SuggestionsForParents/SuggestionsForParents";
 import { getRandomSuggestions } from "@/lib/suggestions";
 import Link from "next/link";
+import type { Metadata } from "next";
 
 type Props = {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 };
 
-export default async function AdvicePage({ params }: Props) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { slug } = await params;
+
     const advice = await prisma.advice.findUnique({
-        where: { slug: params.slug },
+        where: { slug },
+        select: { title: true, description: true, imageUrl: true, slug: true },
+    });
+
+    if (!advice) return { title: "Conseil introuvable" };
+
+    const title = `${advice.title} | Tissatout`;
+    const description = advice.description ?? "Conseil pour parents et enfants.";
+    const image = advice.imageUrl ?? "/og-image.jpg";
+    const url = `https://www.tissatout.fr/conseils/${advice.slug}`;
+
+    return {
+        title,
+        description,
+        alternates: { canonical: url },
+        openGraph: {
+            title: advice.title,
+            description,
+            url,
+            siteName: "Tissatout",
+            type: "article",
+            images: [{ url: image }],
+        },
+        twitter: {
+            card: "summary_large_image",
+            title: advice.title,
+            description,
+            images: [image],
+        },
+    };
+}
+
+export default async function AdvicePage({ params }: Props) {
+    const { slug } = await params;
+
+    const advice = await prisma.advice.findUnique({
+        where: { slug: slug },
         include: {
             ageCategories: { include: { ageCategory: true } },
             sections: true,

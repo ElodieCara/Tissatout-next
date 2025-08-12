@@ -1,38 +1,21 @@
+// src/lib/server.ts
 import "server-only";
-import prisma from "@/lib/prisma"; // ✅ Utilisation de Prisma
+import prisma from "@/lib/prisma";
 import { Drawing } from "@/types/drawing";
-import { headers } from "next/headers";
 
-// ✅ Base URL sûre (dev/preview/prod) — aucun localhost en prod
-async function getBaseUrl() {
-    // 1) Fallback explicite si tu déclares BASE_URL sur Vercel
-    if (process.env.BASE_URL) return process.env.BASE_URL;
-    // 2) Déduire depuis la requête (fonctionne en dev/preview/prod)
-    const h = await headers(); // <- sur ton setup, TS attend un await
-    const proto = h.get("x-forwarded-proto") ?? "http";
-    const host = h.get("x-forwarded-host") ?? h.get("host");
-    return `${proto}://${host}`;
-}
-
-/** ✅ Récupère toutes les inspirations */
+/** ✅ Données d’inspiration sans fetch interne (direct DB) */
 export async function getInspirationData() {
-    const baseUrl = await getBaseUrl();
-
-    const [articlesRes, ideasRes, adviceRes] = await Promise.all([
-        fetch(`${baseUrl}/api/articles`, { next: { revalidate: 60 } }),
-        fetch(`${baseUrl}/api/ideas`, { next: { revalidate: 60 } }),
-        fetch(`${baseUrl}/api/advice`, { next: { revalidate: 60 } }),
-    ]);
-
-    if (!articlesRes.ok || !ideasRes.ok || !adviceRes.ok) {
-        throw new Error("Erreur lors de la récupération des données.");
+    try {
+        const [articles, ideas, advices] = await Promise.all([
+            prisma.article.findMany({ orderBy: { id: "desc" }, take: 10 }),
+            prisma.idea.findMany({ orderBy: { id: "desc" }, take: 10 }),
+            prisma.advice.findMany({ orderBy: { id: "desc" }, take: 10 }),]);
+        return { articles, ideas, advices };
+    } catch (e) {
+        console.error("getInspirationData Prisma error:", e);
+        // 👉 on ne fait PAS planter la page
+        return { articles: [], ideas: [], advices: [] };
     }
-
-    return {
-        articles: await articlesRes.json(),
-        ideas: await ideasRes.json(),
-        advices: await adviceRes.json(),
-    };
 }
 
 /** ✅ Récupère tous les coloriages */
@@ -41,8 +24,6 @@ export async function getDrawings(): Promise<Drawing[]> {
         include: { category: true },
         orderBy: { createdAt: "desc" },
     });
-
-    console.log("📸 Données récupérées depuis Prisma:", drawings); // 🔍 Vérification
 
     return drawings.map(d => ({
         id: d.id,
@@ -57,15 +38,13 @@ export async function getDrawings(): Promise<Drawing[]> {
     }));
 }
 
-/** ✅ Récupère un coloriage spécifique par son ID */
+/** ✅ Récupère un coloriage par ID (et incrémente les vues) */
 export async function getDrawingById(id: string): Promise<Drawing | null> {
-    console.log("🔍 Recherche du dessin avec l'ID :", id);
-
     try {
         const drawing = await prisma.drawing.update({
             where: { id },
             data: { views: { increment: 1 } },
-            include: { category: true }, // ✅ Inclure la catégorie pour éviter les erreurs
+            include: { category: true },
         });
 
         return {
@@ -79,44 +58,30 @@ export async function getDrawingById(id: string): Promise<Drawing | null> {
             description: drawing.description,
             category: drawing.category ? { name: drawing.category.name } : undefined,
         };
-
     } catch (error) {
         console.error("❌ Erreur Prisma :", error);
         return null;
     }
 }
 
-/** ✅ Récupère des dessins similaires */
-export async function getSimilarDrawings(category: string, currentId: string, limit: number = 4) {
+/** ✅ Dessins similaires */
+export async function getSimilarDrawings(category: string, currentId: string, limit = 4) {
     return prisma.drawing.findMany({
-        where: {
-            category: { name: category },
-            id: { not: currentId }
-        },
+        where: { category: { name: category }, id: { not: currentId } },
         include: { category: true },
         orderBy: { createdAt: "desc" },
         take: limit,
     });
 }
 
-/** ✅ Récupère toutes les catégories + leurs dessins */
+/** ✅ Catégories + dessins */
 export async function getAllCategoriesWithDrawings() {
-
     const sections = await prisma.categorySection.findMany({
         include: { categories: true },
         orderBy: { name: "asc" },
     });
 
-    const categoriesData: Record<string, string[]> = {
-        // "Saisons et Fêtes": ["Hiver", "Printemps", "Été", "Automne", "Noël", "Halloween", "Pâques"],
-        // "Thèmes": ["Animaux", "Véhicules", "Espace", "Pirates"],
-        // "Âge": ["Tout Petits (0-3 ans)", "Dès 3 ans", "Dès 6 ans", "Dès 10 ans"],
-        // "Éducatif & Trivium": [
-        //     "Grammaire - Lettres", "Grammaire - Mots", "Grammaire - Chiffres",
-        //     "Logique - Puzzle", "Logique - Coloriages numérotés", "Logique - Labyrinthe",
-        //     "Rhétorique - Histoires", "Rhétorique - Mythologie", "Rhétorique - Philosophie"
-        // ]
-    };
+    const categoriesData: Record<string, string[]> = {};
     for (const section of sections) {
         categoriesData[section.name] = section.categories.map((cat) => cat.name);
     }
@@ -130,25 +95,21 @@ export async function getAllCategoriesWithDrawings() {
     const topImages: Record<string, { imageUrl: string; likes: number }> = {};
     const coloringCounts: Record<string, number> = {};
 
-    for (const drawing of drawings) {
-        if (!drawing.category?.name) continue;
-        const category = drawing.category.name;
-        if (!drawingsByCategory[category]) {
-            drawingsByCategory[category] = [];
-        }
-        drawingsByCategory[category].push(drawing);
+    for (const d of drawings) {
+        const cat = d.category?.name;
+        if (!cat) continue;
 
-        if (!topImages[category] || drawing.likes > (topImages[category]?.likes ?? 0)) {
-            topImages[category] = { imageUrl: drawing.imageUrl, likes: drawing.likes ?? 0 };
+        (drawingsByCategory[cat] ||= []).push(d as unknown as Drawing);
+        if (!topImages[cat] || (d.likes ?? 0) > topImages[cat].likes) {
+            topImages[cat] = { imageUrl: d.imageUrl, likes: d.likes ?? 0 };
         }
-
-        coloringCounts[category] = (coloringCounts[category] || 0) + 1;
+        coloringCounts[cat] = (coloringCounts[cat] || 0) + 1;
     }
 
     return { categoriesData, drawingsByCategory, topImages, coloringCounts };
 }
 
-/** ✅ Récupère les coloriages éducatifs (Trivium & Quadrivium) */
+/** ✅ Éducatif (Trivium) */
 export async function getEducationalDrawings(): Promise<Record<string, Drawing[]>> {
     const categoriesData: Record<string, string[]> = {
         "Éducatif & Trivium": [
@@ -160,24 +121,23 @@ export async function getEducationalDrawings(): Promise<Record<string, Drawing[]
             "Logique - Labyrinthe",
             "Rhétorique - Histoires",
             "Rhétorique - Mythologie",
-            "Rhétorique - Philosophie"
-        ]
+            "Rhétorique - Philosophie",
+        ],
     };
 
     const educationalCategory = "Éducatif & Trivium";
     const subCategories = categoriesData[educationalCategory]?.slice(0, 3);
-
     const educationalDrawings: Record<string, Drawing[]> = {};
 
-    for (const subCategory of subCategories) {
-        const drawings = await prisma.drawing.findMany({
-            where: { category: { name: subCategory } },
+    for (const sub of subCategories) {
+        const list = await prisma.drawing.findMany({
+            where: { category: { name: sub } },
             orderBy: { likes: "desc" },
-            take: 1, // ✅ Récupère uniquement le coloriage le plus aimé
-            include: { category: true }
+            take: 1,
+            include: { category: true },
         });
 
-        educationalDrawings[subCategory] = drawings.map(d => ({
+        educationalDrawings[sub] = list.map(d => ({
             id: d.id,
             title: d.title,
             imageUrl: d.imageUrl,
@@ -186,18 +146,18 @@ export async function getEducationalDrawings(): Promise<Record<string, Drawing[]
             slug: d.slug ?? "",
             createdAt: d.createdAt,
             description: d.description,
-            category: d.category ? { id: d.category.id, name: d.category.name } : undefined
+            category: d.category ? { id: d.category.id, name: d.category.name } : undefined,
         }));
     }
 
     return educationalDrawings;
 }
 
-/** ✅ Récupère les coloriages les plus likés */
-export async function getTopLikedDrawings(limit: number = 4): Promise<Drawing[]> {
+/** ✅ Top likés */
+export async function getTopLikedDrawings(limit = 4): Promise<Drawing[]> {
     const drawings = await prisma.drawing.findMany({
-        orderBy: { likes: "desc" }, // ✅ Trie par nombre de likes décroissant
-        take: limit, // ✅ Prend les X premiers dessins les plus aimés
+        orderBy: { likes: "desc" },
+        take: limit,
         include: { category: true },
     });
 
@@ -214,12 +174,12 @@ export async function getTopLikedDrawings(limit: number = 4): Promise<Drawing[]>
     }));
 }
 
-/** ✅ Récupère les dessins les plus vus */
-export async function getTrendingDrawings(limit: number = 4): Promise<Drawing[]> {
+/** ✅ Tendances (plus vus) */
+export async function getTrendingDrawings(limit = 4): Promise<Drawing[]> {
     const drawings = await prisma.drawing.findMany({
-        orderBy: { views: "desc" }, // ✅ Trie par nombre de vues décroissant
-        take: limit, // ✅ Prend les X premiers dessins les plus vus
-        include: { category: true }, // ✅ Inclut la catégorie pour éviter les erreurs TypeScript
+        orderBy: { views: "desc" },
+        take: limit,
+        include: { category: true },
     });
 
     return drawings.map(d => ({
@@ -235,23 +195,18 @@ export async function getTrendingDrawings(limit: number = 4): Promise<Drawing[]>
     }));
 }
 
-/** ✅ Récupère un coloriage spécifique par son SLUG */
+/** ✅ Par slug (+1 vue) */
 export async function getDrawingBySlug(slug: string): Promise<Drawing | null> {
-    console.log("🔍 Recherche du dessin avec le SLUG :", slug);
-
     try {
-        // Étape 1 : Trouver le dessin via le SLUG
         const drawing = await prisma.drawing.findUnique({
-            where: { slug }, // ✅ Vérifie que slug est bien unique
-            include: { category: true }, // ✅ Inclure la catégorie pour éviter les erreurs
+            where: { slug },
+            include: { category: true },
         });
+        if (!drawing) return null;
 
-        if (!drawing) return null; // ❌ Ne pas faire d'update si le dessin n'existe pas
-
-        // Étape 2 : Incrémenter les vues
         await prisma.drawing.update({
-            where: { id: drawing.id }, // ✅ On met à jour avec l'ID (toujours unique)
-            data: { views: { increment: 1 } }, // ✅ Incrémente les vues
+            where: { id: drawing.id },
+            data: { views: { increment: 1 } },
         });
 
         return {
@@ -264,11 +219,9 @@ export async function getDrawingBySlug(slug: string): Promise<Drawing | null> {
             createdAt: drawing.createdAt,
             description: drawing.description,
             category: drawing.category ? { name: drawing.category.name } : undefined,
-        }; // ✅ Retourne le dessin mis à jour
-
+        };
     } catch (error) {
         console.error("❌ Erreur Prisma :", error);
         return null;
     }
 }
-

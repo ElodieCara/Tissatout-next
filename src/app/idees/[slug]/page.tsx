@@ -17,7 +17,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 type Props = {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 };
 
 type Section = {
@@ -90,11 +90,10 @@ type IdeaWithRelations = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const idea = await prisma.idea.findUnique({ where: { slug: params.slug } });
+    const { slug } = await params;             // ⬅️ attendre params
+    const idea = await prisma.idea.findUnique({ where: { slug } });
 
-    if (!idea) {
-        return { title: "Idée non trouvée" };
-    }
+    if (!idea) return { title: "Idée non trouvée" };
 
     return {
         title: `${idea.title} | Tissatout`,
@@ -108,8 +107,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function IdeaPage({ params }: Props) {
+    const { slug } = await params;
     const idea = await prisma.idea.findUnique({
-        where: { slug: params.slug },
+        where: { slug: slug },
         include: {
             ageCategories: { include: { ageCategory: true } },
             relatedLinks: { include: { toIdea: true } },

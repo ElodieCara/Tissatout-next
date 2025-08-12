@@ -17,41 +17,85 @@ import { getRandomSuggestions } from "@/lib/suggestions";
 import { slugify } from '@/lib/slugify';
 
 
-
 type Props = {
-    params: { slug: string };
+    params: Promise<{ slug: string }>; // ✅ params est maintenant une Promise
 };
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    const article = await getArticleBySlug(params.slug);
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const { slug } = await params; // ✅ Attendez params avant utilisation
+
+    const article = await getArticleBySlug(slug);
 
     if (!article) {
-        return { title: "Article introuvable", description: "Cet article n'existe pas ou a été supprimé." };
+        return {
+            title: "Article introuvable",
+            description: "Cet article n'existe pas ou a été supprimé."
+        };
     }
-
-    const url = `https://www.tonsite.com/articles/${article.slug}`; // 🔥 Ton URL absolue
-    const image = article.image || "https://www.tonsite.com/images/banniere-generique.jpg"; // 🔥 Image par défaut
+    const url = `https://www.tissatout.fr/articles/${article.slug}`; // 🔥 Ton URL absolue
+    const image = article.image || "https://www.tissatout.fr/images/banniere-generique.jpg"; // 🔥 Image par défaut
 
     return {
-        title: article.title,
-        description: article.description || "Découvre un article inspirant sur Tissatout !",
+        title: `${article.title} | TissaTout`, // ✅ Ajout du nom du site
+        description: article.description || "Découvre un article inspirant sur TissaTout !",
+
+        // ✅ Métadonnées canoniques
+        alternates: {
+            canonical: url,
+        },
+
+        // ✅ Open Graph
         openGraph: {
             title: article.title,
-            description: article.description || "Découvre un article inspirant sur Tissatout !",
+            description: article.description || "Découvre un article inspirant sur TissaTout !",
             url,
-            images: [{ url: image }],
+            siteName: 'TissaTout',
+            images: [
+                {
+                    url: image,
+                    width: 1200,
+                    height: 630,
+                    alt: article.title,
+                }
+            ],
             type: "article",
+            // ✅ Utilisez 'date' selon votre schéma
+            publishedTime: article.date?.toISOString(),
+            authors: [article.author || 'TissaTout'],
         },
+
+        // ✅ Twitter
         twitter: {
             card: "summary_large_image",
             title: article.title,
-            description: article.description || "Découvre un article inspirant sur Tissatout !",
+            description: article.description || "Découvre un article inspirant sur TissaTout !",
             images: [image],
+            creator: '@tissatout', // ✅ Votre compte Twitter si vous en avez un
+        },
+
+        // ✅ Métadonnées supplémentaires
+        keywords: article.tags || ['coloriage', 'enfants', 'éducation'], // ✅ Mots-clés
+        authors: [{ name: 'TissaTout' }],
+        robots: {
+            index: true,
+            follow: true,
+            googleBot: {
+                index: true,
+                follow: true,
+                'max-video-preview': -1,
+                'max-image-preview': 'large',
+                'max-snippet': -1,
+            },
         },
     };
 }
+
+
+
 export default async function ArticlePage({ params }: Props) {
-    const article = await getArticleBySlug(params.slug);
+    const { slug } = await params;
+    const article = await getArticleBySlug(slug);
     if (!article) return notFound();
 
     const sections = (article.sections as { title: string; content: string; style?: string }[]) || [];

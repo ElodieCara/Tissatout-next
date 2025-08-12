@@ -8,6 +8,7 @@ import CommentList from "@/components/CommentList/CommentList";
 import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 import SuggestionsForParents from "@/components/SuggestionsForParents/SuggestionsForParents";
 
+
 export default async function Page({ params }: { params: { id: string } }) {
     // Il faut attendre les paramètres avant de les utiliser
     const resolvedParams = await params;
