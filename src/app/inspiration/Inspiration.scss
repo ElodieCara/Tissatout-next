@@ -173,4 +173,14 @@
     .inspiration__content__newsGrid {
         grid-template-columns: 1fr;
     }
+
+    .inspiration__filterButtons {
+        flex-direction: column;
+        align-items: center;
+
+        .filter-button {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
 }

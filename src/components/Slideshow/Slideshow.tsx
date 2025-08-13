@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import Button from "../Button/Button";
 
 type SlideshowProps = {
@@ -24,63 +24,64 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
     const [previousSlide, setPreviousSlide] = useState<number | null>(null);
     const [direction, setDirection] = useState<"left" | "right">("left");
     const [isPaused, setIsPaused] = useState(false);
-    const [fade, setFade] = useState(true);
 
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     // 🛡️ Sécurité : si aucune image, on ne rend rien
     if (images.length === 0) return null;
+    const current = images[currentSlide];
 
     // ⏳ Effet pour l'auto-défilement
     useEffect(() => {
-        if (!isPaused) {
-            intervalRef.current = setInterval(() => {
-                setFade(false);
-                setTimeout(() => {
-                    setCurrentSlide((prev) => (prev + 1) % images.length);
-                    setFade(true);
-                }, 300); // ⏳ Le temps de l'animation (0.3s)
-            }, interval);
-        }
+        if (isPaused || images.length <= 1) return;
 
+        const tick = () => {
+            setCurrentSlide(prev => {
+                setPreviousSlide(prev);
+                setDirection("left"); // défilement auto => l’ancienne sort à gauche
+                return (prev + 1) % images.length;
+            });
+        };
+
+        intervalRef.current = setInterval(tick, interval);
         return () => {
             if (intervalRef.current) clearInterval(intervalRef.current);
         };
     }, [images.length, interval, isPaused]);
 
+    // Nettoyage previousSlide après la transition CSS (0.5s)
+    useEffect(() => {
+        if (previousSlide !== null) {
+            const t = setTimeout(() => setPreviousSlide(null), 500);
+            return () => clearTimeout(t);
+        }
+    }, [previousSlide]);
 
     const nextSlide = () => {
-        setFade(false);
-        setTimeout(() => {
-            setCurrentSlide((prev) => (prev + 1) % images.length);
-            setFade(true);
-        }, 300);
+        setPreviousSlide(currentSlide);
+        setDirection("left");
+        setCurrentSlide((prev) => (prev + 1) % images.length);
     };
 
     const prevSlide = () => {
-        setFade(false);
-        setTimeout(() => {
-            setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
-            setFade(true);
-        }, 300);
+        setPreviousSlide(currentSlide);
+        setDirection("right");
+        setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
     };
 
     const goToSlide = (index: number) => {
-        setFade(false);
-        setTimeout(() => {
-            setCurrentSlide(index);
-            setFade(true);
-        }, 300);
+        if (index === currentSlide) return;
+        setPreviousSlide(currentSlide);
+        setDirection(index > currentSlide ? "left" : "right");
+        setCurrentSlide(index);
     };
 
     const handleMouseEnter = () => {
         setIsPaused(true);
         if (intervalRef.current) clearInterval(intervalRef.current);
     };
+    const handleMouseLeave = () => setIsPaused(false);
 
-    const handleMouseLeave = () => {
-        setIsPaused(false);
-    };
     const ballons = [
         { plein: "/assets/ballon-jaune-plein.png", vide: "/assets/ballon-jaune-vide.png" },
         { plein: "/assets/ballon-rouge-plein.png", vide: "/assets/ballon-rouge-vide.png" },
@@ -88,8 +89,6 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
     ];
 
     if (!images[currentSlide] || !images[currentSlide].imageUrl) return null;
-
-    const current = images[currentSlide];
 
     return (
         <div className="container__slide"
@@ -101,8 +100,9 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
                     <Image
                         key={index}
                         src={image.imageUrl}
-                        alt={`Slide ${index + 1}`}
+                        alt={image.title || `Slide ${index + 1}`}
                         fill
+                        priority={index === 0}
                         className={`container__slide__image ${index === currentSlide ? "active" : ""
                             } ${previousSlide !== null && index === previousSlide
                                 ? direction === "left"
@@ -113,7 +113,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
                         style={{ objectFit: "cover" }}
                         loading={index === 0 ? "eager" : "lazy"}
                         quality={75}
-                        sizes="100vw"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
                     />
                 ))}
             </div>

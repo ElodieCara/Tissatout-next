@@ -64,8 +64,8 @@ export default function Banner({ src, title, description, buttons = [], classNam
                                     alt={title}
                                     fill
                                     priority
-                                    sizes="100vw"
-                                    style={{ objectFit: "contain" }}
+                                    sizes="(max-width: 768px) 221px, (max-width: 1200px) 45vw, 450px"
+                                    style={{ objectFit: "contain", objectPosition: "50% 60%" }}
                                 />
                             </div>
                         </div>
