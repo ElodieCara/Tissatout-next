@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { jwtVerify } from "jose";
 import AdminMenu from "./components/AdminMenu";
-import "./Admin.module.scss"; // (Facultatif si tu utilises SCSS)
+// import "./Admin.module.scss"; // (Facultatif si tu utilises SCSS)
 
 
 export default async function AdminPage() {
