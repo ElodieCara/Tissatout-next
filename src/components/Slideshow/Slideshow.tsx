@@ -112,7 +112,7 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
                             }`}
                         style={{ objectFit: "cover" }}
                         loading={index === 0 ? "eager" : "lazy"}
-                        quality={75}
+                        quality={100}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
                     />
                 ))}
