@@ -7,9 +7,9 @@ import { Drawing } from "@/types/drawing";
 export async function getInspirationData() {
     try {
         const [articles, ideas, advices] = await Promise.all([
-            prisma.article.findMany({ orderBy: { id: "desc" }, take: 10 }),
-            prisma.idea.findMany({ orderBy: { id: "desc" }, take: 10 }),
-            prisma.advice.findMany({ orderBy: { id: "desc" }, take: 10 }),]);
+            prisma.article.findMany({ orderBy: { id: "desc" }, take: 100 }),
+            prisma.idea.findMany({ orderBy: { id: "desc" }, take: 100 }),
+            prisma.advice.findMany({ orderBy: { id: "desc" }, take: 100 }),]);
         return { articles, ideas, advices };
     } catch (e) {
         console.error("getInspirationData Prisma error:", e);
