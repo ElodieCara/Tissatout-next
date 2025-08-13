@@ -71,6 +71,7 @@ const Header: React.FC<HeaderProps> = ({ onSidebarToggle }) => {
                                 height={80}
                                 style={{ objectFit: "contain" }}
                                 loading="eager"
+                                priority
                             />
                         </Link>
                     </div>
