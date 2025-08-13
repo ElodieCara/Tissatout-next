@@ -41,6 +41,8 @@
         text-decoration: none;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s, box-shadow 0.2s;
+        width: 24px;
+        height: auto;
 
         &:hover {
             transform: scale(1.02);
@@ -81,18 +83,4 @@
             }
         }
     }
-
-    // &__link-icon {
-    //     width: none !important;
-    // }
-
-
-    // &__image {
-    //     position: relative;
-    //     margin-top: 2rem;
-    //     width: 100%;
-    //     height: 160px;
-    //     border-radius: 16px;
-    //     overflow: hidden;
-    // }
 }
