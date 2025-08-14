@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import CustomHomeSettingsForm from "../../components/CustomHomeSettingsForm";
 
-
 interface SiteSettings {
     id?: string;
     [key: string]: string | undefined;
@@ -22,17 +21,18 @@ const sectionLabels: Record<string, string> = {
 };
 
 export default function AdminSettingsSectionPage() {
-    const { section } = useParams() as { section: string };
+    const { section } = useParams() as { section?: string };
     const router = useRouter();
 
     const [form, setForm] = useState<SiteSettings>({});
     const [message, setMessage] = useState("");
 
-    if (section === "home") {
-        return <CustomHomeSettingsForm />;
-    }
+    const isHome = section === "home";
 
+    // ✅ Hook toujours appelé, et garde *à l’intérieur*
     useEffect(() => {
+        if (!section || isHome) return; // rien à charger pour "home" ici
+
         fetch("/api/site-settings")
             .then((res) => res.json())
             .then((data) => {
@@ -44,7 +44,7 @@ export default function AdminSettingsSectionPage() {
                 });
             })
             .catch(() => setMessage("❌ Erreur lors du chargement."));
-    }, [section]);
+    }, [section, isHome]);
 
     const handleImageUpload = async (file: File) => {
         const formData = new FormData();
@@ -65,6 +65,7 @@ export default function AdminSettingsSectionPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!section) return;
 
         const payload = {
             id: form.id,
@@ -87,14 +88,20 @@ export default function AdminSettingsSectionPage() {
         }
     };
 
-    if (!sectionLabels[section]) {
+    // ✅ Les retours conditionnels ne viennent qu’APRÈS les hooks
+    if (!section || !sectionLabels[section]) {
         return <p>❌ Section inconnue.</p>;
+    }
+
+    if (isHome) {
+        return <CustomHomeSettingsForm />;
     }
 
     return (
         <div className="admin">
             <h2>Modifier {sectionLabels[section]}</h2>
             {message && <p>{message}</p>}
+
             <form onSubmit={handleSubmit} className="admin-form">
                 {/* Image */}
                 <label>Image</label>
@@ -107,6 +114,7 @@ export default function AdminSettingsSectionPage() {
                     }}
                 />
                 {form[`${section}Banner`] && (
+                    // Vous pouvez remplacer par <Image /> si vous voulez supprimer le warning Next
                     <img
                         src={form[`${section}Banner`] as string}
                         alt="Aperçu"
@@ -133,7 +141,9 @@ export default function AdminSettingsSectionPage() {
                     }
                 />
 
-                <button type="submit" className="admin-form__button">Enregistrer</button>
+                <button type="submit" className="admin-form__button">
+                    Enregistrer
+                </button>
             </form>
         </div>
     );

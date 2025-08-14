@@ -1,16 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+"use client";
+
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Button from "../Button/Button";
 
+type Slide = {
+    id?: string | number;
+    imageUrl: string;
+    title: string;
+    description: string;
+    buttonText?: string;
+    buttonLink?: string;
+};
+
 type SlideshowProps = {
-    images: {
-        id?: string | number;
-        imageUrl: string;
-        title: string;
-        description: string;
-        buttonText?: string;
-        buttonLink?: string;
-    }[];
+    images: Slide[];
     title?: string;
     subtitle?: string;
     description?: string;
@@ -18,27 +22,27 @@ type SlideshowProps = {
     interval?: number;
 };
 
-
 const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [previousSlide, setPreviousSlide] = useState<number | null>(null);
     const [direction, setDirection] = useState<"left" | "right">("left");
     const [isPaused, setIsPaused] = useState(false);
 
-    const intervalRef = useRef<NodeJS.Timeout | null>(null);
+    // Compat navigateur/Node pour TS
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-    // 🛡️ Sécurité : si aucune image, on ne rend rien
-    if (images.length === 0) return null;
-    const current = images[currentSlide];
+    const hasImages = images && images.length > 0;
+    const safeIndex = hasImages ? Math.min(currentSlide, images.length - 1) : 0;
+    const current = hasImages ? images[safeIndex] : undefined;
 
-    // ⏳ Effet pour l'auto-défilement
+    // ⏳ Auto-défilement (garde **dans** le hook)
     useEffect(() => {
-        if (isPaused || images.length <= 1) return;
+        if (!hasImages || isPaused || images.length <= 1) return;
 
         const tick = () => {
-            setCurrentSlide(prev => {
+            setCurrentSlide((prev) => {
                 setPreviousSlide(prev);
-                setDirection("left"); // défilement auto => l’ancienne sort à gauche
+                setDirection("left"); // auto => l’ancienne sort à gauche
                 return (prev + 1) % images.length;
             });
         };
@@ -47,32 +51,33 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
         return () => {
             if (intervalRef.current) clearInterval(intervalRef.current);
         };
-    }, [images.length, interval, isPaused]);
+    }, [hasImages, images.length, interval, isPaused]);
 
-    // Nettoyage previousSlide après la transition CSS (0.5s)
+    // Nettoyage de previousSlide après la transition CSS (0.5s)
     useEffect(() => {
-        if (previousSlide !== null) {
-            const t = setTimeout(() => setPreviousSlide(null), 500);
-            return () => clearTimeout(t);
-        }
+        if (previousSlide === null) return;
+        const t = setTimeout(() => setPreviousSlide(null), 500);
+        return () => clearTimeout(t);
     }, [previousSlide]);
 
     const nextSlide = () => {
-        setPreviousSlide(currentSlide);
+        if (!hasImages) return;
+        setPreviousSlide(safeIndex);
         setDirection("left");
         setCurrentSlide((prev) => (prev + 1) % images.length);
     };
 
     const prevSlide = () => {
-        setPreviousSlide(currentSlide);
+        if (!hasImages) return;
+        setPreviousSlide(safeIndex);
         setDirection("right");
         setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
     };
 
     const goToSlide = (index: number) => {
-        if (index === currentSlide) return;
-        setPreviousSlide(currentSlide);
-        setDirection(index > currentSlide ? "left" : "right");
+        if (!hasImages || index === safeIndex) return;
+        setPreviousSlide(safeIndex);
+        setDirection(index > safeIndex ? "left" : "right");
         setCurrentSlide(index);
     };
 
@@ -88,22 +93,24 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
         { plein: "/assets/ballon-bleu-plein.png", vide: "/assets/ballon-bleu-vide.png" },
     ];
 
-    if (!images[currentSlide] || !images[currentSlide].imageUrl) return null;
+    // ✅ Garde *après* les hooks (rendu) : pas d’images valides, on ne rend rien
+    if (!hasImages || !current?.imageUrl) return null;
 
     return (
-        <div className="container__slide"
+        <div
+            className="container__slide"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
         >
             <div className="container__slide__image-wrapper">
                 {images.map((image, index) => (
                     <Image
-                        key={index}
+                        key={(image.id ?? index).toString()}
                         src={image.imageUrl}
                         alt={image.title || `Slide ${index + 1}`}
                         fill
                         priority={index === 0}
-                        className={`container__slide__image ${index === currentSlide ? "active" : ""
+                        className={`container__slide__image ${index === safeIndex ? "active" : ""
                             } ${previousSlide !== null && index === previousSlide
                                 ? direction === "left"
                                     ? "slide-left"
@@ -142,13 +149,13 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
             <div className="container__slide__pagination">
                 {images.map((slide, idx) => (
                     <span
-                        key={slide.id ?? idx}
-                        className={`dot ${idx === currentSlide ? "active" : ""}`}
+                        key={(slide.id ?? idx).toString()}
+                        className={`dot ${idx === safeIndex ? "active" : ""}`}
                         onClick={() => goToSlide(idx)}
                     >
                         <Image
                             src={
-                                idx === currentSlide
+                                idx === safeIndex
                                     ? ballons[idx % ballons.length].plein
                                     : ballons[idx % ballons.length].vide
                             }
@@ -162,9 +169,9 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
             </div>
 
             <div className="container__slide__text">
-                {current.title && <h1>{current.title}</h1>}
-                {current.description && <p>{current.description}</p>}
-                {current.buttonText && current.buttonLink && (
+                {current?.title && <h1>{current.title}</h1>}
+                {current?.description && <p>{current.description}</p>}
+                {current?.buttonText && current?.buttonLink && (
                     <a href={current.buttonLink}>
                         <Button className="button large">{current.buttonText}</Button>
                     </a>
