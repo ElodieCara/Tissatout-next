@@ -2,29 +2,39 @@ import { getCollectionsWithLessons } from "@/lib/lessons";
 import LessonModulePage from "@/components/Module/LessonModulePage";
 import type { CollectionWithLessons } from "@/types/lessons";
 
-export default async function ModulePage({ params }: { params: { module: string } }) {
-    const module = (params.module === "trivium" || params.module === "quadrivium"
-        ? params.module
-        : "trivium") as "trivium" | "quadrivium";
+type ModuleKey = "trivium" | "quadrivium";
 
-    const rawCollections: CollectionWithLessons[] = await getCollectionsWithLessons(module);
-    // 🔧 Ajout manuel du `lessonsCount` attendu
+export default async function ModulePage({
+    params,
+}: {
+    params: { module: string };
+}) {
+    // ✅ Renommage pour éviter le conflit avec la variable globale `module`
+    const moduleSlug: ModuleKey =
+        params.module === "trivium" || params.module === "quadrivium"
+            ? (params.module as ModuleKey)
+            : "trivium";
+
+    const rawCollections: CollectionWithLessons[] =
+        await getCollectionsWithLessons(moduleSlug);
+
+    // 🔧 Ajout du lessonsCount attendu
     const collections = rawCollections.map((collection) => ({
         id: collection.id,
         title: collection.title,
         slug: collection.slug,
         description: collection.description ?? null,
         lessonsCount: collection.lessons.length,
-        lessons: collection.lessons, // On conserve les leçons pour usage interne
-        module: collection.module as "trivium" | "quadrivium",
+        lessons: collection.lessons,
+        module: collection.module as ModuleKey,
     }));
 
     // 🔁 Fusion de toutes les leçons
-    const lessons = collections.flatMap(c => c.lessons);
+    const lessons = collections.flatMap((c) => c.lessons);
 
     return (
         <LessonModulePage
-            module={module}
+            module={moduleSlug}
             collections={collections}
             lessons={lessons}
         />
