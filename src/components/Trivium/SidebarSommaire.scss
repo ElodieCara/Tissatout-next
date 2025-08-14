@@ -1,3 +1,5 @@
+@use "../../styles/shared" as *;
+
 .trivium-sidebar {
     display: flex;
     flex-direction: column;
@@ -68,7 +70,7 @@
                 color: #2c3f64;
 
                 &:hover {
-                    background-color: darken(#fdca57, 10%);
+                    background-color: $dark-secondary-color;
                 }
             }
         }

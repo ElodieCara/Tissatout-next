@@ -1,5 +1,4 @@
-@use "../../../styles/utils/variables" as *;
-
+@use "../../../styles/shared" as *;
 
 .drawing-page {
     display: flex;
@@ -200,24 +199,6 @@
                     margin-bottom: 1.5rem;
                     line-height: 1.5;
                 }
-
-                // &-buttons {
-                //     display: flex;
-                //     gap: 1rem;
-
-                //     button {
-                //         font-size: 1rem;
-                //         padding: 0.8rem 1.5rem;
-                //         border-radius: 8px;
-                //         background-color: #ecac3e;
-                //         color: #2c3f64;
-                //         transition: background 0.3s;
-
-                //         &:hover {
-                //             background-color: darken(#ecac3e, 10%);
-                //         }
-                //     }
-                // }
             }
 
             &-image {

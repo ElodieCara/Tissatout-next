@@ -1,6 +1,4 @@
-@use '../../styles/utils/variables' as vars;
-@use '../../styles/base/mixins' as mix;
-@use '../../styles/base/typography' as typ;
+@use "../../styles/shared" as *;
 
 .nos-univers__banner {
     align-items: center;
@@ -152,7 +150,7 @@
                 transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
 
                 &:hover {
-                    background-color: darken(#ecac3e, 10%);
+                    background-color: $button-primary-dark;
                     transform: translateY(-2px);
                 }
             }

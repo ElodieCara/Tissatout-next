@@ -1,8 +1,7 @@
-@use '../../../../../styles/utils/variables' as vars;
-@use '../../../../../styles/base/mixins' as mix;
+@use "../../../../../styles/shared" as *;
 
 .drawing-sidebar {
-    @include mix.container;
+    @include container;
     padding: 50px;
 
     &__title {

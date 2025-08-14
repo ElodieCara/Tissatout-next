@@ -1,7 +1,8 @@
+@use "../../../../styles/shared" as *;
+
+
 .content-age-page {
     & h1 {
         color: $primary-color;
     }
-
-
 }

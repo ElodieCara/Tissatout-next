@@ -1,5 +1,6 @@
-@use "../../styles/utils/variables" as vars;
-@use "../../styles/base/typography" as typo;
+@use "../../styles/shared" as *;
+@use "sass:color";
+
 
 .container__section {
     margin: auto;
@@ -30,7 +31,7 @@
         align-items: flex-start;
         justify-content: center;
         position: absolute;
-        background-image: vars.$rectangle-yellow;
+        background-image: $rectangle-yellow;
         margin-right: 300px;
         width: 850px;
         height: 100%;
@@ -68,7 +69,7 @@
                 }
 
                 &.active {
-                    background-color: lighten(vars.$primary-color, 15%);
+                    background-color: color.adjust($primary-color, $lightness: 15%);
                     color: #fff;
                     font-weight: bold;
                     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
@@ -78,19 +79,19 @@
 
             // 🟡 Ici on cible les boutons selon leur ordre dans la liste
             &__button:nth-child(1) {
-                background-color: vars.$secondary-color; // Jaune
+                background-color: $secondary-color; // Jaune
             }
 
             &__button:nth-child(2) {
-                background-color: vars.$tertiary-color; // Rouge pastel
+                background-color: $tertiary-color; // Rouge pastel
             }
 
             &__button:nth-child(3) {
-                background-color: vars.$quaternary-color; // Turquoise
+                background-color: $quaternary-color; // Turquoise
             }
 
             &__button:nth-child(4) {
-                background-color: vars.$quinary-color; // Vert doux
+                background-color: $quinary-color; // Vert doux
             }
         }
     }
@@ -99,7 +100,7 @@
         margin-left: 300px;
         width: 850px;
         height: 100%;
-        background-image: vars.$rectangle-blue;
+        background-image: $rectangle-blue;
         background-repeat: no-repeat;
         background-position: center;
         position: relative;
@@ -109,7 +110,7 @@
             align-items: center;
             flex-direction: row;
             justify-content: flex-start;
-            background: vars.$rectangle-yellow center no-repeat;
+            background: $rectangle-yellow center no-repeat;
             width: 100%;
             height: 100%;
 
@@ -119,7 +120,7 @@
                 padding: 1rem;
 
                 & h3 {
-                    font-family: typo.$font-family-primary;
+                    font-family: $font-family-primary;
                     font-size: 1.8rem;
                     font-weight: bold;
                     margin-bottom: 1rem;
@@ -129,7 +130,7 @@
                 & p {
                     width: 60%;
                     //padding: 10px;
-                    font-family: typo.$font-family-tertiary;
+                    font-family: $font-family-tertiary;
                     color: white !important;
                 }
 
@@ -138,7 +139,7 @@
                     padding: 0;
                     margin: 1rem 0;
                     width: 62%;
-                    font-family: typo.$font-family-tertiary;
+                    font-family: $font-family-tertiary;
                 }
 
                 .activities-list__item {
@@ -210,7 +211,7 @@
 /* Apparence de la barre mobile */
 .mobile-topbar {
     position: sticky;
-    top: 70px; // ou adapte selon ton header
+    top: 70px;
     width: 100%;
     background-color: transparent;
     padding: 1.75rem 1rem;
@@ -241,7 +242,7 @@
     width: 100%;
 
     &:hover {
-        background-color: darken(#f78e74, 5%);
+        background-color: $dark-tertiary-color;
         transform: translateY(2px);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
     }
@@ -287,7 +288,7 @@
         color: #fffefa;
 
         &:hover {
-            background-color: darken(#527e91, 2%); // Un peu plus foncé au hover
+            background-color: $dark-quinary-color;
         }
     }
 }

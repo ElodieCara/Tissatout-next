@@ -46,11 +46,11 @@
                 }
 
                 .edit:hover {
-                    background: darken($secondary-color, 10%);
+                    background: $dark-secondary-color;
                 }
 
                 .delete:hover {
-                    background: darken($danger-color, 10%);
+                    background: $dark-danger-color;
                 }
             }
         }

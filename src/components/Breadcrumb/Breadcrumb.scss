@@ -1,7 +1,9 @@
+@use "utils/variables" as vars;
+
 .breadcrumb {
     margin-bottom: 1.5rem;
     font-size: 0.9rem;
-    color: $primary-color;
+    color: vars.$primary-color;
 
     &__list {
         display: flex;
@@ -20,23 +22,24 @@
 
     &__link {
         text-decoration: none;
-        color: $primary-color;
+        color: vars.$primary-color;
         font-weight: 500;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
             text-decoration: underline;
+            outline: none;
         }
     }
 
     &__separator {
         margin: 0 0.3rem;
-        color: $secondary-color;
+        color: vars.$secondary-color;
     }
 
     &__current {
-        font-weight: bold;
-        color: $primary-color;
+        font-weight: 700;
         font-style: italic;
-        color: #aaa;
+        color: vars.$primary-color;
     }
 }

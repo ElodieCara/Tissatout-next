@@ -1,5 +1,4 @@
-@use '../../styles/utils/variables' as *;
-@use '../../styles/base/mixins' as *;
+@use "../../styles/shared" as *;
 
 @use "sass:map";
 
@@ -36,12 +35,12 @@
                 border-radius: 12px;
                 flex: 1;
                 max-width: 80px;
-                background: #f9b233;
+                background: $button-primary;
                 color: #2c3f64;
                 transition: background-color 0.2s ease, transform 0.2s ease;
 
                 &:hover {
-                    background-color: darken(#f9b233, 8%);
+                    background-color: $button-primary-dark;
                 }
 
                 &:active {
@@ -55,7 +54,7 @@
                 color: $primary-color;
 
                 &:hover {
-                    background-color: darken($secondary-color, 8%);
+                    background-color: $dark-secondary-color;
                 }
             }
 
@@ -64,7 +63,7 @@
                 color: #fff;
 
                 &:hover {
-                    background-color: darken($tertiary-color, 8%);
+                    background-color: $dark-tertiary-color;
                 }
             }
 
@@ -73,7 +72,7 @@
                 color: #2c3f64;
 
                 &:hover {
-                    background-color: darken($quinary-color, 7%);
+                    background-color: $dark-quinary-color;
                 }
             }
 
@@ -82,7 +81,7 @@
                 color: #fff;
 
                 &:hover {
-                    background-color: darken($quaternary-color, 7%);
+                    background-color: $dark-quaternary-color;
                 }
             }
 
@@ -249,8 +248,8 @@
         transition: all 0.3s ease-in-out;
 
         &:hover {
-            color: darken($primary-color, 10%);
-            border-left: 4px solid darken($primary-color, 15%);
+            color: $dark-primary-color;
+            border-left: 4px solid $dark-primary-color;
         }
     }
 
@@ -357,7 +356,7 @@
 
     &:hover,
     &:focus {
-        background-color: darken(#f9b233, 10%);
+        background-color: $button-primary-dark;
         transform: translateY(-2px);
         cursor: pointer;
     }
@@ -367,11 +366,11 @@
     }
 
     &--secondary {
-        background-color: #2c3f64;
+        background-color: $primary-color;
         color: #fff;
 
         &:hover {
-            background-color: darken(#2c3f64, 10%);
+            background-color: $dark-primary-color;
         }
     }
 

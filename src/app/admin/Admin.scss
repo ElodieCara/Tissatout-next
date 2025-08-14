@@ -1,5 +1,4 @@
-@use "../../styles/utils/variables" as *;
-@use "../../styles/base/mixins" as *;
+@use "../../styles/shared" as *;
 
 .admin {
     max-width: 1000px;
@@ -44,7 +43,7 @@
             font-weight: bold;
 
             &:hover {
-                background: darken($secondary-color, 10%);
+                background: $dark-secondary-color;
             }
 
             &.active {
@@ -67,7 +66,7 @@
         margin: 2px;
 
         &:hover {
-            background: darken($secondary-color, 10%);
+            background: $dark-secondary-color;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
@@ -132,7 +131,7 @@
             font-weight: bold;
 
             &:hover {
-                background: darken($primary-color, 10%);
+                background: $dark-primary-color;
             }
         }
     }
@@ -188,7 +187,7 @@
                 transition: all 0.3s ease-in-out;
 
                 &:hover {
-                    background: darken($tertiary-color, 10%);
+                    background: $dark-tertiary-color;
                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                 }
 
@@ -203,7 +202,7 @@
                 transition: all 0.3s ease-in-out;
 
                 &:hover {
-                    background: darken($tertiary-color, 10%);
+                    background: $dark-tertiary-color;
                     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
                 }
 

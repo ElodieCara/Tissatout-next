@@ -23,10 +23,19 @@ $quinary-color: #76A597;
 
 // 🧱 Couleurs de structure
 $dark-primary-color: #293347;
+$dark-secondary-color: #E4B23E;
+$dark-tertiary-color: #F56B4A;
+$dark-quaternary-color: #2A5763; // darken($quaternary-color, 10%)
+$dark-quinary-color: #669485;
+$dark-danger-color: #A11B13;
 $danger-color: #BF1F17;
 $border-color: #c7a269; // Gris doux – lignes de séparation
 $light-gray: #f8f5f1; // Fond léger – sections claires
 $background-color: #ffffff;
+
+// 🎨 Couleurs de boutons spécifiques
+$button-primary: #f9b233;
+$button-primary-dark: #E29C1C;
 
 // ✨ Ombres et effets
 $shadow-light: 0px 4px 10px rgba(0, 0, 0, 0.1);

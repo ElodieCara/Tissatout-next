@@ -1,3 +1,5 @@
+@use "../../styles/shared" as *;
+
 .mystery {
     @include separator;
     padding: 1rem;

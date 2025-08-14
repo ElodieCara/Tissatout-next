@@ -200,9 +200,6 @@ $sheet-colors: $quicknav-colors;
   @each $key, $color in $sheet-colors {
     &__item--#{$key} {
       color: $color;
-      // Si vous voulez un fond coloré léger pour mobile :
-      // background: lighten($color, 40%); 
-      // mais si vous ne voulez que le texte coloré, laissez background: none.
     }
   }
 }

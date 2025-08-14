@@ -1,3 +1,5 @@
+@use "../../styles/shared" as *;
+
 .activity-card {
     background: #fff;
     border-radius: 1rem;
@@ -107,7 +109,7 @@
             }
 
             &:hover {
-                background-color: darken(#f9b233, 5%);
+                background-color: $button-primary-dark;
             }
 
             & img {

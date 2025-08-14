@@ -1,6 +1,4 @@
-// styles/activites.scss
-@use "../../styles/utils/variables" as *;
-@use "../../styles/base/mixins" as *;
+@use "../../styles/shared" as *;
 
 .banner--printable,
 .banner--bg {
@@ -44,7 +42,7 @@
 
         p {
             font-size: 1.25rem;
-            color: darken($primary-color, 10%);
+            color: $dark-primary-color;
         }
     }
 
@@ -249,7 +247,7 @@
                 text-shadow: 1px 1px 4px #0009;
 
                 &:hover {
-                    background: darken($secondary-color, 10%);
+                    background: $dark-secondary-color;
                 }
             }
         }
@@ -331,7 +329,7 @@
             transition: background 0.2s ease-in-out;
 
             &:hover {
-                background: darken($quaternary-color, 10%);
+                background: $dark-quaternary-color;
             }
         }
     }
@@ -377,7 +375,7 @@
             box-shadow: 0 2px 4px #0002;
 
             &:hover {
-                background: darken($secondary-color, 10%);
+                background: $dark-secondary-color;
             }
         }
     }
@@ -417,7 +415,7 @@
             cursor: pointer;
 
             &:hover {
-                background: darken($primary-color, 10%);
+                background: $dark-primary-color;
             }
         }
     }

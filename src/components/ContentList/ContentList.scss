@@ -197,7 +197,7 @@
             &--#{$name} {
                 background-color: $color;
 
-                @if (lightness($color) > 70) {
+                @if (color.channel($color, "lightness", $space: hsl) > 70) {
                     color: #2c3f64;
                 }
 

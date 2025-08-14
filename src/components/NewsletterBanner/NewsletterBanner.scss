@@ -1,3 +1,5 @@
+@use "../../styles/shared" as *;
+
 .newsletter {
     @include separator;
     padding: 2rem !important;

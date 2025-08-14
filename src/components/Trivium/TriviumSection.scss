@@ -1,3 +1,5 @@
+@use "../../styles/shared" as *;
+
 .trivium-section {
     margin-bottom: 3rem;
     padding: 2rem 1rem;
@@ -47,6 +49,6 @@
     transition: background 0.3s ease;
 
     &:hover {
-        background-color: darken(#ecac3e, 8%);
+        background-color: $dark-secondary-color;
     }
 }

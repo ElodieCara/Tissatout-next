@@ -1,5 +1,5 @@
-@use "../../styles/utils/variables" as *;
-@use "../../styles/base/mixins" as *;
+@use "../../styles/shared" as *;
+@use "sass:color";
 
 .admin-form {
     max-width: 600px;
@@ -89,7 +89,7 @@
             transition: all 0.3s ease;
 
             &:hover {
-                background: lighten($primary-color, 40%);
+                background: color.adjust($primary-color, $lightness: 40%);
             }
 
             input[type="checkbox"] {
@@ -152,7 +152,7 @@
         text-align: center;
 
         &:hover {
-            background: darken($primary-color, 10%);
+            background: $dark-primary-color;
         }
     }
 

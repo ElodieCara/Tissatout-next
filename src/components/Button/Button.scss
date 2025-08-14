@@ -1,5 +1,4 @@
-@use '../../styles/base/mixins' as mix;
-@use '../../styles/utils/variables' as vars;
+@use "../../styles/shared" as *;
 
 .button {
     display: inline-flex;
@@ -16,7 +15,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-decoration: none;
     border: none;
-    @include mix.font-primary;
+    @include font-primary;
     font-weight: none !important;
     text-transform: unset !important;
 
@@ -26,17 +25,17 @@
     }
 
     &.yellow-button {
-        background-color: vars.$secondary-color;
+        background-color: $secondary-color;
         color: white;
 
         &:hover {
-            background-color: darken(vars.$secondary-color, 5%);
+            background-color: $dark-secondary-color;
             transform: scale(1.05);
         }
     }
 
     &.blue-button {
-        background-color: vars.$dark-primary-color;
+        background-color: $dark-primary-color;
         color: #f0b429;
 
         &:hover {
