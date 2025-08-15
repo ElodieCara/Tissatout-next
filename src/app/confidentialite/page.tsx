@@ -1,5 +1,6 @@
 import LegalPageLayout from "@/components/Layout/LegalPageLayout";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
     title: "Politique de confidentialité | Tissatout",
@@ -38,7 +39,7 @@ export default function PrivacyPolicyPage() {
                 Ces informations ne sont utilisées que pour répondre à votre message et ne sont jamais revendues ni stockées dans une base de données persistante.
             </p>
 
-            <h2>3. Hébergement & sécurité</h2>
+            <h2>3. Hébergement et sécurité</h2>
             <p>
                 Le site est hébergé par <strong>Vercel Inc.</strong>, une entreprise basée aux États-Unis. Toutes les données transitent via une connexion sécurisée (HTTPS).
                 Aucune donnée personnelle n’est stockée sur leurs serveurs, et aucune exploitation commerciale n’est effectuée.
@@ -47,12 +48,13 @@ export default function PrivacyPolicyPage() {
             <h2>4. Vos droits</h2>
             <p>Conformément au RGPD, vous disposez des droits suivants :</p>
             <ul>
-                <li>🔍 Droit d'accès</li>
+                <li>🔍 Droit d&apos;accès</li>
                 <li>✏️ Droit de rectification</li>
-                <li>🗑️ Droit à l'effacement</li>
+                <li>🗑️ Droit à l&apos;effacement</li>
             </ul>
             <p>
-                Pour exercer vos droits, vous pouvez nous contacter à cette adresse : <strong>contact@tissatout.fr</strong> ou via notre <a href="/contact">formulaire de contact</a>.
+                Pour exercer vos droits, vous pouvez nous contacter à cette adresse : <strong>contact@tissatout.fr</strong> ou via notre{" "}
+                <Link href="/contact">formulaire de contact</Link>.
             </p>
 
             <h2>5. Aucune utilisation commerciale</h2>
@@ -62,7 +64,7 @@ export default function PrivacyPolicyPage() {
 
             <h2>6. Statistiques (optionnel)</h2>
             <p>
-                Si nous utilisons un jour un outil d’analyse d’audience (ex : Plausible), ce sera un outil respectueux de la vie privée, sans cookies ni collecte de données nominatives.
+                Si nous utilisons un jour un outil d’analyse d’audience (ex&nbsp;: Plausible), ce sera un outil respectueux de la vie privée, sans cookies ni collecte de données nominatives.
             </p>
 
             <h2>7. Modification de cette politique</h2>

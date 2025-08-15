@@ -14,7 +14,6 @@ import Button from "../../../components/Button/Button";
 import { Drawing } from "@/types/drawing";
 import { generateSlug } from "@/lib/utils";
 import MobileCategoryFilter from "./components/MobileCategoryFilter";
-import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 
 interface ExplorerPageProps {
     educationalDrawings: Record<string, Drawing[]>;
@@ -28,23 +27,6 @@ interface ExplorerPageProps {
     coloringTitle: string;
     coloringDesc: string;
 }
-
-// const categoriesData: Record<string, string[]> = {
-//     "Saisons et Fêtes": ["Hiver", "Printemps", "Été", "Automne", "Noël", "Halloween", "Pâques"],
-//     "Thèmes": ["Animaux", "Véhicules", "Espace", "Pirates"],
-//     "Âge": ["Tout Petits (0-3 ans)", "Dès 3 ans", "Dès 6 ans", "Dès 10 ans"],
-//     "Trivium & Quadrivium": [
-//         "Grammaire - Lettres",
-//         "Grammaire - Mots",
-//         "Grammaire - Chiffres",
-//         "Logique - Puzzle",
-//         "Logique - Coloriages numérotés",
-//         "Logique - Labyrinthe",
-//         "Rhétorique - Histoires",
-//         "Rhétorique - Mythologie",
-//         "Rhétorique - Philosophie"
-//     ]
-// };
 
 export default function ExplorerPage({
     categoriesData,
@@ -133,7 +115,7 @@ export default function ExplorerPage({
                             description="Explorez nos tendances, nos coloriages saisonniers et éducatifs !"
                         />
                         <Button href="/coloriages" className="cta-button">
-                            ← Retour à l'accueil des coloriages
+                            ← Retour à l&apos;accueil des coloriages
                         </Button>
                     </div>
                     <Breadcrumb
@@ -257,7 +239,7 @@ export default function ExplorerPage({
                             </p>
                             <p>
                                 Tous nos coloriages sont gratuits et classés par âge et par thème. Vous trouverez des coloriages pour Noël, Saisons, Pâques,
-                                mais aussi pour apprendre en s’amusant : lettres, chiffres, formes et nature.
+                                mais aussi pour apprendre en s&apos;amusant : lettres, chiffres, formes et nature.
                                 Une activité simple pour occuper les enfants à la maison, à l’école ou pendant les vacances.
                             </p>
                         </div>

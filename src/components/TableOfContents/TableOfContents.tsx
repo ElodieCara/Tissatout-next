@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Section {
     title: string;
@@ -56,7 +57,12 @@ export default function TableOfContents({ sections }: Props) {
                 <div className="toc__desktop">
                     <div className="toc__header">
                         <span className="toc__icon">
-                            <img src="/icons/sommaire.png" alt="Sommaire" />
+                            <Image
+                                src="/icons/sommaire.png"
+                                alt="Sommaire"
+                                width={24}
+                                height={24}
+                            />
                         </span>
                         <h3 className="toc__title">Sommaire</h3>
                     </div>

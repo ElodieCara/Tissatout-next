@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import { Schema, model, models } from "mongoose";
 import slugify from "slugify"; // Installez slugify si besoin : npm install slugify
 
 const ArticleSchema = new Schema(

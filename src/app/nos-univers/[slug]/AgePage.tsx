@@ -4,7 +4,6 @@ import DrawingSlider from "../../../components/DrawingSlide/DrawingSlide";
 import Link from "next/link";
 import { Advice, Idea } from "@prisma/client";
 import { drawingDescriptions } from "../../../data/drawingDescription";
-import { getAllAgeCategories } from "../../../lib/ages";
 import themeImages from '@/data/themeIdeasImage';
 import BackToTop from "@/components/BackToTop/BackToTop";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
@@ -12,16 +11,35 @@ import Quickbar from "@/components/Quickbar/Quickbar";
 import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 
 
-const allAges = await getAllAgeCategories();
+type AgeArticle = {
+    article: {
+        id: string;
+        slug: string;
+        title: string;
+        description?: string | null;
+        image?: string | null;
+        createdAt: string | Date;
+    };
+};
 
-const formattedAges = allAges.map((a) => ({
-    id: a.id,
-    title: a.title,
-    slug: a.slug,
-    icon: a.imageCard || "/images/default.png", // chemin que tu veux pour l'icône
-    image: a.imageCard || "/images/default.png", // ou imageBanner
-}));
+type AgeAdviceLink = { advice: Advice };
+type AgeDrawingLink = { drawing: { id: string; slug: string; title: string; imageUrl?: string | null } };
+type AgeIdeaLink = { idea: Idea };
 
+interface AgeCategory {
+    id: string;
+    title: string;
+    slug: string;
+    description?: string | null;
+    content?: string | null;
+    imageCard?: string | null;
+    activityList?: string[] | null;
+    conclusion?: string | null;
+    articles?: AgeArticle[];
+    advices?: AgeAdviceLink[];
+    drawings?: AgeDrawingLink[];
+    ideas?: AgeIdeaLink[];
+}
 
 function formatDate(date: string | Date) {
     return new Date(date).toLocaleDateString("fr-FR", {
@@ -32,7 +50,7 @@ function formatDate(date: string | Date) {
 }
 
 
-export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: any, agePageBanner: string }) {
+export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: AgeCategory, agePageBanner: string }) {
     const ageKey = ageCategory.title.toLowerCase();
     const description = drawingDescriptions[ageKey];
     console.log("Advices:", ageCategory.advices);
@@ -132,26 +150,32 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                     </div>
 
                     <div className="articles__grid">
-                        {ageCategory.articles?.length > 0 ? (
-                            ageCategory.articles
-                                .slice(0, 3)
-                                .map(({ article }: any, index: number) => (
-                                    <Link key={article.id} href={`/articles/${article.slug}`} className={`articles__card ${index % 2 !== 0 ? 'reverse' : ''}`}>
-                                        <div className="articles__image">
-                                            <Image src={article.image || "/images/default-article.jpg"} alt={article.title} width={500} height={300} />
-                                        </div>
+                        {ageCategory.articles?.length ? (
+                            ageCategory.articles.slice(0, 3).map(({ article }: AgeArticle, index: number) => (
+                                <Link
+                                    key={article.id}
+                                    href={`/articles/${article.slug}`}
+                                    className={`articles__card ${index % 2 !== 0 ? "reverse" : ""}`}
+                                >
+                                    <div className="articles__image">
+                                        <Image
+                                            src={article.image || "/images/default-article.jpg"}
+                                            alt={article.title}
+                                            width={500}
+                                            height={300}
+                                        />
+                                    </div>
 
-                                        <div className={`articles__content ${index % 2 !== 0 ? 'reverse' : ''}`}>
-                                            <div className="articles__separator"></div>
-                                            <div className="articles__content__text">
-                                                <h3 className="articles__title">{article.title}</h3>
-                                                <p className="articles__description">{article.description}</p>
-                                                <button className="articles__button">Lire l'article</button>
-                                            </div>
+                                    <div className={`articles__content ${index % 2 !== 0 ? "reverse" : ""}`}>
+                                        <div className="articles__separator"></div>
+                                        <div className="articles__content__text">
+                                            <h3 className="articles__title">{article.title}</h3>
+                                            <p className="articles__description">{article.description}</p>
+                                            <button className="articles__button">Lire l’article</button>
                                         </div>
-
-                                    </Link>
-                                ))
+                                    </div>
+                                </Link>
+                            ))
                         ) : (
                             <p>Aucun article disponible.</p>
                         )}
@@ -175,7 +199,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                         <Button className="large"><Link href={`/contenus/${ageCategory.slug}/conseils`} className="advices__link-button">Voir tous les conseils</Link></Button>
                     </div>
                     <div className="advices__grid">
-                        {ageCategory.advices?.length > 0 ? (
+                        {ageCategory.advices?.length ? (
                             <>
                                 {/* Grand conseil principal */}
                                 <Link href={`/conseils/${ageCategory.advices[0].advice.slug}`} className="advices__main-card">
@@ -189,7 +213,9 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                                     <div className="advices__main-card__info">
                                         <p>By Tissatout</p>
                                         <h3>{ageCategory.advices[0].advice.title}</h3>
-                                        <span className="advices__date">{formatDate(ageCategory.advices[0].advice.createdAt)}</span>
+                                        <span className="advices__date">
+                                            {formatDate(ageCategory.advices[0].advice.createdAt)}
+                                        </span>
                                         <p>{ageCategory.advices[0].advice.description}</p>
                                     </div>
                                 </Link>
@@ -305,12 +331,11 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                     </div>
 
                     <div className="ideas__grid">
-                        {ageCategory.ideas?.length > 0 ? (
+                        {ageCategory.ideas?.length ? (
                             ageCategory.ideas
-                                .filter((i: any) => i?.idea)
+                                .filter((i): i is AgeIdeaLink => Boolean(i?.idea)) // ✅ garde typée
                                 .slice(0, 6)
-                                .map(({ idea }: { idea: Idea }) => {
-                                    // Utilisation d'une clé correcte pour accéder au thème et d'une valeur par défaut si l'icône n'existe pas
+                                .map(({ idea }) => {
                                     const themeKey = idea.theme.toLowerCase() as keyof typeof themeImages;
                                     const icon = themeImages[themeKey]?.icon || themeImages.default.icon;
                                     const background = themeImages[themeKey]?.background || themeImages.default.background;
@@ -318,12 +343,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                                     return (
                                         <Link key={idea.id} href={`/idees/${idea.slug}`} className="ideas__card">
                                             <div className="ideas__card__icon">
-                                                <Image
-                                                    src={icon}
-                                                    alt={idea.theme}
-                                                    width={140}
-                                                    height={140}
-                                                />
+                                                <Image src={icon} alt={idea.theme} width={140} height={140} />
                                             </div>
                                             <h3 className="ideas__card__title">{idea.title}</h3>
                                             <p className="ideas__card__description">{idea.description}</p>
@@ -333,7 +353,7 @@ export default function AgePage({ ageCategory, agePageBanner }: { ageCategory: a
                                                 className="ideas__card__background"
                                                 style={{
                                                     backgroundImage: `url(${background})`,
-                                                    backgroundSize: "",  // Couvre toute la surface de la card
+                                                    backgroundSize: "cover", // ✅ pas de chaîne vide
                                                     backgroundRepeat: "no-repeat",
                                                     backgroundPosition: "center",
                                                     position: "absolute",

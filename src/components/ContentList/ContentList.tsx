@@ -1,14 +1,13 @@
 // ContentList.tsx
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 import { reverseThemeMapping } from "@/lib/themeMapping";
 import NewsletterBanner from "../NewsletterBanner/NewsletterBanner";
 import SuggestionsForParents from "../SuggestionsForParents/SuggestionsForParents";
-import { getRandomSuggestions } from "@/lib/suggestions";
 
 export interface ContentItem {
     id: string;

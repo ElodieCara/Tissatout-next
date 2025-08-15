@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { notFound } from "next/navigation";
 
 interface SearchPageProps {
     searchParams?: { query?: string };

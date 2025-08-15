@@ -22,7 +22,6 @@ interface BannerProps {
 
 export default function Banner({ src, title, description, buttons = [], className }: BannerProps) {
     const [isClient, setIsClient] = useState(false);
-    const [showQuickAccess, setShowQuickAccess] = useState(false);
 
     useEffect(() => {
         setIsClient(true);

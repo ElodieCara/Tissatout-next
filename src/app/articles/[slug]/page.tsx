@@ -17,6 +17,10 @@ import { getRandomSuggestions } from "@/lib/suggestions";
 import { slugify } from '@/lib/slugify';
 
 
+type AgeCategoryItem = {
+    ageCategory: { id: string; title: string };
+};
+
 type Props = {
     params: Promise<{ slug: string }>; // ✅ params est maintenant une Promise
 };
@@ -147,7 +151,7 @@ export default async function ArticlePage({ params }: Props) {
                             <p className="article-banner__age">
                                 🌼{" "}
                                 {article.ageCategories
-                                    .map((ac: any) => ac.ageCategory.title)
+                                    .map((ac: AgeCategoryItem) => ac.ageCategory.title)
                                     .join(" – ")}
                             </p>
                         )}
@@ -186,7 +190,7 @@ export default async function ArticlePage({ params }: Props) {
 
                             {article.ageCategories?.length > 0 && (
                                 <div className="article__badges">
-                                    {article.ageCategories.map((ac: any) => (
+                                    {article.ageCategories.map((ac: AgeCategoryItem) => (
                                         <span key={ac.ageCategory.id} className="article__badge">
                                             {ac.ageCategory.title}
                                         </span>
@@ -264,17 +268,18 @@ export default async function ArticlePage({ params }: Props) {
                                     <div className="article__section-content">
                                         <ReactMarkdown
                                             components={{
-                                                h2: ({ node, ...props }) => <h2 className="md-h2" {...props} />,
-                                                h3: ({ node, ...props }) => <h3 className="md-h3" {...props} />,
-                                                p: ({ node, ...props }) => <p className="md-p" {...props} />,
-                                                ul: ({ node, ...props }) => <ul className="md-ul" {...props} />,
-                                                li: ({ node, ...props }) => <li className="md-li" {...props} />,
-                                                strong: ({ node, ...props }) => <strong className="md-strong" {...props} />,
-                                                em: ({ node, ...props }) => <em className="md-em" {...props} />,
+                                                h2: ({ node: _node, ...props }) => <h2 className="md-h2" {...props} />,
+                                                h3: ({ node: _node, ...props }) => <h3 className="md-h3" {...props} />,
+                                                p: ({ node: _node, ...props }) => <p className="md-p" {...props} />,
+                                                ul: ({ node: _node, ...props }) => <ul className="md-ul" {...props} />,
+                                                li: ({ node: _node, ...props }) => <li className="md-li" {...props} />,
+                                                strong: ({ node: _node, ...props }) => <strong className="md-strong" {...props} />,
+                                                em: ({ node: _node, ...props }) => <em className="md-em" {...props} />,
                                             }}
                                         >
                                             {section.content}
                                         </ReactMarkdown>
+
                                     </div>
 
                                     {/* Lien d'impression uniquement pour "highlight" */}

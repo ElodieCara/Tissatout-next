@@ -2,20 +2,6 @@ import DrawingCard from "@/components/DrawingCard/DrawingCard";
 import { Drawing } from "@/types/drawing";
 import { generateSlug } from "@/lib/utils";
 
-const categoriesData: Record<string, string[]> = {
-    "Trivium & Quadrivium": [
-        "Grammaire - Lettres",
-        "Grammaire - Mots",
-        "Grammaire - Chiffres",
-        "Logique - Puzzle",
-        "Logique - Coloriages numérotés",
-        "Logique - Labyrinthe",
-        "Rhétorique - Histoires",
-        "Rhétorique - Mythologie",
-        "Rhétorique - Philosophie"
-    ]
-};
-
 interface EducationalSectionProps {
     educationalDrawings: Record<string, Drawing[]>;
 }
@@ -23,7 +9,7 @@ interface EducationalSectionProps {
 export default function EducationalSection({ educationalDrawings }: EducationalSectionProps) {
     return (
         <div className="educational-section">
-            <h2>Apprendre en s'amusant</h2>
+            <h2>Apprendre en s&apos;amusant</h2>
             <p className="section-subtitle">Découvrez nos coloriages éducatifs pour apprendre les lettres, les chiffres et bien plus encore !</p>
 
             <div className="explorer-grid">

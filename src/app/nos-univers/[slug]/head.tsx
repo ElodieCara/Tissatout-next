@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { notFound } from "next/navigation";
 
 export default async function Head({ params }: { params: { slug: string } }) {
     const category = await prisma.ageCategory.findUnique({

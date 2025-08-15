@@ -1,20 +1,35 @@
 // src/components/AdBanner/AdBanner.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface AdBannerProps {
     className?: string;
 }
 
+declare global {
+    interface Window {
+        adsbygoogle?: unknown[];
+    }
+}
+
 export default function AdBanner({ className = "" }: AdBannerProps) {
     const [isLoaded, setIsLoaded] = useState(false);
+    const pushedOnce = useRef(false);
 
     useEffect(() => {
+        if (typeof window === "undefined") return;
+
         try {
-            // @ts-ignore
-            (window.adsbygoogle = window.adsbygoogle || []).push({});
-            setTimeout(() => setIsLoaded(true), 1500); // Simule le chargement
+            window.adsbygoogle = window.adsbygoogle || [];
+
+            if (!pushedOnce.current) {
+                window.adsbygoogle.push({});
+                pushedOnce.current = true;
+            }
+
+            const t = window.setTimeout(() => setIsLoaded(true), 800);
+            return () => window.clearTimeout(t);
         } catch (e) {
             console.error("AdSense error:", e);
         }

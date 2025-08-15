@@ -220,7 +220,7 @@ export default async function AdvicePage({ params }: Props) {
                                         height="36" />
                                     <h2 className="advice__related-title">Pour aller plus loin</h2>
                                 </div>
-                                <p>Découvre d'autres conseils pratiques pour t'accompagner !</p>
+                                <p>Découvre d&apos;autres conseils pratiques pour t&apos;accompagner !</p>
 
                                 <div className="advice__related-list">
                                     {/* Conseils liés */}
@@ -234,7 +234,7 @@ export default async function AdvicePage({ params }: Props) {
                                                         {/* miniature ou placeholder */}
                                                         {r.toAdvice.imageUrl
                                                             ? <Image src={r.toAdvice.imageUrl} width={100} height={70} alt="" />
-                                                            : <div className="placeholder">Pas d’image</div>}
+                                                            : <div className="placeholder">Pas d&apos;image</div>}
                                                         <span>{r.toAdvice.title}</span>
 
                                                     </Link>
@@ -255,7 +255,7 @@ export default async function AdvicePage({ params }: Props) {
 
                                                             {art.image
                                                                 ? <Image src={art.image} width={100} height={70} alt="" />
-                                                                : <div className="placeholder">Pas d’image</div>}
+                                                                : <div className="placeholder">Pas d&apos;image</div>}
                                                             <span>{art.title}</span>
 
                                                         </Link>
@@ -277,7 +277,7 @@ export default async function AdvicePage({ params }: Props) {
 
                                                             {col.imageUrl
                                                                 ? <Image src={col.imageUrl} width={100} height={70} alt="" />
-                                                                : <div className="placeholder">Pas d’image</div>}
+                                                                : <div className="placeholder">Pas d&apos;image</div>}
                                                             <span>{col.title}</span>
 
                                                         </Link>

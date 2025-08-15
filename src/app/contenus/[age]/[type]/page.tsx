@@ -82,7 +82,7 @@ export default async function ContentByAgePage(props: PageProps) {
         return (
             <main className="content-age-page">
                 <h1>Contenus {type} pour {age}</h1>
-                <p>Aucun contenu trouvé pour cette tranche d'âge.</p>
+                <p>Aucun contenu trouvé pour cette tranche d&apos;âge.</p>
                 <a href="/inspiration" className="link">Voir les autres idées</a>
             </main>
         );

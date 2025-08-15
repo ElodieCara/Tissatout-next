@@ -2,15 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { getArticles } from "@/lib/articles";
 
-interface Article {
-    id: string;
-    title: string;
-    content: string;
-    image?: string;
-    description?: string;
-    date?: string;
-}
-
 export const metadata = {
     title: "Articles - Tissatout",
     description: "Découvrez les derniers articles publiés sur Tissatout : pédagogie, activités et coloriages.",

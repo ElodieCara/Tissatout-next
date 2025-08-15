@@ -46,19 +46,6 @@ export default function Quickbar() {
         zIndex: 1000,
     };
 
-    // Style inline pour la barre tablette/desktop si tu veux la garder visible
-    // Ici on la montre toujours ; tu peux entourer d’une media query en CSS externe si besoin.
-    const quicknavStyle: React.CSSProperties = {
-        display: 'flex',
-        position: 'fixed',
-        bottom: '16px',
-        left: 0,
-        right: 0,
-        justifyContent: 'space-around',
-        padding: '0 16px',
-        zIndex: 1000,
-    };
-
     return (
         <>
             {/* Barre fixe tablette+ */}

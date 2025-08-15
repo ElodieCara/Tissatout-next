@@ -10,7 +10,7 @@ export default function CookiesPage() {
     return (
         <LegalPageLayout title="Utilisation des cookies">
             <p>
-                Le site <strong>Tissatout</strong> n'utilise <strong>aucun cookie de pistage publicitaire</strong>, ni traceur tiers.
+                Le site <strong>Tissatout</strong> n&apos;utilise <strong>aucun cookie de pistage publicitaire</strong>, ni traceur tiers.
             </p>
 
             <p>

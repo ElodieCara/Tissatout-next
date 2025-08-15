@@ -232,7 +232,7 @@ export default async function IdeaPage({ params }: Props) {
                                                 <Link href={`/activites-a-imprimer/${section.activity.slug}`}>
 
                                                     <button className="button red-button">
-                                                        Voir l’activité associée
+                                                        Voir l&apos;activité associée
                                                     </button>
 
                                                 </Link>
@@ -241,14 +241,15 @@ export default async function IdeaPage({ params }: Props) {
 
                                         <ReactMarkdown
                                             components={{
-                                                h2: ({ node, ...props }) => <h2 className="md-h2" {...props} />,
-                                                h3: ({ node, ...props }) => <h3 className="md-h3" {...props} />,
-                                                p: ({ node, ...props }) => <p className="md-p" {...props} />,
-                                                ul: ({ node, ...props }) => <ul className="md-ul" {...props} />,
-                                                li: ({ node, ...props }) => <li className="md-li" {...props} />,
-                                                strong: ({ node, ...props }) => <strong className="md-strong" {...props} />,
-                                                em: ({ node, ...props }) => <em className="md-em" {...props} />,
+                                                h2: ({ node: _node, ...props }) => <h2 className="md-h2" {...props} />,
+                                                h3: ({ node: _node, ...props }) => <h3 className="md-h3" {...props} />,
+                                                p: ({ node: _node, ...props }) => <p className="md-p"  {...props} />,
+                                                ul: ({ node: _node, ...props }) => <ul className="md-ul" {...props} />,
+                                                li: ({ node: _node, ...props }) => <li className="md-li" {...props} />,
+                                                strong: ({ node: _node, ...props }) => <strong className="md-strong" {...props} />,
+                                                em: ({ node: _node, ...props }) => <em className="md-em" {...props} />,
                                             }}
+
                                         >
                                             {section.content}
                                         </ReactMarkdown>
@@ -270,7 +271,8 @@ export default async function IdeaPage({ params }: Props) {
 
                             <section className="idea__related">
                                 <h2 className="idea__related-title">🔎 Pour aller plus loin</h2>
-                                <p>Découvre d'autres idées inspirantes !</p>
+                                <p>Découvre d&apos;autres idées inspirantes !</p>
+
                                 <div className="idea__related-list">
                                     {ideaTyped.relatedArticles.length > 0 ? (
                                         ideaTyped.relatedArticles.map(({ toArticle }) => (
@@ -294,7 +296,7 @@ export default async function IdeaPage({ params }: Props) {
                                             </a>
                                         ))
                                     ) : (
-                                        <p>Aucune idée supplémentaire pour l’instant.</p>
+                                        <p>Aucune idée supplémentaire pour l&apos;instant.</p>
                                     )}
                                 </div>
                             </section>

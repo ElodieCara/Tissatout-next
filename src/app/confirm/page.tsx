@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 export default function ConfirmPage() {
     const searchParams = useSearchParams();
@@ -37,7 +38,7 @@ export default function ConfirmPage() {
                 <>
                     <h1 className="confirm-page__title">✅ Email confirmé !</h1>
                     <p className="confirm-page__text">Merci, votre abonnement est actif. À bientôt !</p>
-                    <a href="/" className="confirm-page__link">← Retour à l’accueil</a>
+                    <Link href="/" className="confirm-page__link">← Retour à l’accueil</Link>
                 </>
             )}
 
@@ -45,7 +46,7 @@ export default function ConfirmPage() {
                 <>
                     <h1 className="confirm-page__title">❌ Lien invalide</h1>
                     <p className="confirm-page__text">Ce lien est invalide ou a expiré. Veuillez tenter de vous inscrire à nouveau.</p>
-                    <a href="/" className="confirm-page__link">← Retour à l’accueil</a>
+                    <Link href="/" className="confirm-page__link">← Retour à l’accueil</Link>
                 </>
             )}
             <style>{`

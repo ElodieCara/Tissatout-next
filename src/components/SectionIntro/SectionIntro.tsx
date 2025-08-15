@@ -17,8 +17,7 @@ interface SectionIntroProps {
 export default function SectionIntro({
     title,
     description,
-    imageSrc,
-    iconSrc,
+    imageSrc, iconSrc,
     backgroundColor = "#2c3f64", // par défaut bleu sombre
     type,
     children,

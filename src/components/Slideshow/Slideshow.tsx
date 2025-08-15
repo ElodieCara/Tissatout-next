@@ -53,6 +53,9 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
         };
     }, [hasImages, images.length, interval, isPaused]);
 
+    // ✅ Garde *après* les hooks (rendu) : pas d’images valides, on ne rend rien
+    if (!hasImages || !current?.imageUrl) return null;
+
     // Nettoyage de previousSlide après la transition CSS (0.5s)
     useEffect(() => {
         if (previousSlide === null) return;
@@ -93,8 +96,6 @@ const Slideshow: React.FC<SlideshowProps> = ({ images, interval = 5000 }) => {
         { plein: "/assets/ballon-bleu-plein.png", vide: "/assets/ballon-bleu-vide.png" },
     ];
 
-    // ✅ Garde *après* les hooks (rendu) : pas d’images valides, on ne rend rien
-    if (!hasImages || !current?.imageUrl) return null;
 
     return (
         <div

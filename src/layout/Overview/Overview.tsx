@@ -4,8 +4,6 @@ import React, { useState, useEffect } from "react";
 import ThemeIcon from "@/components/Decorations/Themes/ThemeIcon";
 import { useTheme } from "@/components/Decorations/Themes/ThemeProvider";
 import Image from "next/image";
-import Button from "@/components/Button/Button";
-import { Link } from "lucide-react";
 import SidebarAgeMobile from "@/components/SidebarAgeMobile/SidebarAgeMobile";
 import AgeOverviewPanel from "./AgeOverviewPanel";
 
@@ -25,7 +23,6 @@ interface AgeCategory {
 const Overview: React.FC = () => {
     const [ageCategories, setAgeCategories] = useState<AgeCategory[]>([]);
     const [activeCategory, setActiveCategory] = useState<AgeCategory | null>(null);
-    const [mobileOpen, setMobileOpen] = useState(false);
     const { theme } = useTheme();
     const [isAgeSidebarOpen, setIsAgeSidebarOpen] = useState(false);
 
@@ -41,7 +38,7 @@ const Overview: React.FC = () => {
 
     const handleSidebarClick = (category: AgeCategory) => {
         setActiveCategory(category);
-        setMobileOpen(false);
+        setIsAgeSidebarOpen(false); // ferme le slide-in mobile
     };
 
     if (!activeCategory) return null;
@@ -66,7 +63,7 @@ const Overview: React.FC = () => {
             {/* Desktop Sidebar */}
             <div className="container__section__card-1">
                 <ul className="container__section__card-1__sidebar">
-                    {ageCategories.map((category, index) => (
+                    {ageCategories.map((category) => (
                         <li
                             key={category.id}
                             className={`container__section__card-1__sidebar__button container__section__card-1__sidebar__button--${category.title.replace(/\s+/g, "").toLowerCase()}`}

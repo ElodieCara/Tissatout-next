@@ -10,7 +10,6 @@ import React, {
 import { Theme } from "@/types/theme";
 import { calculateEaster } from "@/utils/dateHelpers";
 import ThemeDecorations from "@/components/Decorations/Themes/ThemeDecorations";
-import { decorationsConfig } from "@/data/decorationsConfig";
 
 const themes: Record<Theme, string> = {
     "back-to-school-theme": "back-to-school-theme",

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import type { Lesson } from "@/types/lessons";
 import Banner from "@/components/Banner/Banner";
 import CategoryTabs from "@/components/Trivium/CategoryTabs";
@@ -9,7 +9,6 @@ import AgeFilter from "@/components/Trivium/AgeFilter";
 import TriviumSection from "@/components/Trivium/TriviumSection";
 import TriviumSidebar from "@/components/Trivium/SidebarSommaire";
 import CollectionBanner from "@/components/Trivium/CollectionBanner";
-import { usePathname } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 
 interface TriviumPageProps {
@@ -24,21 +23,29 @@ interface TriviumPageProps {
     }[];
 }
 
+type ModuleKind = "trivium" | "quadrivium";
+
 export default function TriviumPage({ lessons, collections }: TriviumPageProps) {
     const searchParams = useSearchParams();
     const [selectedCategory, setSelectedCategory] = useState("Grammaire");
     const [selectedAge, setSelectedAge] = useState<string | null>(null);
     const [selectedCollection, setSelectedCollection] = useState<string | undefined>(undefined);
+
     const activeCollection = collections.find((col) => col.id === selectedCollection);
+
     const sectionTitle =
         activeCollection
             ? activeCollection.title
             : selectedCategory === "Toutes"
                 ? "Toutes les catégories"
                 : selectedCategory;
+
     const pathname = usePathname();
-    const module = (pathname ?? "").includes("quadrivium") ? "quadrivium" : "trivium";
-    const filteredCollections = collections.filter(c => (c.module ?? "trivium") === module);
+    const currentModule: ModuleKind = (pathname ?? "").includes("quadrivium") ? "quadrivium" : "trivium";
+
+    const filteredCollections = collections.filter(
+        (c) => (c.module ?? "trivium") === currentModule
+    );
 
     // 🔄 Écouteur pour le changement de l'URL
     useEffect(() => {
@@ -46,8 +53,14 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
 
         if (categoryFromQuery) {
             const validCategories = [
-                "Toutes", "Grammaire", "Logique", "Rhétorique",
-                "Arithmétique", "Géométrie", "Musique", "Astronomie"
+                "Toutes",
+                "Grammaire",
+                "Logique",
+                "Rhétorique",
+                "Arithmétique",
+                "Géométrie",
+                "Musique",
+                "Astronomie",
             ];
 
             if (validCategories.includes(categoryFromQuery)) {
@@ -61,7 +74,6 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
         }
     }, [searchParams]);
 
-
     const filteredByCollection = selectedCollection
         ? lessons.filter((l) => l.collection?.id === selectedCollection)
         : lessons;
@@ -73,10 +85,7 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
         );
     });
 
-
-    const ages = Array.from(
-        new Set(lessons.map((l) => l.ageTag).filter((a): a is string => !!a))
-    );
+    const ages = Array.from(new Set(lessons.map((l) => l.ageTag).filter((a): a is string => !!a)));
 
     return (
         <>
@@ -90,14 +99,20 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
             </header>
 
             <main className="trivium-page">
-                <Breadcrumb crumbs={[
-                    { label: "Accueil", href: "/" },
-                    { label: "Trivium", href: "/trivium" },
-                    { label: selectedCategory }
-                ]} />
+                <Breadcrumb
+                    crumbs={[
+                        { label: "Accueil", href: "/" },
+                        { label: "Trivium", href: "/trivium" },
+                        { label: selectedCategory },
+                    ]}
+                />
                 <h1>Le Trivium : Apprendre à penser avec clarté, logique et justesse</h1>
-                <p>Découvrez la méthode du Trivium — Grammaire, Logique, Rhétorique — pour apprendre à structurer sa pensée, à raisonner avec rigueur et à s’exprimer avec force.
-                    Un socle intemporel pour développer l’intelligence critique et la maîtrise du langage.</p>
+                <p>
+                    Découvrez la méthode du Trivium — Grammaire, Logique, Rhétorique — pour apprendre à
+                    structurer sa pensée, à raisonner avec rigueur et à s’exprimer avec force. Un socle
+                    intemporel pour développer l’intelligence critique et la maîtrise du langage.
+                </p>
+
                 <div className="trivium-page__layout">
                     <div className="trivium-page__main">
                         <CategoryTabs
@@ -109,57 +124,57 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
                                 { key: "Logique", label: "Logique" },
                                 { key: "Rhétorique", label: "Rhétorique" },
                             ]}
-                            module={module}
+                            module={currentModule}
                         />
 
-                        <AgeFilter
-                            selectedAge={selectedAge}
-                            ages={ages}
-                            onChange={setSelectedAge}
-                        />
+                        <AgeFilter selectedAge={selectedAge} ages={ages} onChange={setSelectedAge} />
 
                         <div className="trivium-page__selection">
                             <div className="trivium-page__group">
                                 {selectedCollection && (
                                     <CollectionBanner
-                                        title={
-                                            collections.find((col) => col.id === selectedCollection)?.title || ""
-                                        }
+                                        title={collections.find((col) => col.id === selectedCollection)?.title || ""}
                                         count={filteredByCollection.length}
                                         onClear={() => setSelectedCollection(undefined)}
                                     />
                                 )}
+
                                 <TriviumSection
                                     id={selectedCategory.toLowerCase()}
                                     title={sectionTitle}
                                     lessons={filteredLessons}
                                 />
                             </div>
+
                             <div className="trivium-page__right">
                                 <TriviumSidebar
                                     collections={filteredCollections}
                                     selectedId={selectedCollection}
                                     onSelect={setSelectedCollection}
-                                    module={module}
+                                    module={currentModule}
                                 />
-
                             </div>
                         </div>
+
                         <div className="trivium-page__footer">
                             <h2>Pourquoi le Trivium ?</h2>
-                            <p> Parce qu’il ne suffit pas de savoir. Il faut comprendre, discerner et transmettre.
-                                Le Trivium — Grammaire, Logique, Rhétorique — n’est pas une méthode scolaire parmi d’autres.
-                                C’est un chemin. Celui qui mène de la simple réception à la pensée articulée.
-                                Apprendre selon le Trivium, c’est retrouver un ordre naturel : d’abord nommer le monde avec justesse (grammaire),
-                                puis apprendre à y voir clair, à trier, à relier (logique),
-                                enfin oser dire, défendre, convaincre (rhétorique).
-                                Dans un monde saturé d’images et d’opinions, cette structure donne des racines.
-                                Elle apprend à penser avant de parler, à écouter avant de répondre, à formuler sans manipuler.
-                                C’est une école de liberté intérieure — exigeante, patiente, mais profondément libératrice.</p>
+                            <p>
+                                Parce qu’il ne suffit pas de savoir. Il faut comprendre, discerner et transmettre. Le
+                                Trivium — Grammaire, Logique, Rhétorique — n’est pas une méthode scolaire parmi
+                                d’autres. C’est un chemin. Celui qui mène de la simple réception à la pensée
+                                articulée. Apprendre selon le Trivium, c’est retrouver un ordre naturel : d’abord
+                                nommer le monde avec justesse (grammaire), puis apprendre à y voir clair, à trier,
+                                à relier (logique), enfin oser dire, défendre, convaincre (rhétorique). Dans un monde
+                                saturé d’images et d’opinions, cette structure donne des racines. Elle apprend à
+                                penser avant de parler, à écouter avant de répondre, à formuler sans manipuler.
+                                C’est une école de liberté intérieure — exigeante, patiente, mais profondément
+                                libératrice.
+                            </p>
                         </div>
                     </div>
                 </div>
             </main>
+
             <script
                 type="application/ld+json"
                 suppressHydrationWarning
@@ -176,7 +191,7 @@ export default function TriviumPage({ lessons, collections }: TriviumPageProps) 
                             name: "Tissatout",
                             url: "https://tissatout.fr",
                         },
-                        image: "https://tissatout.fr/trivium-og.jpg",
+                        image: "https://tissatout.fr/trivium.png",
                         url: "https://tissatout.fr/trivium",
                     }),
                 }}

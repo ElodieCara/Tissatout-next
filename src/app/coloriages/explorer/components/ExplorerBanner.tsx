@@ -1,34 +1,37 @@
-import React from "react";
-import Image from "next/image";
+// src/app/coloriages/explorer/components/ExplorerBanner.tsx
+"use client";
+import Link from "next/link";
 
-interface ExplorerBannerProps {
-
+type Props = {
     title: string;
-    description: string;
-    onClick?: () => void;
-}
-
-const ExplorerBanner: React.FC<ExplorerBannerProps> = ({ title, description, onClick }) => {
-    return (
-        <div className="explorer-banner">
-            <div className="explorer-banner__content">
-                <h1>{title}</h1>
-                <p>{description}</p>
-            </div>
-            <Image
-                src="/icons/titres/crayons.png"
-                alt="Bannière des coloriages"
-                width={200}
-                height={200}
-                className="explorer-banner__image"
-            />
-
-            {/* 🔍 Moteur de recherche */}
-            {/* <div className="search-bar">
-                <input type="text" placeholder="🔍 Rechercher un coloriage..." />
-            </div> */}
-        </div>
-    );
+    description?: string;
+    subtitle?: string;
+    ctaLabel?: string;
+    ctaHref?: string;
+    onClick?: () => void; // ← tu gardes
 };
 
-export default ExplorerBanner;
+export default function ExplorerBanner({
+    title,
+    subtitle,
+    ctaLabel = "Explorer",
+    ctaHref,
+    onClick, // ← destructuré ET utilisé plus bas
+}: Props) {
+    return (
+        <header className="explorer-banner">
+            <h1>{title}</h1>
+            {subtitle && <p>{subtitle}</p>}
+
+            {ctaHref ? (
+                <Link href={ctaHref} className="button yellow-button" onClick={onClick}>
+                    {ctaLabel}
+                </Link>
+            ) : (
+                <button type="button" className="button yellow-button" onClick={onClick}>
+                    {ctaLabel}
+                </button>
+            )}
+        </header>
+    );
+}

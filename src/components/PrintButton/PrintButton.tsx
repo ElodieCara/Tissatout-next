@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Button from "../Button/Button";
 
-export default function PrintButton({ articleImageUrl }: { articleImageUrl?: string }) {
+export default function PrintButton() {
     const [includeImage, setIncludeImage] = useState(true);
 
     const handlePrint = () => {

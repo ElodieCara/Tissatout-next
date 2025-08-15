@@ -21,7 +21,6 @@ interface AgeCategory {
 export default function SidebarAgeMobile({ isOpen, onClose }: SidebarMobileProps) {
     const [categories, setCategories] = useState<AgeCategory[]>([]);
     const [activeCategory, setActiveCategory] = useState<AgeCategory | null>(null);
-    const router = useRouter();
 
     useEffect(() => {
         fetch("/api/ageCategory")

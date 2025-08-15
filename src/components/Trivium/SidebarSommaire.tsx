@@ -22,22 +22,6 @@ export default function TriviumSidebar({
     onSelect,
     module,
 }: TriviumSidebarProps) {
-    const categoryLabels = {
-        trivium: ["Grammaire", "Logique", "Rhétorique"],
-        quadrivium: ["Arithmétique", "Géométrie", "Musique", "Astronomie"],
-    };
-
-    // ✅ Fonction de scroll programmatique
-    const handleScroll = (id: string) => {
-        onSelect?.(id);
-        const target = document.getElementById(id);
-        if (target) {
-            target.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-            });
-        }
-    };
 
     return (
         <aside className="trivium-sidebar">

@@ -17,7 +17,7 @@ export default function CategoryTabs({ selected, onChange, categories, module }:
         onChange(key);
 
         // 🔄 Mise à jour de l'URL avec le bon paramètre
-        const currentParams = new URLSearchParams(searchParams as any);
+        const currentParams = new URLSearchParams(searchParams?.toString() || "");
         currentParams.set("category", key);
 
         // ✅ Empêcher le scroll vers le haut

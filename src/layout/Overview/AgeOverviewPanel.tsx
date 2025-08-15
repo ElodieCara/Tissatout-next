@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import Link from "next/link";
 
 interface AgeOverviewPanelProps {
     category: {
@@ -12,70 +12,74 @@ interface AgeOverviewPanelProps {
     };
 }
 
-const AgeOverviewPanel: React.FC<AgeOverviewPanelProps> = ({ category }) => {
+export default function AgeOverviewPanel({ category }: AgeOverviewPanelProps) {
     if (!category) return null;
 
     const { title, description, slug, imageCard } = category;
+    const skillPath = title.includes("10") ? "quadrivium" : "trivium";
 
     return (
         <div className="age-panel">
+            <header className="age-panel__header">
+                {imageCard && (
+                    <Image
+                        src={imageCard}
+                        alt={title}
+                        width={40}
+                        height={40}
+                        className="age-panel__thumb"
+                    />
+                )}
+                {/* <h4 className="age-panel__title">{title}</h4>
+                {description && <p className="age-panel__desc">{description}</p>} */}
+            </header>
+
             <div className="age-panel__links">
-                <a
-                    href={`/contenus/${slug}/${title.includes("10") ? "quadrivium" : "trivium"}`}
+                <Link
+                    href={`/contenus/${slug}/${skillPath}`}
                     className="age-panel__link age-panel__link--trivium"
                 >
                     <Image
                         src="/icons/titres/quadrivium.png"
-                        alt="Trivium"
+                        alt="Trivium / Quadrivium"
                         width={24}
                         height={24}
                     />
-                    Activités {title.includes("10") ? "Quadrivium" : "Trivium"}
-                </a>
+                    <span>Activités {skillPath === "quadrivium" ? "Quadrivium" : "Trivium"}</span>
+                </Link>
 
-                <a href={`/contenus/${slug}/articles`} className="age-panel__link age-panel__link--articles">
-                    <Image
-                        className="age-panel__link-icon"
-                        src="/icons/titres/livre.png"
-                        alt="Articles"
-                        width={24}
-                        height={24}
-                    />
-                    Articles
-                </a>
+                <Link
+                    href={`/contenus/${slug}/articles`}
+                    className="age-panel__link age-panel__link--articles"
+                >
+                    <Image src="/icons/titres/livre.png" alt="Articles" width={24} height={24} />
+                    <span>Articles</span>
+                </Link>
 
-                <a href={`/contenus/${slug}/conseils`} className="age-panel__link age-panel__link--conseils">
-                    <Image
-                        src="/icons/titres/nounours.png"
-                        alt="Conseils"
-                        width={24}
-                        height={24}
-                    />
-                    Conseils
-                </a>
+                <Link
+                    href={`/contenus/${slug}/conseils`}
+                    className="age-panel__link age-panel__link--conseils"
+                >
+                    <Image src="/icons/titres/nounours.png" alt="Conseils" width={24} height={24} />
+                    <span>Conseils</span>
+                </Link>
 
-                <a href={`/contenus/${slug}/idees`} className="age-panel__link age-panel__link--idees">
-                    <Image
-                        src="/icons/titres/cible.png"
-                        alt="Idées créatives"
-                        width={24}
-                        height={24}
-                    />
-                    Idées créatives
-                </a>
+                <Link
+                    href={`/contenus/${slug}/idees`}
+                    className="age-panel__link age-panel__link--idees"
+                >
+                    <Image src="/icons/titres/cible.png" alt="Idées créatives" width={24} height={24} />
+                    <span>Idées créatives</span>
+                </Link>
 
-                <a href={`/contenus/${slug}/coloriages`} className="age-panel__link age-panel__link--coloriages">
-                    <Image
-                        src="/icons/titres/coloriages.png"
-                        alt="Coloriages"
-                        width={24}
-                        height={24}
-                    />
-                    Coloriages
-                </a>
+                <Link
+                    href={`/contenus/${slug}/coloriages`}
+                    className="age-panel__link age-panel__link--coloriages"
+                >
+                    <Image src="/icons/titres/coloriages.png" alt="Coloriages" width={24} height={24} />
+                    <span>Coloriages</span>
+                </Link>
             </div>
         </div>
     );
-};
-
-export default AgeOverviewPanel;
+}

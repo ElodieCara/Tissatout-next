@@ -43,11 +43,11 @@ export function encryptEmail(email: string): { iv: string; data: string } {
 
         return result;
     } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Erreur inconnue';
-        const errorStack = error instanceof Error ? error.stack : undefined;
-        console.error('Erreur lors du chiffrement:', errorMessage);
+        const message = error instanceof Error ? error.message : 'Erreur inconnue';
+        console.error('Erreur lors du chiffrement:', message);
         throw error;
     }
+
 }
 
 export function decryptEmail(encryptedEmail: string, iv: string): string {

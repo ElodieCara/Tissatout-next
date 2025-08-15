@@ -275,9 +275,16 @@
     }
 }
 
-@media (min-width: 1225px) {
-    .mobile-topbar {
-        display: none !important;
+@media (min-width: 1024px) {
+    .container__section {
+        display: none;
+    }
+
+}
+
+@media (min-width: 1025px) {
+    .container__section {
+        visibility: hidden;
     }
 }
 

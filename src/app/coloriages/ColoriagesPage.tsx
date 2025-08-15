@@ -180,7 +180,7 @@ export default function ColoriagePage({
                             href={`/coloriages/explorer?categorie=${encodeURIComponent("Âge")}`}
                             className="section-button"
                         >
-                            Explorer cette tranche d'âge
+                            Explorer cette tranche d&apos;âge
                         </Link>
                     </div>
                     {ages.map((age) => {

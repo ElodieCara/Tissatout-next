@@ -2,11 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Drawing } from "@/types/drawing";
-import Banner from "@/components/Banner/Banner";
 import Button from "@/components/Button/Button";
-import Breadcrumb from "../../../components/Breadcrumb/Breadcrumb";
 import DrawingBreadcrumb from "./components/DrawingBreadcrumb/DrawingBreadcrumb";
 import ShareActions from "@/components/ShareActions/ShareActions";
 import ExplorerBanner from "../explorer/components/ExplorerBanner";

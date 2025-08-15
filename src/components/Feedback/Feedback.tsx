@@ -1,8 +1,9 @@
 "use client";
-import { useState } from "react";
 
-const ALLOWED_TYPES = ["article", "advice", "idea", "printable", "lesson"] as const;
-type ResourceType = typeof ALLOWED_TYPES[number];
+import { useState } from "react";
+import Image from "next/image";
+
+type ResourceType = "article" | "advice" | "idea" | "printable" | "lesson";
 
 interface CommentFormProps {
     resourceType: ResourceType;
@@ -44,10 +45,15 @@ export default function ArticleFeedback({ resourceType, resourceId }: CommentFor
     return (
         <div className="article__feedback">
             <div className="article__feedback-texte">
-                <img src="/icons/commentaires/bulle.png" alt="icone bulle de dialogue" width="36"
-                    height="36" />
-                <h2 className="article__feedback-title">Et toi, qu'en as-tu pensé ?</h2>
+                <Image
+                    src="/icons/commentaires/bulle.png"
+                    alt="Icône bulle de dialogue"
+                    width={36}
+                    height={36}
+                />
+                <h2 className="article__feedback-title">Et toi, qu’en as-tu pensé&nbsp;?</h2>
             </div>
+
             <form className="article__feedback-form" onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -67,18 +73,22 @@ export default function ArticleFeedback({ resourceType, resourceId }: CommentFor
                 />
 
                 <button type="submit" disabled={loading} className="article__feedback-submit">
-                    {loading ? "Envoi..." : (
-                        <div className="article__feedback-btn">
+                    {loading ? (
+                        "Envoi..."
+                    ) : (
+                        <span className="article__feedback-btn">
                             Envoyer
-                            <img
+                            <Image
                                 src="/icons/commentaires/envoyer.png"
                                 alt="Icône enveloppe"
                                 width={24}
                                 height={24}
                                 className="article__feedback-icon"
                             />
-                        </div>)}
+                        </span>
+                    )}
                 </button>
+
                 {message && <p className="article__feedback-message">{message}</p>}
             </form>
         </div>
