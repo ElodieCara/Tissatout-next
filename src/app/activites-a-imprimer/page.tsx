@@ -1,3 +1,7 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const runtime = 'nodejs';
+
 import { Metadata } from "next";
 import { getPublicGames } from "@/lib/printables";
 import ActivityPrintPage from "./ActivityPrintPage";
