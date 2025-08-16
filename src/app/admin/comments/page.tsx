@@ -1,3 +1,7 @@
+// Désactive le pré-rendu (évite l'erreur Prisma au build)
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 
@@ -6,10 +10,8 @@ export default async function AdminCommentsPage() {
         where: { approved: false },
         orderBy: { createdAt: "desc" },
         include: {
-            article: {
-                select: { id: true, title: true, slug: true }
-            }
-        }
+            article: { select: { id: true, title: true, slug: true } },
+        },
     });
 
     return (
@@ -23,9 +25,19 @@ export default async function AdminCommentsPage() {
                     {comments.map((c) => (
                         <li key={c.id} className="admin-comments__item">
                             <p className="admin-comments__content">{c.content}</p>
+
                             <p className="admin-comments__meta">
-                                Sur : <Link href={`/articles/${c.article.slug}`}>{c.article.title}</Link> – {new Date(c.createdAt).toLocaleString()}
+                                Sur :{" "}
+                                {c.article ? (
+                                    <Link href={`/articles/${c.article.slug}`}>
+                                        {c.article.title}
+                                    </Link>
+                                ) : (
+                                    <span>Article introuvable</span>
+                                )}{" "}
+                                – {new Date(c.createdAt).toLocaleString()}
                             </p>
+
                             <div className="admin-comments__actions">
                                 <form method="POST" action={`/api/comments/${c.id}?action=approve`}>
                                     <button type="submit">✅ Valider</button>
