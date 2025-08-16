@@ -1,11 +1,19 @@
-import { PrismaClient } from "@prisma/client";
+// src/lib/prisma.ts
+import 'server-only'
+import { PrismaClient } from '@prisma/client'
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
+// Utilise globalThis et rends la propriété optionnelle
+const g = globalThis as unknown as { prisma?: PrismaClient }
 
-export const prisma = globalForPrisma.prisma || new PrismaClient();
+export const prisma =
+    g.prisma ??
+    new PrismaClient({
+        // Optionnel : des logs utiles en dev, silencieux en prod
+        log: process.env.NODE_ENV === 'development' ? ['query', 'warn', 'error'] : ['error'],
+        // datasourceUrl: process.env.DATABASE_URL, // <- tu peux décommenter si tu veux forcer l’URL
+    })
 
-if (process.env.NODE_ENV !== "production") {
-    globalForPrisma.prisma = prisma;
-}
+// En dev, garde une instance unique (évite d’exploser le pool)
+if (process.env.NODE_ENV !== 'production') g.prisma = prisma
 
-export default prisma; // Utilisez `export default` ici
+export default prisma

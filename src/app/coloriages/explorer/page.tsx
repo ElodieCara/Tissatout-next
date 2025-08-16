@@ -1,3 +1,7 @@
+export const dynamic = 'force-dynamic'
+export const runtime = 'nodejs'
+export const revalidate = 0
+
 import { getEducationalDrawings, getAllCategoriesWithDrawings, getTopLikedDrawings, getTrendingDrawings } from "@/lib/server";
 import ExplorerPage from "./ExplorerPage";
 import prisma from "@/lib/prisma";
@@ -57,4 +61,3 @@ export default async function Page() {
     );
 }
 
-export const revalidate = 60; // ✅ ISR : met à jour toutes les 60 secondes
