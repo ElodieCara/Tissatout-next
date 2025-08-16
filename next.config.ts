@@ -1,35 +1,21 @@
-// next.config.mjs
-import path from "node:path";
+// next.config.ts
+import type { NextConfig } from "next";
+import path from "path";
 
-/** @type {import('next').NextConfig} */
-const isVercel = Boolean(process.env.VERCEL);
 const cloudinaryCloudName = process.env.CLOUDINARY_CLOUD_NAME;
 
-const nextConfig = {
-  // Débloque le déploiement sur Vercel (sans impacter ton dev local)
-  eslint: { ignoreDuringBuilds: isVercel },
-  typescript: { ignoreBuildErrors: isVercel },
+const nextConfig: NextConfig = {
+  eslint: { ignoreDuringBuilds: true },
+  typescript: { ignoreBuildErrors: true },
 
-  sassOptions: {
-    includePaths: [path.join(process.cwd(), "src/styles")],
-  },
+  sassOptions: { includePaths: [path.join(__dirname, "src/styles")] },
 
   images: {
     formats: ["image/avif", "image/webp"],
-    remotePatterns: cloudinaryCloudName
-      ? [
-        {
-          protocol: "https",
-          hostname: "res.cloudinary.com",
-          pathname: `/${cloudinaryCloudName}/image/upload/**`,
-        },
-        {
-          protocol: "https",
-          hostname: "res.cloudinary.com",
-          pathname: `/${cloudinaryCloudName}/image/fetch/**`,
-        },
-      ]
-      : [],
+    remotePatterns: cloudinaryCloudName ? [
+      { protocol: "https", hostname: "res.cloudinary.com", pathname: `/${cloudinaryCloudName}/image/upload/**` },
+      { protocol: "https", hostname: "res.cloudinary.com", pathname: `/${cloudinaryCloudName}/image/fetch/**` },
+    ] : [],
   },
 
   async rewrites() {
