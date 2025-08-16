@@ -1,3 +1,7 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const runtime = 'nodejs';
+
 import Link from "next/link";
 import Image from "next/image";
 import { getArticles } from "@/lib/articles";

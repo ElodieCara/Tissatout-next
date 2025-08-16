@@ -1,3 +1,8 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const runtime = 'nodejs';
+
+
 import TriviumPage from "./TriviumPage";
 import { getTriviumLessons, getTriviumCollections } from "@/lib/lessons";
 import type { Metadata } from "next";

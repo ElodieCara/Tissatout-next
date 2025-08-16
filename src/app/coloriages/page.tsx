@@ -1,4 +1,8 @@
 // app/coloriages/page.tsx
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const runtime = 'nodejs';
+
 import { getDrawings } from "@/lib/server";
 import prisma from "@/lib/prisma";
 import ColoriagePage from "./ColoriagesPage";

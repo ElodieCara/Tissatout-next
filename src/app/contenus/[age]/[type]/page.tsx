@@ -1,3 +1,8 @@
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const runtime = 'nodejs';
+
+
 import { notFound } from "next/navigation";
 import ContentList from "@/components/ContentList/ContentList";
 import { getContenusParAgeEtType } from "@/lib/contenus";

@@ -1,4 +1,8 @@
 // ./src/app/modules/[module]/page.tsx
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const runtime = 'nodejs';
+
 import { getCollectionsWithLessons } from "@/lib/lessons";
 import LessonModulePage from "@/components/Module/LessonModulePage";
 import type { CollectionWithLessons } from "@/types/lessons";
