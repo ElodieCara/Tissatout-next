@@ -3,7 +3,6 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import AdminArticles from "./AdminArticles";
 import AdminColoring from "./AdminColoring";
-import AdminNews from "./AdminLesson";
 import AdminIdeas from "./AdminIdeas";
 import Breadcrumb from "../components/Breadcrumb";
 import AdminAdvice from "./AdminAdvice";

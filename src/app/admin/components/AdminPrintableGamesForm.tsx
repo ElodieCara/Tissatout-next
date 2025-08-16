@@ -39,6 +39,32 @@ interface PrintableGameForm {
     mysteryUntil: string | undefined,
 }
 
+type ThemeLink = { theme: Theme | null };
+type TypeLink = { type: Type | null };
+
+type PrintableGameDTO = {
+    title: string;
+    slug: string;
+    description: string;
+    pdfUrl: string;
+    pdfPrice?: number | null;
+    printUrl?: string | null;
+    imageUrl: string;
+    previewImageUrl?: string | null;
+    isPrintable: boolean;
+    printPrice?: number | null;
+    ageMin: number;
+    ageMax: number;
+    isFeatured: boolean;
+    themes: ThemeLink[];
+    types: TypeLink[];
+    articleId?: string | null;
+    isMystery: boolean;
+    mysteryUntil?: string | null;
+    extraImages?: string[];
+};
+
+
 export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
     const [form, setForm] = useState<PrintableGameForm>({
         title: "",
@@ -62,7 +88,6 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
     const [themes, setThemes] = useState<Theme[]>([]);
     const [types, setTypes] = useState<Type[]>([]);
     const [message, setMessage] = useState("");
-    const [articles, setArticles] = useState<{ id: string; title: string }[]>([]);
     const router = useRouter();
 
     const handlePdfUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,80 +110,84 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
                 fetch("/api/themes"),
                 fetch("/api/types"),
             ]);
-            const [themeData, typeData] = await Promise.all([
-                themeRes.json(),
-                typeRes.json(),
-            ]);
+
+            const themeData = (await themeRes.json()) as Theme[];
+            const typeData = (await typeRes.json()) as Type[];
+
             setThemes(themeData);
             setTypes(typeData);
 
-            const articleRes = await fetch("/api/articles");
-            const articleData = await articleRes.json();
-
-            setArticles(articleData.map((a: any) => ({
-                id: a.id,
-                title: a.title,
-            })));
-
             if (gameId && gameId !== "new") {
                 const res = await fetch(`/api/printable/${gameId}`);
-                const data = await res.json();
+                const data = (await res.json()) as PrintableGameDTO;
 
-                // Conversion correcte de la date mysteryUntil
-                let mysteryUntilFormatted = undefined;
-                if (data.mysteryUntil) {
-                    const date = new Date(data.mysteryUntil);
-                    // Format pour datetime-local : YYYY-MM-DDTHH:MM
-                    mysteryUntilFormatted = date.toISOString().slice(0, 16);
-                }
+                // Format pour <input type="datetime-local" />
+                const mysteryUntilFormatted =
+                    data.mysteryUntil ? new Date(data.mysteryUntil).toISOString().slice(0, 16) : undefined;
 
                 setForm({
                     title: data.title,
                     slug: data.slug,
                     description: data.description,
                     pdfUrl: data.pdfUrl,
-                    pdfPrice: data.pdfPrice,
+                    pdfPrice: data.pdfPrice ?? undefined,
                     printUrl: data.printUrl?.trim() === "" ? undefined : data.printUrl?.trim(),
                     imageUrl: data.imageUrl,
-                    previewImageUrl: data.previewImageUrl,
+                    previewImageUrl: data.previewImageUrl ?? undefined,
                     isPrintable: data.isPrintable,
-                    printPrice: data.printPrice,
+                    printPrice: data.printPrice ?? undefined,
                     ageMin: data.ageMin,
                     ageMax: data.ageMax,
                     isFeatured: data.isFeatured,
-                    themeIds: data.themes.filter((t: any) => t.theme !== null).map((t: any) => t.theme.id),
-                    typeIds: data.types.filter((t: any) => t.type !== null).map((t: any) => t.type.id),
+                    themeIds: data.themes.filter(t => t.theme).map(t => t.theme!.id),
+                    typeIds: data.types.filter(t => t.type).map(t => t.type!.id),
                     articleId: data.articleId ?? null,
                     isMystery: data.isMystery,
                     mysteryUntil: mysteryUntilFormatted,
-                    extraImages: data.extraImages || [],
+                    extraImages: data.extraImages ?? [],
                 });
             }
         };
         fetchData();
     }, [gameId]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const target = e.target as HTMLInputElement;
-        const { name, value, type, checked } = target;
 
-        let newValue: any;
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    ) => {
+        const { name, value } = e.target as HTMLInputElement;
+        const isChecked = (e.target as HTMLInputElement).checked;
+        const inputType = (e.target as HTMLInputElement).type;
 
-        if (type === "checkbox") {
-            newValue = checked;
-        } else if (type === "number") {
-            newValue = value === "" ? undefined : parseFloat(value);
-            // "2025-06-28T06:00:00.000Z"
-        } else if (name === "mysteryUntil") {
-            newValue = value;
-        } else {
-            newValue = value;
-        }
-        setForm({
-            ...form,
-            [name]: newValue,
+        setForm(prev => {
+            switch (name) {
+                // booléens (checkbox)
+                case "isPrintable":
+                case "isFeatured":
+                case "isMystery":
+                    return { ...prev, [name]: isChecked };
+
+                // nombres optionnels
+                case "pdfPrice":
+                case "printPrice":
+                    return { ...prev, [name]: value === "" ? undefined : parseFloat(value) };
+
+                // entiers
+                case "ageMin":
+                case "ageMax":
+                    return { ...prev, [name]: value === "" ? prev[name as "ageMin" | "ageMax"] : parseInt(value, 10) };
+
+                // datetime-local (string)
+                case "mysteryUntil":
+                    return { ...prev, mysteryUntil: value };
+
+                default:
+                    // text/textarea
+                    return { ...prev, [name]: inputType === "number" ? Number(value) : value };
+            }
         });
     };
+
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -170,7 +199,7 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
         if (res.ok) {
             setForm({ ...form, imageUrl: data.imageUrl });
         } else {
-            setMessage("Erreur lors de l'upload de l'image");
+            setMessage("Erreur lors de l’upload de l’image");
         }
     };
 
@@ -179,20 +208,21 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
         const method = gameId && gameId !== "new" ? "PUT" : "POST";
         const url = gameId && gameId !== "new" ? `/api/printable/${gameId}` : "/api/printable";
 
+        const baseTitle = form.title || "";
+        const suffix = (globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2, 8));
+        const slug = !form.slug || gameId === "new"
+            ? generateSlug(`${baseTitle} ${suffix}`)
+            : form.slug;
+
         const payload = {
             ...form,
-            slug: !form.slug || gameId === "new"
-                ? generateSlug(form.title, crypto.randomUUID())
-                : form.slug,
+            slug,
             themeIds: form.themeIds,
             typeIds: form.typeIds,
             printUrl: form.printUrl?.trim() || undefined,
             printPrice: form.printPrice,
-            mysteryUntil: form.mysteryUntil || null, // 👈 AJOUTE ÇA
+            mysteryUntil: form.mysteryUntil || null,
         };
-
-
-        console.log("🧾 PAYLOAD ENVOYÉ :", payload);
 
         const res = await fetch(url, {
             method,
@@ -204,9 +234,10 @@ export default function AdminPrintableForm({ gameId }: { gameId?: string }) {
             setMessage("✅ Activité enregistrée");
             setTimeout(() => router.push("/admin?section=printable"), 1000);
         } else {
-            setMessage("❌ Erreur lors de l'enregistrement");
+            setMessage("❌ Erreur lors de l’enregistrement");
         }
     };
+
 
     const handleExtraImagesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = Array.from(e.target.files ?? []);

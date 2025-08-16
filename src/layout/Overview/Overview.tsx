@@ -38,7 +38,7 @@ const Overview: React.FC = () => {
 
     const handleSidebarClick = (category: AgeCategory) => {
         setActiveCategory(category);
-        setIsAgeSidebarOpen(false); // ferme le slide-in mobile
+        setIsAgeSidebarOpen(false);
     };
 
     if (!activeCategory) return null;
@@ -49,7 +49,6 @@ const Overview: React.FC = () => {
             <div className="mobile-topbar">
                 <button className="mobile-topbar__button" onClick={() => setIsAgeSidebarOpen(true)}>
                     Ouvrir les catégories<span className="icon">⋮</span>
-
                 </button>
             </div>
 
@@ -58,7 +57,6 @@ const Overview: React.FC = () => {
                 isOpen={isAgeSidebarOpen}
                 onClose={() => setIsAgeSidebarOpen(false)}
             />
-
 
             {/* Desktop Sidebar */}
             <div className="container__section__card-1">
@@ -81,7 +79,6 @@ const Overview: React.FC = () => {
                             </div>
                             <span className="sidebar__button__title">{category.title}</span>
                         </li>
-
                     ))}
                 </ul>
             </div>
@@ -90,9 +87,8 @@ const Overview: React.FC = () => {
             <div className="container__section__card-2">
                 <ThemeIcon theme={theme} />
 
-
                 <div className="container__section__card-2__content-panel">
-                    <div className="container__section__card-2__content-panel__tag"></div>
+                    <div className="container__section__card-2__content-panel__tag" />
 
                     <div className="container__section__card-2__content-panel__text">
                         <h3>{activeCategory?.title ?? "Titre indisponible"}</h3>

@@ -1,5 +1,3 @@
-// src/app/contenus/[age]/[type]/page.tsx
-
 import { notFound } from "next/navigation";
 import ContentList from "@/components/ContentList/ContentList";
 import { getContenusParAgeEtType } from "@/lib/contenus";
@@ -89,35 +87,35 @@ export default async function ContentByAgePage(props: PageProps) {
     }
 
     // ✅ Typage explicite après mapping - force ContentItem[]
-    const data: ContentItem[] = rawData.map(item => {
+    const data: ContentItem[] = (rawData as ContentItem[]).map((item: ContentItem) => {
         if (type === "trivium" || type === "quadrivium") {
             return {
                 ...item,
                 type,
                 module: type as "trivium" | "quadrivium",
-                age: ageCategory.title, // Ajoute l'age depuis ageCategory
-                date: item.date || null // Convertit undefined en null
+                age: ageCategory.title,
+                date: item.date ?? null,
             };
         }
         return {
             ...item,
             type,
             module: undefined,
-            age: ageCategory.title, // Ajoute l'age depuis ageCategory
-            date: item.date || null // Convertit undefined en null
+            age: ageCategory.title,
+            date: item.date ?? null,
         };
     });
 
     // ✅ Typage explicite pour les suggestions
     const rawSuggestions = await getRandomSuggestions("articles", 4);
-    const suggestions: ContentItem[] = rawSuggestions.map(item => ({
+    // ✅ typage explicite pour suggestions
+    const suggestions: ContentItem[] = (rawSuggestions as ContentItem[]).map((item: ContentItem) => ({
         ...item,
-        type: item.type ?? "articles",
-        module: ('module' in item && (item.module === "trivium" || item.module === "quadrivium"))
-            ? item.module
-            : undefined,
-        date: item.date ?? null, // Convertit undefined en null
-        age: ('age' in item && item.age) ? item.age : undefined,
+        type: (item.type as ContentItem["type"]) ?? "articles",
+        module:
+            item.module === "trivium" || item.module === "quadrivium" ? item.module : undefined,
+        date: item.date ?? null,
+        age: item.age,
     }));
 
     return (

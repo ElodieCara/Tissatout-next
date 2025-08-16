@@ -2,13 +2,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { getArticles } from "@/lib/articles";
 
+type ArticleListItem = {
+    id: string;
+    slug: string;
+    title: string;
+    content: string;
+    image?: string | null;
+    description?: string | null;
+    date?: string | Date | null;
+};
+
 export const metadata = {
     title: "Articles - Tissatout",
     description: "Découvrez les derniers articles publiés sur Tissatout : pédagogie, activités et coloriages.",
 };
 
 export default async function ArticlesPage() {
-    const articles = await getArticles(); // 🔥 Chargement côté serveur
+    const articles = (await getArticles()) as ArticleListItem[];
 
     return (
         <main className="container">

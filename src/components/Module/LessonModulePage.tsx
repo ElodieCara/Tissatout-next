@@ -49,13 +49,13 @@ export default function LessonModulePage({ module, lessons, collections }: Lesso
 
     useEffect(() => {
         if (!searchParams) return;
-
         const categoryFromQuery = searchParams.get("category");
-        if (categoryFromQuery) {
-            console.log("🔎 Catégorie trouvée dans l'URL :", categoryFromQuery);
+
+        if (categoryFromQuery && categories.some(c => c.key === categoryFromQuery)) {
             setSelectedCategory(categoryFromQuery);
         }
-    }, [searchParams]);
+        // fait réagir l'effet quand l'URL change
+    }, [searchParams?.toString()]);
 
     const filteredByCollection = selectedCollection
         ? lessons.filter(

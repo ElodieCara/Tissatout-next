@@ -15,6 +15,8 @@ type Lesson = BaseLesson & {
     module: "trivium" | "quadrivium";
 };
 
+type AgeSlug = { slug: string; title: string };
+
 export default function AdminLessonForm({ lessonId }: Props) {
     const [form, setForm] = useState<Partial<Lesson> & { module?: "trivium" | "quadrivium" }>({
         order: 1,
@@ -49,6 +51,7 @@ export default function AdminLessonForm({ lessonId }: Props) {
         ? ["Arithmétique", "Géométrie", "Musique", "Astronomie"]
         : ["Grammaire", "Logique", "Rhétorique"];
 
+
     const handleCreateCollection = async () => {
         if (!newCollectionTitle.trim()) return;
 
@@ -79,15 +82,12 @@ export default function AdminLessonForm({ lessonId }: Props) {
     const handleDeleteCollection = async () => {
         if (!form.collectionId) return;
 
-        const confirm = window.confirm("Supprimer cette collection ? Cela supprimera aussi toutes les leçons liées.");
-        if (!confirm) return;
+        const confirmed = window.confirm("Supprimer cette collection ? Cela supprimera aussi toutes les leçons liées.");
+        if (!confirmed) return;
 
         setIsLoading(true);
         try {
-            const res = await fetch(`/api/collections/${form.collectionId}`, {
-                method: "DELETE",
-            });
-
+            const res = await fetch(`/api/collections/${form.collectionId}`, { method: "DELETE" });
             if (res.ok) {
                 setCollections((prev) => prev.filter(c => c.id !== form.collectionId));
                 setForm((prev) => ({ ...prev, collectionId: "" }));
@@ -96,7 +96,7 @@ export default function AdminLessonForm({ lessonId }: Props) {
                 const data = await res.json();
                 setMessage(`❌ Erreur : ${data.error || res.statusText}`);
             }
-        } catch (err) {
+        } catch {
             setMessage("❌ Erreur lors de la suppression.");
         } finally {
             setIsLoading(false);
@@ -107,16 +107,12 @@ export default function AdminLessonForm({ lessonId }: Props) {
     useEffect(() => {
         if (lessonId && lessonId !== "new") {
             setIsLoading(true);
-            // Vérifiez que cette URL correspond à la structure de votre API
             fetch(`/api/modules/${lessonId}`)
                 .then((res) => {
-                    if (!res.ok) {
-                        throw new Error(`Erreur de chargement: ${res.status}`);
-                    }
-                    return res.json();
+                    if (!res.ok) throw new Error(`Erreur de chargement: ${res.status}`);
+                    return res.json() as Promise<Lesson>;
                 })
                 .then((data) => {
-                    console.log("Données chargées:", data);
                     setForm(data);
                     setMessage("Leçon chargée avec succès");
                 })
@@ -124,33 +120,37 @@ export default function AdminLessonForm({ lessonId }: Props) {
                     console.error("Erreur lors du chargement:", error);
                     setMessage(`❌ Erreur lors du chargement: ${error.message}`);
                 })
-                .finally(() => {
-                    setIsLoading(false);
-                });
+                .finally(() => setIsLoading(false));
         }
     }, [lessonId]);
+
 
     // 🔹 Chargement des collections
     useEffect(() => {
         fetch("/api/collections")
-            .then((res) => res.json())
-            .then((data) => setCollections(data))
+            .then((res) => {
+                if (!res.ok) throw new Error("Échec du chargement des collections");
+                return res.json() as Promise<
+                    { id: string; title: string; module: "trivium" | "quadrivium" }[]
+                >;
+            })
+            .then(setCollections)
             .catch((err) => console.error("Erreur de chargement des collections:", err));
     }, []);
 
     useEffect(() => {
-        fetch("/api/ageCategory")
-            .then((res) => res.json())
-            .then((data) => {
-                // Tu peux filtrer ou mapper ici si tu veux uniquement les champs utiles
-                const mapped = data.map((cat: any) => ({
-                    slug: cat.slug,
-                    title: cat.title
-                }));
-                setAgeSlugs(mapped);
-            })
-            .catch((err) => console.error("Erreur de chargement des tranches d'âge :", err));
+        (async () => {
+            try {
+                const res = await fetch("/api/ageCategory");
+                if (!res.ok) throw new Error("Échec du chargement des tranches d'âge");
+                const data = (await res.json()) as { slug: string; title: string }[];
+                setAgeSlugs(data.map(({ slug, title }) => ({ slug, title })));
+            } catch (err) {
+                console.error("Erreur de chargement des tranches d'âge :", err);
+            }
+        })();
     }, []);
+
 
     // 🔹 Slug auto uniquement si nouvelle leçon
     useEffect(() => {
@@ -167,7 +167,10 @@ export default function AdminLessonForm({ lessonId }: Props) {
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
         const { name, value } = e.target;
-        setForm({ ...form, [name]: name === "order" ? parseInt(value) : value });
+        setForm({
+            ...form,
+            [name]: name === "order" ? Number(value) || 0 : value,
+        });
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -179,25 +182,28 @@ export default function AdminLessonForm({ lessonId }: Props) {
         const url = isEdit ? `/api/modules/${lessonId}` : `/api/modules`;
 
         // Préparer les données nettoyées
-        const payload = {
+        const basePayload = {
             ...form,
-            title: form.title?.trim(),
-            slug: form.slug?.trim(),
-            category: form.category?.trim(),
-            subcategory: form.subcategory?.trim().toLowerCase() || "",
+            title: form.title?.trim() ?? "",
+            slug: form.slug?.trim() ?? "",
+            category: form.category?.trim() ?? "",
+            subcategory: (form.subcategory ?? "").trim().toLowerCase(),
             published: form.published ?? false,
         };
 
-        // Ne jamais envoyer l'id dans un POST
-        if (!isEdit) {
-            delete (payload as any).id;
-        }
+        // 🔹 Si création, on n’envoie pas `id` (sans cast en any)
+        const body = isEdit
+            ? JSON.stringify(basePayload)
+            : JSON.stringify(((p) => {
+                const { id: _omit, ...rest } = p as Lesson & { id?: string };
+                return rest;
+            })(basePayload));
 
         try {
             const res = await fetch(url, {
                 method,
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
+                body,
             });
 
             if (res.ok) {

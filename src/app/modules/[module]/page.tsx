@@ -4,33 +4,27 @@ import LessonModulePage from "@/components/Module/LessonModulePage";
 import type { CollectionWithLessons } from "@/types/lessons";
 
 type ModuleKey = "trivium" | "quadrivium";
+type PageProps = { params: { module: string } };
 
-export default async function ModulePage({
-    params,
-}: {
-    params: { module: string };
-}) {
-    // ✅ Accès entre crochets: évite l’identifiant nu `module`
-    const paramModule = params?.["module"];
-    const moduleSlug: ModuleKey =
-        paramModule === "trivium" || paramModule === "quadrivium"
-            ? (paramModule as ModuleKey)
-            : "trivium";
+const isModuleKey = (v: string): v is ModuleKey =>
+    v === "trivium" || v === "quadrivium";
 
-    const rawCollections: CollectionWithLessons[] = await getCollectionsWithLessons(moduleSlug);
+export default async function ModulePage({ params }: PageProps) {
+    const moduleSlug: ModuleKey = isModuleKey(params.module) ? params.module : "trivium";
 
-    // ✅ Clé littérale entre crochets pour la propriété "module"
-    const collections = rawCollections.map((collection) => ({
-        id: collection.id,
-        title: collection.title,
-        slug: collection.slug,
-        description: collection.description ?? null,
-        lessonsCount: collection.lessons.length,
-        lessons: collection.lessons,
-        ["module"]: collection.module as ModuleKey,
+    const rawCollections: CollectionWithLessons[] =
+        await getCollectionsWithLessons(moduleSlug);
+
+    // ⬇️ Façon attendue par LessonModulePage (avec lessonsCount)
+    const collections = rawCollections.map(c => ({
+        id: c.id,
+        title: c.title,
+        slug: c.slug,
+        description: c.description ?? null,
+        lessonsCount: c.lessons.length,
     }));
 
-    const lessons = collections.flatMap((c) => c.lessons);
+    const lessons = rawCollections.flatMap(c => c.lessons);
 
     return (
         <LessonModulePage

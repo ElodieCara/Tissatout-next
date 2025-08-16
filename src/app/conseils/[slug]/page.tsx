@@ -19,6 +19,26 @@ type Props = {
     params: Promise<{ slug: string }>;
 };
 
+type AdviceSection = {
+    id: string;
+    title: string;
+    content: string;
+    style?: string | null;
+    imageUrl?: string | null;
+};
+
+type RelatedAdvice = {
+    toAdvice: { id: string; slug: string; title: string; imageUrl?: string | null };
+};
+
+type RelatedArticle = {
+    toArticle: { id: string; slug: string; title: string; image?: string | null };
+};
+
+type RelatedColoring = {
+    toColoring: { id: string; slug: string; title: string; imageUrl?: string | null };
+};
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
 
@@ -80,6 +100,12 @@ export default async function AdvicePage({ params }: Props) {
     if (!advice) {
         notFound();
     }
+
+    const sections = (advice.sections ?? []) as AdviceSection[];
+    const relatedFrom = (advice.relatedFrom ?? []) as RelatedAdvice[];
+    const relatedArticles = (advice.relatedArticles ?? []) as RelatedArticle[];
+    const relatedColorings = (advice.relatedColorings ?? []) as RelatedColoring[];
+
 
     const suggestions = await getRandomSuggestions("conseils", 4);
 
@@ -179,7 +205,7 @@ export default async function AdvicePage({ params }: Props) {
                             )}
 
                             {/* ➡️ Boucle sur toutes les sections */}
-                            {advice.sections?.map((section) => (
+                            {advice.sections?.map((section: AdviceSection) => (
                                 <section
                                     key={section.id}
                                     id={section.title.replace(/\s+/g, "-").toLowerCase()}
@@ -206,7 +232,7 @@ export default async function AdvicePage({ params }: Props) {
                                 <TableOfContents
                                     sections={[
                                         { title: "Introduction", id: "intro" },
-                                        ...advice.sections.map((section) => ({
+                                        ...advice.sections.map((section: AdviceSection) => ({
                                             title: section.title,
                                             id: section.title.replace(/\s+/g, "-").toLowerCase(),
                                         })),
@@ -228,7 +254,7 @@ export default async function AdvicePage({ params }: Props) {
                                         <section className="advice__related-group">
                                             <h3>📝 Autres conseils</h3>
                                             <div className="advice__related-list">
-                                                {advice.relatedFrom.map(r => (
+                                                {advice.relatedFrom.map((r: RelatedAdvice) => (
                                                     <Link className="advice__related-item" key={r.toAdvice.id} href={`/conseils/${r.toAdvice.slug}`}>
 
                                                         {/* miniature ou placeholder */}
@@ -248,7 +274,7 @@ export default async function AdvicePage({ params }: Props) {
                                         <section className="advice__related-group">
                                             <h3>📄 Articles liés</h3>
                                             <div className="advice__related-list">
-                                                {advice.relatedArticles.map(r => {
+                                                {advice.relatedArticles.map((r: RelatedArticle) => {
                                                     const art = r.toArticle;
                                                     return (
                                                         <Link className="advice__related-item" key={art.id} href={`/articles/${art.slug}`}>
@@ -270,7 +296,7 @@ export default async function AdvicePage({ params }: Props) {
                                         <section className="advice__related-group">
                                             <h3>🖍️ Coloriages liés</h3>
                                             <div className="advice__related-list">
-                                                {advice.relatedColorings.map(r => {
+                                                {advice.relatedColorings.map((r: RelatedColoring) => {
                                                     const col = r.toColoring;
                                                     return (
                                                         <Link className="advice__related-item" key={col.id} href={`/coloriages/${col.slug}`}>

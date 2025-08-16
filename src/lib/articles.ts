@@ -94,13 +94,12 @@ export async function createArticle(
     image?: string
 ) {
     // Slug “de base”
-    const baseSlug = generateSlug(title, Math.random().toString(36).substr(2, 6));
-    // Slug qui sera potentiellement modifié pour l’unicité
-    let uniqueSlug = baseSlug;
+    const slug = generateSlug(title, Math.random().toString(36).substr(2, 6));    // Slug qui sera potentiellement modifié pour l’unicité
+    let uniqueSlug = slug;
 
     let counter = 1;
     while (await prisma.article.findUnique({ where: { slug: uniqueSlug } })) {
-        uniqueSlug = `${baseSlug}-${counter++}`;
+        uniqueSlug = `${slug}-${counter++}`;
     }
 
     // ✅ Créer l'article avec le slug unique dès le départ

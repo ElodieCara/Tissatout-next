@@ -2,7 +2,6 @@ import Button from "@/components/Button/Button";
 import Image from "next/image";
 import DrawingSlider from "../../../components/DrawingSlide/DrawingSlide";
 import Link from "next/link";
-import { Advice, Idea } from "@prisma/client";
 import { drawingDescriptions } from "../../../data/drawingDescription";
 import themeImages from '@/data/themeIdeasImage';
 import BackToTop from "@/components/BackToTop/BackToTop";
@@ -10,6 +9,22 @@ import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 import Quickbar from "@/components/Quickbar/Quickbar";
 import NewsletterBanner from "@/components/NewsletterBanner/NewsletterBanner";
 
+type Advice = {
+    id: string;
+    slug: string;
+    title: string;
+    description?: string | null;
+    imageUrl?: string | null;
+    createdAt: Date | string;
+};
+
+type Idea = {
+    id: string;
+    slug: string;
+    title: string;
+    description?: string | null;
+    theme: string;
+};
 
 type AgeArticle = {
     article: {

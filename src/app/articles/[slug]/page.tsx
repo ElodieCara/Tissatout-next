@@ -25,6 +25,8 @@ type Props = {
     params: Promise<{ slug: string }>; // ✅ params est maintenant une Promise
 };
 
+type RelatedArticle = { id: string; slug: string; title: string; image?: string };
+
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params; // ✅ Attendez params avant utilisation
@@ -101,6 +103,9 @@ export default async function ArticlePage({ params }: Props) {
     const { slug } = await params;
     const article = await getArticleBySlug(slug);
     if (!article) return notFound();
+    const relatedArticles = (article.relatedArticles ?? []) as RelatedArticle[];
+    const tags = (article.tags ?? []) as string[];
+
 
     const sections = (article.sections as { title: string; content: string; style?: string }[]) || [];
 
@@ -338,11 +343,11 @@ export default async function ArticlePage({ params }: Props) {
 
                     {/* 🔗 Articles liés */}
                     {
-                        article.relatedArticles?.length > 0 && (
+                        relatedArticles.length > 0 && (
                             <section className="article__related">
                                 <h2 className="article__related-title">🧭 Pour aller plus loin</h2>
                                 <div className="article__related-list">
-                                    {article.relatedArticles.map((related) => (
+                                    {relatedArticles.map((related: RelatedArticle) => (
                                         <a
                                             key={related.id}
                                             href={`/articles/${related.slug}`}
@@ -361,19 +366,18 @@ export default async function ArticlePage({ params }: Props) {
                         <PrintButton />
                     </div>
 
-                    {
-                        article.tags?.length > 0 && (
-                            <section className="article__tags">
-                                <h3 className="article__tags-title">Mots-clés :</h3>
-                                <ul className="article__tag-list">
-                                    {article.tags.map((tag, index) => (
-                                        <li key={index} className="article__tag">
-                                            {tag}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </section>
-                        )
+                    {tags.length > 0 && (
+                        <section className="article__tags">
+                            <h3 className="article__tags-title">Mots-clés :</h3>
+                            <ul className="article__tag-list">
+                                {tags.map((tag: string, index: number) => (
+                                    <li key={index} className="article__tag">
+                                        {tag}
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    )
                     }
                     <div className="comments no-print mystery">
                         <ArticleFeedback resourceType="article" resourceId={article.id} />
